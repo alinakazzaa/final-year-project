@@ -11,7 +11,7 @@ class EditCollab extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>Home Screen</Text>
+                <Text style={styles.text}>Edit Collab</Text>
             </View>
         );
     }

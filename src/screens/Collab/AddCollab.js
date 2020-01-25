@@ -11,7 +11,7 @@ class AddCollab extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>Add Collab Screen</Text>
+                <Text style={styles.text}>Add Collab</Text>
             </View>
         );
     }

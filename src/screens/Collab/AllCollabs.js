@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, TouchableOpacity } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-import { createStackNavigator } from 'react-navigation-stack';
 
 
 class AllCollabs extends React.Component {
@@ -12,6 +10,12 @@ class AllCollabs extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>All Collabs</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewCollab')}>
+                    <Text>View Collab</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('AddCollab')}>
+                    <Text>Add Collab</Text>
+                </TouchableOpacity>
             </View>
         );
     }

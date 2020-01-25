@@ -3,8 +3,6 @@ import { View, Text, YellowBox, StyleSheet } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-import { createStackNavigator } from 'react-navigation-stack';
-
 
 class CollabScreen extends React.Component {
 
@@ -29,6 +27,5 @@ const styles = StyleSheet.create(
             color: 'black'
         }
     });
-
 
 export default CollabScreen
