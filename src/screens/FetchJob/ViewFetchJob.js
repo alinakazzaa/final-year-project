@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, TouchableOpacity } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -12,6 +12,9 @@ class ViewFetchJob extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>View Fetch Job</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('AllInfluencers')}>
+                    <Text>View Influencers</Text>
+                </TouchableOpacity>
             </View>
         );
     }

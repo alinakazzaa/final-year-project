@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, TouchableOpacity } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-import { createStackNavigator } from 'react-navigation-stack';
 
 
 class AllFetchJobs extends React.Component {
@@ -12,6 +10,12 @@ class AllFetchJobs extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>All Fetch Jobs</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewFetchJob')}>
+                    <Text>View Fetch Job</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('AddFetchJob')}>
+                    <Text>Add Fetch Job</Text>
+                </TouchableOpacity>
             </View>
         );
     }
