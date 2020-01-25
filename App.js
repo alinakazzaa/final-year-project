@@ -1,76 +1,45 @@
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  Button,
-  Text,
-  TextInput
-} from 'react-native';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as countActions from './src/actions/counts';
-import * as textActions from './src/actions/text';
+import * as React from 'react';
+import { View, Text, YellowBox } from 'react-native';
+import HomeScreen from './src/screens/Home/Home'
+import { enableScreens } from 'react-native-screens';
+import { createAppContainer } from 'react-navigation';
+import BottomNavigation from './src/navigation/BottomNavigation'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import ProjectScreen from './src/screens/Project/Project';
+import CollabScreen from './src/screens/Collab/Collab';
+import SettingsScreen from './src/screens/Settings/Settings';
 
-class App extends Component {
-  decrementCount() {
-    let { count, actions } = this.props;
-    count--;
-    actions.changeCount(count);
-  }
-  incrementCount() {
-    let { count, actions } = this.props;
-    count++;
-    actions.changeCount(count);
-  }
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-  changeText = value => {
-    let { text, actions } = this.props
-    actions.changeText(value);
-  }
+class MyApp extends React.Component {
 
   render() {
-    const { count } = this.props;
+    enableScreens();
     return (
-      <View style={styles.container}>
-        <TextInput onChangeText={value => this.changeText(value)} style={{ borderColor: 'black', color: 'black' }} />
-        <Button
-          title="increment"
-          onPress={() => this.incrementCount()}
-        />
-        <Text style={styles.textCenter}>{count}</Text>
-        <Button
-          title="decrement"
-          onPress={() => this.decrementCount()}
-        />
-
-      </View>
+      <Router>
+        <Switch>
+          <Route path="/home">
+            <HomeScreen />
+          </Route>
+          <Route path="/projects">
+            <ProjectScreen />
+          </Route>
+          <Route path="/collabs">
+            <CollabScreen />
+          </Route>
+          <Route path="/settings">
+            <SettingsScreen />
+          </Route>
+        </Switch>
+      </Router>
     );
   }
-};
+}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  textCenter: {
-    textAlign: 'center'
+const AppContainer = createAppContainer(BottomNavigation);
+
+export default class App extends React.Component {
+  render() {
+    return <AppContainer />;
   }
-});
-
-const mapStateToProps = state => ({
-  count: state.count.count,
-  text: state.text.text
-});
-
-const ActionCreators = Object.assign(
-  {},
-  countActions,
-  textActions
-);
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(ActionCreators, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+}
