@@ -21,3 +21,5 @@ export const updateUser = (user_id, user) => {
 export const removeUser = user_id => {
     db.ref('/Users').child(user_id).remove()
 }
+
+//
