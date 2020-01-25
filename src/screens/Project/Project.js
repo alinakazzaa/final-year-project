@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, TouchableOpacity } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-import { createStackNavigator } from 'react-navigation-stack';
 
 
 class ProjectScreen extends React.Component {
@@ -29,6 +27,5 @@ const styles = StyleSheet.create(
             color: 'black'
         }
     });
-
 
 export default ProjectScreen
