@@ -27,20 +27,16 @@ export default class ListProjects extends Component {
         usersRef.on('value', (snapshot) => {
 
             snapshot.forEach(childSnapshot => {
-                if (childSnapshot.val().username == 'testuser') {
-                    projectsRef = usersRef.child(`${childSnapshot.key}/Projects`)
+                if (childSnapshot.val().username == 'alinakazzaa') {
+                    let projectsRef = usersRef.child(`${childSnapshot.key}/Projects`)
+                    projectsRef.on('value', (snapshot) => {
+                        let data = snapshot.val();
+                        let projects = Object.values(data);
+                        this.setState({ projects });
+                    });
                 }
             })
         });
-
-        if (projectsRef != null) {
-            projectsRef.on('value', (snapshot) => {
-                let data = snapshot.val();
-                let projects = Object.values(data);
-                this.setState({ projects });
-            });
-        }
-
     }
 
     render() {

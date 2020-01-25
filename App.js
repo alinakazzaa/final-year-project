@@ -1,76 +1,42 @@
 import React, { Component } from 'react';
 import {
+  Platform,
   StyleSheet,
-  View,
-  Button,
   Text,
-  TextInput
+  View
 } from 'react-native';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as countActions from './src/actions/counts';
-import * as textActions from './src/actions/text';
+import { createStackNavigator } from 'react-navigation-stack';
+import Home from './src/screens/Home';
+import AddItem from './src/screens/AddItem';
+import ListItem from './src/screens/ListItem';
+import AddUser from './src/screens/AddUser';
+import ListUsers from './src/screens/ListUsers';
+import AddProject from './src/screens/AddProject';
+import ListProjects from './src/screens/ListProjects';
+import { YellowBox } from 'react-native';
+import { createAppContainer } from 'react-navigation';
 
-class App extends Component {
-  decrementCount() {
-    let { count, actions } = this.props;
-    count--;
-    actions.changeCount(count);
-  }
-  incrementCount() {
-    let { count, actions } = this.props;
-    count++;
-    actions.changeCount(count);
-  }
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-  changeText = value => {
-    let { text, actions } = this.props
-    actions.changeText(value);
-  }
+const AppNavigator = createStackNavigator({
+  ListItemScreen: { screen: ListItem },
+  AddItemScreen: { screen: AddItem },
+  HomeScreen: { screen: Home },
+  ListUsersScreen: { screen: ListUsers },
+  AddUserScreen: { screen: AddUser },
+  ListProjectsScreen: { screen: ListProjects },
+  AddProjectScreen: { screen: AddProject },
+},
+  {
+    initialRouteName: 'ListProjectsScreen'
+  });
 
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends Component {
   render() {
-    const { count } = this.props;
     return (
-      <View style={styles.container}>
-        <TextInput onChangeText={value => this.changeText(value)} style={{ borderColor: 'black', color: 'black' }} />
-        <Button
-          title="increment"
-          onPress={() => this.incrementCount()}
-        />
-        <Text style={styles.textCenter}>{count}</Text>
-        <Button
-          title="decrement"
-          onPress={() => this.decrementCount()}
-        />
-
-      </View>
+      <AppContainer />
     );
   }
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  textCenter: {
-    textAlign: 'center'
-  }
-});
-
-const mapStateToProps = state => ({
-  count: state.count.count,
-  text: state.text.text
-});
-
-const ActionCreators = Object.assign(
-  {},
-  countActions,
-  textActions
-);
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(ActionCreators, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+}
