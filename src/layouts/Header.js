@@ -1,7 +1,7 @@
 import React from 'react';
-import { Header, Input, Icon } from 'react-native-elements';
-import { StyleSheet, View } from 'react-native';
-import PropTypes, { bool } from 'prop-types'
+import { Header } from 'react-native-elements';
+import { StyleSheet } from 'react-native';
+import PropTypes from 'prop-types'
 
 
 export const AppHeader = ({ left, center, right }) => {
