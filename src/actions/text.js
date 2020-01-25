@@ -6,3 +6,5 @@ export function changeText(text) {
         payload: text
     }
 }
+
+//

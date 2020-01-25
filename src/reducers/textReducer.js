@@ -17,3 +17,5 @@ const textReducer = (state = initialState, action) => {
     }
 }
 export default textReducer;
+
+//

@@ -12,3 +12,4 @@ export function changeCount(count) {
 }
 
 // The changeCount() function returns an action. Now based on that action, reducers function’s case is executed.
+//

@@ -22,3 +22,4 @@ export default countReducer;
 // and then we pass whatever argument, it takes that argument and operates based on the case execution.
 // The second argument is action, which consists of type and payload. The payload is the count value,
 // which assigned to count variable in store.
+//
