@@ -27,7 +27,7 @@ const styles = StyleSheet.create(
         },
     });
 
-AppHeader.PropTypes = {
+AppHeader.propTypes = {
     left: PropTypes.object,
     center: PropTypes.object,
     right: PropTypes.object,
