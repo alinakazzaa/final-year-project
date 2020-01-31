@@ -9,7 +9,7 @@ import { ProjectStackNavigator } from './ProjectStack';
 import { CollabStackNavigator } from './CollabStack';
 
 
-const BottomNavigator = createBottomTabNavigator(
+export const BottomNavigator = createBottomTabNavigator(
     {
         Home: {
             screen: HomeScreen,
@@ -52,5 +52,3 @@ const BottomNavigator = createBottomTabNavigator(
         initialRouteName: 'Home'
     },
 );
-
-export default BottomNavigator
