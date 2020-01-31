@@ -31,8 +31,11 @@ class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchHashtagPosts("assaroundtheworld")
+        this.fetchHashtagPosts("fitnessdublin")
     }
+
+    // make hashtag searches as specific as possible.
+    //  Minimize the possibility of generating large sets & keep speed optimal - max 1000 publications
 
 
     render() {
