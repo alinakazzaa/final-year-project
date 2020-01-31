@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from '
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 
-export const FetchJobList = ({ fetchJobs, goToFetchJob }) => {
+export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob }) => {
     const FJList = (fj, index) => {
         return (
             <TouchableOpacity style={styles.listItem} key={index} onPress={() => goToFetchJob(fj)}>
@@ -35,7 +35,7 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob }) => {
                     color="#493649"
                     type='plus'
                     size={40}
-                    // onPress={() => addProject()}
+                    onPress={() => addFetchJob()}
                     style={styles.addIcon}
                 // reverse
                 />
