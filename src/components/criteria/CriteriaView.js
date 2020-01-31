@@ -5,11 +5,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { criteria } from '../../constants/Criteria'
 
 
-export const ViewCriteria = ({ activeCriteria }) => {
+export const CriteriaView = ({ activeCriteria }) => {
     return <View style={styles.criteriaBox}>
         <View style={styles.column}>
             <View style={styles.row}>
-                {activeCriteria.indexOf(criteria[0].value) >= 0 ? <Icon
+                {activeCriteria.includes(String(criteria[0].value)) ? <Icon
                     name='check'
                     type='font-awesome'
                     size={20}
@@ -23,7 +23,7 @@ export const ViewCriteria = ({ activeCriteria }) => {
                 <Text style={styles.data}>{criteria[0].label}</Text>
             </View>
             <View style={styles.row}>
-                {activeCriteria.indexOf(criteria[1].value) >= 0 ? <Icon
+                {activeCriteria.includes(String(criteria[1].value)) ? <Icon
                     name='check'
                     type='font-awesome'
                     size={20}
@@ -37,7 +37,7 @@ export const ViewCriteria = ({ activeCriteria }) => {
                 <Text style={styles.data}>{criteria[1].label}</Text>
             </View>
             <View style={styles.row}>
-                {activeCriteria.indexOf(criteria[2].value) >= 0 ? <Icon
+                {activeCriteria.includes(String(criteria[2].value)) ? <Icon
                     name='check'
                     type='font-awesome'
                     size={20}
@@ -53,7 +53,7 @@ export const ViewCriteria = ({ activeCriteria }) => {
         </View>
         <View style={styles.column}>
             <View style={styles.row}>
-                {activeCriteria.indexOf(criteria[3].value) >= 0 ? <Icon
+                {activeCriteria.includes(String(criteria[3].value)) ? <Icon
                     name='check'
                     type='font-awesome'
                     size={20}
@@ -67,7 +67,7 @@ export const ViewCriteria = ({ activeCriteria }) => {
                 <Text style={styles.data}>{criteria[3].label}</Text>
             </View>
             <View style={styles.row}>
-                {activeCriteria.indexOf(criteria[4].value) >= 0 ? <Icon
+                {activeCriteria.includes(String(criteria[4].value)) ? <Icon
                     name='check'
                     type='font-awesome'
                     size={20}
@@ -81,7 +81,7 @@ export const ViewCriteria = ({ activeCriteria }) => {
                 <Text style={styles.data}>{criteria[4].label}</Text>
             </View>
             <View style={styles.row}>
-                {activeCriteria.indexOf(criteria[5].value) >= 0 ? <Icon
+                {activeCriteria.includes(String(criteria[5].value)) ? <Icon
                     name='check'
                     type='font-awesome'
                     size={20}
@@ -129,11 +129,11 @@ const styles = StyleSheet.create(
         },
     });
 
-ViewCriteria.propTypes = {
+CriteriaView.propTypes = {
     activeCriteria: PropTypes.array
 }
 
-ViewCriteria.defaultProps = {
+CriteriaView.defaultProps = {
     activeCriteria: []
 }
 
