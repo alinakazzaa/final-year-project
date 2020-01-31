@@ -8,12 +8,9 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import HomeScreen from '../screens/Home/Home';
 import { createAppContainer } from 'react-navigation';
+import { BottomNavigator } from './BottomNavigation'
 
-const Router = createStackNavigator({
-    Home: { screen: HomeScreen },
-});
-
-const RouteContainer = createAppContainer(Router);
+const RouteContainer = createAppContainer(BottomNavigator);
 
 export default class App extends React.Component {
     render() {
