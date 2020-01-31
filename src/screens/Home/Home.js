@@ -7,7 +7,46 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 class HomeScreen extends React.Component {
 
+    state = {
+        users: []
+    }
+
+    fetchHashtagPosts = hashtag => {
+
+        fetch(`https://instagramdimashirokovv1.p.rapidapi.com/search/${hashtag}`, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "InstagramdimashirokovV1.p.rapidapi.com",
+                "x-rapidapi-key": "34e15202camshd26e86b9aad394bp14a37djsnb70eabbe1eb3"
+            }
+        })
+            .then(response => response.json()) // Getting the actual response data
+            .then(data => {
+                this.setState({ users: data.users })
+
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    componentDidMount() {
+        this.fetchHashtagPosts("assaroundtheworld")
+    }
+
+
     render() {
+
+        let users = this.state.users
+        if (users.length > 0) {
+            users.forEach(item => {
+                console.log(item.user.username)
+            })
+
+        }
+
+        // console.log("hello")
+
         return (
             <View style={styles.main}>
                 <AppHeader
