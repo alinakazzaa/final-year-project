@@ -16,30 +16,9 @@ class MyApp extends React.Component {
   render() {
     enableScreens();
     return (
-      <Router>
-        <Switch>
-          <Route path="/home">
-            <HomeScreen />
-          </Route>
-          <Route path="/projects">
-            <ProjectScreen />
-          </Route>
-          <Route path="/collabs">
-            <CollabScreen />
-          </Route>
-          <Route path="/settings">
-            <SettingsScreen />
-          </Route>
-        </Switch>
-      </Router>
+      <View />
     );
   }
 }
 
-const AppContainer = createAppContainer(BottomNavigation);
-
-export default class App extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
-}
+export default MyApp;
