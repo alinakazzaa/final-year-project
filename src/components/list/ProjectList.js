@@ -244,7 +244,7 @@ const styles = StyleSheet.create(
         },
     });
 
-ProjectList.PropTypes = {
+ProjectList.propTypes = {
     active: PropTypes.bool,
     projects: PropTypes.array,
     deleteProject: PropTypes.func,
