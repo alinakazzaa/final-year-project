@@ -1,7 +1,6 @@
 import React from 'react';
 import HomeScreen from '../screens/Home/Home';
-import ProjectScreen from '../screens/Project/Project';
-import CollabScreen from '../screens/Collab/Collab';
+import LogInScreen from '../screens/LogIn/LogInScreen';
 import SettingsScreen from '../screens/Settings/Settings';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Icon } from 'react-native-elements';
@@ -11,6 +10,12 @@ import { CollabStackNavigator } from './CollabStack';
 
 const BottomNavigator = createBottomTabNavigator(
     {
+        LogIn: {
+            screen: LogInScreen,
+            navigationOptions: {
+                title: 'LogIn',
+            }
+        },
         Home: {
             screen: HomeScreen,
             navigationOptions: {
@@ -49,7 +54,7 @@ const BottomNavigator = createBottomTabNavigator(
         },
     },
     {
-        initialRouteName: 'Home'
+        initialRouteName: 'LogIn'
     },
 );
 
