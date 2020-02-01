@@ -32,7 +32,6 @@ class AllProjects extends React.Component {
                         let data = snapshot.val();
                         let projects = Object.values(data);
                         this.setState({ projects });
-                        console.log(projects)
                     });
                 }
             })
