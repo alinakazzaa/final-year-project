@@ -1,6 +1,6 @@
 import { db } from '../config/db';
 
-export const addProject = (project, user_id) => {
+export const addProject = (user_id, project) => {
     db.ref(`/Users/${user_id}/Projects`).push({
         title: project.title,
         description: project.description,
