@@ -4,6 +4,7 @@ import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
 import BasicInput from '../input/BasicInput';
 import t from 'tcomb-form-native';
+import { validate } from 'tcomb-form-native/lib';
 
 const Form = t.form.Form;
 
@@ -83,14 +84,20 @@ export default class ProjectForm extends React.Component {
         value: {}
     }
 
+    componentDidMount() {
+        let project = this.props.project
+        console.log(project || "none") // -- why this makes the form work is beyond me??????
+        if (project) {
+            this.setState({ value: this.props.project })
+        }
+    }
+
     onChange(value) {
-        const handleChange = this.props.onChange
-        handleChange(value)
+        this.props.onChange(value)
         this.setState({ value });
     }
 
     render() {
-        const props = this.props
         return (
             <View style={styles.container}>
                 <Form
