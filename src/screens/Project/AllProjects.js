@@ -7,6 +7,7 @@ import { TextButton } from '../../components/buttons/TextButton';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { ProjectList } from '../../components/list/ProjectList';
 import { Input } from 'react-native-elements';
+import { removeProject } from '../../database/services/ProjectService'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -48,12 +49,7 @@ class AllProjects extends React.Component {
     }
 
     deleteProject = project => {
-        console.log("Delete project")
-        // db.deleteProject(project).then((data) => {
-        // }).catch((err) => {
-        //     console.log(err);
-        // })
-        // this.getProjects()
+        removeProject("-LzOYfdTgQu-Hqxl9bGz", project)
     }
 
     searchProject = text => {
