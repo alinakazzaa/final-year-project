@@ -4,6 +4,7 @@ import { AppHeader } from '../../layouts/Header';
 import ProjectForm from '../../components/forms/ProjectForm';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
+import { addProject } from '../../database/services/ProjectService'
 
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -11,23 +12,17 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 class AddProject extends React.Component {
 
     state = {
-        title: '',
-        description: '',
-        date_created: '',
-        active: null
+        project: {}
     }
 
-    handleChange = item => {
-        // console.log(project);
-        this.setState({ item });
+    handleChange = project => {
+        this.setState({ project: project });
     }
 
     handleSubmit = () => {
-        console.log(this.state)
-        // db.addProject(this.state.project);
-        // db.addProject(this.refs.form.getValue());
-        // console.log(this.refs.form.getValue)
-        // this.props.navigation.navigate('Projects')
+        const project = this.state.project
+        // will replace user ID with one in redux state
+        addProject("-LzOYfdTgQu-Hqxl9bGz", project);
     }
 
     render() {
@@ -45,7 +40,6 @@ class AddProject extends React.Component {
                             <TextButton onPress={this.handleSubmit} title="Save" />
                         </View>}
                 />
-                {/* <Text style={styles.text}>Add Project</Text> */}
                 <ProjectForm onChange={this.handleChange} />
             </View>
         );
@@ -56,15 +50,10 @@ const styles = StyleSheet.create(
     {
         container: {
             flex: 1,
-            // justifyContent: 'center',
-            // alignItems: 'center',
         },
-        // text: {
-        //     textAlign: 'center',
-        //     color: 'black'
-        // },
         saveBtn: {
             marginRight: 10,
+            fontWeight: '700'
         },
     });
 
