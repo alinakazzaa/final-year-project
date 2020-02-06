@@ -11,9 +11,6 @@ export const addProject = (user_id, project) => {
 }
 
 export const updateProject = (user_id, project_id, project) => {
-    // console.log(user_id)
-    // console.log(project_id)
-    // console.log(project)
     db.ref(`/Users/${user_id}/Projects/${project_id}`).update({
         title: project.title,
         client: project.client,
