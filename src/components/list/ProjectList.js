@@ -222,7 +222,7 @@ const styles = StyleSheet.create(
             justifyContent: 'space-evenly',
         },
         txtStyle: {
-            fontFamily: 'Arial',
+            fontFamily: 'ArialRoundedMTBold',
             fontSize: 19,
             color: '#33334d',
         },
