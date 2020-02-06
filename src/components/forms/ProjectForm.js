@@ -87,6 +87,7 @@ export default class ProjectForm extends React.Component {
     componentDidMount() {
         let project = this.props.project
         console.log(project || "none") // -- why this makes the form work is beyond me??????
+        //   also, need to open the file & refresh the page to see the data
         if (project) {
             this.setState({ value: this.props.project })
         }
