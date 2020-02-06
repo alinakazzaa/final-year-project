@@ -36,7 +36,8 @@ class ViewFetchJob extends React.Component {
                 <AppHeader
                     left={
                         <IconButton color="#493649"
-                            type='angle-left'
+                            type='font-awesome'
+                            name='angle-left'
                             size={40}
                             onPress={() => this.props.navigation.goBack()}
                         />} />
