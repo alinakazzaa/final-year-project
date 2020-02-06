@@ -17,16 +17,16 @@ class AllFetchJobs extends React.Component {
     }
 
     componentDidMount() {
-        usersRef.on('value', (snapshot) => {
-            snapshot.forEach(userSnapshot => {
+        usersRef.on('value', (u_snapshot) => {
+            u_snapshot.forEach(userSnapshot => {
                 if (userSnapshot.val().username == 'alinakazzaa') {
                     let projectsRef = usersRef.child(`${userSnapshot.key}/Projects`)
-                    projectsRef.on('value', (snapshot) => {
-                        snapshot.forEach(projectSnapshot => {
-                            if (projectSnapshot.val().title == 'Test Project for Alinakazzaa 2') {
+                    projectsRef.on('value', (proj_snapshot) => {
+                        proj_snapshot.forEach(projectSnapshot => {
+                            if (projectSnapshot.val().title == 'Another Test Project for Alinakazzaa') {
                                 let fetchJobsRef = projectsRef.child(`${projectSnapshot.key}/FetchJobs`)
-                                fetchJobsRef.on('value', (snapshot) => {
-                                    let data = snapshot.val();
+                                fetchJobsRef.on('value', (fj_snapshot) => {
+                                    let data = fj_snapshot.val();
                                     let fetchJobs = Object.values(data);
                                     this.setState({ fetchJobs });
                                 });

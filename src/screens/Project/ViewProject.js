@@ -49,6 +49,7 @@ class ViewProjectScreen extends React.Component {
                             onPress={() => this.props.navigation.goBack()}
                         />}
                     right={<IconButton color="#493649"
+                        name='font-awesome'
                         type='edit'
                         size={27}
                         onPress={() => this.editProject(proj)}
@@ -67,7 +68,7 @@ class ViewProjectScreen extends React.Component {
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Client</Text>
-                            <Text style={styles.data}>Current Client</Text>
+                            <Text style={styles.data}>{proj.client}</Text>
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Date created</Text>

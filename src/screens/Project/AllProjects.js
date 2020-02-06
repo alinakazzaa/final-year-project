@@ -33,7 +33,6 @@ class AllProjects extends React.Component {
                         let data = snapshot.val();
                         let projects = Object.values(data);
                         this.setState({ projects });
-                        console.log(projects)
                     });
                 }
             })
@@ -81,7 +80,8 @@ class AllProjects extends React.Component {
                 <AppHeader
                     left={
                         <IconButton color="#5d4d50'"
-                            type='angle-left'
+                            type='font-awesome'
+                            name='angle-left'
                             size={40}
                             onPress={() => this.props.navigation.goBack()}
                         />}

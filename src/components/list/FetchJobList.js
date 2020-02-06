@@ -3,15 +3,26 @@ import { Icon, Avatar } from 'react-native-elements'
 import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
+import { TextButton } from '../buttons/TextButton'
 
-export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob }) => {
+export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJob }) => {
     const FJList = (fj, index) => {
         return (
-            <TouchableOpacity style={styles.listItem} key={index} onPress={() => goToFetchJob(fj)}>
-                <Text style={styles.rowTxt}>{fj.title}</Text>
-                <Text style={styles.rowTxt}>{fj.date_created}</Text>
-                <Text style={styles.rowTxt}>{fj.hashtag}</Text>
-                <Text style={styles.rowTxt}>{fj.location}</Text>
+            <TouchableOpacity key={index} onPress={() => goToFetchJob(fj)}>
+                <View style={styles.listItem}>
+                    <View style={styles.left}>
+                        <Text style={styles.hashtag}>{`HASHTAG    ${fj.hashtag}`}</Text>
+                        <Text style={styles.location}>{`LOCATION    ${fj.location}`}</Text>
+
+                    </View>
+                    <View style={styles.middle}>
+                        <Text style={styles.date}>{fj.date_created}</Text>
+                    </View>
+                    <View style={styles.right}>
+                        <IconButton type="foundation" name="download" size={30} onPress={fj => console.log(fj)} color="#493649" />
+                        {/* <TextButton style={styles.startBtn} onPress={} title="Start" /> */}
+                    </View>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -33,7 +44,8 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob }) => {
                 <IconButton
                     // raised
                     color="#493649"
-                    type='plus'
+                    type='font-awesome'
+                    name='plus'
                     size={40}
                     onPress={() => addFetchJob()}
                     style={styles.addIcon}
@@ -66,11 +78,10 @@ const styles = StyleSheet.create(
             flexDirection: 'row',
             borderBottomWidth: 0.5,
             borderColor: '#ded4da',
-            padding: 10,
+            padding: 15,
+            marginRight: '5%',
             fontFamily: 'ArialRoundedMTBold',
-            height: '13%',
-            marginRight: '2%',
-            marginLeft: '2%',
+            justifyContent: 'space-between'
         },
         headerTitle: {
             color: '#0B0033',
@@ -80,16 +91,54 @@ const styles = StyleSheet.create(
             fontFamily: 'ArialRoundedMTBold',
             width: '25%'
         },
-        rowTxt: {
-            fontSize: 17,
+        title: {
+            fontSize: 13,
             textAlign: 'left',
-            width: '25%'
+            padding: 5,
+            color: '#0B0033',
+            fontFamily: 'ArialRoundedMTBold',
+        },
+        date: {
+            fontSize: 15,
+            textAlign: 'left',
+            padding: 5,
+            fontFamily: 'ArialRoundedMTBold',
+            color: '#0B0033',
+        },
+        hashtag: {
+            fontSize: 13,
+            textAlign: 'left',
+            padding: 5,
+            fontFamily: 'ArialRoundedMTBold',
+            color: '#0B0033',
+        },
+        location: {
+            fontSize: 13,
+            textAlign: 'left',
+            padding: 5,
+            fontFamily: 'ArialRoundedMTBold',
+            color: '#0B0033',
+        },
+        startBtn: {
+            fontSize: 15,
+            // textAlign: 'left',
+            // width: '25%'
         },
         addIcon: {
             alignSelf: 'center',
             backgroundColor: 'transparent',
             marginTop: '3%'
         },
+        left: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        middle: {
+            display: 'flex',
+        },
+        right: {
+            display: 'flex',
+        }
     });
 
 FetchJobList.PropTypes = {

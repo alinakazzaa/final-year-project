@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import { Icon } from 'react-native-elements';
 
 
-export const IconButton = ({ type, color, size, onPress, raised, style, reverse }) => {
+export const IconButton = ({ type, name, color, size, onPress, raised, style, reverse }) => {
     return <Icon
         raised={raised}
-        name={type}
+        name={name}
         size={size}
         color={color}
         reverse={reverse}
-        type='font-awesome'
+        type={type}
         onPress={onPress}
         iconStyle={style} />
 }
