@@ -19,7 +19,7 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJ
                         <Text style={styles.date}>{fj.date_created}</Text>
                     </View>
                     <View style={styles.right}>
-                        <IconButton type="foundation" name="download" size={30} onPress={fj => console.log(fj)} color="#493649" />
+                        <IconButton type="foundation" name="download" size={30} onPress={() => startFetchJob(fj)} color="#493649" />
                         {/* <TextButton style={styles.startBtn} onPress={} title="Start" /> */}
                     </View>
                 </View>
@@ -144,8 +144,10 @@ const styles = StyleSheet.create(
 FetchJobList.PropTypes = {
     fetchJobs: PropTypes.array.isRequired,
     goToFetchJob: PropTypes.func,
+    startFetchJob: PropTypes.func,
 }
 
 FetchJobList.defaultProps = {
-    goToFetchJob: null
+    goToFetchJob: null,
+    startFetchJob: null
 }
