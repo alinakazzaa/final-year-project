@@ -87,7 +87,6 @@ export default class FetchJobForm extends React.Component {
         let fetch_job = this.state.value
 
         // set date and title of fetch job
-
         let date = new Date();
         const string_date = date.getDate() + '/' + date.getMonth() + 1 + '/' + new Date().getFullYear()
         fetch_job.date_created = string_date
@@ -103,7 +102,7 @@ export default class FetchJobForm extends React.Component {
             if (element[1] == true)
                 active_criteria.push(element[0])
         })
-        fetch_job.active_criteria = active_criteria
+        fetch_job.criteria = active_criteria
         addFetchJob("-LzOYfdTgQu-Hqxl9bGz", "-LzOoD6NWW-4VpFoTrGK", fetch_job)
         this.props.goBack()
     }
