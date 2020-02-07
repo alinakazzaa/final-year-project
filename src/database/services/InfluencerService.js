@@ -1,15 +1,21 @@
 import { db } from '../config/db';
 
-export const addInfluencerId = id => {
-    db.ref(`/Influencers/${id}`).push({
-        id: id,
-    });
+export const addInfluencerByIdHashtagAll = (id, hashtag) => {
+    db.ref(`/Influencers/allposts/hashtags/${hashtag}`).child(id).set({
+        username: '',
+        profileURL: '',
+        followers: 0,
+        media_count: 0
+    })
 }
 
-export const addInfluData = data => {
-    db.ref(`/Influencers/Raw/`).push({
-        data: data
-    });
+export const addInfluencerByIdHashtagTop = (id, hashtag) => {
+    db.ref(`/Influencers/topposts/hashtags/${hashtag}`).child(id).set({
+        username: '',
+        profileURL: '',
+        followers: 0,
+        media_count: 0
+    })
 }
 
 // export const updateProject = (user_id, project_id, project) => {

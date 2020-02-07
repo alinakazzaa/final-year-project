@@ -6,14 +6,21 @@ import { addFetchJob } from '../../database/services/FetchJobService'
 import { criteria } from '../../constants/Criteria'
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
+import { getInfluencersByHashtag } from '../../web-services/instagram/GetUsersByHashtag'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-let usersRef = db.ref('/Users');
+let usersRef = db.ref('/Users')
+let influencersRef = db.ref('/Influencers/topposts/hashtags/')
 
 class AllFetchJobs extends React.Component {
     state = {
         fetchJobs: [],
+    }
+
+    startFetchJob = job => {
+        getInfluencersByHashtag(job.hashtag)
+        // set status of fetch job completed
     }
 
     componentDidMount() {
@@ -46,6 +53,7 @@ class AllFetchJobs extends React.Component {
                     fetchJobs={this.state.fetchJobs}
                     goToFetchJob={fj => this.props.navigation.navigate('ViewFetchJob', { fj })}
                     addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
+                    startFetchJob={this.startFetchJob}
                 />
             </View>
         );

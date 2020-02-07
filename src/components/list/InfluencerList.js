@@ -5,22 +5,19 @@ import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 
-export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJob }) => {
-    const FJList = (fj, index) => {
+export const InfluencerList = ({ criteria, influencers, goToInfluencer, addInfluencerByUsername, addToPotential, removeInfluencer }) => {
+    const influList = (influ, index) => {
         return (
-            <TouchableOpacity key={index} onPress={() => goToFetchJob(fj)}>
+            <TouchableOpacity key={index} onPress={() => console.log(influ)}>
                 <View style={styles.listItem}>
                     <View style={styles.left}>
-                        <Text style={styles.hashtag}>{`HASHTAG    ${fj.hashtag}`}</Text>
-                        <Text style={styles.location}>{`LOCATION    ${fj.location}`}</Text>
-
+                        <Text style={styles.hashtag}>{influ.id}</Text>
                     </View>
                     <View style={styles.middle}>
-                        <Text style={styles.date}>{fj.date_created}</Text>
+                        <Text style={styles.hashtag}>{influ.followers}</Text>
                     </View>
                     <View style={styles.right}>
-                        <IconButton type="foundation" name="download" size={30} onPress={() => startFetchJob(fj)} color="#493649" />
-                        {/* <TextButton style={styles.startBtn} onPress={} title="Start" /> */}
+                        <Text style={styles.hashtag}>{influ.media_count}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -30,27 +27,18 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJ
     return (
 
         <View>
+            {/* {criteria.hashtag && `# ${criteria.hashtag}`}
+            {criteria.location && `Location ${criteria.location}`} */}
             <View style={styles.listHead}>
-                <Text style={styles.headerTitle}>Title</Text>
-                <Text style={styles.headerTitle}>Date</Text>
-                <Text style={styles.headerTitle}>Hashtag</Text>
-                <Text style={styles.headerTitle}>Location</Text>
+                <Text style={styles.headerTitle}>Username</Text>
+                <Text style={styles.headerTitle}>Followers</Text>
+                <Text style={styles.headerTitle}>Media</Text>
             </View>
             <ScrollView keyboardDismissMode='on-drag'
                 contentContainerStyle={styles.scrollContainer}>
-                {fetchJobs.map((fj, index) => {
-                    return FJList(fj, index)
+                {influencers.map((i, index) => {
+                    return influList(i, index)
                 })}
-                <IconButton
-                    // raised
-                    color="#493649"
-                    type='font-awesome'
-                    name='plus'
-                    size={40}
-                    onPress={() => addFetchJob()}
-                    style={styles.addIcon}
-                // reverse
-                />
             </ScrollView>
         </View>
     )
@@ -64,9 +52,6 @@ const styles = StyleSheet.create(
             flexDirection: 'row',
             color: '#5d4d50',
             justifyContent: 'space-around',
-            padding: 13,
-            marginRight: '2%',
-            marginLeft: '2%',
         },
         scrollContainer: {
             paddingTop: '3%',
@@ -141,13 +126,19 @@ const styles = StyleSheet.create(
         }
     });
 
-FetchJobList.PropTypes = {
-    fetchJobs: PropTypes.array.isRequired,
-    goToFetchJob: PropTypes.func,
-    startFetchJob: PropTypes.func,
+InfluencerList.PropTypes = {
+    influencers: PropTypes.array.isRequired,
+    goToInfluencer: PropTypes.func,
+    addInfluencerByUsername: PropTypes.func,
+    addToPotential: PropTypes.func,
+    removeInfluencer: PropTypes.func,
+    criteria: PropTypes.object
 }
 
-FetchJobList.defaultProps = {
-    goToFetchJob: null,
-    startFetchJob: null
+InfluencerList.defaultProps = {
+    goToInfluencer: null,
+    addInfluencerByUsername: null,
+    addToPotential: null,
+    removeInfluencer: null,
+    criteria: {}
 }
