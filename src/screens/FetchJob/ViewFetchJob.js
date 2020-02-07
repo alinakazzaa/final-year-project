@@ -16,19 +16,19 @@ class ViewFetchJob extends React.Component {
 
     componentDidMount() {
         const { navigation } = this.props;
-        let fj = navigation.getParam('fj') || {}
-        if (fj.criteria != null) {
-            let fjcriteria = fj.criteria.split(',') || []
+        let fj = navigation.getParam('fj') || null
+        if (fj.criteria) {
+            let fjcriteria = fj.criteria.split(',')
             fj.criteria = fjcriteria
-            this.setState({ job: fj })
         }
+        this.setState({ job: fj })
     }
 
     render() {
 
         const job = this.state.job
         return (
-            <View style={styles.main}>
+            <View>
                 {/* <Text style={styles.text}>View Fetch Job</Text>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('AllInfluencers')}>
                     <Text>View Influencers</Text>
@@ -66,27 +66,28 @@ class ViewFetchJob extends React.Component {
                             <Text style={styles.lbl}>Location</Text>
                             <Text style={styles.data}>{job.location}</Text>
                         </View>
-                        <View style={styles.itemRow}>
+                        <View style={styles.itemRowRange}>
+                            <Text style={styles.lblRange}>Follower range</Text>
                             <CriteriaView activeCriteria={job.criteria} />
                         </View>
                         <View style={styles.bottomView}>
                             <View>
                                 <View style={styles.listHead}>
                                     <Text style={styles.title}>Influencers</Text>
-                                    <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
+                                    <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers', { job })}>
                                         <Text style={styles.title}>View All</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <ScrollView horizontal>
+                                {/* <ScrollView horizontal>
                                     {/* {collabs.map((collab, index) => {
                                     return this.collabList(collab, index)
-                                })} */}
-                                </ScrollView>
+                                })} </ScrollView>*/}
+
                             </View>
                         </View>
                     </View>
                 </View>
-            </View>
+            </View >
         );
     }
 }
@@ -100,7 +101,7 @@ const styles = StyleSheet.create(
             justifyContent: 'space-between'
         },
         middle: {
-            paddingTop: '3%',
+            paddingTop: '4%',
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between'
@@ -108,72 +109,59 @@ const styles = StyleSheet.create(
         bottomView: {
             display: 'flex',
             flexDirection: 'column',
-            marginTop: '3%'
+            paddingTop: '4%'
         },
         listHead: {
             flexDirection: 'row',
             justifyContent: 'space-between'
         },
         infoContainer: {
-            margin: '5%',
-        },
-        fetchJob: {
             display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: 13,
-            borderBottomWidth: 0.5,
-            borderColor: '#ded4da',
+            margin: '5%',
+            flex: 1
         },
         title: {
-            fontSize: 16,
+            fontSize: 15,
             color: '#493649',
             fontWeight: 'bold',
             textTransform: 'uppercase',
             textAlign: 'left',
-            paddingLeft: '4%'
-            // padding: '4%'
-            // marginBottom: '4%',
-            // paddingTop: '3%',
-            // marginLeft: '3%'
+            paddingLeft: '4%',
         },
         itemRow: {
             display: 'flex',
             flexDirection: 'row',
             borderBottomWidth: 0.2,
             borderBottomColor: '#b3b3cc',
-            padding: '4%',
+            margin: '3%',
+            marginLeft: '4%',
+            marginRight: '4%',
             justifyContent: 'space-between'
         },
-        itemCol: {
+        itemRowRange: {
             display: 'flex',
             flexDirection: 'column',
             borderBottomWidth: 0.2,
             borderBottomColor: '#b3b3cc',
-            padding: '4%',
-            paddingBottom: '7%',
-            justifyContent: 'space-between',
-            // marginBottom: '4%'
+            margin: '3%',
+            marginLeft: '4%',
+            marginRight: '4%',
+            justifyContent: 'space-evenly'
         },
         lbl: {
             fontSize: 18,
             color: '#5d4d50',
             textTransform: 'uppercase',
         },
+        lblRange: {
+            fontSize: 18,
+            color: '#5d4d50',
+            textTransform: 'uppercase',
+            paddingBottom: '7%'
+        },
         data: {
             fontSize: 18,
             color: '#826478'
-        },
-        influName: {
-            color: '#846284',
-            textTransform: 'uppercase',
-            fontSize: 14,
-        },
-        fjData: {
-            color: '#846284',
-            textTransform: 'uppercase',
-            fontSize: 14,
-            // width: '40%'
         },
         viewAllBtn: {
             alignSelf: 'center',
