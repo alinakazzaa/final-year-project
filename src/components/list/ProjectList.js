@@ -1,30 +1,30 @@
 import React from 'react'
 import { Icon, Avatar } from 'react-native-elements'
-import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView, Dimensions } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 
 export const ProjectList = ({ active, projects, deleteProject, addProject, goToProject }) => {
-
     const projList = (proj, index) => {
+        proj = { ...proj } || {}
         let collabs = proj.collabs
         // const noOfCollabs = collabs.length;
         // let extraColls;
 
         // if (noOfCollabs > 4) {
-        //   collabs = collabs.splice(noOfCollabs - 4);
-        //   extraColls = noOfCollabs - 4;
+        //     collabs = collabs.splice(noOfCollabs - 4);
+        //     extraColls = noOfCollabs - 4;
         // }
-
         return (
             <View style={styles.listItem} key={index}>
+
                 <View style={styles.header}>
-                    <Text style={styles.headerTitle}>{proj.title}</Text>
+                    <Text style={styles.headerTitle}>{proj.details.title}</Text>
                 </View>
                 <View style={{ padding: '5%' }}>
                     <View style={styles.description}>
                         <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: '5%' }}>Description</Text>
-                        <Text style={{ color: 'black', marginBottom: '5%', fontStyle: "italic" }}>{proj.description}</Text>
+                        <Text style={{ color: 'black', marginBottom: '5%', fontStyle: "italic" }}>{proj.details.description}</Text>
                     </View>
                     <Text style={{ fontSize: 15, fontWeight: '500', marginBottom: '4%' }}>Collabs</Text>
                     {!collabs && <Text>None</Text>}
@@ -47,7 +47,7 @@ export const ProjectList = ({ active, projects, deleteProject, addProject, goToP
                         </View>}
                     <View style={styles.footer}>
                         <Text style={{ fontSize: 13, paddingRight: '5%', fontFamily: 'ArialRoundedMTBold' }}>Date created</Text>
-                        <Text style={{ fontSize: 13, fontFamily: 'ArialRoundedMTBold' }}>{proj.date_created}</Text>
+                        <Text style={{ fontSize: 13, fontFamily: 'ArialRoundedMTBold' }}>{proj.details.date_created}</Text>
                     </View>
                 </View>
                 <View style={styles.projFooter} key={proj} >
@@ -70,13 +70,17 @@ export const ProjectList = ({ active, projects, deleteProject, addProject, goToP
         )
     }
 
+    const screenHeight = Dimensions.get('window').height
+
     return (
-        <View>
+        <View style={{ height: screenHeight }}>
             <ScrollView keyboardDismissMode='on-drag'
-                contentContainerStyle={styles.scrollContainer}>
+                contentContainerStyle={styles.scrollContainer}
+            // style={{ flexGrow: 1, marginBottom: '10%' }}
+            >
                 <View style={styles.projList}>
                     {
-                        projects.map((proj, index) => {
+                        projects.length > 0 && projects.map((proj, index) => {
                             return (
                                 projList(proj, index)
                             );
@@ -84,17 +88,8 @@ export const ProjectList = ({ active, projects, deleteProject, addProject, goToP
 
                     }
                 </View>
-                {active && <IconButton
-                    // raised
-                    color="#493649"
-                    type='plus'
-                    size={40}
-                    onPress={() => addProject()}
-                    style={styles.addIcon}
-                // reverse
-                />}
-            </ScrollView>
-        </View>
+            </ScrollView >
+        </View >
     )
 
 }
@@ -103,9 +98,8 @@ const styles = StyleSheet.create(
     {
         main:
         {
-            display: 'flex',
-            flex: 4,
-            flexDirection: 'column',
+
+            // flexDirection: 'column',
 
         },
         addIcon: {
@@ -117,7 +111,7 @@ const styles = StyleSheet.create(
         },
         scrollContainer: {
             paddingTop: '3%',
-            paddingBottom: '3%'
+            paddingBottom: 200,
         },
         addBtn: {
             borderWidth: 1,
