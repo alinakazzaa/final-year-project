@@ -24,9 +24,7 @@ const userReducer = (state = initialState, action) => {
             };
         case SET_USER_PROJECTS:
             const projects = [...action.payload]
-            // let newProjects = newState.projects
             newState.projects = projects
-            // newProjects = projects
             return {
                 ...newState
             };
