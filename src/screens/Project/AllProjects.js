@@ -93,7 +93,6 @@ class AllProjects extends React.Component {
                             <IconButton
                                 color="#493649"
                                 name="plus"
-                                type='font-awesome'
                                 size={40}
                                 onPress={this.addProject}
                                 style={styles.addIcon}

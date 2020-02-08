@@ -19,7 +19,6 @@ class HomeScreen extends React.Component {
             <View style={styles.main}>
                 <AppHeader
                     right={<IconButton color="#5d4d50"
-                        type='font-awesome'
                         name='sign-out'
                         size={30}
                         onPress={() => actions.logOutUser()}

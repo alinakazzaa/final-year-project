@@ -16,13 +16,11 @@ export const CriteriaView = ({ activeCriteria }) => {
                     {activeCriteria.includes(item.key) ?
                         < Icon
                             name='check'
-                            type='font-awesome'
                             size={20}
                             color='#493649'
                             style={styles.checkmark} /> :
                         <Icon
                             name='times'
-                            type='font-awesome'
                             size={20}
                             color='#e9e2e7'
                             style={styles.checkmark} />}

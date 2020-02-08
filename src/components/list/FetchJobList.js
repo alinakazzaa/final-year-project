@@ -44,7 +44,6 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJ
                 <IconButton
                     // raised
                     color="#493649"
-                    type='font-awesome'
                     name='plus'
                     size={40}
                     onPress={() => addFetchJob()}
