@@ -4,15 +4,14 @@ import { db } from '../../database/config/db';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
-import { TabView, SceneMap } from 'react-native-tab-view';
+// import { TabView, SceneMap } from 'react-native-tab-view';
 import { ProjectList } from '../../components/list/ProjectList';
 import { Input } from 'react-native-elements';
 import { removeProject } from '../../database/services/ProjectService'
 import * as userActions from '../../actions/user';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DB_USER_REF, DB_PROJECTS_REF, DB_FETCH_JOBS_REF, DB_INFLUENCERS_REF } from '../../constants/index'
-import { updateUser } from '../../database/services/UserService';
+import { DB_USER_REF } from '../../constants/index'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -31,7 +30,6 @@ class AllProjects extends React.Component {
     componentDidMount() {
         this.setState({ isLoading: true })
         let { actions, user } = this.props;
-        console.log(user)
         let projects = []
         let projects_ref
         DB_USER_REF.on('value', u_snap => {
@@ -41,7 +39,7 @@ class AllProjects extends React.Component {
                     db.ref(projects_ref).on('value', p_snap => {
                         p_snap.forEach(proj => {
                             let data = proj.val()
-                            projects = Object.values(data)
+                            projects.push(data)
                         })
                     })
                 }
@@ -49,6 +47,7 @@ class AllProjects extends React.Component {
             })
         })
         actions.setUserProjects(projects)
+        console.log(user)
         this.setState({ isLoading: false })
 
     }
@@ -68,36 +67,11 @@ class AllProjects extends React.Component {
 
     searchProject = text => {
         console.log("Search project")
-        // let projects = [];
-        // db.projectByTitle(text).then((data) => {
-        //     projects = Object.values(data);
-        //     this.setState({
-        //         projects,
-        //     });
-        // }).catch((err) => {
-        //     console.log(err);
-        // })
-        // this.getProjects()
     }
 
     render() {
-        // const { user, projects } = this.props;
-        // let { actions, user, projects, state } = this.props;
-        // let s = { ...state }
-        // console.log(user)
-        // console.log(user)
-        // console.log(projects)
+        const { user } = this.props;
         return (
-            // <View style={styles.container}>
-            //     <Text style={styles.text}>All Projects</Text>
-            //     <TouchableOpacity onPress={() => this.props.navigation.navigate('AddProject')}>
-            //         <Text>Add Project</Text>
-            //     </TouchableOpacity>
-            //     <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewProject')}>
-            //         <Text>View Project</Text>
-            //     </TouchableOpacity>
-            // </View>
-
             <View style={styles.main} >
                 {
                     this.state.isLoading ? <View style={styles.loading}>
@@ -121,16 +95,18 @@ class AllProjects extends React.Component {
                                 />}
                                 right={<View style={styles.cancelBtn}><TextButton title="Cancel" onPress={Keyboard.dismiss} /></View>}
                             />
-                            <TabView
+                            {/* <TabView
                                 navigationState={this.state}
                                 renderScene={SceneMap({
-                                    active: () => <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={this.state.projects} />
+                                    active: () => <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={user.projects} />
                                     ,
                                     archived: () => <ProjectList deleteProject={this.deleteProject} goToProject={this.goToProject} active={false} projects={this.state.projects} />,
                                 })}
                                 onIndexChange={index => this.setState({ index })}
                                 initialLayout={{ width: 250, height: 250 }}
-                            />
+                            /> */}
+
+                            <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={user.projects} />
 
                             <IconButton
                                 color="#493649"
@@ -153,7 +129,7 @@ const styles = StyleSheet.create(
         {
             backgroundColor: '#f4f1f1',
             display: 'flex',
-            flex: 4,
+            flex: 1,
             flexDirection: 'column',
         },
         loading: {
