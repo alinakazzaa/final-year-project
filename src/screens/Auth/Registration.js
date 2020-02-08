@@ -3,6 +3,9 @@ import { View, Text, YellowBox, StyleSheet, TextInput, Button } from 'react-nati
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import { DB_USER_REF } from '../../constants/index'
 import { addUser, getUserByUsername } from '../../database/services/UserService'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as userActions from '../../actions/user';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -13,7 +16,16 @@ class RegistrationScreen extends React.Component {
     }
 
     logIn = user => {
-        console.log(user)
+        let { actions } = this.props;
+        let current_user = DB_USER_REF.on('value', u_snap => {
+            u_snap.forEach(item => {
+                let details = { ...item.val().details }
+                if (details.username == user.username) {
+                    actions.setLoggedInUser({ ...item.val() })
+                }
+            })
+
+        })
     }
 
     render() {
@@ -34,4 +46,16 @@ const styles = StyleSheet.create(
         },
     });
 
-export default RegistrationScreen
+const mapStateToProps = state => ({
+    user: state.user,
+});
+
+const ActionCreators = Object.assign(
+    {},
+    userActions,
+);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationScreen)
