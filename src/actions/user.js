@@ -1,4 +1,4 @@
-import { USER_LOGIN, USER_LOGOUT } from '../constants';
+import { USER_LOGIN, USER_LOGOUT, SET_USER_PROJECTS } from '../constants';
 
 export const setLoggedInUser = user => {
     return {
@@ -10,6 +10,14 @@ export const setLoggedInUser = user => {
 export const logOutUser = () => {
     return {
         type: USER_LOGOUT,
-        payload: {}
+    }
+}
+
+
+
+export const setUserProjects = projects => {
+    return {
+        type: SET_USER_PROJECTS,
+        payload: projects
     }
 }
