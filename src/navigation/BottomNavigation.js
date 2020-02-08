@@ -3,7 +3,8 @@ import HomeScreen from '../screens/Home/Home';
 import SettingsScreen from '../screens/Settings/Settings';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Icon } from 'react-native-elements';
-import { ApplicationStack } from './ApplicationStack';
+import { CollabStack } from './CollabStack';
+import { ProjectStack } from './ProjectStack';
 
 
 export const BottomNavigator = createBottomTabNavigator(
@@ -18,7 +19,7 @@ export const BottomNavigator = createBottomTabNavigator(
             }
         },
         Projects: {
-            screen: ApplicationStack,
+            screen: ProjectStack,
             navigationOptions: {
                 title: 'Projects',
                 tabBarIcon: () => (
@@ -27,7 +28,7 @@ export const BottomNavigator = createBottomTabNavigator(
             }
         },
         Collabs: {
-            screen: ApplicationStack,
+            screen: CollabStack,
             navigationOptions: {
                 title: 'Collabs',
                 tabBarIcon: () => (
