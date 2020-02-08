@@ -7,6 +7,9 @@ import { criteria } from '../../constants/Criteria'
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
 import { getInfluencersByHashtag } from '../../web-services/instagram/GetUsersByHashtag'
+import * as fetchJobActions from '../../actions/fetchJob';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -14,9 +17,6 @@ let usersRef = db.ref('/Users')
 let influencersRef = db.ref('/Influencers/topposts/hashtags/')
 
 class AllFetchJobs extends React.Component {
-    state = {
-        fetchJobs: [],
-    }
 
     startFetchJob = job => {
         getInfluencersByHashtag(job.hashtag)
@@ -24,18 +24,19 @@ class AllFetchJobs extends React.Component {
     }
 
     componentDidMount() {
+        const { actions, user, current_project } = this.props
         usersRef.on('value', (u_snapshot) => {
             u_snapshot.forEach(userSnapshot => {
-                if (userSnapshot.val().username == 'alinakazzaa') {
+                if (userSnapshot.val().details.username == user.username) {
                     let projectsRef = usersRef.child(`${userSnapshot.key}/Projects`)
                     projectsRef.on('value', (proj_snapshot) => {
                         proj_snapshot.forEach(projectSnapshot => {
-                            if (projectSnapshot.val().title == 'Another Test Project for Alinakazzaa') {
+                            if (projectSnapshot.val().details.title == current_project.title) {
                                 let fetchJobsRef = projectsRef.child(`${projectSnapshot.key}/FetchJobs`)
                                 fetchJobsRef.on('value', (fj_snapshot) => {
                                     let data = fj_snapshot.val();
                                     let fetchJobs = Object.values(data);
-                                    this.setState({ fetchJobs });
+                                    actions.setFetchJobs(fetchJobs)
                                 });
                             }
                         })
@@ -46,11 +47,12 @@ class AllFetchJobs extends React.Component {
     }
 
     render() {
+        const { fetch_jobs } = this.props
+
         return (
             <View style={styles.container}>
-                <AppHeader />
                 <FetchJobList
-                    fetchJobs={this.state.fetchJobs}
+                    fetchJobs={fetch_jobs}
                     goToFetchJob={fj => this.props.navigation.navigate('ViewFetchJob', { fj })}
                     addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                     startFetchJob={this.startFetchJob}
@@ -73,4 +75,19 @@ const styles = StyleSheet.create(
         }
     });
 
-export default AllFetchJobs
+const mapStateToProps = state => ({
+    state: state,
+    user: state.user,
+    current_project: state.projects.current_project,
+    fetch_jobs: state.fetch_jobs.fetch_jobs
+});
+
+const ActionCreators = Object.assign(
+    {},
+    fetchJobActions
+);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)

@@ -1,4 +1,4 @@
-import { USER_LOGIN, USER_LOGOUT, SET_USER_PROJECTS, SET_CURRENT_PROJECT } from '../constants';
+import { USER_LOGIN, USER_LOGOUT } from '../constants';
 
 const initialState = {
     user: {

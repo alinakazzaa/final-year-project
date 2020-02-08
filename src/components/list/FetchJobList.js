@@ -140,7 +140,7 @@ const styles = StyleSheet.create(
         }
     });
 
-FetchJobList.PropTypes = {
+FetchJobList.propTypes = {
     fetchJobs: PropTypes.array.isRequired,
     goToFetchJob: PropTypes.func,
     startFetchJob: PropTypes.func,

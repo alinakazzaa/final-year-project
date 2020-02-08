@@ -29,9 +29,8 @@ class AddProject extends React.Component {
 
     handleSubmit = () => {
         const { project, user } = this.state
-        console.log()
         project.date_created = DATE_TODAY
-        addProject(user.details.id, project);
+        addProject(user.id, project);
         this.props.navigation.navigate("AllProjects")
     }
 
