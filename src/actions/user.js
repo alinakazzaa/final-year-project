@@ -1,14 +1,13 @@
 import { USER_LOGIN, USER_LOGOUT } from '../constants';
 
-export function setLoggedInUser(user) {
-    console.log(user)
+export const setLoggedInUser = user => {
     return {
         type: USER_LOGIN,
-        payload: user
+        payload: { ...user }
     }
 }
 
-export function logOutUser() {
+export const logOutUser = () => {
     return {
         type: USER_LOGOUT,
         payload: {}
