@@ -6,6 +6,9 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 import { CriteriaView } from '../../components/criteria/CriteriaView';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
+import * as fetchJobActions from '../../actions/fetchJob';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 
 class ViewFetchJob extends React.Component {
@@ -17,6 +20,8 @@ class ViewFetchJob extends React.Component {
     componentDidMount() {
         const { navigation } = this.props;
         let fj = navigation.getParam('fj') || null
+        const { current_fetch_job } = this.props
+        console.log(current_fetch_job)
         if (fj.criteria) {
             let fjcriteria = fj.criteria.split(',')
             fj.criteria = fjcriteria
@@ -168,4 +173,20 @@ const styles = StyleSheet.create(
         }
     });
 
-export default ViewFetchJob
+const mapStateToProps = state => ({
+    state: state,
+    user: state.user,
+    current_project: state.projects.current_project,
+    fetch_jobs: state.fetch_jobs.fetch_jobs,
+    current_fetch_job: state.fetch_jobs.current_fetch_job
+});
+
+const ActionCreators = Object.assign(
+    {},
+    fetchJobActions
+);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewFetchJob)
