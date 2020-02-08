@@ -9,25 +9,26 @@ const initialState = {
     }
 };
 const userReducer = (state = initialState, action) => {
-    let newState = { ...state }
-    let newUser = { ...state.user }
+    let updated_user = { ...state.user }
+    let updated_state = { ...state }
     switch (action.type) {
         case USER_LOGIN:
-            const user = { ...action.payload }
-            newUser.details = user.details
+            const details = { ...action.payload.details }
+            updated_user.details = details
+            updated_state.user = updated_user
             return {
-                ...newUser
+                ...updated_state
             };
         case USER_LOGOUT:
             return {
                 ...initialState
             };
-        case SET_USER_PROJECTS:
-            const projects = [...action.payload]
-            newState.projects = projects
-            return {
-                ...newState
-            };
+        // case SET_USER_PROJECTS:
+        //     const projects = [...action.payload]
+        //     newState.projects = projects
+        //     return {
+        //         ...newState
+        //     };
         default:
             return state;
     }

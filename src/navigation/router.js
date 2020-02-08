@@ -13,10 +13,10 @@ class Router extends Component {
 
     render() {
         let { user } = this.props
-        // console.log(user.details.id)
         console.log(user.details && "current user: " + user.details.username || "no user logged in")
         return (
-            !user.details ? <LogIn /> : <MainApp />
+            // <LogIn />
+            !user.details.username ? <LogIn /> : <MainApp />
         );
     }
 };
