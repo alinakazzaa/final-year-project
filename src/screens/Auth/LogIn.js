@@ -21,7 +21,7 @@ class LogInScreen extends React.Component {
                 let details = { ...item.val().details }
                 if (details.username == user.username) {
                     let key = item.key
-                    let user = { details, id: key }
+                    let user = { ...details }
                     actions.setLoggedInUser(user)
                 }
             })
@@ -48,7 +48,7 @@ const styles = StyleSheet.create(
     });
 
 const mapStateToProps = state => ({
-    user: state.user,
+    user: state.user
 });
 
 const ActionCreators = Object.assign(
