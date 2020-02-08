@@ -16,26 +16,16 @@ class LogInScreen extends React.Component {
 
     logIn = user => {
         let { actions } = this.props;
-        let current_user = {}
         DB_USER_REF.on('value', u_snap => {
-            u_snap.forEach(u_cursor => {
-                let item = { ...current_user, ...u_cursor.val() }
-                if (item.details.username == user.username) {
-                    current_user = { ...item }
+            u_snap.forEach(item => {
+                let details = { ...item.val().details }
+                if (details.username == user.username) {
+                    let key = item.key
+                    let user = { details, id: key }
+                    actions.setLoggedInUser(user)
                 }
             })
         })
-
-        if (current_user.details) {
-            if (current_user.details.password == user.password) {
-                actions.setLoggedInUser(current_user)
-                console.log('logged in successfully')
-            } else {
-                console.log('incorrect password')
-            }
-        } else {
-            console.log('No account found with these details. Please register below')
-        }
     }
 
     render() {
