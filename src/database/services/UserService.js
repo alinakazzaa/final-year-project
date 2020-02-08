@@ -2,14 +2,21 @@ import { db } from '../config/db';
 import { DB_USER_REF } from '../../constants/index'
 
 export const addUser = user => {
-    db.ref(`/Users/`).push({
+
+    const user_add = DB_USER_REF.push({
         details: {
+            id: '',
             username: user.username,
             password: user.password,
+            date_created: user.date_created,
             profileURL: `https://www.instagram.com/${user.username}/`,
-            avatar: ''
+            avatar: '',
         }
-    });
+    })
+    const key = user_add.key
+    DB_USER_REF.child(key).update({
+        id: key
+    })
 }
 
 
