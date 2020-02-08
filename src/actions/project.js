@@ -1,4 +1,4 @@
-import { SET_USER_PROJECTS } from '../constants';
+import { SET_USER_PROJECTS, SET_CURRENT_PROJECT } from '../constants';
 
 export const setUserProjects = projects => {
     return {
@@ -6,3 +6,11 @@ export const setUserProjects = projects => {
         payload: projects
     }
 }
+
+export const setCurrentProject = project => {
+    return {
+        type: SET_CURRENT_PROJECT,
+        payload: project
+    }
+}
+
