@@ -23,12 +23,13 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...initialState
             };
-        // case SET_USER_PROJECTS:
-        //     const projects = [...action.payload]
-        //     newState.projects = projects
-        //     return {
-        //         ...newState
-        //     };
+        case SET_USER_PROJECTS:
+            const projects = [...action.payload]
+            updated_user.projects = projects
+            updated_state.user = updated_user
+            return {
+                ...updated_state
+            };
         default:
             return state;
     }
