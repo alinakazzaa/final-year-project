@@ -17,14 +17,15 @@ class RegistrationScreen extends React.Component {
 
     logIn = user => {
         let { actions } = this.props;
-        let current_user = DB_USER_REF.on('value', u_snap => {
+        DB_USER_REF.on('value', u_snap => {
             u_snap.forEach(item => {
                 let details = { ...item.val().details }
                 if (details.username == user.username) {
-                    actions.setLoggedInUser({ ...item.val() })
+                    let key = item.key
+                    let user = { details, id: key }
+                    actions.setLoggedInUser(user)
                 }
             })
-
         })
     }
 
