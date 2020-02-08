@@ -2,8 +2,6 @@ import { db } from '../config/db';
 import { DB_USER_REF } from '../../constants/index'
 
 export const addProject = (user_id, project) => {
-    console.log(project)
-    console.log(user_id)
     const project_add = db.ref(`/Users/${user_id}/Projects`).push({
         details: {
             id: '',
@@ -22,10 +20,7 @@ export const addProject = (user_id, project) => {
 
 export const updateProject = (user_id, project_id, project) => {
     db.ref(`/Users/${user_id}/Projects/${project_id}`).update({
-        title: project.title,
-        date_created: project.date_created,
-        description: project.description,
-        active: project.active
+        details: project.details
     });
 
 
