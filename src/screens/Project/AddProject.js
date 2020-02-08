@@ -5,13 +5,21 @@ import ProjectForm from '../../components/forms/ProjectForm';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
 import { addProject } from '../../database/services/ProjectService'
+import { DATE_TODAY } from '../../constants/TodayDate'
 
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class AddProject extends React.Component {
 
+    componentDidMount() {
+        const { navigation } = this.props;
+        const user = navigation.getParam('user');
+        this.setState({ user })
+    }
+
     state = {
+        user: {},
         project: {}
     }
 
@@ -20,9 +28,10 @@ class AddProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const project = this.state.project
-        // will replace user ID with one in redux state
-        addProject("-LzOYfdTgQu-Hqxl9bGz", project);
+        const { project, user } = this.state
+        project.date_created = DATE_TODAY
+        addProject(user.id, project);
+        this.props.navigation.navigate("AllProjects")
     }
 
     render() {
