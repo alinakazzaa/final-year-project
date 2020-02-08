@@ -28,7 +28,7 @@ class HomeScreen extends React.Component {
                 <View style={styles.logInMsg}><Text style={styles.largeTitle}>Welcome!</Text></View>
                 <View style={styles.logInMsg}>
                     <Text style={styles.largeTitle}>Recent posts by influencers....</Text>
-                    <Text style={styles.largeTitle}>{`Current user ${current_user.details.username}`}</Text>
+                    <Text style={styles.largeTitle}>{`Current user ${current_user.username}`}</Text>
                 </View>
                 <View style={styles.logInMsg}>
                     <Text style={styles.largeTitle}>Maybe recently openet projects....</Text>

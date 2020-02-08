@@ -73,23 +73,20 @@ export const ProjectList = ({ active, projects, deleteProject, addProject, goToP
     const screenHeight = Dimensions.get('window').height
 
     return (
-        <View style={{ height: screenHeight }}>
-            <ScrollView keyboardDismissMode='on-drag'
-                contentContainerStyle={styles.scrollContainer}
-            // style={{ flexGrow: 1, marginBottom: '10%' }}
-            >
-                <View style={styles.projList}>
-                    {
-                        projects.length > 0 && projects.map((proj, index) => {
-                            return (
-                                projList(proj, index)
-                            );
-                        })
+        <ScrollView keyboardDismissMode='on-drag'
+            contentContainerStyle={styles.scrollContainer}
+        >
+            <View style={styles.projList}>
+                {
+                    projects.length > 0 && projects.map((proj, index) => {
+                        return (
+                            projList(proj, index)
+                        );
+                    })
 
-                    }
-                </View>
-            </ScrollView >
-        </View >
+                }
+            </View>
+        </ScrollView >
     )
 
 }
@@ -110,8 +107,7 @@ const styles = StyleSheet.create(
             backgroundColor: '#C0C4F3'
         },
         scrollContainer: {
-            paddingTop: '3%',
-            paddingBottom: 200,
+            padding: '3%',
         },
         addBtn: {
             borderWidth: 1,
@@ -184,10 +180,9 @@ const styles = StyleSheet.create(
             fontWeight: '100',
         },
         projList: {
-            flex: 1,
             flexDirection: 'row',
             flexWrap: 'wrap',
-            height: '60%',
+            // height: '60%',
             marginTop: '4%',
             justifyContent: 'center'
         },
