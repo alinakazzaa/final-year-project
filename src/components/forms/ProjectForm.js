@@ -58,8 +58,6 @@ const formStyles = {
 const Project = t.struct({
     title: t.String,
     description: t.maybe(t.String),
-    client: t.String,
-    date_created: t.String,
     active: t.Boolean
 });
 
@@ -71,8 +69,6 @@ const options = {
         active: {
             label: 'Active Project',
         },
-        client: {
-        }
     },
     stylesheet: formStyles,
 };
