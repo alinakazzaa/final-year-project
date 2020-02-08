@@ -9,6 +9,7 @@ import { ProjectList } from '../../components/list/ProjectList';
 import { Input } from 'react-native-elements';
 import { removeProject } from '../../database/services/ProjectService'
 import * as userActions from '../../actions/user';
+import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DB_USER_REF } from '../../constants/index'
@@ -34,7 +35,7 @@ class AllProjects extends React.Component {
         let projects_ref
         DB_USER_REF.on('value', u_snap => {
             u_snap.forEach(item => {
-                if (item.key == user.details.id) {
+                if (item.key == user.id) {
                     projects_ref = `Users/${item.key}/Projects`
                     db.ref(projects_ref).on('value', p_snap => {
                         p_snap.forEach(proj => {
@@ -47,7 +48,6 @@ class AllProjects extends React.Component {
             })
         })
         actions.setUserProjects(projects)
-        console.log(user)
         this.setState({ isLoading: false })
 
     }
@@ -58,7 +58,9 @@ class AllProjects extends React.Component {
     }
 
     goToProject = proj => {
-        this.props.navigation.navigate('ViewProject', { proj })
+        let { actions } = this.props;
+        this.props.navigation.navigate('ViewProject')
+        actions.setCurrentProject(proj)
     }
 
     deleteProject = project => {
@@ -70,7 +72,7 @@ class AllProjects extends React.Component {
     }
 
     render() {
-        const { user } = this.props;
+        const { projects } = this.props;
         return (
             <View style={styles.main} >
                 {
@@ -78,23 +80,6 @@ class AllProjects extends React.Component {
                         <ActivityIndicator size="large" color="#5d4d50" />
                         <Text style={styles.loadingTxt}>Wait, getting influencers for you</Text>
                     </View> : <View>
-                            <AppHeader
-                                left={
-                                    <IconButton color="#5d4d50'"
-                                        type='font-awesome'
-                                        name='angle-left'
-                                        size={40}
-                                        onPress={() => this.props.navigation.goBack()}
-                                    />}
-                                center={<Input
-                                    placeholder="Search projects"
-                                    placeholderTextColor="#b3b3cc"
-                                    inputContainerStyle={styles.inputStyle}
-                                    inputStyle={styles.txtStyle}
-                                    onChangeText={(text) => this.searchProject(text)}
-                                />}
-                                right={<View style={styles.cancelBtn}><TextButton title="Cancel" onPress={Keyboard.dismiss} /></View>}
-                            />
                             {/* <TabView
                                 navigationState={this.state}
                                 renderScene={SceneMap({
@@ -105,9 +90,6 @@ class AllProjects extends React.Component {
                                 onIndexChange={index => this.setState({ index })}
                                 initialLayout={{ width: 250, height: 250 }}
                             /> */}
-
-                            <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={user.projects} />
-
                             <IconButton
                                 color="#493649"
                                 name="plus"
@@ -116,6 +98,9 @@ class AllProjects extends React.Component {
                                 onPress={this.addProject}
                                 style={styles.addIcon}
                             />
+
+                            <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects} />
+
                         </View>
                 }
             </View>
@@ -170,12 +155,15 @@ const styles = StyleSheet.create(
     });
 
 const mapStateToProps = state => ({
+    state: state,
     user: state.user,
+    projects: state.projects.projects
 });
 
 const ActionCreators = Object.assign(
     {},
-    userActions
+    userActions,
+    projectActions
 );
 const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(ActionCreators, dispatch),

@@ -4,6 +4,9 @@ import { StyleSheet, Text, YellowBox, View, ScrollView, TouchableOpacity } from 
 import { Avatar } from 'react-native-elements';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
+import * as projectActions from '../../actions/project';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -31,28 +34,17 @@ class ViewProjectScreen extends React.Component {
         </TouchableOpacity>
     }
 
-    editProject = proj => {
-        this.props.navigation.navigate('EditProject', { proj })
-    }
-
     render() {
-        const { navigation } = this.props;
-        const proj = navigation.getParam('proj');
+        const { current_project } = this.props;
+        const proj = current_project
         let active;
         return (
             <View style={styles.main}>
                 <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            type='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
                     right={<IconButton color="#493649"
-                        name='font-awesome'
-                        type='edit'
+                        name='edit'
                         size={27}
-                        onPress={() => this.editProject(proj)}
+                        onPress={() => this.props.navigation.navigate('EditProject')}
                     />} />
 
                 <View style={styles.infoContainer}>
@@ -65,10 +57,6 @@ class ViewProjectScreen extends React.Component {
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Title</Text>
                             <Text style={styles.data}>{proj.title}</Text>
-                        </View>
-                        <View style={styles.itemRow}>
-                            <Text style={styles.lbl}>Client</Text>
-                            <Text style={styles.data}>{proj.client}</Text>
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Date created</Text>
@@ -177,8 +165,7 @@ const styles = StyleSheet.create(
             borderBottomColor: '#b3b3cc',
             padding: '4%',
             justifyContent: 'space-between',
-            height: 50,
-            textAlign: 'right'
+            // textAlign: 'right'
         },
         itemCol: {
             display: 'flex',
@@ -198,7 +185,6 @@ const styles = StyleSheet.create(
         data: {
             fontSize: 18,
             color: '#826478',
-            width: '50%'
         },
         influName: {
             color: '#846284',
@@ -217,4 +203,19 @@ const styles = StyleSheet.create(
         }
     });
 
-export default ViewProjectScreen;
+const mapStateToProps = state => ({
+    state: state,
+    user: state.user,
+    projects: state.projects.projects,
+    current_project: state.projects.current_project
+});
+
+const ActionCreators = Object.assign(
+    {},
+    projectActions
+);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewProjectScreen)

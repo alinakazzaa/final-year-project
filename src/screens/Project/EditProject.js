@@ -11,6 +11,10 @@ import { IconButton } from '../../components/buttons/IconButton';
 import ProjectForm from '../../components/forms/ProjectForm';
 import { db } from '../../database/config/db';
 
+import * as projectActions from '../../actions/project';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 let usersRef = db.ref('/Users');
 
 class EditProject extends React.Component {
@@ -30,54 +34,43 @@ class EditProject extends React.Component {
     handleChange = project => {
         let updatedProject = {
             ...this.state.project,
-            title: project.title,
-            active: project.active,
-            description: project.description,
-            client: project.client
+            details: {
+                ...project
+            }
         }
         this.setState({ project: updatedProject });
     }
 
     handleSubmit = () => {
-        const project = this.state.project
-        // will replace user ID with one in redux state
+        const { user } = this.props
+        let project = this.state.project
         usersRef.on('value', (snapshot) => {
             snapshot.forEach(childSnapshot => {
-                if (childSnapshot.val().username == 'alinakazzaa') {
+                if (childSnapshot.key == user.id) {
                     let projectsRef = usersRef.child(`${childSnapshot.key}/Projects`)
                     projectsRef.on('value', (projectSnapshot) => {
                         projectSnapshot.forEach(proj => {
-                            let projectData = proj.val()
-                            if (projectData.title == project.title) {
-                                updateProject("-LzOYfdTgQu-Hqxl9bGz", proj.key, project);
-                            }
+                            updateProject(user.id, proj.val().details.id, project)
                         })
-
-
                     });
                 }
             })
         });
+        this.props.navigation.navigate.goBack()
 
     }
 
     render() {
+        const { current_project } = this.props
         return (
             <View style={styles.container}>
                 <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            type='font-awesome'
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
                     right={
                         <View style={styles.saveBtn}>
                             <TextButton onPress={this.handleSubmit} title="Save" />
                         </View>}
                 />
-                <ProjectForm onChange={this.handleChange} project={this.state.project} />
+                <ProjectForm onChange={this.handleChange} project={current_project} />
             </View>
         );
     }
@@ -100,4 +93,18 @@ const styles = StyleSheet.create(
         },
     });
 
-export default EditProject
+const mapStateToProps = state => ({
+    state: state,
+    user: state.user,
+    current_project: state.projects.current_project
+});
+
+const ActionCreators = Object.assign(
+    {},
+    projectActions
+);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditProject)
