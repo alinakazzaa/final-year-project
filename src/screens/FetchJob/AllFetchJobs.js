@@ -46,14 +46,19 @@ class AllFetchJobs extends React.Component {
         });
     }
 
-    render() {
-        const { fetch_jobs } = this.props
+    goToFetchJob = fj => {
+        const { actions } = this.props
+        actions.setCurrentFetchJob(fj)
+        this.props.navigation.navigate('ViewFetchJob')
+    }
 
+    render() {
+        const { fetch_jobs } = this.props || []
         return (
             <View style={styles.container}>
                 <FetchJobList
                     fetchJobs={fetch_jobs}
-                    goToFetchJob={fj => this.props.navigation.navigate('ViewFetchJob', { fj })}
+                    goToFetchJob={this.goToFetchJob}
                     addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                     startFetchJob={this.startFetchJob}
                 />

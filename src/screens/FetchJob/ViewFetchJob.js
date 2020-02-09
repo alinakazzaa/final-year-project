@@ -18,15 +18,8 @@ class ViewFetchJob extends React.Component {
     }
 
     componentDidMount() {
-        const { navigation } = this.props;
-        let fj = navigation.getParam('fj') || null
         const { current_fetch_job } = this.props
-        console.log(current_fetch_job)
-        if (fj.criteria) {
-            let fjcriteria = fj.criteria.split(',')
-            fj.criteria = fjcriteria
-        }
-        this.setState({ job: fj })
+        this.setState({ job: current_fetch_job })
     }
 
     render() {
@@ -38,13 +31,6 @@ class ViewFetchJob extends React.Component {
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('AllInfluencers')}>
                     <Text>View Influencers</Text>
                 </TouchableOpacity> */}
-                <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />} />
 
                 <View style={styles.infoContainer}>
                     <View>

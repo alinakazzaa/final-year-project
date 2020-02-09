@@ -15,9 +15,7 @@ const fetchJobReducer = (state = initialState, action) => {
                 ...updated_state
             };
         case SET_CURRENT_FETCH_JOB:
-            // console.log(action.payload)
-            // updated_state.current_fetch_job = { ...action.payload.details }
-
+            updated_state.current_fetch_job = { ...action.payload }
             return {
                 ...updated_state
             };
