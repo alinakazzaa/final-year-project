@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Icon } from 'react-native-elements';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { criteria } from '../../constants/Criteria'
+import { IconButton } from '../buttons/IconButton';
 
 
 export const CriteriaView = ({ activeCriteria }) => {
@@ -14,16 +15,14 @@ export const CriteriaView = ({ activeCriteria }) => {
             renderItem={({ item }) =>
                 <View style={styles.row}>
                     {activeCriteria.includes(item.key) ?
-                        < Icon
+                        < IconButton
                             name='check'
                             size={20}
-                            color='#493649'
-                            style={styles.checkmark} /> :
-                        <Icon
+                            color='#493649' /> :
+                        <IconButton
                             name='times'
                             size={20}
-                            color='#e9e2e7'
-                            style={styles.checkmark} />}
+                            color='#e9e2e7' />}
                     <Text style={styles.data}>{item.label}</Text>
                 </View>}
             keyExtractor={item => item.key}
@@ -39,9 +38,6 @@ const styles = StyleSheet.create(
             flexDirection: 'row',
             flexWrap: 'wrap',
             justifyContent: 'space-between'
-        },
-        checkmark: {
-            fontSize: 13
         },
         row: {
             display: 'flex',
