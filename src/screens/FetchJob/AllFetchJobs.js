@@ -6,7 +6,7 @@ import { addFetchJob, updateFetchJob } from '../../database/services/FetchJobSer
 import { criteria } from '../../constants/Criteria'
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import { getInfluencersByHashtag } from '../../web-services/instagram/InfluencerService'
+import { getInfluencersByHashtag } from '../../web-services/instagram/InfluencerWebService'
 import * as fetchJobActions from '../../actions/fetchJob';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -26,6 +26,7 @@ class AllFetchJobs extends React.Component {
         const { user, current_project } = this.props
         // getInfluencersByHashtag(job.hashtag)
         // set current fetch job running in state
+        console.log(job)
         let updated_job = { ...job }
         updated_job.status = 'in progress'
         updateFetchJob(user.id, current_project.id, updated_job)
@@ -46,18 +47,20 @@ class AllFetchJobs extends React.Component {
 
     getFetchJobs = () => {
         const { actions, user, current_project } = this.props
+        let fetchJobs = []
         usersRef.on('value', (u_snapshot) => {
             u_snapshot.forEach(userSnapshot => {
                 if (userSnapshot.val().details.username == user.username) {
                     let projectsRef = usersRef.child(`${userSnapshot.key}/Projects`)
                     projectsRef.on('value', (proj_snapshot) => {
                         proj_snapshot.forEach(projectSnapshot => {
-                            if (projectSnapshot.val().details.title == current_project.title) {
+                            if (projectSnapshot.val().details.id == current_project.id) {
                                 let fetchJobsRef = projectsRef.child(`${projectSnapshot.key}/FetchJobs`)
                                 fetchJobsRef.on('value', (fj_snapshot) => {
-                                    let data = fj_snapshot.val();
-                                    let fetchJobs = Object.values(data);
-                                    actions.setFetchJobs(fetchJobs)
+                                    fj_snapshot.forEach(item => {
+                                        fetchJobs.push(item.val())
+                                        actions.setFetchJobs(fetchJobs)
+                                    })
                                 });
                             }
                         })
@@ -76,7 +79,7 @@ class AllFetchJobs extends React.Component {
     render() {
         const { isLoading } = this.state
         const { fetch_jobs } = this.props || []
-
+        console.log(this.props.fetch_jobs)
         return (
             <View style={styles.container}>
                 {isLoading ?
