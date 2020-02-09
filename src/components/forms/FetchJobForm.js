@@ -85,34 +85,36 @@ export default class FetchJobForm extends React.Component {
 
     onChangeFormValues(val) {
         this.setState({ value: val });
-        this.props.onChange({ ...this.state })
+        const { criteria, value } = this.state
+        const fj = { criteria, value }
+        this.props.onChange(fj)
     }
 
     onChangeCriteria = val => {
-        let { state_crit, value } = this.state
-        const fj = { ...state_crit, ...value }
+        let { criteria, value } = this.state
+        const fj = { criteria, value }
         switch (val) {
             case 'five':
-                state_crit.five = !state_crit.five
+                criteria.five = !criteria.five
                 break
             case 'ten':
-                state_crit.ten = !state_crit.ten
+                criteria.ten = !criteria.ten
                 break
             case 'twenty':
-                state_crit.twenty = !state_crit.twenty
+                criteria.twenty = !criteria.twenty
                 break
             case 'fifty':
-                state_crit.fifty = !state_crit.fifty
+                criteria.fifty = !criteria.fifty
                 break
             case 'two_hundred':
-                state_crit.two_hundred = !state_crit.two_hundred
+                criteria.two_hundred = !criteria.two_hundred
                 break
             case 'two_hundred_plus':
-                state_crit.two_hundred_plus = !state_crit.two_hundred_plus
+                criteria.two_hundred_plus = !criteria.two_hundred_plus
                 break
         }
 
-        this.setState({ criteria: state_crit })
+        this.setState({ criteria })
         this.props.onChange(fj)
     }
 

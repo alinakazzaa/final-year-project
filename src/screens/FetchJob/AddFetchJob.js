@@ -27,9 +27,9 @@ class AddFetchJob extends React.Component {
         const { user, current_project } = this.props
 
         fetch_job.value.date_created = DATE_TODAY
-        fetch_job.value.title = 'Fetch: ' + fetch_job.hashtag && fetch_job.location ?
-            `hashtag: ${fetch_job.hashtag} & location: ${fetch_job.location} ` :
-            fetch_job.location ? 'location:' + fetch_job.location : 'hashtag:' + fetch_job.hashtag
+        fetch_job.value.title = 'Fetch: ' + fetch_job.value.hashtag && fetch_job.value.location ?
+            `hashtag: ${fetch_job.value.value.hashtag} & location: ${fetch_job.value.value.location} ` :
+            fetch_job.value.location ? 'location:' + fetch_job.value.location : 'hashtag:' + fetch_job.value.hashtag
 
         // filter active criteria
         let criteria = Object.entries(fetch_job.criteria);
@@ -41,7 +41,8 @@ class AddFetchJob extends React.Component {
         })
         fetch_job.criteria = active_criteria
 
-        addFetchJob(user.id, current_project.id, fetch_job)
+
+        addFetchJob(user.id, current_project.id, { ...this.state.fetch_job })
         this.props.navigation.goBack()
     }
 
