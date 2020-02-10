@@ -71,16 +71,13 @@ export default class FetchJobForm extends React.Component {
     state = {
         value: {},
         criteria: {
+            zero: false,
             five: false,
             ten: false,
             twenty: false,
             fifty: false,
             two_hundred: false,
-            two_hundred_plus: false
         }
-    }
-
-    componentDidMount() {
     }
 
     onChangeFormValues(val) {
@@ -94,6 +91,9 @@ export default class FetchJobForm extends React.Component {
         let { criteria, value } = this.state
         const fj = { criteria, value }
         switch (val) {
+            case 'zero':
+                criteria.zero = !criteria.zero
+                break
             case 'five':
                 criteria.five = !criteria.five
                 break
@@ -108,9 +108,6 @@ export default class FetchJobForm extends React.Component {
                 break
             case 'two_hundred':
                 criteria.two_hundred = !criteria.two_hundred
-                break
-            case 'two_hundred_plus':
-                criteria.two_hundred_plus = !criteria.two_hundred_plus
                 break
         }
 
@@ -132,6 +129,9 @@ export default class FetchJobForm extends React.Component {
     getChecked = key => {
         let checked = false
         switch (key) {
+            case 'zero':
+                checked = this.state.zero
+                break
             case 'five':
                 checked = this.state.criteria.five
                 break
@@ -147,9 +147,7 @@ export default class FetchJobForm extends React.Component {
             case 'two_hundred':
                 checked = this.state.criteria.two_hundred
                 break
-            case 'two_hundred_plus':
-                checked = this.state.criteria.two_hundred_plus
-                break
+
         }
         return checked
     }
