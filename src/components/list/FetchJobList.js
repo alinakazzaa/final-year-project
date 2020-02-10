@@ -68,9 +68,7 @@ const styles = StyleSheet.create(
             marginLeft: '2%',
         },
         scrollContainer: {
-            paddingTop: '3%',
-            paddingBottom: '10%',
-            height: '100%'
+            padding: '3%',
         },
         listItem: {
             display: 'flex',
