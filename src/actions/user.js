@@ -4,7 +4,7 @@ import { db } from '../database/config/db'
 export const setLoggedInUser = user => {
     return {
         type: USER_LOGIN,
-        payload: { ...user }
+        payload: user
     }
 }
 
@@ -40,17 +40,16 @@ export const removeUser = user => {
 }
 
 export const getUserByUsername = username => {
+    let user_obj = {}
     DB_USER_REF.on('value', (snapshot) => {
         snapshot.forEach(childSnapshot => {
-            if (childSnapshot.val().details.username = username) {
-                let user = { id: childSnapshot.key, ...childSnapshot.val().details }
-                return { ...user }
-
+            {
+                user_obj = { id: childSnapshot.key, ...childSnapshot.val().details }
             }
-            return {}
         })
-    });
+    })
 
+    return user_obj
 }
 
 export const logOutUser = () => {
@@ -58,6 +57,4 @@ export const logOutUser = () => {
         type: USER_LOGOUT,
     }
 }
-
-
 

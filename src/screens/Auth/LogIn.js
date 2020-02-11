@@ -5,6 +5,8 @@ import { DB_USER_REF } from '../../constants/index'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as userActions from '../../actions/user';
+import { getUserByUsername } from '../../actions/user';
+// import { getAllUsers } from '../../actions/user';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -16,16 +18,8 @@ class LogInScreen extends React.Component {
 
     logIn = user => {
         let { actions } = this.props;
-        DB_USER_REF.on('value', u_snap => {
-            u_snap.forEach(item => {
-                let details = { ...item.val().details }
-                if (details.username == user.username) {
-                    let key = item.key
-                    let user = { ...details }
-                    actions.setLoggedInUser(user)
-                }
-            })
-        })
+        let user_obj = getUserByUsername(user.username)
+        actions.setLoggedInUser(user_obj)
     }
 
     render() {
