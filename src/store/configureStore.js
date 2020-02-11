@@ -2,12 +2,14 @@ import { createStore, combineReducers } from 'redux';
 import userReducer from '../reducers/userReducer';
 import projectReducer from '../reducers/projectReducer';
 import fetchJobReducer from '../reducers/fetchJobReducer';
+import influencerReducer from '../reducers/influencerReducer';
 
 const rootReducer = combineReducers(
     {
         user: userReducer,
-        projects: projectReducer,
-        fetch_jobs: fetchJobReducer
+        project: projectReducer,
+        fetch_job: fetchJobReducer,
+        influencer: influencerReducer
     },
 );
 

@@ -9,10 +9,11 @@ export const SET_CURRENT_PROJECT = 'SET_CURRENT_PROJECT'
 export const SET_FETCH_JOBS = 'SET_FETCH_JOBS'
 export const SET_CURRENT_FETCH_JOB = 'SET_CURRENT_FETCH_JOB'
 
-
-
+export const GET_ALL_INFLUENCERS = 'GET_ALL_INFLUENCERS'
+export const SET_CURRENT_INFLUENCER = 'SET_CURRENT_INFLUENCER'
 
 export const DB_USER_REF = db.ref('Users/');
 export const DB_PROJECTS_REF = 'Projects'
 export const DB_FETCH_JOBS_REF = 'FetchJobs'
 export const DB_INFLUENCERS_REF = 'Influencers'
+
