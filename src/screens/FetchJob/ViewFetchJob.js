@@ -6,32 +6,24 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 import { CriteriaView } from '../../components/criteria/CriteriaView';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import * as fetchJobActions from '../../actions/fetchJob';
+import * as influencerActions from '../../actions/influencer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
 
 
 class ViewFetchJob extends React.Component {
 
-    state = {
-        job: {}
-    }
-
     componentDidMount() {
-        const { current_fetch_job } = this.props
-        this.setState({ job: current_fetch_job })
+        const { user, current_project, current_fetch_job, actions } = this.props
+        actions.getAllInfluencers(current_fetch_job.hashtag)
     }
 
     render() {
-
-        const job = this.state.job
+        const { current_fetch_job, influencers } = this.props
+        console.log(influencers)
         return (
             <View>
-                {/* <Text style={styles.text}>View Fetch Job</Text>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('AllInfluencers')}>
-                    <Text>View Influencers</Text>
-                </TouchableOpacity> */}
-
                 <View style={styles.infoContainer}>
                     <View>
                         <View style={styles.top}>
@@ -39,44 +31,43 @@ class ViewFetchJob extends React.Component {
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Title</Text>
-                            <Text style={styles.data}>{job.title}</Text>
+                            <Text style={styles.data}>{current_fetch_job.title}</Text>
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Date Created</Text>
-                            <Text style={styles.data}>{job.date_created}</Text>
+                            <Text style={styles.data}>{current_fetch_job.date_created}</Text>
                         </View>
                         <View style={styles.middle}>
                             <Text style={styles.title}>Fetch Criteria</Text>
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Hashtag</Text>
-                            <Text style={styles.data}># {job.hashtag}</Text>
+                            <Text style={styles.data}># {current_fetch_job.hashtag}</Text>
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Location</Text>
-                            <Text style={styles.data}>{job.location}</Text>
+                            <Text style={styles.data}>{current_fetch_job.location}</Text>
                         </View>
                         <View style={styles.itemRowRange}>
                             <Text style={styles.lblRange}>Follower range</Text>
-                            <CriteriaView activeCriteria={job.criteria} />
+                            <CriteriaView activeCriteria={current_fetch_job.criteria} />
                         </View>
                         <View style={styles.bottomView}>
                             <View>
                                 <View style={styles.listHead}>
                                     <Text style={styles.title}>Influencers</Text>
-                                    <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers', { job })}>
+                                    <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
                                         <Text style={styles.title}>View All</Text>
                                     </TouchableOpacity>
                                 </View>
-                                {/* <ScrollView horizontal>
-                                    {/* {collabs.map((collab, index) => {
-                                    return this.collabList(collab, index)
-                                })} </ScrollView>*/}
-
+                                <ScrollView horizontal
+                                    contentContainerStyle={styles.scrollContainer}>
+                                    <InfluencerListFjView influencers={influencers} />
+                                </ScrollView>
                             </View>
-                        </View>
-                    </View>
-                </View>
+                        </View >
+                    </View >
+                </View >
             </View >
         );
     }
@@ -97,9 +88,13 @@ const styles = StyleSheet.create(
             justifyContent: 'space-between'
         },
         bottomView: {
-            display: 'flex',
-            flexDirection: 'column',
-            paddingTop: '4%'
+            paddingTop: '4%',
+
+        },
+        scrollContainer: {
+            padding: '5%',
+            paddingLeft: 0,
+            paddingBottom: '10%',
         },
         listHead: {
             flexDirection: 'row',
@@ -162,14 +157,15 @@ const styles = StyleSheet.create(
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
-    current_project: state.projects.current_project,
-    fetch_jobs: state.fetch_jobs.fetch_jobs,
-    current_fetch_job: state.fetch_jobs.current_fetch_job
+    current_project: state.project.current_project,
+    fetch_jobs: state.fetch_job.fetch_jobs,
+    current_fetch_job: state.fetch_job.current_fetch_job,
+    influencers: state.influencer.influencers
 });
 
 const ActionCreators = Object.assign(
     {},
-    fetchJobActions
+    influencerActions
 );
 const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(ActionCreators, dispatch),

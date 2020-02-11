@@ -1,47 +1,41 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { db } from '../../database/config/db';
+import { View, Text, YellowBox, StyleSheet, ActivityIndicator } from 'react-native';
 import { InfluencerList } from '../../components/list/InfluencerList'
-
-let influencersRef = db.ref("Influencers/topposts/hashtags/working_hard_")
+import * as influencerAtions from '../../actions/influencer';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-import { createStackNavigator } from 'react-navigation-stack';
 import { getInfluencerData } from '../../web-services/instagram/GetInfluencerData';
 
-let usersRef = db.ref('Users/')
 
 class AllInfluencers extends React.Component {
 
     state = {
-        // isLoading: true, // need to add loading screen
-        all_hashtag_users: [],
-        top_posts: [],
-        related_tags: [],
         isLoading: false
     }
 
     componentDidMount() {
-        this.setState({ isLoading: true })
-        const influencers = []
-        let account = {}
-        const { navigation } = this.props;
-        let fj = navigation.getParam('job')
 
-        influencersRef.on('value', snapshot => {
-            snapshot.forEach(item => {
-                account = { id: item.key, ...item.val() }
-                influencers.push(account)
-            })
-        })
-        this.setState({ top_posts: influencers })
-        this.setState({ isLoading: false })
+
+        // let account = {}
+        // const { navigation } = this.props;
+        // let fj = navigation.getParam('job')
+
+        // influencersRef.on('value', snapshot => {
+        //     snapshot.forEach(item => {
+        //         account = { id: item.key, ...item.val() }
+        //         influencers.push(account)
+        //     })
+        // })
+        // this.setState({ top_posts: influencers })
+        // this.setState({ isLoading: false })
     }
 
 
     render() {
-        const influencers = this.state.top_posts || []
+        const { influencers, current_project, current_fetch_job } = this.props
         return (
             <View style={styles.container}>
                 {this.state.isLoading ?
@@ -49,7 +43,7 @@ class AllInfluencers extends React.Component {
                         <ActivityIndicator size="large" color="#5d4d50" />
                         <Text style={styles.loadingTxt}>Wait, getting influencers for you</Text>
                     </View>
-                    : <InfluencerList influencers={influencers} />}
+                    : <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} />}
 
             </View>
         );
@@ -60,8 +54,6 @@ const styles = StyleSheet.create(
     {
         container: {
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
         },
         loadingTxt: {
             fontFamily: 'Arial',
@@ -71,4 +63,20 @@ const styles = StyleSheet.create(
         }
     });
 
-export default AllInfluencers
+const mapStateToProps = state => ({
+    state: state,
+    user: state.user,
+    current_project: state.project.current_project,
+    current_fetch_job: state.fetch_job.current_fetch_job,
+    influencers: state.influencer.influencers
+});
+
+const ActionCreators = Object.assign(
+    {},
+    influencerAtions
+);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllInfluencers)
