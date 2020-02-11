@@ -1,5 +1,17 @@
 import { db } from '../database/config/db';
-import { DB_USER_REF, SET_FETCH_JOBS, SET_CURRENT_FETCH_JOB } from '../constants';
+import { GET_ALL_FETCH_JOBS, DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS, SET_CURRENT_FETCH_JOB } from '../constants';
+
+export const getAllFetchJobs = (user_id, project_id) => {
+
+    let fetchJobs = []
+
+    DB_PROJECT_FETCH_JOBS_REF(user_id, project_id).on('value', fj_snapshot => {
+        fj_snapshot.forEach(fj_snap => {
+            fetchJobs.push(fj_snap.val())
+        })
+    })
+    return fetchJobs
+}
 
 export const setFetchJobs = fetch_jobs => {
     return {

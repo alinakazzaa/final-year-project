@@ -21,7 +21,7 @@ class ViewFetchJob extends React.Component {
 
     render() {
         const { current_fetch_job, influencers } = this.props
-        console.log(influencers)
+        // console.log(influencers)
         return (
             <View>
                 <View style={styles.infoContainer}>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { db } from '../../database/config/db';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { addFetchJob, updateFetchJob } from '../../actions/fetchJob'
+import { addFetchJob, updateFetchJob, getAllFetchJobs } from '../../actions/fetchJob'
 import { criteria } from '../../constants/Criteria'
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
@@ -25,8 +25,14 @@ class AllFetchJobs extends React.Component {
     }
 
     componentDidMount() {
-        this.getFetchJobs()
         this.setState({ isLoading: false })
+        this.getFetchJobs()
+    }
+
+    getFetchJobs = () => {
+        const { actions, user, current_project } = this.props
+        const fetchJobs = getAllFetchJobs(user.id, current_project.id)
+        actions.setFetchJobs(fetchJobs)
     }
 
     // componentDidUpdate(prevProps) {
@@ -40,19 +46,19 @@ class AllFetchJobs extends React.Component {
 
 
     startFetchJob = job => {
-        const { user, current_project } = this.props
-        let updated_job = { ...job }
-        updated_job.status = 'in progress'
-        updateFetchJob(user.id, current_project.id, updated_job)
-        // hashtag, number, active_criteria
-        getInitialCursor(job.hashtag, 1000, job.criteria).then(() => updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' }))
-        // getInfluencersByHashtag()
+        // const { user, current_project } = this.props
+        // let updated_job = { ...job }
+        // updated_job.status = 'in progress'
+        // updateFetchJob(user.id, current_project.id, updated_job)
+        // // hashtag, number, active_criteria
+        // getInitialCursor(job.hashtag, 1000, job.criteria).then(() => updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' }))
+        // // getInfluencersByHashtag()
     }
 
 
-    // componentDidUpdate(prevProps) {
-    //     console.log(prevProps)
-    // }
+    componentWillReceiveProps(props) {
+        // console.log(props)
+    }
 
     // static getDerivedStateFromProps(props, state) {
     //     // if (props.currentRow !== state.lastRow) {
@@ -69,32 +75,7 @@ class AllFetchJobs extends React.Component {
 
     componentWillUnmount() {
         const { actions } = this.props
-        actions.setFetchJobs([])
-    }
-
-    getFetchJobs = () => {
-        const { actions, user, current_project } = this.props
-        let fetchJobs = []
-        usersRef.on('value', (u_snapshot) => {
-            u_snapshot.forEach(userSnapshot => {
-                if (userSnapshot.val().details.username == user.username) {
-                    let projectsRef = usersRef.child(`${userSnapshot.key}/Projects`)
-                    projectsRef.on('value', (proj_snapshot) => {
-                        proj_snapshot.forEach(projectSnapshot => {
-                            if (projectSnapshot.val().details.id == current_project.id) {
-                                let fetchJobsRef = projectsRef.child(`${projectSnapshot.key}/FetchJobs`)
-                                fetchJobsRef.on('value', (fj_snapshot) => {
-                                    fj_snapshot.forEach(item => {
-                                        fetchJobs.push(item.val())
-                                        actions.setFetchJobs(fetchJobs)
-                                    })
-                                });
-                            }
-                        })
-                    });
-                }
-            })
-        });
+        actions.setFetchJobs()
     }
 
     goToFetchJob = fj => {
@@ -105,7 +86,7 @@ class AllFetchJobs extends React.Component {
 
     render() {
         const { isLoading } = this.state
-        const { fetch_jobs } = this.props || []
+        const fetch_jobs = this.props.fetch_jobs
         return (
             <View style={styles.container}>
                 {isLoading ?

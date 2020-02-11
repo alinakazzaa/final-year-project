@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 
 export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJob }) => {
+
     const FJList = (fj, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => goToFetchJob(fj)}>

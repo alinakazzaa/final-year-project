@@ -1,15 +1,15 @@
 import { SET_CURRENT_FETCH_JOB, SET_FETCH_JOBS } from '../constants';
 
 const initialState = {
-    fetch_jobs: {},
+    fetch_jobs: [],
     current_fetch_job: {}
 };
 
 const fetchJobReducer = (state = initialState, action) => {
-    let updated_state = { ...state }
+    const updated_state = { ...state }
     switch (action.type) {
         case SET_FETCH_JOBS:
-            let jobs = [...action.payload]
+            const jobs = action.payload
             updated_state.fetch_jobs = jobs
             return {
                 ...updated_state
