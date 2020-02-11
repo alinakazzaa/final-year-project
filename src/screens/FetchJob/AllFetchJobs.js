@@ -35,43 +35,16 @@ class AllFetchJobs extends React.Component {
         actions.setFetchJobs(fetchJobs)
     }
 
-    // componentDidUpdate(prevProps) {
-    //     const { user } = this.props
-    //     if (prevProps.user !== user) {
-    //         console.log("visited")
-    //         this.getFetchJobs()
-    //         this.setState({ isLoading: false })
-    //     }
-    // }
-
 
     startFetchJob = job => {
-        // const { user, current_project } = this.props
-        // let updated_job = { ...job }
-        // updated_job.status = 'in progress'
-        // updateFetchJob(user.id, current_project.id, updated_job)
-        // // hashtag, number, active_criteria
-        // getInitialCursor(job.hashtag, 1000, job.criteria).then(() => updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' }))
-        // // getInfluencersByHashtag()
+        const { user, current_project } = this.props
+        let updated_job = { ...job }
+        updated_job.status = 'in progress'
+        updateFetchJob(user.id, current_project.id, updated_job)
+        // hashtag, number, active_criteria
+        getInitialCursor(job.hashtag, 1000, job.criteria).then(() => updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' }))
+        // getInfluencersByHashtag()
     }
-
-
-    componentWillReceiveProps(props) {
-        // console.log(props)
-    }
-
-    // static getDerivedStateFromProps(props, state) {
-    //     // if (props.currentRow !== state.lastRow) {
-    //     //   return {
-    //     //     isScrollingDown: props.currentRow > state.lastRow,
-    //     //     lastRow: props.currentRow,
-    //     //   };
-    //     // }
-    //     // // Return null to indicate no change to state.
-    //     // return null;
-    //     console.log("props" + props)
-    //     console.log("state" + state)
-    // }
 
     componentWillUnmount() {
         const { actions } = this.props

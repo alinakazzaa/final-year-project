@@ -15,7 +15,7 @@ import { InfluencerListFjView } from '../../components/list/InfluencerListFjView
 class ViewFetchJob extends React.Component {
 
     componentDidMount() {
-        const { user, current_project, current_fetch_job, actions } = this.props
+        const { current_fetch_job, actions } = this.props
         actions.getAllInfluencers(current_fetch_job.hashtag)
     }
 
@@ -92,9 +92,8 @@ const styles = StyleSheet.create(
 
         },
         scrollContainer: {
-            padding: '5%',
+            padding: '2%',
             paddingLeft: 0,
-            paddingBottom: '10%',
         },
         listHead: {
             flexDirection: 'row',
@@ -106,7 +105,7 @@ const styles = StyleSheet.create(
             flex: 1
         },
         title: {
-            fontSize: 15,
+            fontSize: 13,
             color: '#493649',
             fontWeight: 'bold',
             textTransform: 'uppercase',
@@ -121,7 +120,8 @@ const styles = StyleSheet.create(
             margin: '3%',
             marginLeft: '4%',
             marginRight: '4%',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            padding: 5
         },
         itemRowRange: {
             display: 'flex',
@@ -134,18 +134,18 @@ const styles = StyleSheet.create(
             justifyContent: 'space-evenly'
         },
         lbl: {
-            fontSize: 18,
+            fontSize: 16,
             color: '#5d4d50',
             textTransform: 'uppercase',
         },
         lblRange: {
-            fontSize: 18,
+            fontSize: 16,
             color: '#5d4d50',
             textTransform: 'uppercase',
             paddingBottom: '7%'
         },
         data: {
-            fontSize: 18,
+            fontSize: 16,
             color: '#826478'
         },
         viewAllBtn: {

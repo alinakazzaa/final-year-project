@@ -4,7 +4,6 @@ import { db } from '../../database/config/db';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
-// import { TabView, SceneMap } from 'react-native-tab-view';
 import { ProjectList } from '../../components/list/ProjectList';
 import { Input } from 'react-native-elements';
 import { removeProject, getUserProjects } from '../../actions/project'
