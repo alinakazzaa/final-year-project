@@ -5,6 +5,33 @@ import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 
 export const ProjectList = ({ active, projects, deleteProject, addProject, goToProject }) => {
+    // const influList = (influ, index) => {
+    //     return (
+    //         <TouchableOpacity key={index} onPress={() => console.log(influ)}>
+    //             <View style={styles.listItem}>
+    //                 <View style={styles.left}>
+    //                     <Avatar
+    //                         size="medium"
+    //                         rounded
+    //                         source={{
+    //                             uri: influ.profile_pic_url,
+    //                         }} />
+    //                 </View>
+    //                 <View style={styles.left}>
+    //                     <Text style={styles.username}>{influ.username}</Text>
+    //                 </View>
+    //                 <View style={styles.middle}>
+    //                     <Text style={styles.hashtag}>{influ.followers}</Text>
+    //                 </View>
+    //                 <View style={styles.right}>
+    //                     <Text style={styles.hashtag}>{influ.media_count}</Text>
+    //                 </View>
+    //             </View>
+    //         </TouchableOpacity>
+    //     )
+    // }
+
+
     const projList = (proj, index) => {
         proj = { ...proj } || {}
         let collabs = proj.collabs
