@@ -7,7 +7,7 @@ import { TextButton } from '../../components/buttons/TextButton';
 // import { TabView, SceneMap } from 'react-native-tab-view';
 import { ProjectList } from '../../components/list/ProjectList';
 import { Input } from 'react-native-elements';
-import { removeProject } from '../../database/services/ProjectService'
+import { removeProject } from '../../actions/project'
 import * as userActions from '../../actions/user';
 import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';

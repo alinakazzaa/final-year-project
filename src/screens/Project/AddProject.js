@@ -4,7 +4,7 @@ import { AppHeader } from '../../layouts/Header';
 import ProjectForm from '../../components/forms/ProjectForm';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
-import { addProject } from '../../database/services/ProjectService'
+import { addProject } from '../../actions/project'
 import { DATE_TODAY } from '../../constants/TodayDate'
 
 

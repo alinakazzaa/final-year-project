@@ -7,7 +7,7 @@ import t from 'tcomb-form-native';
 import { CheckBox } from "native-base";
 import { criteria } from '../../constants/Criteria'
 import { Checkbox } from '../checkbox/Checkbox';
-import { addFetchJob } from '../../database/services/FetchJobService';
+import { addFetchJob } from '../../actions/fetchJob';
 
 const Form = t.form.Form;
 

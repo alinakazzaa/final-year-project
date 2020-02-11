@@ -2,11 +2,11 @@ import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { db } from '../../database/config/db';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { addFetchJob, updateFetchJob } from '../../database/services/FetchJobService'
+import { addFetchJob, updateFetchJob } from '../../actions/fetchJob'
 import { criteria } from '../../constants/Criteria'
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import { getInitialCursor } from '../../web-services/instagram/InfluencerWebService'
+import { getInitialCursor } from '../../actions/instagram'
 import * as fetchJobActions from '../../actions/fetchJob';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

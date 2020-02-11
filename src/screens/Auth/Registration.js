@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, TextInput, Button } from 'react-native';
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import { DB_USER_REF } from '../../constants/index'
-import { addUser, getUserByUsername } from '../../database/services/UserService'
+import { addUser, getUserByUsername } from '../../actions/user'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as userActions from '../../actions/user';

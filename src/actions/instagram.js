@@ -1,9 +1,9 @@
-import { addInfluencer } from '../../database/services/InfluencerService'
-import { criteria } from '../../constants/Criteria'
+import { addInfluencer } from '../actions/influencer'
+import { criteria } from '../constants/Criteria'
 import {
     INSTAGRAM_GET_MEDIA_BY_HASHTAG, INSTAGRAM_GET_USER_BY_ID,
     INSTAGRAM_GET_USER_BY_USERNAME
-} from '../../constants/endpoints'
+} from '../constants/endpoints'
 
 
 export const getInitialCursor = async (hashtag, number, active_criteria) => {

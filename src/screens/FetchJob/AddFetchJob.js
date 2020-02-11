@@ -13,7 +13,7 @@ import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DATE_TODAY } from '../../constants/TodayDate'
-import { addFetchJob } from '../../database/services/FetchJobService';
+import { addFetchJob } from '../../actions/fetchJob';
 
 
 class AddFetchJob extends React.Component {
