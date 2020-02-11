@@ -103,7 +103,7 @@ const styles = StyleSheet.create(
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
-    current_project: state.projects.current_project
+    current_project: state.project.current_project
 });
 
 const ActionCreators = Object.assign(

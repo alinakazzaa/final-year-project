@@ -17,15 +17,17 @@ import { DB_USER_REF } from '../../constants/index'
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class AllProjects extends React.Component {
-
-    state = {
-        isLoading: false,
-        projects: [],
-        index: 0,
-        routes: [
-            { key: 'active', title: 'Active' },
-            { key: 'archived', title: 'Archived' },
-        ],
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false,
+            projects: [],
+            index: 0,
+            routes: [
+                { key: 'active', title: 'Active' },
+                { key: 'archived', title: 'Archived' },
+            ],
+        }
     }
 
     componentDidMount() {
@@ -156,7 +158,7 @@ const styles = StyleSheet.create(
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
-    projects: state.projects.projects
+    projects: state.project.projects
 });
 
 const ActionCreators = Object.assign(

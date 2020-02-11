@@ -6,7 +6,7 @@ import { addFetchJob, updateFetchJob } from '../../database/services/FetchJobSer
 import { criteria } from '../../constants/Criteria'
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import { getInfluencersByHashtag } from '../../web-services/instagram/InfluencerWebService'
+import { getInitialCursor } from '../../web-services/instagram/InfluencerWebService'
 import * as fetchJobActions from '../../actions/fetchJob';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -17,28 +17,55 @@ let usersRef = db.ref('/Users')
 let influencersRef = db.ref('/Influencers/topposts/hashtags/')
 
 class AllFetchJobs extends React.Component {
-
-    state = {
-        isLoading: true
-    }
-
-    startFetchJob = job => {
-        const { user, current_project } = this.props
-        // getInfluencersByHashtag(job.hashtag)
-        // set current fetch job running in state
-        console.log(job)
-        let updated_job = { ...job }
-        updated_job.status = 'in progress'
-        updateFetchJob(user.id, current_project.id, updated_job)
-        // set status of fetch job completed
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: true
+        }
     }
 
     componentDidMount() {
-        const { actions, user, current_project, fetch_jobs } = this.props
         this.getFetchJobs()
         this.setState({ isLoading: false })
     }
+
+    // componentDidUpdate(prevProps) {
+    //     const { user } = this.props
+    //     if (prevProps.user !== user) {
+    //         console.log("visited")
+    //         this.getFetchJobs()
+    //         this.setState({ isLoading: false })
+    //     }
+    // }
+
+
+    startFetchJob = job => {
+        const { user, current_project } = this.props
+        let updated_job = { ...job }
+        updated_job.status = 'in progress'
+        updateFetchJob(user.id, current_project.id, updated_job)
+        // hashtag, number, active_criteria
+        getInitialCursor(job.hashtag, 1000, job.criteria).then(() => updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' }))
+        // getInfluencersByHashtag()
+    }
+
+
+    // componentDidUpdate(prevProps) {
+    //     console.log(prevProps)
+    // }
+
+    // static getDerivedStateFromProps(props, state) {
+    //     // if (props.currentRow !== state.lastRow) {
+    //     //   return {
+    //     //     isScrollingDown: props.currentRow > state.lastRow,
+    //     //     lastRow: props.currentRow,
+    //     //   };
+    //     // }
+    //     // // Return null to indicate no change to state.
+    //     // return null;
+    //     console.log("props" + props)
+    //     console.log("state" + state)
+    // }
 
     componentWillUnmount() {
         const { actions } = this.props
@@ -79,7 +106,6 @@ class AllFetchJobs extends React.Component {
     render() {
         const { isLoading } = this.state
         const { fetch_jobs } = this.props || []
-        console.log(this.props.fetch_jobs)
         return (
             <View style={styles.container}>
                 {isLoading ?
@@ -123,8 +149,9 @@ const styles = StyleSheet.create(
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
-    current_project: state.projects.current_project,
-    fetch_jobs: state.fetch_jobs.fetch_jobs
+    current_project: state.project.current_project,
+    fetch_jobs: state.fetch_job.fetch_jobs,
+    current_fetch_job: state.fetch_job.current_fetch_job
 });
 
 const ActionCreators = Object.assign(
