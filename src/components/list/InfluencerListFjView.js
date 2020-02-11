@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 
 export const InfluencerListFjView = ({ influencers, goToInfluencer, addInfluencerByUsername, addToPotential, removeInfluencer }) => {
+    let count = 5
     const influList = (influ, index) => {
         return (
             <View style={styles.listItem} key={index}>
@@ -18,21 +19,6 @@ export const InfluencerListFjView = ({ influencers, goToInfluencer, addInfluence
                         }} />
                     <Text style={styles.userName}>{influ.username}</Text>
                 </TouchableOpacity></View>
-
-
-            // <TouchableOpacity key={index} onPress={() => console.log(influ)}>
-            //     <View style={styles.listItem}>
-            //         <View style={styles.left}>
-            //             <Text style={styles.hashtag}>{influ.id}</Text>
-            //         </View>
-            //         <View style={styles.middle}>
-            //             <Text style={styles.hashtag}>{influ.followers}</Text>
-            //         </View>
-            //         <View style={styles.right}>
-            //             <Text style={styles.hashtag}>{influ.media_count}</Text>
-            //         </View>
-            //     </View>
-            // </TouchableOpacity>
         )
     }
 
@@ -43,6 +29,7 @@ export const InfluencerListFjView = ({ influencers, goToInfluencer, addInfluence
                 horizontal
                 keyboardDismissMode='on-drag'
                 contentContainerStyle={styles.scrollContainer}>
+
                 {influencers.length > 0 && influencers.map((i, index) => {
                     return influList(i, index)
                 })}

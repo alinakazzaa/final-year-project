@@ -1,5 +1,4 @@
 import { SET_CURRENT_FETCH_JOB, DB_USER_REF, GET_ALL_INFLUENCERS, SET_CURRENT_INFLUENCER } from '../constants';
-import { db } from '../database/config/db';
 
 const initialState = {
     influencers: [],
@@ -11,15 +10,7 @@ const influencerReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case GET_ALL_INFLUENCERS:
-            let hashtag = action.payload
-            let influencers = []
-            db.ref(`Influencers/hashtags/${hashtag}`).on('value', (influ_snapshot) => {
-                influ_snapshot.forEach(influ_snap => {
-                    influencers.push(influ_snap.val())
-                })
-            });
-
-            updated_state.influencers = influencers
+            updated_state.influencers = [...action.payload]
             return {
                 ...updated_state
             };

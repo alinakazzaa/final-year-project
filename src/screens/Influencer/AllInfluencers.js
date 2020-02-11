@@ -7,8 +7,6 @@ import { bindActionCreators } from 'redux';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-import { getInfluencerData } from '../../web-services/instagram/GetInfluencerData';
-
 
 class AllInfluencers extends React.Component {
 
