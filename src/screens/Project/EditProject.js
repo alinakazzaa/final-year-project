@@ -40,11 +40,11 @@ class EditProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user } = this.props
+        const { user, navigation } = this.props
         let project = this.state.project
 
         updateProject(user.id, project.id, project)
-        this.props.navigation.navigate.goBack()
+        navigation.goBack()
 
     }
 
