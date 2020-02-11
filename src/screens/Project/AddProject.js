@@ -6,29 +6,27 @@ import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
 import { addProject } from '../../actions/project'
 import { DATE_TODAY } from '../../constants/TodayDate'
+import * as userActions from '../../actions/user';
+import * as projectActions from '../../actions/project';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class AddProject extends React.Component {
 
-    componentDidMount() {
-        const { navigation } = this.props;
-        const user = navigation.getParam('user');
-        this.setState({ user })
-    }
-
     state = {
-        user: {},
         project: {}
     }
 
     handleChange = project => {
-        this.setState({ project: project });
+        this.setState({ project });
     }
 
     handleSubmit = () => {
-        const { project, user } = this.state
+        const { user } = this.props
+        const { project } = this.state
         project.date_created = DATE_TODAY
         addProject(user.id, project);
         this.props.navigation.navigate("AllProjects")
@@ -66,4 +64,19 @@ const styles = StyleSheet.create(
         },
     });
 
-export default AddProject
+const mapStateToProps = state => ({
+    state: state,
+    user: state.user,
+    current_project: state.project.current_project
+});
+
+const ActionCreators = Object.assign(
+    {},
+    userActions,
+    projectActions
+);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddProject)

@@ -1,5 +1,17 @@
 import { db } from '../database/config/db';
-import { DB_USER_REF, SET_PROJECTS, SET_CURRENT_PROJECT } from '../constants';
+import { DB_USER_PROJECTS_REF, SET_PROJECTS, SET_CURRENT_PROJECT } from '../constants';
+
+export const getUserProjects = user_id => {
+    let projects = []
+    DB_USER_PROJECTS_REF(user_id).on('value', proj_snapshot => {
+        proj_snapshot.forEach(proj_snap => {
+            proj_snap.forEach(proj => {
+                projects.push(proj.val())
+            })
+        })
+    })
+    return projects
+}
 
 export const setUserProjects = projects => {
     return {
@@ -16,12 +28,10 @@ export const setCurrentProject = project => {
 }
 
 export const addProject = (user_id, project) => {
-    const project_add = db.ref(`/Users/${user_id}/Projects`).push({
+    const project_add = db.ref(`/Users/${user_id}/Projects/`).push({
         details: {
-            id: '',
-            title: project.title,
+            ...project,
             description: project.description || '',
-            date_created: project.date_created,
             active: project.active || false
         },
     })
@@ -34,21 +44,13 @@ export const addProject = (user_id, project) => {
 
 export const updateProject = (user_id, project_id, project) => {
     db.ref(`/Users/${user_id}/Projects/${project_id}`).update({
-        details: project.details
+        details: { ...project }
     });
 
 
 }
 
 export const removeProject = (user_id, project) => {
-    db.ref(`/Users/${user_id}/Projects`).on('value', snapshot => {
-        snapshot.forEach(projectSnapshot => {
-            let proj = projectSnapshot.val();
-            if (proj.title == project.title) {
-                db.ref(`/Users/${user_id}/Projects`).child(projectSnapshot.key).remove()
-            }
-        }
-        )
-    })
+    db.ref(`/Users/${user_id}/Projects`).child(project.id).remove()
 }
 

@@ -36,7 +36,6 @@ class ViewProjectScreen extends React.Component {
 
     render() {
         const { current_project } = this.props;
-        const proj = current_project
         let active;
         return (
             <View style={styles.main}>
@@ -51,20 +50,20 @@ class ViewProjectScreen extends React.Component {
                     <View>
                         <View style={styles.top}>
                             <Text style={styles.title}>Details</Text>
-                            {proj.active ? <Text style={styles.title}>Active</Text> : <Text style={styles.title}>Inactive</Text>}
+                            {current_project.active ? <Text style={styles.title}>Active</Text> : <Text style={styles.title}>Inactive</Text>}
 
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Title</Text>
-                            <Text style={styles.data}>{proj.title}</Text>
+                            <Text style={styles.data}>{current_project.title}</Text>
                         </View>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Date created</Text>
-                            <Text style={styles.data}>{proj.date_created}</Text>
+                            <Text style={styles.data}>{current_project.date_created}</Text>
                         </View>
                         <View style={styles.itemCol}>
                             <Text style={styles.lbl}>Description</Text>
-                            <Text style={styles.data}>{proj.description}</Text>
+                            <Text style={styles.data}>{current_project.description}</Text>
                         </View>
                     </View>
                     <View style={styles.bottomView}>
@@ -76,7 +75,7 @@ class ViewProjectScreen extends React.Component {
                                 </TouchableOpacity>
                             </View>
                             <ScrollView horizontal>
-                                {proj.collabs ? proj.collabs.map((collab, index) => {
+                                {current_project.collabs ? current_project.collabs.map((collab, index) => {
                                     return this.collabList(collab, index)
                                 }) : <Text>No collaborations yet</Text>}
                             </ScrollView>
@@ -89,7 +88,7 @@ class ViewProjectScreen extends React.Component {
                                 </TouchableOpacity>
                             </View>
                             <ScrollView>
-                                {proj.fetchJobs ? proj.fetchJobs.map((fj, index) => {
+                                {current_project.fetchJobs ? current_project.fetchJobs.map((fj, index) => {
                                     return this.FJList(fj, index)
                                 }) : <Text>No fetch jobs yet</Text>}
                             </ScrollView>

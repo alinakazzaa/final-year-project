@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet } from 'react-native';
-import { updateProject } from '../../actions/project'
+import { updateProject, getUserProjects } from '../../actions/project'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -24,19 +24,17 @@ class EditProject extends React.Component {
     }
 
     componentDidMount() {
-        const { navigation } = this.props;
-        const proj = navigation.getParam('proj');
-        if (proj) {
-            this.setState({ project: proj });
+        const { current_project } = this.props;
+        if (current_project.title) {
+            this.setState({ project: { ...current_project } })
         }
+
     }
 
     handleChange = project => {
         let updatedProject = {
             ...this.state.project,
-            details: {
-                ...project
-            }
+            ...project
         }
         this.setState({ project: updatedProject });
     }
@@ -44,18 +42,8 @@ class EditProject extends React.Component {
     handleSubmit = () => {
         const { user } = this.props
         let project = this.state.project
-        usersRef.on('value', (snapshot) => {
-            snapshot.forEach(childSnapshot => {
-                if (childSnapshot.key == user.id) {
-                    let projectsRef = usersRef.child(`${childSnapshot.key}/Projects`)
-                    projectsRef.on('value', (projectSnapshot) => {
-                        projectSnapshot.forEach(proj => {
-                            updateProject(user.id, proj.val().details.id, project)
-                        })
-                    });
-                }
-            })
-        });
+
+        updateProject(user.id, project.id, project)
         this.props.navigation.navigate.goBack()
 
     }
@@ -80,8 +68,6 @@ const styles = StyleSheet.create(
     {
         container: {
             flex: 1,
-            // justifyContent: 'center',
-            // alignItems: 'center',
         },
         text: {
             textAlign: 'center',

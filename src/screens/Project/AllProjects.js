@@ -7,12 +7,11 @@ import { TextButton } from '../../components/buttons/TextButton';
 // import { TabView, SceneMap } from 'react-native-tab-view';
 import { ProjectList } from '../../components/list/ProjectList';
 import { Input } from 'react-native-elements';
-import { removeProject } from '../../actions/project'
+import { removeProject, getUserProjects } from '../../actions/project'
 import * as userActions from '../../actions/user';
 import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DB_USER_REF } from '../../constants/index'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -32,31 +31,11 @@ class AllProjects extends React.Component {
 
     componentDidMount() {
         this.setState({ isLoading: true })
-        let { actions, user } = this.props;
-        let projects = []
-        let projects_ref
-        DB_USER_REF.on('value', u_snap => {
-            u_snap.forEach(item => {
-                if (item.key == user.id) {
-                    projects_ref = `Users/${item.key}/Projects`
-                    db.ref(projects_ref).on('value', p_snap => {
-                        p_snap.forEach(proj => {
-                            let data = proj.val()
-                            projects.push(data)
-                        })
-                    })
-                }
-
-            })
-        })
+        let { user, actions } = this.props;
+        let projects = getUserProjects(user.id)
         actions.setUserProjects(projects)
         this.setState({ isLoading: false })
 
-    }
-
-    addProject = () => {
-        let { user } = this.props;
-        this.props.navigation.navigate('AddProject', { user })
     }
 
     goToProject = proj => {
@@ -66,7 +45,8 @@ class AllProjects extends React.Component {
     }
 
     deleteProject = project => {
-        removeProject("-LzOYfdTgQu-Hqxl9bGz", project)
+        let { user } = this.props;
+        removeProject(user.id, project)
     }
 
     searchProject = text => {
@@ -92,16 +72,14 @@ class AllProjects extends React.Component {
                                 onIndexChange={index => this.setState({ index })}
                                 initialLayout={{ width: 250, height: 250 }}
                             /> */}
+                            <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects} />
                             <IconButton
                                 color="#493649"
                                 name="plus"
                                 size={40}
-                                onPress={this.addProject}
+                                onPress={() => this.props.navigation.navigate('AddProject')}
                                 style={styles.addIcon}
                             />
-
-                            <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects} />
-
                         </View>
                 }
             </View>
