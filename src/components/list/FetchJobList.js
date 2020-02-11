@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 
 export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJob }) => {
+
     const FJList = (fj, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => goToFetchJob(fj)}>
@@ -44,7 +45,6 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJ
                 <IconButton
                     // raised
                     color="#493649"
-                    type='font-awesome'
                     name='plus'
                     size={40}
                     onPress={() => addFetchJob()}
@@ -69,9 +69,7 @@ const styles = StyleSheet.create(
             marginLeft: '2%',
         },
         scrollContainer: {
-            paddingTop: '3%',
-            paddingBottom: '10%',
-            height: '100%'
+            padding: '3%',
         },
         listItem: {
             display: 'flex',
@@ -141,7 +139,7 @@ const styles = StyleSheet.create(
         }
     });
 
-FetchJobList.PropTypes = {
+FetchJobList.propTypes = {
     fetchJobs: PropTypes.array.isRequired,
     goToFetchJob: PropTypes.func,
     startFetchJob: PropTypes.func,

@@ -26,7 +26,7 @@ IconButton.propTypes = {
 }
 
 IconButton.defaultProps = {
-    type: 'add',
+    type: 'font-awesome',
     color: '#994d6e',
     size: 50,
     onPress: null,

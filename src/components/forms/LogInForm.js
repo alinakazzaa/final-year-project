@@ -55,55 +55,51 @@ const formStyles = {
 
 }
 
-const Project = t.struct({
-    title: t.String,
-    description: t.maybe(t.String),
-    active: t.Boolean
+const User = t.struct({
+    username: t.String,
+    password: t.String,
 });
 
 const options = {
     fields: {
-        title: {
-            error: 'Project requires a title!',
+        username: {
+            error: 'Username is required',
         },
-        active: {
-            label: 'Active Project',
+        password: {
+            error: 'Password is required',
         },
     },
     stylesheet: formStyles,
 };
 
 
-export default class ProjectForm extends React.Component {
+export default class LogInForm extends React.Component {
 
     state = {
         value: {}
     }
 
-    componentDidMount() {
-        let project = this.props.project
-        if (project) {
-            this.setState({ value: project })
-        }
-    }
-
     onChange(value) {
-        let updated_project = { ...this.state.value, ...value }
-        this.setState({ value: updated_project });
-        this.props.onChange(updated_project)
+        this.setState({ value });
     }
 
     render() {
+
+        const { logIn, goToRegister } = this.props
+        const { value } = this.state
+
         return (
             <View style={styles.container}>
                 <Form
                     ref={c => this._form = c}
-                    type={Project}
+                    type={User}
                     options={options}
                     value={this.state.value}
                     onChange={(value) => this.onChange(value)}
                     onBlur={Keyboard.dismiss}
                 />
+                <TextButton title="Log In" onPress={() => logIn(value)} style={styles.logInBtn} />
+                <TextButton title="Registration" onPress={goToRegister} />
             </View>
         )
     }
@@ -112,22 +108,29 @@ export default class ProjectForm extends React.Component {
 const styles = StyleSheet.create(
     {
         container: {
-            justifyContent: 'center',
-            marginTop: 50,
-            padding: 20,
+            display: 'flex',
             backgroundColor: '#ffffff',
         },
         textInput: {
             borderWidth: 1,
         },
-
+        logInBtn: {
+            padding: 6,
+            fontSize: 18,
+            fontWeight: '400',
+            display: 'flex',
+            marginRight: 10,
+            borderWidth: 1.5,
+            borderColor: '#493649',
+            borderRadius: 5,
+        }
     });
 
-ProjectForm.propTypes = {
+LogInForm.propTypes = {
 
 }
 
-ProjectForm.defaultProps = {
+LogInForm.defaultProps = {
 
 }
 

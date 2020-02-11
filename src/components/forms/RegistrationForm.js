@@ -55,55 +55,60 @@ const formStyles = {
 
 }
 
-const Project = t.struct({
-    title: t.String,
-    description: t.maybe(t.String),
-    active: t.Boolean
+const User = t.struct({
+    username: t.String,
+    password: t.String,
+    profileURL: t.maybe(t.String),
+    date_created: t.String,
 });
 
 const options = {
     fields: {
-        title: {
-            error: 'Project requires a title!',
+        username: {
+            error: 'Username is required',
         },
-        active: {
-            label: 'Active Project',
+        password: {
+            error: 'Password is required',
         },
     },
     stylesheet: formStyles,
 };
 
 
-export default class ProjectForm extends React.Component {
+export default class RegistrationForm extends React.Component {
 
     state = {
         value: {}
     }
 
-    componentDidMount() {
-        let project = this.props.project
-        if (project) {
-            this.setState({ value: project })
-        }
+    onChange(value) {
+        this.setState({ value });
     }
 
-    onChange(value) {
-        let updated_project = { ...this.state.value, ...value }
-        this.setState({ value: updated_project });
-        this.props.onChange(updated_project)
+    onSubmit = () => {
+        const { logIn, registerUser } = this.props
+        let user = { username: '', password: '' }
+        const value = this.state.value
+        user = { ...user, ...value }
+        user.username = value.username
+        user.password = value.password
+        registerUser(user)
+        logIn(user)
     }
 
     render() {
+
         return (
             <View style={styles.container}>
                 <Form
                     ref={c => this._form = c}
-                    type={Project}
+                    type={User}
                     options={options}
                     value={this.state.value}
                     onChange={(value) => this.onChange(value)}
                     onBlur={Keyboard.dismiss}
                 />
+                <TextButton title="Register" onPress={this.onSubmit} style={styles.regBtn} />
             </View>
         )
     }
@@ -120,14 +125,23 @@ const styles = StyleSheet.create(
         textInput: {
             borderWidth: 1,
         },
-
+        regBtn: {
+            padding: 6,
+            fontSize: 18,
+            fontWeight: '400',
+            display: 'flex',
+            marginRight: 10,
+            borderWidth: 1.5,
+            borderColor: '#493649',
+            borderRadius: 5,
+        }
     });
 
-ProjectForm.propTypes = {
+RegistrationForm.propTypes = {
 
 }
 
-ProjectForm.defaultProps = {
+RegistrationForm.defaultProps = {
 
 }
 
