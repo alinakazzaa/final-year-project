@@ -21,3 +21,12 @@ export const addInfluencer = (influencer, hashtag) => {
         ...influencer, date_added: DATE_TODAY
     })
 }
+
+export const updateInfluencer = (hashtag, influencer) => {
+    console.log(influencer)
+    // db.ref(`/Influencers/hashtags/${hashtag}/${influencer.id}`).update({
+    //     ...influencer
+    // });
+
+
+}

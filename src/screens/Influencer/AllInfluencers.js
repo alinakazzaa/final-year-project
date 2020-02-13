@@ -15,6 +15,7 @@ class AllInfluencers extends React.Component {
     }
 
     componentDidMount() {
+        const { influencers } = this.props
 
 
         // let account = {}
@@ -76,5 +77,6 @@ const ActionCreators = Object.assign(
 const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(ActionCreators, dispatch),
 });
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllInfluencers)
