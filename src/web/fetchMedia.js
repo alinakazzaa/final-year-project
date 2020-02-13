@@ -11,7 +11,7 @@ const fetchMedia = hashtag => {
                     throw (res.error);
                 }
                 // dispatch(getInitialCursorSuccess(res));
-                dispatch(getCurrentPage(res));
+                dispatch(getCurrentPage(res))
                 return res;
             })
             .catch(error => {

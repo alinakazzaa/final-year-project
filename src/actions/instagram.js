@@ -5,13 +5,13 @@ import {
     INSTAGRAM_GET_USER_BY_USERNAME
 } from '../constants/endpoints'
 
-import { GET_MEDIA_BY_HASHTAG_SUCCESS, GET_CURRENT_PAGE, GET_NEXT_PAGE, GET_USER_BY_ID, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_NEXT_PAGE_SUCCESS, GET_NEXT_PAGE_PENDING, GET_NEXT_PAGE_ERROR, GET_MEDIA_IDS, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_SUCCESS, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR } from '../constants/index'
+import { GET_MEDIA_BY_HASHTAG_SUCCESS, GET_CURRENT_PAGE, GET_NEXT_PAGE, GET_USER_BY_ID, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_NEXT_PAGE_SUCCESS, GET_NEXT_PAGE_PENDING, GET_NEXT_PAGE_ERROR, GET_MEDIA_IDS, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_SUCCESS, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR, GET_CURRENT_PAGE_MEDIA_IDS } from '../constants/index'
 
-// export const getInitialCursorPending = () => {
-//     return {
-//         type: GET_MEDIA_BY_HASHTAG_PENDING
-//     }
-// }
+export const getInitialCursorPending = () => {
+    return {
+        type: GET_MEDIA_BY_HASHTAG_PENDING
+    }
+}
 
 export const getInitialCursorSuccess = async result => {
     console.log(result)
@@ -22,12 +22,12 @@ export const getInitialCursorSuccess = async result => {
     // }
 }
 
-// export const getInitialCursorError = error => {
-//     return {
-//         type: GET_MEDIA_BY_HASHTAG_ERROR,
-//         error: error
-//     }
-// }
+export const getInitialCursorError = error => {
+    return {
+        type: GET_MEDIA_BY_HASHTAG_ERROR,
+        error: error
+    }
+}
 
 
 export const getCurrentPage = result => {
@@ -35,6 +35,7 @@ export const getCurrentPage = result => {
     let has_next_page
     let end_cursor = {}
     let got_data = false
+    const media_ids = []
 
     if (result.graphql) {
         console.log("in result graphql")
@@ -47,7 +48,6 @@ export const getCurrentPage = result => {
         got_data = true
     }
     else if (result.status == 'fail') {
-        data = { ...result }
         console.log("Failed fetch: " + result.message)
     } else {
         console.log(result)
@@ -58,25 +58,24 @@ export const getCurrentPage = result => {
     }
 
     if (has_next_page) {
-        end_cursor = { ...edge_hashtag_to_media }
-        return data
+        end_cursor = { ...edge_hashtag_to_media.page_info.end_cursor }
     }
 
-    return data
+    // return edge_hashtag_to_media
+
+    if (edge_hashtag_to_media.edges !== null && edge_hashtag_to_media.length > 0) {
+        edge_hashtag_to_media.edges.forEach(edge => {
+            media_ids.push(edge.node.owner.id)
+        })
+    }
+
+    return {
+        type: GET_CURRENT_PAGE_MEDIA_IDS,
+        payload: media_ids
+    }
 }
 
 export const setMediaIDs = edges => {
-    const media_ids = []
-    if (edges !== null && edges.length > 0) {
-        edges.forEach(edge => {
-            media_ids.push(edge.node.owner.id)
-        })
-
-        return {
-            type: GET_MEDIA_IDS,
-            payload: media_ids
-        }
-    }
 
     return {
         type: GET_MEDIA_IDS,

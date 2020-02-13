@@ -1,4 +1,4 @@
-import { SET_CURRENT_FETCH_JOB, SET_FETCH_JOBS, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_PENDING, GET_NEXT_PAGE_PENDING, GET_NEXT_PAGE_SUCCESS, GET_NEXT_PAGE_ERROR, GET_MEDIA_IDS, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_SUCCESS, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR } from '../constants';
+import { SET_CURRENT_FETCH_JOB, SET_FETCH_JOBS, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_PENDING, GET_NEXT_PAGE_PENDING, GET_NEXT_PAGE_SUCCESS, GET_NEXT_PAGE_ERROR, GET_MEDIA_IDS, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_SUCCESS, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR, GET_CURRENT_PAGE_MEDIA_IDS } from '../constants';
 
 const initialState = {
     pending: false,
@@ -30,6 +30,13 @@ const instagramReducer = (state = initialState, action) => {
         //         pending: false,
         //         error: action.error
         //     }
+        case GET_CURRENT_PAGE_MEDIA_IDS:
+            return {
+                ...state,
+                pending: false,
+                influ_ids: action.payload
+            }
+
         case GET_MEDIA_IDS:
             return {
                 ...state,

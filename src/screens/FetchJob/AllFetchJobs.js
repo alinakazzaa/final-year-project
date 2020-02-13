@@ -31,16 +31,17 @@ class AllFetchJobs extends React.Component {
 
     componentDidUpdate(prevProps) {
         const { result, influ_ids, setMediaIDs, fetchInfluencer, influencers } = this.props
+        console.log(influ_ids)
         let media
-        if (prevProps.result !== result) {
-            media = getCurrentPage(result)
-            setMediaIDs(media.edges)
+        // if (prevProps.result !== result) {
+        //     media = getCurrentPage(result)
+        //     setMediaIDs(media.edges)
 
-        } else if (prevProps.influ_ids !== influ_ids) {
-            influ_ids.forEach(influ => {
-                setInterval(() => fetchInfluencer(influ), 20000)
-            });
-        }
+        // } else if (prevProps.influ_ids !== influ_ids) {
+        //     influ_ids.forEach(influ => {
+        //         setInterval(() => fetchInfluencer(influ), 20000)
+        //     });
+        // }
 
     }
 
