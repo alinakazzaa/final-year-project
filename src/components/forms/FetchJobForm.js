@@ -15,7 +15,6 @@ const formStyles = {
     ...Form.stylesheet,
     controlLabel: {
         normal: {
-            // display: 'none',
         },
         error: {
             color: 'Purple',
@@ -82,15 +81,14 @@ export default class FetchJobForm extends React.Component {
 
     onChangeFormValues(val) {
         this.setState({ value: val });
-        const { criteria, value } = this.state
-        const fj = { criteria, value }
+        const fj = { ...this.state }
         this.props.onChange(fj)
     }
 
     onChangeCriteria = val => {
-        let { criteria, value } = this.state
-        const fj = { criteria, value }
-        switch (val) {
+        const criteria = { ...this.state.criteria }
+        const fj = { ...this.state }
+        switch (val.key) {
             case 'zero':
                 criteria.zero = !criteria.zero
                 break
@@ -111,26 +109,26 @@ export default class FetchJobForm extends React.Component {
                 break
         }
 
-        this.setState({ criteria })
+        this.setState({ ...this.state, criteria })
         this.props.onChange(fj)
     }
 
     getCriteria = () => {
         return <View>
-
             <FlatList
                 numColumns={2}
                 data={criteria}
-                renderItem={({ item }) => <Checkbox checked={this.getChecked(item.key)} criteria={item} onPress={this.onChangeCriteria} />}
+                renderItem={({ item }) => <Checkbox checked={this.getChecked(item)} criteria={item} onPress={() => this.onChangeCriteria(item)} />}
                 keyExtractor={item => item.key}
             /></View>
     }
 
-    getChecked = key => {
+    getChecked = item => {
         let checked = false
-        switch (key) {
+        let st
+        switch (item.key) {
             case 'zero':
-                checked = this.state.zero
+                checked = this.state.criteria.zero
                 break
             case 'five':
                 checked = this.state.criteria.five
@@ -162,14 +160,11 @@ export default class FetchJobForm extends React.Component {
                     options={options}
                     value={this.state.value}
                     onChange={(value) => this.onChangeFormValues(value)}
-                // onBlur={Keyboard.dismiss}
+                    onBlur={Keyboard.dismiss}
                 />
                 <View style={styles.midView}>
                     <Text style={styles.title}>Choose follower range</Text>
                     <View style={styles.criteriaBox}>
-                        {/* {criteria.map((item, key) => {
-                    return <View>{this.getCriteria(item, key)}</View>
-                })} */}
                         {this.getCriteria()}
                     </View>
                 </View>
