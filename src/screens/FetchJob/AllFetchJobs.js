@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, ActivityIndicator } from 'react-native';
 import { db } from '../../database/config/db';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { addFetchJob, updateFetchJob, getAllFetchJobs } from '../../actions/fetchJob'
-import { criteria } from '../../constants/Criteria'
-import { AppHeader } from '../../layouts/Header';
-import { IconButton } from '../../components/buttons/IconButton';
-import { getInitialCursor } from '../../actions/instagram'
+import { updateFetchJob, getAllFetchJobs } from '../../actions/fetchJob'
+// import { getInitialCursor, getCurrentPage } from '../../actions/instagram'
 import * as fetchJobActions from '../../actions/fetchJob';
+import * as instaActions from '../../actions/instagram';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import fetchMedia from '../../web/fetchMedia';
+import fetchInfluencer from '../../web/fetchInfluencer'
+import { getMedia, getPending, getError, getInfluIDs, getInfluencers } from '../../reducers/instagramReducer';
+import { getCurrentPage, createUser } from '../../actions/instagram';
+import { getAllInfluencers } from '../../actions/influencer';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-let usersRef = db.ref('/Users')
-let influencersRef = db.ref('/Influencers/topposts/hashtags/')
 
 class AllFetchJobs extends React.Component {
     constructor(props) {
@@ -25,41 +25,69 @@ class AllFetchJobs extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: false })
         this.getFetchJobs()
+        this.setState({ isLoading: false })
+    }
+
+    componentDidUpdate(prevProps) {
+        const { result, influ_ids, setMediaIDs, fetchInfluencer, influencers } = this.props
+        let media
+        if (prevProps.result !== result) {
+            media = getCurrentPage(result)
+            setMediaIDs(media.edges)
+
+        } else if (prevProps.influ_ids !== influ_ids) {
+            influ_ids.forEach(influ => {
+                setInterval(() => fetchInfluencer(influ), 20000)
+            });
+        }
+
     }
 
     getFetchJobs = () => {
-        const { actions, user, current_project } = this.props
+        const { user, current_project, setFetchJobs } = this.props
         const fetchJobs = getAllFetchJobs(user.id, current_project.id)
-        actions.setFetchJobs(fetchJobs)
+        setFetchJobs(fetchJobs)
     }
 
-
     startFetchJob = job => {
-        const { user, current_project } = this.props
+        const { user, fetchMedia, fetchInfluencer, pending, current_project, result, influ_ids, setMediaIDs, influencers } = this.props
+        let end_cursor
+        this.setState({ isLoading: true })
+
+        // update job status
         let updated_job = { ...job }
         updated_job.status = 'in progress'
-        updateFetchJob(user.id, current_project.id, updated_job)
-        // hashtag, number, active_criteria
-        getInitialCursor(job.hashtag, 1000, job.criteria).then(() => updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' }))
-        // getInfluencersByHashtag()
+        updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' })
+
+        fetchMedia(job.hashtag)
+
+        this.setState({ isLoading: false })
+
+    }
+
+    shouldComponentRender() {
+        const { pending } = this.props;
+        if (pending === false) return false;
+        // more tests
+        return true;
     }
 
     componentWillUnmount() {
-        const { actions } = this.props
-        actions.setFetchJobs()
+        const { setFetchJobs } = this.props
+        setFetchJobs()
     }
 
     goToFetchJob = fj => {
-        const { actions } = this.props
-        actions.setCurrentFetchJob(fj)
+        const { setCurrentFetchJob } = this.props
+        setCurrentFetchJob(fj)
         this.props.navigation.navigate('ViewFetchJob')
     }
 
     render() {
         const { isLoading } = this.state
-        const fetch_jobs = this.props.fetch_jobs
+        const { fetch_jobs, influ_ids, influencers } = this.props
+
         return (
             <View style={styles.container}>
                 {isLoading ?
@@ -105,15 +133,19 @@ const mapStateToProps = state => ({
     user: state.user,
     current_project: state.project.current_project,
     fetch_jobs: state.fetch_job.fetch_jobs,
-    current_fetch_job: state.fetch_job.current_fetch_job
+    result: getMedia(state),
+    pending: getPending(state),
+    error: getError(state),
+    influ_ids: getInfluIDs(state),
+    influencers: getInfluencers(state)
 });
 
-const ActionCreators = Object.assign(
-    {},
-    fetchJobActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    fetchMedia,
+    fetchInfluencer,
+    setMediaIDs: instaActions.setMediaIDs,
+    setFetchJobs: fetchJobActions.setFetchJobs,
+    setCurrentFetchJob: fetchJobActions.setCurrentFetchJob
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)

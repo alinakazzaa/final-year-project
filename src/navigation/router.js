@@ -13,7 +13,6 @@ class Router extends Component {
 
     render() {
         let { user } = this.props
-        // console.log(this.props)
         console.log(user.username && "current user: " + user.username || "no user logged in")
         return (
             // <LogIn />

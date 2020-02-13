@@ -17,8 +17,9 @@ class LogInScreen extends React.Component {
     }
 
     logIn = user => {
-        let { actions } = this.props;
-        let user_obj = getUserByUsername(user.username)
+        const { actions } = this.props;
+        const user_obj = getUserByUsername(user.username)
+        // console.log(user_obj)
         actions.setLoggedInUser(user_obj)
     }
 
