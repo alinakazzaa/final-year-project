@@ -41,10 +41,10 @@ export const removeUser = user => {
 
 export const getUserByUsername = username => {
     let user_obj = {}
-    DB_USER_REF.on('value', (snapshot) => {
-        snapshot.forEach(childSnapshot => {
-            {
-                user_obj = { id: childSnapshot.key, ...childSnapshot.val().details }
+    DB_USER_REF.on('value', (user_snapshot) => {
+        user_snapshot.forEach(user_snap => {
+            if (user_snap.val().details.username == username) {
+                user_obj = { id: user_snap.key, ...user_snap.val().details }
             }
         })
     })
