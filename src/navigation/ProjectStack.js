@@ -13,7 +13,7 @@ import AddFetchJob from '../screens/FetchJob/AddFetchJob';
 import AllInfluencers from '../screens/Influencer/AllInfluencers';
 import ViewInfluencer from '../screens/Influencer/ViewInfluencer';
 
-export const ProjectStackNavigator = createStackNavigator({
+export const ProjectStack = createStackNavigator({
     AllProjects: { screen: AllProjects },
     ViewProject: { screen: ViewProject },
     AddProject: { screen: AddProject },

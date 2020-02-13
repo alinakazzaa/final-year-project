@@ -4,7 +4,12 @@ import { AppHeader } from '../../layouts/Header';
 import ProjectForm from '../../components/forms/ProjectForm';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
-import { addProject } from '../../database/services/ProjectService'
+import { addProject } from '../../actions/project'
+import { DATE_TODAY } from '../../constants/TodayDate'
+import * as userActions from '../../actions/user';
+import * as projectActions from '../../actions/project';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -16,13 +21,15 @@ class AddProject extends React.Component {
     }
 
     handleChange = project => {
-        this.setState({ project: project });
+        this.setState({ project });
     }
 
     handleSubmit = () => {
-        const project = this.state.project
-        // will replace user ID with one in redux state
-        addProject("-LzOYfdTgQu-Hqxl9bGz", project);
+        const { user } = this.props
+        const { project } = this.state
+        project.date_created = DATE_TODAY
+        addProject(user.id, project);
+        this.props.navigation.navigate("AllProjects")
     }
 
     render() {
@@ -31,7 +38,6 @@ class AddProject extends React.Component {
                 <AppHeader
                     left={
                         <IconButton color="#493649"
-                            type='font-awesome'
                             name='angle-left'
                             size={40}
                             onPress={() => this.props.navigation.goBack()}
@@ -58,4 +64,19 @@ const styles = StyleSheet.create(
         },
     });
 
-export default AddProject
+const mapStateToProps = state => ({
+    state: state,
+    user: state.user,
+    current_project: state.project.current_project
+});
+
+const ActionCreators = Object.assign(
+    {},
+    userActions,
+    projectActions
+);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddProject)

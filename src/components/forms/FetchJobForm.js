@@ -7,7 +7,7 @@ import t from 'tcomb-form-native';
 import { CheckBox } from "native-base";
 import { criteria } from '../../constants/Criteria'
 import { Checkbox } from '../checkbox/Checkbox';
-import { addFetchJob } from '../../database/services/FetchJobService';
+import { addFetchJob } from '../../actions/fetchJob';
 
 const Form = t.form.Form;
 
@@ -71,70 +71,48 @@ export default class FetchJobForm extends React.Component {
     state = {
         value: {},
         criteria: {
+            zero: false,
             five: false,
             ten: false,
             twenty: false,
             fifty: false,
             two_hundred: false,
-            two_hundred_plus: false
         }
     }
 
-    componentDidMount() {
+    onChangeFormValues(val) {
+        this.setState({ value: val });
+        const { criteria, value } = this.state
+        const fj = { criteria, value }
+        this.props.onChange(fj)
     }
 
-    handleSubmit = () => {
-        let fetch_job = this.state.value
-
-        // set date and title of fetch job
-        let date = new Date();
-        const string_date = date.getDate() + '/' + date.getMonth() + 1 + '/' + new Date().getFullYear()
-        fetch_job.date_created = string_date
-        fetch_job.title = 'Fetch: ' + fetch_job.hashtag && fetch_job.location ?
-            `hashtag: ${fetch_job.hashtag} & location: ${fetch_job.location} ` :
-            fetch_job.location ? 'location:' + fetch_job.location : 'hashtag:' + fetch_job.hashtag
-
-        // filter active criteria
-        let criteria = Object.entries(this.state.criteria);
-        let active_criteria = []
-
-        criteria.forEach(element => {
-            if (element[1] == true)
-                active_criteria.push(element[0])
-        })
-        fetch_job.criteria = active_criteria
-        addFetchJob("-LzOYfdTgQu-Hqxl9bGz", "-LzOoD6NWW-4VpFoTrGK", fetch_job)
-        this.props.goBack()
-    }
-
-    onChangeFormValues(value) {
-        this.setState({ value: value });
-    }
-
-    onChangeCriteria = value => {
-        let state_crit = this.state.criteria
-        switch (value) {
+    onChangeCriteria = val => {
+        let { criteria, value } = this.state
+        const fj = { criteria, value }
+        switch (val) {
+            case 'zero':
+                criteria.zero = !criteria.zero
+                break
             case 'five':
-                state_crit.five = !state_crit.five
+                criteria.five = !criteria.five
                 break
             case 'ten':
-                state_crit.ten = !state_crit.ten
+                criteria.ten = !criteria.ten
                 break
             case 'twenty':
-                state_crit.twenty = !state_crit.twenty
+                criteria.twenty = !criteria.twenty
                 break
             case 'fifty':
-                state_crit.fifty = !state_crit.fifty
+                criteria.fifty = !criteria.fifty
                 break
             case 'two_hundred':
-                state_crit.two_hundred = !state_crit.two_hundred
-                break
-            case 'two_hundred_plus':
-                state_crit.two_hundred_plus = !state_crit.two_hundred_plus
+                criteria.two_hundred = !criteria.two_hundred
                 break
         }
 
-        this.setState({ criteria: state_crit })
+        this.setState({ criteria })
+        this.props.onChange(fj)
     }
 
     getCriteria = () => {
@@ -151,6 +129,9 @@ export default class FetchJobForm extends React.Component {
     getChecked = key => {
         let checked = false
         switch (key) {
+            case 'zero':
+                checked = this.state.zero
+                break
             case 'five':
                 checked = this.state.criteria.five
                 break
@@ -166,9 +147,7 @@ export default class FetchJobForm extends React.Component {
             case 'two_hundred':
                 checked = this.state.criteria.two_hundred
                 break
-            case 'two_hundred_plus':
-                checked = this.state.criteria.two_hundred_plus
-                break
+
         }
         return checked
     }
@@ -194,9 +173,6 @@ export default class FetchJobForm extends React.Component {
                         {this.getCriteria()}
                     </View>
                 </View>
-                <View style={styles.bottomView}>
-                    <TextButton style={styles.saveBtn} onPress={this.handleSubmit} title="Save" />
-                </View>
             </View>
         )
     }
@@ -218,24 +194,8 @@ const styles = StyleSheet.create(
         midView: {
             padding: '4%',
         },
-        bottomView: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center'
-        },
         textInput: {
             borderWidth: 1,
-        },
-        saveBtn: {
-            padding: 6,
-            fontSize: 18,
-            fontWeight: '400',
-            display: 'flex',
-            marginRight: 10,
-            borderWidth: 1.5,
-            borderColor: '#493649',
-            borderRadius: 5,
         },
         title: {
             fontSize: 16,
