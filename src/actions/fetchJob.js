@@ -1,7 +1,6 @@
 import { db } from '../database/config/db';
-import { SET_CURRENT_PAGE_MEDIA_IDS, DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR } from '../constants';
+import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR } from '../constants';
 import { addInfluencer } from './influencer';
-import fetchInfluencer from '../web/fetchInfluencer';
 import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME } from '../constants/endpoints';
 
 export const getAllFetchJobs = (user_id, project_id) => {
@@ -94,11 +93,8 @@ export const setCurrentPageInfo = result => {
     // if (has_next_page) {
     //     // get next page
     // }
+
     return media_ids
-    // return {
-    //     type: SET_CURRENT_PAGE_MEDIA_IDS,
-    //     payload: { has_next_page, end_cursor, influ_ids: media_ids }
-    // }
 }
 
 // export const getNextPagePending = () => {

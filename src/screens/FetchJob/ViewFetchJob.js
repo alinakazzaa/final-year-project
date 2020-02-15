@@ -10,59 +10,13 @@ import * as influencerActions from '../../actions/influencer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
-import fetchInfluencerByUsername from '../../web/fetchInfluencerByUsername';
 import { getAllInfluencers } from '../../actions/influencer';
-import { getInfluencers } from '../../reducers/instagramReducer';
+import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 
 
 class ViewFetchJob extends React.Component {
-
-    componentDidMount() {
-        const { current_fetch_job, getAllInfluencers, fetchInfluencerByUsername, influencers } = this.props
-        getAllInfluencers(current_fetch_job.hashtag)
-
-        if (influencers.length > 0) {
-            influencers.forEach(influ => {
-                this.getInfluencerByUsername(influ.username)
-            })
-        }
-
-
-        // influencers.forEach(influ => {
-        //     setInterval(() => fetchInfluencerByUsername(influ.username), 20000)
-        // });
-        // influ_ids.forEach(influ => {
-        //     setInterval(() => fetchInfluencer(influ), 20000)
-        // });
-    }
-
-    getInfluencerByUsername = username => {
-        setInterval(() => fetchInfluencerByUsername(username), 20000)
-    }
-
-    componentDidUpdate(prevProps) {
-        const { result, influ_ids, setMediaIDs, fetchInfluencer, influencers, fj_influencers } = this.props
-        let media
-        if (prevProps.influencers !== influencers) {
-            console.log("influencers_changed")
-            // console.log(this.props.state)
-
-            // console.log(influencers[2])
-            // influencers.forEach(influ => {
-            //     setInterval(() => fetchInfluencerByUsername(influ.username), 20000)
-            // });
-
-        } else if (prevProps.influ_ids !== influ_ids) {
-            console.log("influ_ids changed")
-        }
-
-    }
-
     render() {
-        const { current_fetch_job, fj_influencers, influencers } = this.props
-        // influencers.forEach(element => {
-
-        // });
+        const { current_fetch_job, influencers } = this.props
 
         return (
             <View>
@@ -203,12 +157,10 @@ const mapStateToProps = state => ({
     fetch_jobs: state.fetch_job.fetch_jobs,
     current_fetch_job: state.fetch_job.current_fetch_job,
     influencers: state.influencer.influencers,
-    fj_influencers: getInfluencers(state)
+    running_fetch_job: getRunningFetchJob(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchInfluencerByUsername: fetchInfluencerByUsername,
-    getAllInfluencers: getAllInfluencers
 }, dispatch);
 
 
