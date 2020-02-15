@@ -1,8 +1,9 @@
-import { SET_CURRENT_FETCH_JOB, SET_FETCH_JOBS } from '../constants';
+import { SET_CURRENT_FETCH_JOB, SET_FETCH_JOBS, SET_RUNNING_FETCH_JOB } from '../constants';
 
 const initialState = {
     fetch_jobs: [],
-    current_fetch_job: {}
+    current_fetch_job: {},
+    running_fetch_job: {}
 };
 
 const fetchJobReducer = (state = initialState, action) => {
@@ -16,6 +17,11 @@ const fetchJobReducer = (state = initialState, action) => {
             };
         case SET_CURRENT_FETCH_JOB:
             updated_state.current_fetch_job = { ...action.payload }
+            return {
+                ...updated_state
+            };
+        case SET_RUNNING_FETCH_JOB:
+            updated_state.running_fetch_job = { ...action.payload }
             return {
                 ...updated_state
             };

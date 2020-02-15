@@ -30,9 +30,17 @@ class AllFetchJobs extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { result, influ_ids, setMediaIDs, fetchInfluencer, influencers } = this.props
-        console.log(influ_ids)
-        let media
+        const { influ_ids, fetchInfluencer, running_fetch_job } = this.props
+        // console.log('Prev props: ' + prevProps.influ_ids)
+        // console.log('Updated props: ' + influ_ids)
+        if (prevProps.influ_ids !== influ_ids) {
+            // influ_ids.forEach(id => {
+            //     setInterval(() => fetchInfluencer(id), 20000)
+            // });
+            fetchInfluencer(influ_ids[3], running_fetch_job.hashtag);
+        }
+        // console.log(this.props.insta_fetch)
+        // let media
         // if (prevProps.result !== result) {
         //     media = getCurrentPage(result)
         //     setMediaIDs(media.edges)
@@ -52,17 +60,15 @@ class AllFetchJobs extends React.Component {
     }
 
     startFetchJob = job => {
-        const { user, fetchMedia, fetchInfluencer, pending, current_project, result, influ_ids, setMediaIDs, influencers } = this.props
+        const { user, fetchMedia, setRunningFetchJob, fetchInfluencer, pending, current_project, result, influ_ids, setMediaIDs, influencers } = this.props
         let end_cursor
         this.setState({ isLoading: true })
 
         // update job status
-        let updated_job = { ...job }
-        updated_job.status = 'in progress'
-        updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' })
-
+        let updated_job = { ...job, status: 'in progress' }
+        updateFetchJob(user.id, current_project.id, updated_job)
+        setRunningFetchJob(updated_job);
         fetchMedia(job.hashtag)
-
         this.setState({ isLoading: false })
 
     }
@@ -138,7 +144,8 @@ const mapStateToProps = state => ({
     pending: getPending(state),
     error: getError(state),
     influ_ids: getInfluIDs(state),
-    influencers: getInfluencers(state)
+    influencers: getInfluencers(state),
+    running_fetch_job: state.fetch_job.running_fetch_job
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -146,7 +153,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     fetchInfluencer,
     setMediaIDs: instaActions.setMediaIDs,
     setFetchJobs: fetchJobActions.setFetchJobs,
-    setCurrentFetchJob: fetchJobActions.setCurrentFetchJob
+    setCurrentFetchJob: fetchJobActions.setCurrentFetchJob,
+    setRunningFetchJob: fetchJobActions.setRunningFetchJob
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)

@@ -1,5 +1,5 @@
 import { db } from '../database/config/db';
-import { GET_ALL_FETCH_JOBS, DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS, SET_CURRENT_FETCH_JOB } from '../constants';
+import { GET_ALL_FETCH_JOBS, DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB } from '../constants';
 
 export const getAllFetchJobs = (user_id, project_id) => {
 
@@ -23,6 +23,13 @@ export const setFetchJobs = fetch_jobs => {
 export const setCurrentFetchJob = fetch_job => {
     return {
         type: SET_CURRENT_FETCH_JOB,
+        payload: fetch_job
+    }
+}
+
+export const setRunningFetchJob = fetch_job => {
+    return {
+        type: SET_RUNNING_FETCH_JOB,
         payload: fetch_job
     }
 }

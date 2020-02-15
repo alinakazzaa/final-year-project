@@ -6,6 +6,7 @@ import {
 } from '../constants/endpoints'
 
 import { GET_MEDIA_BY_HASHTAG_SUCCESS, GET_CURRENT_PAGE, GET_NEXT_PAGE, GET_USER_BY_ID, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_NEXT_PAGE_SUCCESS, GET_NEXT_PAGE_PENDING, GET_NEXT_PAGE_ERROR, GET_MEDIA_IDS, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_SUCCESS, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR, GET_CURRENT_PAGE_MEDIA_IDS } from '../constants/index'
+import fetchInfluencer from '../web/fetchInfluencer'
 
 export const getInitialCursorPending = () => {
     return {
@@ -31,20 +32,21 @@ export const getInitialCursorError = error => {
 
 
 export const getCurrentPage = result => {
-    let edge_hashtag_to_media
-    let has_next_page
+    let edge_hashtag_to_media = {}
+    let has_next_page = false
     let end_cursor = {}
     let got_data = false
     const media_ids = []
+    let edges = []
 
     if (result.graphql) {
         console.log("in result graphql")
-        edge_hashtag_to_media = result.graphql.hashtag.edge_hashtag_to_media
+        edge_hashtag_to_media = { ...result.graphql.hashtag.edge_hashtag_to_media }
         got_data = true
     }
     else if (result.data) {
         console.log("in result data")
-        edge_hashtag_to_media = result.data.hashtag.edge_hashtag_to_media
+        edge_hashtag_to_media = { ...result.data.hashtag.edge_hashtag_to_media }
         got_data = true
     }
     else if (result.status == 'fail') {
@@ -52,6 +54,7 @@ export const getCurrentPage = result => {
     } else {
         console.log(result)
     }
+
 
     if (got_data) {
         has_next_page = edge_hashtag_to_media.page_info.has_next_page
@@ -61,9 +64,9 @@ export const getCurrentPage = result => {
         end_cursor = { ...edge_hashtag_to_media.page_info.end_cursor }
     }
 
-    // return edge_hashtag_to_media
+    edges = edge_hashtag_to_media.edges
 
-    if (edge_hashtag_to_media.edges !== null && edge_hashtag_to_media.length > 0) {
+    if (edges.length > 0) {
         edge_hashtag_to_media.edges.forEach(edge => {
             media_ids.push(edge.node.owner.id)
         })
@@ -104,16 +107,27 @@ export const getNextPageError = error => {
     }
 }
 
+export const getUserByIDSuccess = (result, hashtag) => {
+
+    let influ_obj = { ...result.graphql.user.reel.owner }
+    console.log(result.graphql)
+    // const influencer = {
+    //     username: influ_obj.username,
+    //     id: influ_obj.id,
+    //     profile_pic_url: influ_obj.profile_pic_url,
+    //     profile_url: `https://www.instagram.com/${user_obj.username}/`
+    // }
+
+    // console.log(influencer)
+
+    // return dispatch => {
+    //     dispatch(addInfluencer(influencer, hashtag))
+    // }
+}
+
 export const getUserByIDPending = () => {
     return {
         type: GET_USER_BY_ID_PENDING
-    }
-}
-
-export const getUserByIDSuccess = result => {
-    return {
-        type: GET_USER_BY_ID_SUCCESS,
-        payload: result
     }
 }
 
@@ -145,25 +159,38 @@ export const getUserByUsernameError = error => {
     }
 }
 
-// export const getUserByID = async id => {
-//     await fetch(`https://www.instagram.com/graphql/query/?query_hash=e74d51c10ecc0fe6250a295b9bb9db74&variables=%7B%22user_id%22:%22${id}%22,%22include_chaining%22:false,%22include_reel%22:true,%22include_suggested_users%22:false,%22include_logged_out_extras%22:false,%22include_highlight_reels%22:false,%22include_related_profiles%22:false%7D`, {
-//         method: 'GET',
-//         headers: {
-//             Accept: 'application/json',
-//             'Content-Type': 'application/json',
-//         },
-//         // }).then((response) => response.json().then(result => createUser(result.data.user.reel.user, hashtag)))
-//         //     .catch((error) => {
-//         //         console.error("Cannot fetch" + error);
-//         //     });
-//     }).then((response) => response.json().then(result =>
-//         // createUser(result.data.user.reel, hashtag)
-//         console.log(result)
-//     ))
-//         .catch((error) => {
-//             console.error("Cannot fetch" + error);
-//         });
-// }
+export const getUsersByID = edges => {
+    // console.log(edges[8].node.owner.id)
+    fetchInfluencer(edges[8].node.owner.id)
+    // if (ids.length > 0) {
+    //     // setInterval(() => fetchInfluencer(ids[8]), 20000)
+    // }
+    // if (ids !== null) {
+    //     // ids.array.forEach(id => {
+    //     //     setInterval(() => fetchInfluencer(id), 20000)
+    //     // });
+    //     // console.log(ids[8])
+    //     setInterval(() => fetchInfluencer(ids[8]), 20000)
+    // }
+
+    // await fetch(`https://www.instagram.com/graphql/query/?query_hash=e74d51c10ecc0fe6250a295b9bb9db74&variables=%7B%22user_id%22:%22${id}%22,%22include_chaining%22:false,%22include_reel%22:true,%22include_suggested_users%22:false,%22include_logged_out_extras%22:false,%22include_highlight_reels%22:false,%22include_related_profiles%22:false%7D`, {
+    //     method: 'GET',
+    //     headers: {
+    //         Accept: 'application/json',
+    //         'Content-Type': 'application/json',
+    //     },
+    //     // }).then((response) => response.json().then(result => createUser(result.data.user.reel.user, hashtag)))
+    //     //     .catch((error) => {
+    //     //         console.error("Cannot fetch" + error);
+    //     //     });
+    // }).then((response) => response.json().then(result =>
+    //     // createUser(result.data.user.reel, hashtag)
+    //     console.log(result)
+    // ))
+    //     .catch((error) => {
+    //         console.error("Cannot fetch" + error);
+    //     });
+}
 
 
 
