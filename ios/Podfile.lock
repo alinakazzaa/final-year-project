@@ -247,9 +247,9 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-safe-area-context (0.6.2):
+  - react-native-safe-area-context (0.6.4):
     - React
-  - react-native-webview (8.0.5):
+  - react-native-webview (8.1.0):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -291,11 +291,11 @@ PODS:
   - RNFBApp (6.3.3):
     - Firebase/Core (~> 6.13.0)
     - React
-  - RNGestureHandler (1.5.3):
+  - RNGestureHandler (1.6.0):
     - React
   - RNReanimated (1.7.0):
     - React
-  - RNScreens (2.0.0-alpha.31):
+  - RNScreens (2.0.0-beta.4):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -453,8 +453,8 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-safe-area-context: a1d322930b8c5d04ebeb77cc47cc97575ad27203
-  react-native-webview: d3ceb323f0d880174568c8b4d53239e708f85976
+  react-native-safe-area-context: 042dfc9d4db17196841df962ba9497f6e7a5bd02
+  react-native-webview: f686ed60541ed7291cb1c2aad56b96c86352cb87
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -467,9 +467,9 @@ SPEC CHECKSUMS:
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCMaskedView: e5b99bc191945f157adeede68da9d424462de177
   RNFBApp: 887ccc5840f93abad3202ff23eb0faf7bee4ac12
-  RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
+  RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: 5fcc247984ffae92240e7e8e39e1e19c0a0f6f67
+  RNScreens: 6053a007667bea81a69087caadf103bba04c032e
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
