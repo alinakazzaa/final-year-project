@@ -14,7 +14,6 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
     }
 
     const influList = (influ, index) => {
-
         return (
             <View style={styles.listItem} key={index}>
                 <View style={styles.itemHeader}>
@@ -28,7 +27,7 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                             <Text style={styles.title}>Following</Text>
                             <Text style={styles.infoText}>{formatNumber(influ.following)}</Text>
                             <Text style={styles.title}>No of media</Text>
-                            <Text style={styles.infoText}>{formatNumber(influ.media)}</Text>
+                            <Text style={styles.infoText}>{formatNumber(influ.media_count)}</Text>
                         </View>
                     </View>
                     <View style={styles.middleRight}>
@@ -52,12 +51,20 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                         </View>
                     </View>
                 </View>
+                <View style={styles.business}>
+                    {influ.is_business_account && <IconButton
+                        name='briefcase'
+                        size={20}
+                        color="#493649"
+                        style={styles.icon}
+                    />}
+                </View>
                 <View style={styles.bottom}>
                     <Text style={styles.title}>Biography</Text>
-                    <Text style={styles.bio}>{influ.bio}</Text>
+                    <Text style={styles.bio}>{influ.biography}</Text>
                 </View>
                 <View style={styles.footer}>
-                    <Icon
+                    {/* <Icon
                         name='delete'
                         size={30}
                         color="#493649"
@@ -72,7 +79,25 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                         type='MaterialIcons'
                         style={styles.icon}
                         onPress={() => console.log(influ)}
-                    />
+                    /> */}
+                    <TouchableOpacity style={styles.footerYes}>
+                        <Icon
+                            name='check'
+                            size={50}
+                            color="green"
+                            type='MaterialIcons'
+                            style={styles.icon}
+                        // onPress={() => deleteProject(proj)}
+                        /></TouchableOpacity>
+                    <TouchableOpacity style={styles.footerNo}>
+                        <Icon
+                            name='close'
+                            size={50}
+                            color="red"
+                            type='MaterialIcons'
+                            style={styles.icon}
+                            onPress={() => console.log(influ)}
+                        /></TouchableOpacity>
                 </View>
             </View>
         )
@@ -197,24 +222,34 @@ const styles = StyleSheet.create(
             padding: 20
         },
         footer: {
-            padding: 20,
+            // padding: 10,
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'space-evenly',
             borderTopWidth: 1,
             borderTopColor: '#ded4da',
         },
         icon: {
             fontWeight: '100',
         },
-
         cancelBtn: {
             marginRight: 10
         },
         scene: {
             flex: 1,
         },
+        business: {
+            paddingLeft: 20,
+            alignItems: 'flex-start'
+        },
+        footerYes: {
+            borderRightWidth: 0.4,
+            borderColor: '#ded4da',
+            width: '40%'
+        },
+        footerNo: {
+            width: '40%'
+        }
     });
 
 InfluencerList.PropTypes = {

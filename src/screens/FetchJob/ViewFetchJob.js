@@ -15,6 +15,11 @@ import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 
 
 class ViewFetchJob extends React.Component {
+
+    componentDidMount() {
+        const { getAllInfluencers, current_fetch_job } = this.props
+        getAllInfluencers(current_fetch_job.hashtag)
+    }
     render() {
         const { current_fetch_job, influencers } = this.props
 
@@ -161,6 +166,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+    getAllInfluencers
 }, dispatch);
 
 

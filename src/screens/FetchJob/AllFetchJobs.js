@@ -6,7 +6,6 @@ import * as fetchJobActions from '../../actions/fetchJob';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import fetchMedia from '../../web/fetchMedia';
-import fetchInfluencer from '../../web/fetchInfluencer'
 import { getPending, getError, getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { getAllInfluencers } from '../../actions/influencer';
 
