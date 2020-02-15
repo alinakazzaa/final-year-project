@@ -1,4 +1,4 @@
-import { getInitialCursorPending, getInitialCursorSuccess, getInitialCursorError, getCurrentPage } from '../actions/instagram';
+import { getInitialCursorPending, getInitialCursorSuccess, getInitialCursorError } from '../actions/fetchJob';
 import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from '../constants/endpoints';
 
 const fetchMedia = hashtag => {
@@ -10,8 +10,7 @@ const fetchMedia = hashtag => {
                 if (res.error) {
                     throw (res.error);
                 }
-                // dispatch(getInitialCursorSuccess(res));
-                dispatch(getCurrentPage(res))
+                dispatch(getInitialCursorSuccess(res));
                 return res;
             })
             .catch(error => {

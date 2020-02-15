@@ -1,17 +1,13 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, ActivityIndicator } from 'react-native';
-import { db } from '../../database/config/db';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { updateFetchJob, getAllFetchJobs } from '../../actions/fetchJob'
-// import { getInitialCursor, getCurrentPage } from '../../actions/instagram'
+import { updateFetchJob, getAllFetchJobs, getInfluencersByIDs } from '../../actions/fetchJob'
 import * as fetchJobActions from '../../actions/fetchJob';
-import * as instaActions from '../../actions/instagram';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import fetchMedia from '../../web/fetchMedia';
 import fetchInfluencer from '../../web/fetchInfluencer'
-import { getMedia, getPending, getError, getInfluIDs, getInfluencers } from '../../reducers/instagramReducer';
-import { getCurrentPage, createUser } from '../../actions/instagram';
+import { getPending, getError, getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { getAllInfluencers } from '../../actions/influencer';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -29,30 +25,6 @@ class AllFetchJobs extends React.Component {
         this.setState({ isLoading: false })
     }
 
-    componentDidUpdate(prevProps) {
-        const { influ_ids, fetchInfluencer, running_fetch_job } = this.props
-        // console.log('Prev props: ' + prevProps.influ_ids)
-        // console.log('Updated props: ' + influ_ids)
-        if (prevProps.influ_ids !== influ_ids) {
-            // influ_ids.forEach(id => {
-            //     setInterval(() => fetchInfluencer(id), 20000)
-            // });
-            fetchInfluencer(influ_ids[3], running_fetch_job.hashtag);
-        }
-        // console.log(this.props.insta_fetch)
-        // let media
-        // if (prevProps.result !== result) {
-        //     media = getCurrentPage(result)
-        //     setMediaIDs(media.edges)
-
-        // } else if (prevProps.influ_ids !== influ_ids) {
-        //     influ_ids.forEach(influ => {
-        //         setInterval(() => fetchInfluencer(influ), 20000)
-        //     });
-        // }
-
-    }
-
     getFetchJobs = () => {
         const { user, current_project, setFetchJobs } = this.props
         const fetchJobs = getAllFetchJobs(user.id, current_project.id)
@@ -60,24 +32,14 @@ class AllFetchJobs extends React.Component {
     }
 
     startFetchJob = job => {
-        const { user, fetchMedia, setRunningFetchJob, fetchInfluencer, pending, current_project, result, influ_ids, setMediaIDs, influencers } = this.props
-        let end_cursor
+        const { user, fetchMedia, setRunningFetchJob, current_project } = this.props
         this.setState({ isLoading: true })
 
-        // update job status
         let updated_job = { ...job, status: 'in progress' }
         updateFetchJob(user.id, current_project.id, updated_job)
         setRunningFetchJob(updated_job);
         fetchMedia(job.hashtag)
         this.setState({ isLoading: false })
-
-    }
-
-    shouldComponentRender() {
-        const { pending } = this.props;
-        if (pending === false) return false;
-        // more tests
-        return true;
     }
 
     componentWillUnmount() {
@@ -140,21 +102,16 @@ const mapStateToProps = state => ({
     user: state.user,
     current_project: state.project.current_project,
     fetch_jobs: state.fetch_job.fetch_jobs,
-    result: getMedia(state),
     pending: getPending(state),
     error: getError(state),
-    influ_ids: getInfluIDs(state),
-    influencers: getInfluencers(state),
-    running_fetch_job: state.fetch_job.running_fetch_job
+    running_fetch_job: getRunningFetchJob(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchMedia,
-    fetchInfluencer,
-    setMediaIDs: instaActions.setMediaIDs,
     setFetchJobs: fetchJobActions.setFetchJobs,
     setCurrentFetchJob: fetchJobActions.setCurrentFetchJob,
-    setRunningFetchJob: fetchJobActions.setRunningFetchJob
+    setRunningFetchJob: fetchJobActions.setRunningFetchJob,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)
