@@ -17,10 +17,11 @@ export const getAllInfluencers = hashtag => {
 }
 
 export const addInfluencer = (influencer, hashtag) => {
-    console.log(influencer)
-    // db.ref(`/Influencers/hashtags/${hashtag}`).child(influencer.id).set({
-    //     ...influencer, date_added: DATE_TODAY
-    // })
+    db.ref(`/Influencers/hashtags/${hashtag}`).child(influencer.id).set({
+        ...influencer,
+        profile_url: `https://www.instagram.com/${influencer.username}/`,
+        date_added: DATE_TODAY
+    })
 }
 
 export const updateInfluencer = (hashtag, influencer) => {
