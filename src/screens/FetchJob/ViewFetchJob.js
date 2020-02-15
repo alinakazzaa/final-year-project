@@ -10,18 +10,14 @@ import * as influencerActions from '../../actions/influencer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
+import { getAllInfluencers } from '../../actions/influencer';
+import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 
 
 class ViewFetchJob extends React.Component {
-
-    componentDidMount() {
-        const { current_fetch_job, actions } = this.props
-        actions.getAllInfluencers(current_fetch_job.hashtag)
-    }
-
     render() {
         const { current_fetch_job, influencers } = this.props
-        // console.log(influencers)
+
         return (
             <View>
                 <View style={styles.infoContainer}>
@@ -160,15 +156,12 @@ const mapStateToProps = state => ({
     current_project: state.project.current_project,
     fetch_jobs: state.fetch_job.fetch_jobs,
     current_fetch_job: state.fetch_job.current_fetch_job,
-    influencers: state.influencer.influencers
+    influencers: state.influencer.influencers,
+    running_fetch_job: getRunningFetchJob(state)
 });
 
-const ActionCreators = Object.assign(
-    {},
-    influencerActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+}, dispatch);
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewFetchJob)

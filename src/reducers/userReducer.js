@@ -1,8 +1,7 @@
 import { USER_LOGIN, USER_LOGOUT } from '../constants';
 
 const initialState = {
-    user: {
-    }
+
 };
 
 const userReducer = (state = initialState, action) => {

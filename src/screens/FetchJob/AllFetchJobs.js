@@ -1,20 +1,16 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { db } from '../../database/config/db';
+import { View, Text, YellowBox, StyleSheet, ActivityIndicator } from 'react-native';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { addFetchJob, updateFetchJob, getAllFetchJobs } from '../../actions/fetchJob'
-import { criteria } from '../../constants/Criteria'
-import { AppHeader } from '../../layouts/Header';
-import { IconButton } from '../../components/buttons/IconButton';
-import { getInitialCursor } from '../../actions/instagram'
+import { updateFetchJob, getAllFetchJobs, getInfluencersByIDs } from '../../actions/fetchJob'
 import * as fetchJobActions from '../../actions/fetchJob';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import fetchMedia from '../../web/fetchMedia';
+import fetchInfluencer from '../../web/fetchInfluencer'
+import { getPending, getError, getRunningFetchJob } from '../../reducers/fetchJobReducer';
+import { getAllInfluencers } from '../../actions/influencer';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-let usersRef = db.ref('/Users')
-let influencersRef = db.ref('/Influencers/topposts/hashtags/')
 
 class AllFetchJobs extends React.Component {
     constructor(props) {
@@ -25,41 +21,42 @@ class AllFetchJobs extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: false })
         this.getFetchJobs()
+        this.setState({ isLoading: false })
     }
 
     getFetchJobs = () => {
-        const { actions, user, current_project } = this.props
+        const { user, current_project, setFetchJobs } = this.props
         const fetchJobs = getAllFetchJobs(user.id, current_project.id)
-        actions.setFetchJobs(fetchJobs)
+        setFetchJobs(fetchJobs)
     }
 
-
     startFetchJob = job => {
-        const { user, current_project } = this.props
-        let updated_job = { ...job }
-        updated_job.status = 'in progress'
+        const { user, fetchMedia, setRunningFetchJob, current_project } = this.props
+        this.setState({ isLoading: true })
+
+        let updated_job = { ...job, status: 'in progress' }
         updateFetchJob(user.id, current_project.id, updated_job)
-        // hashtag, number, active_criteria
-        getInitialCursor(job.hashtag, 1000, job.criteria).then(() => updateFetchJob(user.id, current_project.id, { ...job, status: 'completed' }))
-        // getInfluencersByHashtag()
+        setRunningFetchJob(updated_job);
+        fetchMedia(job.hashtag)
+        this.setState({ isLoading: false })
     }
 
     componentWillUnmount() {
-        const { actions } = this.props
-        actions.setFetchJobs()
+        const { setFetchJobs } = this.props
+        setFetchJobs()
     }
 
     goToFetchJob = fj => {
-        const { actions } = this.props
-        actions.setCurrentFetchJob(fj)
+        const { setCurrentFetchJob } = this.props
+        setCurrentFetchJob(fj)
         this.props.navigation.navigate('ViewFetchJob')
     }
 
     render() {
         const { isLoading } = this.state
-        const fetch_jobs = this.props.fetch_jobs
+        const { fetch_jobs, influ_ids, influencers } = this.props
+
         return (
             <View style={styles.container}>
                 {isLoading ?
@@ -105,15 +102,16 @@ const mapStateToProps = state => ({
     user: state.user,
     current_project: state.project.current_project,
     fetch_jobs: state.fetch_job.fetch_jobs,
-    current_fetch_job: state.fetch_job.current_fetch_job
+    pending: getPending(state),
+    error: getError(state),
+    running_fetch_job: getRunningFetchJob(state)
 });
 
-const ActionCreators = Object.assign(
-    {},
-    fetchJobActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    fetchMedia,
+    setFetchJobs: fetchJobActions.setFetchJobs,
+    setCurrentFetchJob: fetchJobActions.setCurrentFetchJob,
+    setRunningFetchJob: fetchJobActions.setRunningFetchJob,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)

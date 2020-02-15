@@ -47,6 +47,6 @@ export const BottomNavigator = createBottomTabNavigator(
         },
     },
     {
-        initialRouteName: 'Home'
+        initialRouteName: 'Projects'
     },
 );
