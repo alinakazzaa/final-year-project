@@ -13,7 +13,7 @@ class Router extends Component {
 
     render() {
         let { user } = this.props
-        console.log(user.username && "current user: " + user.username || "no user logged in")
+        // console.log(user.username && "current user: " + user.username || "no user logged in")
         return (
             // <LogIn />
             !user.username ? <LogIn /> : <MainApp />
@@ -35,12 +35,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Router)
-
-
-
-// https://www.instagram.com/graphql/query/?query_hash=09bb2c060bd093088daac1906a1f1d53&variables={"user_id":"275428276","include_reel":true},headers=
-
-
-// {"user_id":"275428276","include_reel":true}
-
-// https://www.instagram.com/graphql/query/?query_hash=' + query_hash + '&variables=' + query_variable,headers=header
