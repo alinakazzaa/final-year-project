@@ -5,7 +5,7 @@ import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 
-export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJob }) => {
+export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob }) => {
 
     const FJList = (fj, index) => {
         return (
@@ -18,10 +18,6 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJ
                     </View>
                     <View style={styles.middle}>
                         <Text style={styles.date}>{fj.date_created}</Text>
-                    </View>
-                    <View style={styles.right}>
-                        <IconButton type="foundation" name="download" size={30} onPress={() => startFetchJob(fj)} color="#493649" />
-                        {/* <TextButton style={styles.startBtn} onPress={} title="Start" /> */}
                     </View>
                 </View>
             </TouchableOpacity>
@@ -49,7 +45,6 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJ
                     size={40}
                     onPress={() => addFetchJob()}
                     style={styles.addIcon}
-                // reverse
                 />
             </ScrollView>
         </View>
@@ -142,10 +137,8 @@ const styles = StyleSheet.create(
 FetchJobList.propTypes = {
     fetchJobs: PropTypes.array.isRequired,
     goToFetchJob: PropTypes.func,
-    startFetchJob: PropTypes.func,
 }
 
 FetchJobList.defaultProps = {
     goToFetchJob: null,
-    startFetchJob: null
 }

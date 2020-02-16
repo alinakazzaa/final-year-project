@@ -4,16 +4,29 @@ import { addInfluencer } from './influencer';
 import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME } from '../constants/endpoints';
 
 export const setProjectFetchJobs = (user_id, project_id) => {
-    const fetch_jobs = []
+
+    const completed = []
+    const running = []
+    const pending = []
+
     DB_PROJECT_FETCH_JOBS_REF(user_id, project_id).on('value', fj_snapshot => {
         fj_snapshot.forEach(fj_snap => {
-            fetch_jobs.push(fj_snap.val())
+            if (fj_snap.val().status == 'completed') {
+                completed.push(fj_snap.val())
+            } else if (fj_snap.val().status == 'in progress') {
+                running.push(fj_snap.val())
+            } else {
+                pending.push(fj_snap.val())
+            }
+
         })
     })
 
     return {
         type: SET_FETCH_JOBS,
-        payload: fetch_jobs
+        running: running,
+        pending: pending,
+        completed: completed
     }
 }
 

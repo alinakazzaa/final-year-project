@@ -1,7 +1,11 @@
 import { SET_CURRENT_FETCH_JOB, SET_FETCH_JOBS, SET_RUNNING_FETCH_JOB, SET_CURRENT_PAGE_MEDIA_IDS, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR } from '../constants';
 
 const initialState = {
-    fetch_jobs: [],
+    fetch_jobs: {
+        completed: [],
+        running: [],
+        pending: []
+    },
     current_fetch_job: {},
     running_fetch_job: {
 
@@ -12,8 +16,9 @@ const fetchJobReducer = (state = initialState, action) => {
     const updated_state = { ...state }
     switch (action.type) {
         case SET_FETCH_JOBS:
-            const jobs = action.payload
-            updated_state.fetch_jobs = jobs
+            updated_state.fetch_jobs.completed = action.completed
+            updated_state.fetch_jobs.running = action.running
+            updated_state.fetch_jobs.pending = action.pending
             return {
                 ...updated_state
             };

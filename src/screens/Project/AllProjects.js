@@ -149,12 +149,12 @@ const styles = StyleSheet.create(
         },
         tabView: {
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: 'space-around',
             padding: 10
         },
         tabItem: {
             justifyContent: 'center',
-            width: '50%',
+            width: '45%',
             borderBottomWidth: 1,
             borderRightWidth: 1,
             borderColor: "#b3b3cc",

@@ -12,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
 import { getAllInfluencers } from '../../actions/influencer';
 import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
+import { TextButton } from '../../components/buttons/TextButton';
 
 
 class ViewFetchJob extends React.Component {
@@ -56,6 +57,10 @@ class ViewFetchJob extends React.Component {
                                 <Text style={styles.lbl}>Date Created</Text>
                                 <Text style={styles.data}>{current_fetch_job.date_created}</Text>
                             </View>
+                            <View style={styles.itemRow}>
+                                <Text style={styles.lbl}>Status</Text>
+                                <Text style={styles.data}>{current_fetch_job.status}</Text>
+                            </View>
                         </View>
                         <View style={styles.middle}>
                             <Text style={styles.title}>Fetch Criteria</Text>
@@ -81,10 +86,11 @@ class ViewFetchJob extends React.Component {
                                         <Text style={styles.title}>View All</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <ScrollView horizontal
+                                {current_fetch_job.status == 'completed' ? <ScrollView horizontal
                                     contentContainerStyle={styles.scrollContainer}>
                                     <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />
-                                </ScrollView>
+                                </ScrollView> :
+                                    <TextButton title="Start" />}
                             </View>
                         </View >
                     </View >
