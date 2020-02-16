@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, ActivityIndicator } from 'react-native';
 import { InfluencerList } from '../../components/list/InfluencerList'
-import * as influencerAtions from '../../actions/influencer';
+import { getAllInfluencers, setCurrentInfluencer } from '../../actions/influencer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -14,22 +14,10 @@ class AllInfluencers extends React.Component {
         isLoading: false
     }
 
-    componentDidMount() {
-        const { influencers } = this.props
-
-
-        // let account = {}
-        // const { navigation } = this.props;
-        // let fj = navigation.getParam('job')
-
-        // influencersRef.on('value', snapshot => {
-        //     snapshot.forEach(item => {
-        //         account = { id: item.key, ...item.val() }
-        //         influencers.push(account)
-        //     })
-        // })
-        // this.setState({ top_posts: influencers })
-        // this.setState({ isLoading: false })
+    goToInfluencer = influ => {
+        const { setCurrentInfluencer } = this.props
+        setCurrentInfluencer(influ)
+        this.props.navigation.navigate('ViewInfluencer')
     }
 
 
@@ -42,7 +30,7 @@ class AllInfluencers extends React.Component {
                         <ActivityIndicator size="large" color="#5d4d50" />
                         <Text style={styles.loadingTxt}>Wait, getting influencers for you</Text>
                     </View>
-                    : <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} />}
+                    : <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} />}
 
             </View>
         );
@@ -70,13 +58,9 @@ const mapStateToProps = state => ({
     influencers: state.influencer.influencers
 });
 
-const ActionCreators = Object.assign(
-    {},
-    influencerAtions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    setCurrentInfluencer,
+}, dispatch);
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllInfluencers)

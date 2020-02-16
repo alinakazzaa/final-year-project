@@ -14,9 +14,17 @@ const influencerReducer = (state = initialState, action) => {
             return {
                 ...updated_state
             };
+        case SET_CURRENT_INFLUENCER:
+            updated_state.current_influencer = action.payload
+            return {
+                ...updated_state
+            };
         default:
             return state;
     }
 }
+
+export const getAllInfluencers = state => state.influencer.influencers
+export const getCurrentInfluencer = state => state.influencer.current_influencer
 
 export default influencerReducer;
