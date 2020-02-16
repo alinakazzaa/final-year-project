@@ -97,7 +97,7 @@ class AllProjects extends React.Component {
                             <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects.archived} />
                         }
                     </View>}
-
+                <IconButton name="plus" size={40} color='#646380' onPress={() => this.props.navigation.navigate('AddProject')} />
             </View>
         );
     }

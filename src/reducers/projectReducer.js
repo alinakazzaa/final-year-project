@@ -5,7 +5,9 @@ const initialState = {
         active: [],
         archived: []
     },
-    current_project: {}
+    current_project: {},
+    pending: true,
+    error: null
 };
 
 const projectReducer = (state = initialState, action) => {
@@ -15,11 +17,13 @@ const projectReducer = (state = initialState, action) => {
         case SET_PROJECTS:
             updated_state.projects.active = action.active
             updated_state.projects.archived = action.archived
+            updated_state.pending = false
             return {
                 ...updated_state
             };
         case SET_CURRENT_PROJECT:
             updated_state.current_project = { ...action.payload }
+            updated_state.pending = false
             return {
                 ...updated_state
             };

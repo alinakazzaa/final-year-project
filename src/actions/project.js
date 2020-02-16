@@ -26,7 +26,7 @@ export const setUserProjects = user_id => {
     return {
         type: SET_PROJECTS,
         active: active,
-        archived: archived
+        archived: archived,
     }
 }
 

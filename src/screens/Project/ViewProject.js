@@ -19,6 +19,7 @@ class ViewProjectScreen extends React.Component {
     }
 
     componentDidMount() {
+
         const { user, current_project, setProjectFetchJobs } = this.props
         setProjectFetchJobs(user.id, current_project.id)
         this.setState({ isLoading: false })
@@ -50,7 +51,6 @@ class ViewProjectScreen extends React.Component {
 
     render() {
         const { current_project, fetch_jobs } = this.props;
-        console.log(current_project)
         return (
             <View style={styles.main}>
                 <AppHeader
@@ -106,13 +106,15 @@ class ViewProjectScreen extends React.Component {
                         <View>
                             <View style={styles.listHead}>
                                 <Text style={styles.title}>Fetch Jobs</Text>
-                                <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllFetchJobs')}>
-                                    <Text style={styles.title}>View All</Text>
-                                </TouchableOpacity>
                             </View>
                             <ScrollView
                                 contentContainerStyle={styles.scrollContainer}>
-                                {fetch_jobs ? <FetchJobListProjectView fetch_jobs={fetch_jobs} goToFetchJob={this.goToFetchJob} />
+                                {fetch_jobs ? <View>
+                                    <FetchJobListProjectView fetch_jobs={[...fetch_jobs.completed, fetch_jobs.pending]} goToFetchJob={this.goToFetchJob} />
+                                    <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllFetchJobs')}>
+                                        <Text style={styles.title}>See All</Text>
+                                    </TouchableOpacity>
+                                </View>
                                     : <Text>No fetch jobs yet</Text>}
                             </ScrollView>
                         </View>
