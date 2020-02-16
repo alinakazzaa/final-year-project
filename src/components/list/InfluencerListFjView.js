@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 
 export const InfluencerListFjView = ({ influencers, goToInfluencer, addInfluencerByUsername, addToPotential, removeInfluencer }) => {
-    let count = 5
+    let COUNT = 0
     const influList = (influ, index) => {
         return (
             <View style={styles.listItem} key={index}>
@@ -31,7 +31,8 @@ export const InfluencerListFjView = ({ influencers, goToInfluencer, addInfluence
                 contentContainerStyle={styles.scrollContainer}>
 
                 {influencers.length > 0 && influencers.map((i, index) => {
-                    return influList(i, index)
+                    COUNT++
+                    return COUNT < 5 && influList(i, index)
                 })}
             </ScrollView>
         </View>
@@ -48,13 +49,11 @@ const styles = StyleSheet.create(
             // justifyContent: 'space-around',
         },
         scrollContainer: {
-            // paddingTop: '3%',
-            // paddingBottom: '10%',
-            // height: '100%'
+            padding: '2%',
+            paddingLeft: 0,
         },
         listItem: {
             display: 'flex',
-            width: '2.5%',
             borderLeftWidth: 0.5,
             borderColor: '#ded4da',
             alignItems: 'center',
