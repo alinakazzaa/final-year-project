@@ -13,6 +13,8 @@ import { InfluencerListFjView } from '../../components/list/InfluencerListFjView
 import { getAllInfluencers } from '../../actions/influencer';
 import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { TextButton } from '../../components/buttons/TextButton';
+import { updateFetchJob, setRunningFetchJob } from '../../actions/fetchJob';
+import fetchMedia from '../../web/fetchMedia';
 
 
 class ViewFetchJob extends React.Component {
@@ -30,6 +32,17 @@ class ViewFetchJob extends React.Component {
         const { setCurrentInfluencer } = this.props
         setCurrentInfluencer(influ)
         this.props.navigation.navigate('ViewInfluencer')
+    }
+
+    startFetchJob = job => {
+        const { user, fetchMedia, setRunningFetchJob, current_project } = this.props
+        this.setState({ isLoading: true })
+
+        let updated_job = { ...job, status: 'in progress' }
+        updateFetchJob(user.id, current_project.id, updated_job)
+        setRunningFetchJob(updated_job);
+        fetchMedia(job.hashtag)
+        this.setState({ isLoading: false })
     }
 
     render() {
@@ -78,22 +91,22 @@ class ViewFetchJob extends React.Component {
                             <Text style={styles.lblRange}>Follower range</Text>
                             <CriteriaView activeCriteria={current_fetch_job.criteria} />
                         </View>
-                        <View style={styles.bottomView}>
-                            <View>
+
+                        {current_fetch_job.status == 'completed' ?
+                            <View style={styles.bottomView}>
                                 <View style={styles.influencers}>
                                     <Text style={styles.title}>Influencers</Text>
                                     <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
                                         <Text style={styles.title}>View All</Text>
                                     </TouchableOpacity>
                                 </View>
-                                {current_fetch_job.status == 'completed' ? <ScrollView horizontal
-                                    contentContainerStyle={styles.scrollContainer}>
-                                    <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />
-                                </ScrollView> :
-                                    <TextButton title="Start" />}
-                            </View>
-                        </View >
+                                <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />
+                            </View >
+                            :
+                            <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>
+                        }
                     </View >
+
                 </View >
             </View >
         );
@@ -121,6 +134,9 @@ const styles = StyleSheet.create(
         },
         bottomView: {
             paddingTop: '4%',
+        },
+        button: {
+            alignItems: 'center',
         },
         scrollContainer: {
             padding: '2%',
@@ -180,8 +196,19 @@ const styles = StyleSheet.create(
             color: '#826478'
         },
         viewAllBtn: {
-            // alignSelf: 'center',
-            // flexWrap: 'wrap'
+            alignSelf: 'center',
+            flexWrap: 'wrap'
+        },
+        startBtn: {
+            fontSize: 24,
+            color: '#493649',
+            borderWidth: 3,
+            borderColor: '#493649',
+            borderRadius: 10,
+            width: 140,
+            height: 40,
+            textAlign: 'center',
+            marginTop: 50
         }
     });
 
@@ -196,8 +223,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+    fetchMedia,
     getAllInfluencers,
-    setCurrentInfluencer
+    setCurrentInfluencer,
+    setRunningFetchJob: setRunningFetchJob,
 }, dispatch);
 
 

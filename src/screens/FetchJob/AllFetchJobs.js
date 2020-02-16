@@ -41,17 +41,6 @@ class AllFetchJobs extends React.Component {
         this.setState({ isLoading: false })
     }
 
-    startFetchJob = job => {
-        const { user, fetchMedia, setRunningFetchJob, current_project } = this.props
-        this.setState({ isLoading: true })
-
-        let updated_job = { ...job, status: 'in progress' }
-        updateFetchJob(user.id, current_project.id, updated_job)
-        setRunningFetchJob(updated_job);
-        fetchMedia(job.hashtag)
-        this.setState({ isLoading: false })
-    }
-
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
         setCurrentFetchJob(fj)
@@ -171,8 +160,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchMedia,
-    setCurrentFetchJob: setCurrentFetchJob,
-    setRunningFetchJob: setRunningFetchJob,
+    setCurrentFetchJob: setCurrentFetchJob
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)
