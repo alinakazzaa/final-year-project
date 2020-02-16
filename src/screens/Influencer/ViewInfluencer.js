@@ -12,7 +12,7 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 class ViewInfluencer extends React.Component {
 
     static navigationOptions = {
-        header: null
+        headerShown: false
     }
 
     formatNumber = num => {

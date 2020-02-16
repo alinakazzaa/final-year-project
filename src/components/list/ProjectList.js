@@ -99,8 +99,6 @@ const styles = StyleSheet.create(
         },
         startBtn: {
             fontSize: 15,
-            // textAlign: 'left',
-            // width: '25%'
         },
         addIcon: {
             alignSelf: 'center',

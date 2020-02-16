@@ -13,7 +13,7 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 class ViewProjectScreen extends React.Component {
 
     static navigationOptions = {
-        header: null
+        headerShown: false
     }
 
     collabList = (collab, index) => {

@@ -17,7 +17,7 @@ import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 class ViewFetchJob extends React.Component {
 
     static navigationOptions = {
-        header: null
+        headerShown: false
     }
 
     componentDidMount() {

@@ -16,7 +16,7 @@ export const getUserProjects = user_id => {
 export const setUserProjects = projects => {
     return {
         type: SET_PROJECTS,
-        payload: projects
+        payload: [...projects]
     }
 }
 

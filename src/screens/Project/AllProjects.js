@@ -4,6 +4,7 @@ import { db } from '../../database/config/db';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
+import BasicInput from '../../components/input/BasicInput';
 import { ProjectList } from '../../components/list/ProjectList';
 import { Input } from 'react-native-elements';
 import { removeProject, getUserProjects } from '../../actions/project'
@@ -12,12 +13,12 @@ import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader, Warning: componentWillReceiveProps has been renamed']);
 
 class AllProjects extends React.Component {
 
     static navigationOptions = {
-        header: null
+        headerShown: false
     }
 
     constructor(props) {
@@ -62,12 +63,8 @@ class AllProjects extends React.Component {
         return (
             <View style={styles.main} >
                 <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
+                    center={<BasicInput />}
+                    right={<TextButton title="Cancel" />}
                 />
 
                 {this.state.isLoading ? <View style={styles.loading}>
