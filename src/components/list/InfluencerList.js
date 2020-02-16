@@ -4,8 +4,9 @@ import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from '
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
+import { removeInfluencer } from '../../actions/influencer'
 
-export const InfluencerList = ({ influencers, current_project, current_fetch_job, goToInfluencer, addInfluencerByUsername, addToPotential, removeInfluencer }) => {
+export const InfluencerList = ({ influencers, current_project, current_fetch_job, goToInfluencer, addInfluencerByUsername, addToPotential }) => {
 
     const formatNumber = num => {
         let parsed
@@ -17,7 +18,15 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
         return (
             <View style={styles.listItem} key={index}>
                 <View style={styles.itemHeader}>
-                    <Text style={styles.headerTitle}>{influ.username}</Text>
+                    <Text style={styles.username}>{influ.username}</Text>
+                    <Icon
+                        name='chevron-right'
+                        size={50}
+                        color="#493649"
+                        type='MaterialIcons'
+                        style={styles.icon}
+                        onPress={() => goToInfluencer(influ)}
+                    />
                 </View>
                 <View style={styles.middle}>
                     <View style={styles.middleLeft}>
@@ -64,22 +73,6 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                     <Text style={styles.bio}>{influ.biography}</Text>
                 </View>
                 <View style={styles.footer}>
-                    {/* <Icon
-                        name='delete'
-                        size={30}
-                        color="#493649"
-                        type='MaterialIcons'
-                        style={styles.icon}
-                    // onPress={() => deleteProject(proj)}
-                    />
-                    <Icon
-                        name='chevron-right'
-                        size={50}
-                        color="#493649"
-                        type='MaterialIcons'
-                        style={styles.icon}
-                        onPress={() => console.log(influ)}
-                    /> */}
                     <TouchableOpacity style={styles.footerYes}>
                         <Icon
                             name='check'
@@ -87,7 +80,13 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                             color="green"
                             type='MaterialIcons'
                             style={styles.icon}
-                        // onPress={() => deleteProject(proj)}
+                        /></TouchableOpacity>
+                    <TouchableOpacity style={styles.footerCollab}>
+                        <Icon
+                            name='create'
+                            size={40}
+                            color="#ded4da"
+                            type='MaterialIcons'
                         /></TouchableOpacity>
                     <TouchableOpacity style={styles.footerNo}>
                         <Icon
@@ -96,7 +95,7 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                             color="red"
                             type='MaterialIcons'
                             style={styles.icon}
-                            onPress={() => console.log(influ)}
+                            onPress={() => removeInfluencer(current_fetch_job.hashtag, influ.id)}
                         /></TouchableOpacity>
                 </View>
             </View>
@@ -133,7 +132,15 @@ const styles = StyleSheet.create(
             borderColor: '#ded4da',
             padding: 20,
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        },
+        username: {
+            color: '#0B0033',
+            fontSize: 19,
+            textTransform: 'uppercase',
+            fontWeight: '400',
+            fontFamily: 'ArialRoundedMTBold',
         },
         headerTitle: {
             color: '#0B0033',
@@ -222,7 +229,6 @@ const styles = StyleSheet.create(
             padding: 20
         },
         footer: {
-            // padding: 10,
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-evenly',
@@ -230,7 +236,7 @@ const styles = StyleSheet.create(
             borderTopColor: '#ded4da',
         },
         icon: {
-            fontWeight: '100',
+            fontWeight: '500',
         },
         cancelBtn: {
             marginRight: 10
@@ -245,10 +251,16 @@ const styles = StyleSheet.create(
         footerYes: {
             borderRightWidth: 0.4,
             borderColor: '#ded4da',
-            width: '40%'
+            width: '30%'
+        },
+        footerCollab: {
+            width: '40%',
+            paddingTop: '2%'
         },
         footerNo: {
-            width: '40%'
+            borderLeftWidth: 0.4,
+            borderColor: '#ded4da',
+            width: '30%'
         }
     });
 
