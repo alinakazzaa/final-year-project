@@ -1,10 +1,17 @@
-import { DB_USER_REF, USER_LOGIN, USER_LOGOUT } from '../constants';
+import { DB_USER_REF, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_LOGIN_ERROR } from '../constants';
 import { db } from '../database/config/db'
 
-export const setLoggedInUser = user => {
+export const setLoggedInUserSuccess = user => {
     return {
-        type: USER_LOGIN,
+        type: USER_LOGIN_SUCCESS,
         payload: user
+    }
+}
+
+export const setLoggedInUserError = error => {
+    return {
+        type: USER_LOGIN_ERROR,
+        error: error
     }
 }
 

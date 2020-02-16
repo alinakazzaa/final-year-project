@@ -85,7 +85,7 @@ export default class LogInForm extends React.Component {
 
     render() {
 
-        const { logIn, goToRegister } = this.props
+        const { logIn, goToRegister, error } = this.props
         const { value } = this.state
 
         return (
@@ -98,6 +98,7 @@ export default class LogInForm extends React.Component {
                     onChange={(value) => this.onChange(value)}
                     onBlur={Keyboard.dismiss}
                 />
+                {error && <Text>{error.type}</Text>}
                 <TextButton title="Log In" onPress={() => logIn(value)} style={styles.logInBtn} />
                 <TextButton title="Registration" onPress={goToRegister} />
             </View>

@@ -2,7 +2,9 @@ import { SET_CURRENT_FETCH_JOB, DB_USER_REF, GET_ALL_INFLUENCERS, SET_CURRENT_IN
 
 const initialState = {
     influencers: [],
-    current_influencer: {}
+    current_influencer: {},
+    pending: true,
+    error: null
 };
 
 const influencerReducer = (state = initialState, action) => {
