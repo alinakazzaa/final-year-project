@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { updateFetchJob } from '../../actions/fetchJob'
-import * as fetchJobActions from '../../actions/fetchJob';
+import { updateFetchJob, setCurrentFetchJob, setRunningFetchJob } from '../../actions/fetchJob'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import fetchMedia from '../../web/fetchMedia';
@@ -25,7 +24,7 @@ class AllFetchJobs extends React.Component {
             textTransform: 'uppercase'
         },
         selectedTabItemStyle: {
-            width: '35%',
+            width: '32%',
             borderBottomWidth: 1,
             borderRightWidth: 1,
             justifyContent: 'center',
@@ -53,11 +52,6 @@ class AllFetchJobs extends React.Component {
         this.setState({ isLoading: false })
     }
 
-    componentWillUnmount() {
-        const { setFetchJobs } = this.props
-        setFetchJobs()
-    }
-
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
         setCurrentFetchJob(fj)
@@ -67,7 +61,6 @@ class AllFetchJobs extends React.Component {
     render() {
         let { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
         const { fetch_jobs } = this.props
-        console.log(fetch_jobs)
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -153,7 +146,7 @@ const styles = StyleSheet.create(
         },
         tabItem: {
             justifyContent: 'center',
-            width: '35%',
+            width: '30%',
             borderBottomWidth: 1,
             borderRightWidth: 1,
             borderColor: "#b3b3cc",
@@ -161,7 +154,6 @@ const styles = StyleSheet.create(
         tab: {
             textTransform: 'uppercase',
             textAlign: 'center',
-            padding: '5%',
             color: "#5d4d50",
             borderColor: "#b3b3cc",
         },
@@ -179,8 +171,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchMedia,
-    setCurrentFetchJob: fetchJobActions.setCurrentFetchJob,
-    setRunningFetchJob: fetchJobActions.setRunningFetchJob,
+    setCurrentFetchJob: setCurrentFetchJob,
+    setRunningFetchJob: setRunningFetchJob,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)

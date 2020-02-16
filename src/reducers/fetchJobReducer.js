@@ -9,7 +9,9 @@ const initialState = {
     current_fetch_job: {},
     running_fetch_job: {
 
-    }
+    },
+    pending: true,
+    error: null
 };
 
 const fetchJobReducer = (state = initialState, action) => {
