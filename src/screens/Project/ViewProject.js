@@ -5,12 +5,30 @@ import { Avatar } from 'react-native-elements';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
 import * as projectActions from '../../actions/project';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { setProjectFetchJobs, setCurrentFetchJob } from '../../actions/fetchJob';
+import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class ViewProjectScreen extends React.Component {
+    state = {
+        isLoading: true
+    }
+
+    componentDidMount() {
+        const { user, current_project, setProjectFetchJobs } = this.props
+        setProjectFetchJobs(user.id, current_project.id)
+        this.setState({ isLoading: false })
+    }
+
+    goToFetchJob = fj => {
+        const { setCurrentFetchJob } = this.props
+        setCurrentFetchJob(fj)
+        this.props.navigation.navigate('ViewFetchJob')
+    }
 
     static navigationOptions = {
         headerShown: false
@@ -30,17 +48,9 @@ class ViewProjectScreen extends React.Component {
 
     }
 
-    FJList = (fj, index) => {
-        return <TouchableOpacity style={styles.fetchJob} key={index} onPress={() => this.props.navigation.navigate('ViewFetchJob', { fj })}>
-            <Text style={styles.fjData}>{fj.title}</Text>
-            <Text style={styles.fjData}>{fj.date_created}</Text>
-            <Text style={styles.fjData}>{fj.hashtag}</Text>
-        </TouchableOpacity>
-    }
-
     render() {
-        const { current_project } = this.props;
-        let active;
+        const { current_project, fetch_jobs } = this.props;
+        console.log(current_project)
         return (
             <View style={styles.main}>
                 <AppHeader
@@ -85,11 +95,13 @@ class ViewProjectScreen extends React.Component {
                                     <Text style={styles.title}>View All</Text>
                                 </TouchableOpacity>
                             </View>
-                            <ScrollView horizontal>
-                                {current_project.collabs ? current_project.collabs.map((collab, index) => {
-                                    return this.collabList(collab, index)
-                                }) : <Text>No collaborations yet</Text>}
-                            </ScrollView>
+                            {/* <ScrollView horizontal> */}
+                            {/* {current_project.collabs ? current_project.collabs.map((collab, index) => { */}
+                            {/* return this.collabList(collab, index) */}
+                            {/* }) :  */}
+                            <Text style={styles.noneMsg}>No collaborations yet</Text>
+                            {/* } */}
+                            {/* </ScrollView> */}
                         </View>
                         <View>
                             <View style={styles.listHead}>
@@ -98,10 +110,10 @@ class ViewProjectScreen extends React.Component {
                                     <Text style={styles.title}>View All</Text>
                                 </TouchableOpacity>
                             </View>
-                            <ScrollView>
-                                {current_project.fetchJobs ? current_project.fetchJobs.map((fj, index) => {
-                                    return this.FJList(fj, index)
-                                }) : <Text>No fetch jobs yet</Text>}
+                            <ScrollView
+                                contentContainerStyle={styles.scrollContainer}>
+                                {fetch_jobs ? <FetchJobListProjectView fetch_jobs={fetch_jobs} goToFetchJob={this.goToFetchJob} />
+                                    : <Text>No fetch jobs yet</Text>}
                             </ScrollView>
                         </View>
                     </View>
@@ -118,6 +130,10 @@ const styles = StyleSheet.create(
             backgroundColor: '#f4f1f1',
             flex: 1
 
+        },
+        scrollContainer: {
+            padding: 5,
+            paddingLeft: 0,
         },
         top: {
             display: 'flex',
@@ -196,6 +212,11 @@ const styles = StyleSheet.create(
             fontSize: 18,
             color: '#826478',
         },
+        noneMsg: {
+            marginLeft: '4%',
+            fontSize: 16,
+            color: '#826478',
+        },
         influName: {
             color: '#846284',
             textTransform: 'uppercase',
@@ -216,15 +237,13 @@ const styles = StyleSheet.create(
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
-    current_project: state.project.current_project
+    current_project: state.project.current_project,
+    fetch_jobs: state.fetch_job.fetch_jobs
 });
 
-const ActionCreators = Object.assign(
-    {},
-    projectActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    setCurrentFetchJob: setCurrentFetchJob,
+    setProjectFetchJobs: setProjectFetchJobs
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProjectScreen)
