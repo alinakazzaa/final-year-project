@@ -12,6 +12,10 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 class HomeScreen extends React.Component {
 
+    static navigationOptions = {
+        header: null
+    }
+
     render() {
         const { user, actions } = this.props
         const current_user = { ...user }

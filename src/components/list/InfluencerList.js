@@ -264,7 +264,7 @@ const styles = StyleSheet.create(
         }
     });
 
-InfluencerList.PropTypes = {
+InfluencerList.propTypes = {
     influencers: PropTypes.array.isRequired,
     current_project: PropTypes.object.isRequired,
     current_fetch_job: PropTypes.object.isRequired,

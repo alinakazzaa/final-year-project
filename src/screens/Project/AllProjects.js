@@ -15,6 +15,11 @@ import { bindActionCreators } from 'redux';
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class AllProjects extends React.Component {
+
+    static navigationOptions = {
+        header: null
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -56,12 +61,20 @@ class AllProjects extends React.Component {
         const { projects } = this.props;
         return (
             <View style={styles.main} >
-                {
-                    this.state.isLoading ? <View style={styles.loading}>
-                        <ActivityIndicator size="large" color="#5d4d50" />
-                        <Text style={styles.loadingTxt}>Wait, getting influencers for you</Text>
-                    </View> : <View>
-                            {/* <TabView
+                <AppHeader
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
+                />
+
+                {this.state.isLoading ? <View style={styles.loading}>
+                    <ActivityIndicator size="large" color="#5d4d50" />
+                    <Text style={styles.loadingTxt}>Wait, getting influencers for you</Text>
+                </View> : <View>
+                        {/* <TabView
                                 navigationState={this.state}
                                 renderScene={SceneMap({
                                     active: () => <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={user.projects} />
@@ -71,15 +84,15 @@ class AllProjects extends React.Component {
                                 onIndexChange={index => this.setState({ index })}
                                 initialLayout={{ width: 250, height: 250 }}
                             /> */}
-                            <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects} />
-                            <IconButton
-                                color="#493649"
-                                name="plus"
-                                size={40}
-                                onPress={() => this.props.navigation.navigate('AddProject')}
-                                style={styles.addIcon}
-                            />
-                        </View>
+                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects} />
+                        <IconButton
+                            color="#493649"
+                            name="plus"
+                            size={40}
+                            onPress={() => this.props.navigation.navigate('AddProject')}
+                            style={styles.addIcon}
+                        />
+                    </View>
                 }
             </View>
         );

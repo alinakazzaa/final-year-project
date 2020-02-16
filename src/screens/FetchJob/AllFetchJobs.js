@@ -8,10 +8,18 @@ import { bindActionCreators } from 'redux';
 import fetchMedia from '../../web/fetchMedia';
 import { getPending, getError, getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { getAllInfluencers } from '../../actions/influencer';
+import { AppHeader } from '../../layouts/Header';
+import { IconButton } from '../../components/buttons/IconButton';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class AllFetchJobs extends React.Component {
+
+    static navigationOptions = {
+        header: null
+    }
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -58,6 +66,14 @@ class AllFetchJobs extends React.Component {
 
         return (
             <View style={styles.container}>
+                <AppHeader
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
+                />
                 {isLoading ?
                     <View>
                         <ActivityIndicator size="large" color="#5d4d50" />

@@ -16,6 +16,10 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 class AddProject extends React.Component {
 
+    static navigationOptions = {
+        header: null
+    }
+
     state = {
         project: {}
     }

@@ -19,6 +19,10 @@ let usersRef = db.ref('/Users');
 
 class EditProject extends React.Component {
 
+    static navigationOptions = {
+        header: null
+    }
+
     state = {
         project: {}
     }
@@ -57,6 +61,12 @@ class EditProject extends React.Component {
                         <View style={styles.saveBtn}>
                             <TextButton onPress={this.handleSubmit} title="Save" />
                         </View>}
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
                 />
                 <ProjectForm onChange={this.handleChange} project={current_project} />
             </View>

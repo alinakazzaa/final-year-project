@@ -6,7 +6,7 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 import { CriteriaView } from '../../components/criteria/CriteriaView';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import * as influencerActions from '../../actions/influencer';
+import { setCurrentInfluencer } from '../../actions/influencer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
@@ -16,38 +16,58 @@ import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 
 class ViewFetchJob extends React.Component {
 
+    static navigationOptions = {
+        header: null
+    }
+
     componentDidMount() {
         const { getAllInfluencers, current_fetch_job } = this.props
         getAllInfluencers(current_fetch_job.hashtag)
     }
+
+    goToInfluencer = influ => {
+        const { setCurrentInfluencer } = this.props
+        setCurrentInfluencer(influ)
+        this.props.navigation.navigate('ViewInfluencer')
+    }
+
     render() {
         const { current_fetch_job, influencers } = this.props
 
         return (
-            <View>
+            <View style={styles.container}>
+                <AppHeader
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
+                />
                 <View style={styles.infoContainer}>
                     <View>
                         <View style={styles.top}>
                             <Text style={styles.title}>Job Details</Text>
-                        </View>
-                        <View style={styles.itemRow}>
-                            <Text style={styles.lbl}>Title</Text>
-                            <Text style={styles.data}>{current_fetch_job.title}</Text>
-                        </View>
-                        <View style={styles.itemRow}>
-                            <Text style={styles.lbl}>Date Created</Text>
-                            <Text style={styles.data}>{current_fetch_job.date_created}</Text>
+                            <View style={styles.itemRow}>
+                                <Text style={styles.lbl}>Title</Text>
+                                <Text style={styles.data}>{current_fetch_job.title}</Text>
+                            </View>
+                            <View style={styles.itemRow}>
+                                <Text style={styles.lbl}>Date Created</Text>
+                                <Text style={styles.data}>{current_fetch_job.date_created}</Text>
+                            </View>
                         </View>
                         <View style={styles.middle}>
                             <Text style={styles.title}>Fetch Criteria</Text>
-                        </View>
-                        <View style={styles.itemRow}>
-                            <Text style={styles.lbl}>Hashtag</Text>
-                            <Text style={styles.data}># {current_fetch_job.hashtag}</Text>
-                        </View>
-                        <View style={styles.itemRow}>
-                            <Text style={styles.lbl}>Location</Text>
-                            <Text style={styles.data}>{current_fetch_job.location}</Text>
+
+                            <View style={styles.itemRow}>
+                                <Text style={styles.lbl}>Hashtag</Text>
+                                <Text style={styles.data}># {current_fetch_job.hashtag}</Text>
+                            </View>
+                            <View style={styles.itemRow}>
+                                <Text style={styles.lbl}>Location</Text>
+                                <Text style={styles.data}>{current_fetch_job.location}</Text>
+                            </View>
                         </View>
                         <View style={styles.itemRowRange}>
                             <Text style={styles.lblRange}>Follower range</Text>
@@ -55,7 +75,7 @@ class ViewFetchJob extends React.Component {
                         </View>
                         <View style={styles.bottomView}>
                             <View>
-                                <View style={styles.listHead}>
+                                <View style={styles.influencers}>
                                     <Text style={styles.title}>Influencers</Text>
                                     <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
                                         <Text style={styles.title}>View All</Text>
@@ -63,7 +83,7 @@ class ViewFetchJob extends React.Component {
                                 </View>
                                 <ScrollView horizontal
                                     contentContainerStyle={styles.scrollContainer}>
-                                    <InfluencerListFjView influencers={influencers} />
+                                    <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />
                                 </ScrollView>
                             </View>
                         </View >
@@ -76,21 +96,25 @@ class ViewFetchJob extends React.Component {
 
 const styles = StyleSheet.create(
     {
-
+        container: {
+            flex: 1
+        },
         top: {
             display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            borderBottomWidth: 0.3,
+            borderBottomColor: '#b3b3cc',
         },
         middle: {
-            paddingTop: '4%',
+            paddingTop: 10,
             display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            borderBottomWidth: 0.3,
+            borderBottomColor: '#b3b3cc',
+            paddingBottom: 20
         },
         bottomView: {
             paddingTop: '4%',
-
         },
         scrollContainer: {
             padding: '2%',
@@ -98,41 +122,39 @@ const styles = StyleSheet.create(
         },
         listHead: {
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+        },
+        influencers: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
         },
         infoContainer: {
-            display: 'flex',
+            // display: 'flex',
             margin: '5%',
-            flex: 1
         },
         title: {
+            padding: 10,
             fontSize: 13,
             color: '#493649',
             fontWeight: 'bold',
             textTransform: 'uppercase',
             textAlign: 'left',
-            paddingLeft: '4%',
         },
         itemRow: {
             display: 'flex',
             flexDirection: 'row',
-            borderBottomWidth: 0.2,
-            borderBottomColor: '#b3b3cc',
-            margin: '3%',
-            marginLeft: '4%',
-            marginRight: '4%',
+            padding: 10,
             justifyContent: 'space-between',
-            padding: 5
+
         },
         itemRowRange: {
             display: 'flex',
             flexDirection: 'column',
-            borderBottomWidth: 0.2,
+            padding: 10,
+            paddingTop: 20,
+            justifyContent: 'space-evenly',
+            borderBottomWidth: 0.3,
             borderBottomColor: '#b3b3cc',
-            margin: '3%',
-            marginLeft: '4%',
-            marginRight: '4%',
-            justifyContent: 'space-evenly'
         },
         lbl: {
             fontSize: 16,
@@ -140,18 +162,20 @@ const styles = StyleSheet.create(
             textTransform: 'uppercase',
         },
         lblRange: {
-            fontSize: 16,
-            color: '#5d4d50',
+            fontSize: 13,
+            color: '#493649',
+            fontWeight: 'bold',
             textTransform: 'uppercase',
-            paddingBottom: '7%'
+            textAlign: 'left',
+            marginBottom: 20
         },
         data: {
             fontSize: 16,
             color: '#826478'
         },
         viewAllBtn: {
-            alignSelf: 'center',
-            flexWrap: 'wrap'
+            // alignSelf: 'center',
+            // flexWrap: 'wrap'
         }
     });
 
@@ -166,7 +190,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getAllInfluencers
+    getAllInfluencers,
+    setCurrentInfluencer
 }, dispatch);
 
 

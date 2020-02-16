@@ -4,11 +4,18 @@ import { InfluencerList } from '../../components/list/InfluencerList'
 import { getAllInfluencers, setCurrentInfluencer } from '../../actions/influencer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { AppHeader } from '../../layouts/Header';
+import { IconButton } from '../../components/buttons/IconButton';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 
 class AllInfluencers extends React.Component {
+
+    static navigationOptions = {
+        header: null
+    }
+
 
     state = {
         isLoading: false
@@ -25,6 +32,14 @@ class AllInfluencers extends React.Component {
         const { influencers, current_project, current_fetch_job } = this.props
         return (
             <View style={styles.container}>
+                <AppHeader
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
+                />
                 {this.state.isLoading ?
                     <View>
                         <ActivityIndicator size="large" color="#5d4d50" />

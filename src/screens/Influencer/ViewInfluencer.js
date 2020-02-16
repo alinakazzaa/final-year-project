@@ -5,10 +5,15 @@ import { bindActionCreators } from 'redux';
 import { getCurrentInfluencer } from '../../reducers/influencerReducer'
 import { Avatar, Icon } from 'react-native-elements';
 import { IconButton } from '../../components/buttons/IconButton';
+import { AppHeader } from '../../layouts/Header';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class ViewInfluencer extends React.Component {
+
+    static navigationOptions = {
+        header: null
+    }
 
     formatNumber = num => {
         let parsed
@@ -21,6 +26,14 @@ class ViewInfluencer extends React.Component {
 
         return (
             <View style={styles.main}>
+                <AppHeader
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
+                />
                 <View style={styles.infoContainer}>
                     <View style={styles.top}>
                         <View style={styles.infoBox}>

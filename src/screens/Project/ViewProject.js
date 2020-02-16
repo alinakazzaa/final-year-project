@@ -12,6 +12,10 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 class ViewProjectScreen extends React.Component {
 
+    static navigationOptions = {
+        header: null
+    }
+
     collabList = (collab, index) => {
 
         return <View style={styles.collab}><TouchableOpacity key={index} onPress={() => this.props.navigation.navigate('ViewCollab', { collab })}>
@@ -44,7 +48,14 @@ class ViewProjectScreen extends React.Component {
                         name='edit'
                         size={27}
                         onPress={() => this.props.navigation.navigate('EditProject')}
-                    />} />
+                    />}
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
+                />
 
                 <View style={styles.infoContainer}>
                     <View>

@@ -35,13 +35,13 @@ const styles = StyleSheet.create(
 TextButton.propTypes = {
     title: PropTypes.string,
     onPress: PropTypes.func,
-    style: PropTypes.string
+    style: PropTypes.object
 }
 
 TextButton.defaultProps = {
     title: '',
     onPress: null,
-    style: 'txtStyle'
+    style: {}
 }
 
 

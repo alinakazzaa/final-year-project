@@ -18,6 +18,10 @@ import { addFetchJob } from '../../actions/fetchJob';
 
 class AddFetchJob extends React.Component {
 
+    static navigationOptions = {
+        header: null
+    }
+    s
     state = {
         fetch_job: {}
     }
