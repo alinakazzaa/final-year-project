@@ -3,29 +3,45 @@ import { Icon, Avatar } from 'react-native-elements'
 import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView, Dimensions } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
+import { SceneMap, TabView } from 'react-native-tab-view'
+
+const FirstRoute = () => (
+    < View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
+);
+
+const SecondRoute = () => (
+    <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
+);
+
+const initialLayout = { width: Dimensions.get('window').width };
+
 
 export const ProjectList = ({ active, projects, deleteProject, addProject, goToProject }) => {
+    const [index, setIndex] = React.useState(0);
+    const [routes] = React.useState([
+        { key: 'first', title: 'First' },
+        { key: 'second', title: 'Second' },
+    ]);
+
+    const renderScene = SceneMap({
+        first: FirstRoute,
+        second: SecondRoute,
+    });
+
     const projList = (proj, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => goToProject(proj)}>
                 <View style={styles.listItem}>
-                    <View style={styles.left}>
-                    </View>
                     <View style={styles.left}>
                         <Text style={styles.username}>{proj.title}</Text>
                     </View>
                     <View style={styles.middle}>
                         <Text style={styles.hashtag}>{proj.date_created}</Text>
                     </View>
-                    <View style={styles.right}>
-                        <Text style={styles.hashtag}>{proj.active}</Text>
-                    </View>
                 </View>
             </TouchableOpacity>
         )
     }
-
-    const screenHeight = Dimensions.get('window').height
 
     return (
         <ScrollView keyboardDismissMode='on-drag'
@@ -43,22 +59,20 @@ export const ProjectList = ({ active, projects, deleteProject, addProject, goToP
             </View>
         </ScrollView >
     )
-
 }
 
 const styles = StyleSheet.create(
     {
         scrollContainer: {
-            padding: '3%',
-            paddingBottom: '10%',
+            padding: '4%',
+            paddingBottom: '7%',
         },
         listItem: {
             display: 'flex',
             flexDirection: 'row',
-            borderBottomWidth: 0.5,
+            borderBottomWidth: 0.7,
             borderColor: '#ded4da',
             padding: 15,
-            marginRight: '5%',
             fontFamily: 'ArialRoundedMTBold',
             justifyContent: 'space-between'
         },
@@ -72,28 +86,21 @@ const styles = StyleSheet.create(
         },
         date: {
             fontSize: 15,
-            textAlign: 'left',
-            padding: 5,
             fontFamily: 'ArialRoundedMTBold',
             color: '#0B0033',
         },
         hashtag: {
             fontSize: 13,
-            textAlign: 'left',
-            padding: 5,
             fontFamily: 'ArialRoundedMTBold',
             color: '#0B0033',
         },
         username: {
             fontSize: 13,
-            padding: 5,
             fontFamily: 'ArialRoundedMTBold',
             color: '#0B0033',
         },
         location: {
             fontSize: 13,
-            textAlign: 'left',
-            padding: 5,
             fontFamily: 'ArialRoundedMTBold',
             color: '#0B0033',
         },
@@ -107,14 +114,13 @@ const styles = StyleSheet.create(
         },
         left: {
             display: 'flex',
-            flexDirection: 'column',
         },
         middle: {
             display: 'flex',
         },
         right: {
             display: 'flex',
-        }
+        },
     });
 
 ProjectList.propTypes = {
@@ -132,3 +138,4 @@ ProjectList.defaultProps = {
     addProject: null,
     goToProject: null
 }
+

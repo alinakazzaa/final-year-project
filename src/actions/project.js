@@ -1,22 +1,31 @@
 import { db } from '../database/config/db';
-import { DB_USER_PROJECTS_REF, SET_PROJECTS, SET_CURRENT_PROJECT } from '../constants';
+import { DB_USER_PROJECTS_REF, SET_PROJECTS, SET_CURRENT_PROJECT, UPDATE_STATE_PROJECTS } from '../constants';
 
-export const getUserProjects = user_id => {
-    let projects = []
+export const setUserProjects = user_id => {
+    const active = []
+    const archived = []
+
     DB_USER_PROJECTS_REF(user_id).on('value', proj_snapshot => {
         proj_snapshot.forEach(proj_snap => {
-            proj_snap.forEach(proj => {
-                projects.push(proj.val())
-            })
+            const proj = {
+                title: proj_snap.val().title,
+                active: proj_snap.val().active,
+                date_created: proj_snap.val().date_created,
+                description: proj_snap.val().dercription
+            }
+            if (proj_snap.val().active == true) {
+                active.push(proj)
+            } else {
+                archived.push(proj)
+            }
+
         })
     })
-    return projects
-}
 
-export const setUserProjects = projects => {
     return {
         type: SET_PROJECTS,
-        payload: [...projects]
+        active: active,
+        archived: archived
     }
 }
 
@@ -29,15 +38,13 @@ export const setCurrentProject = project => {
 
 export const addProject = (user_id, project) => {
     const project_add = db.ref(`/Users/${user_id}/Projects/`).push({
-        details: {
-            ...project,
-            description: project.description || '',
-            active: project.active || false
-        },
+        ...project,
+        description: project.description || '',
+        active: project.active || false
     })
 
     const key = project_add.key
-    db.ref(`/Users/${user_id}/Projects/${key}/details`).update({
+    db.ref(`/Users/${user_id}/Projects/${key}`).update({
         id: key
     })
 }

@@ -1,7 +1,10 @@
-import { SET_PROJECTS, SET_CURRENT_PROJECT } from '../constants';
+import { SET_PROJECTS, SET_CURRENT_PROJECT, UPDATE_STATE_PROJECTS } from '../constants';
 
 const initialState = {
-    projects: [],
+    projects: {
+        active: [],
+        archived: []
+    },
     current_project: {}
 };
 
@@ -10,7 +13,8 @@ const projectReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case SET_PROJECTS:
-            updated_state.projects = action.payload
+            updated_state.projects.active = action.active
+            updated_state.projects.archived = action.archived
             return {
                 ...updated_state
             };

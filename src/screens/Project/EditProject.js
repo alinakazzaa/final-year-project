@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet } from 'react-native';
-import { updateProject, getUserProjects } from '../../actions/project'
+import { updateProject } from '../../actions/project'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
