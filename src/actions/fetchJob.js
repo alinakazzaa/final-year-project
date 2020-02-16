@@ -3,17 +3,14 @@ import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS, SET_CURRENT_FETCH_JOB, SET_R
 import { addInfluencer } from './influencer';
 import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME } from '../constants/endpoints';
 
-export const getAllFetchJobs = (user_id, project_id) => {
-    let fetchJobs = []
+export const setProjectFetchJobs = (user_id, project_id) => {
+    const fetch_jobs = []
     DB_PROJECT_FETCH_JOBS_REF(user_id, project_id).on('value', fj_snapshot => {
         fj_snapshot.forEach(fj_snap => {
-            fetchJobs.push(fj_snap.val())
+            fetch_jobs.push(fj_snap.val())
         })
     })
-    return fetchJobs
-}
 
-export const setFetchJobs = fetch_jobs => {
     return {
         type: SET_FETCH_JOBS,
         payload: fetch_jobs
