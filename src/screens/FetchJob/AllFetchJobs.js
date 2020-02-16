@@ -122,7 +122,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchMedia,
-    setFetchJobs: fetchJobActions.setFetchJobs,
     setCurrentFetchJob: fetchJobActions.setCurrentFetchJob,
     setRunningFetchJob: fetchJobActions.setRunningFetchJob,
 }, dispatch);
