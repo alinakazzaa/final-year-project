@@ -11,7 +11,8 @@ export const setUserProjects = user_id => {
                 title: proj_snap.val().title,
                 active: proj_snap.val().active,
                 date_created: proj_snap.val().date_created,
-                description: proj_snap.val().dercription
+                description: proj_snap.val().description,
+                id: proj_snap.val().id
             }
             if (proj_snap.val().active == true) {
                 active.push(proj)
