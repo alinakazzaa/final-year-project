@@ -27,6 +27,7 @@ const fetchJobReducer = (state = initialState, action) => {
             updated_state.fetch_jobs.running = action.running
             updated_state.fetch_jobs.pending = action.pending
             updated_state.pending = false
+            updated_state.error = null
             return {
                 ...updated_state
             };

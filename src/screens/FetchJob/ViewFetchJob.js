@@ -6,7 +6,7 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 import { CriteriaView } from '../../components/criteria/CriteriaView';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import { setCurrentInfluencer } from '../../actions/influencer';
+import { setCurrentInfluencer, getInfluencersPending } from '../../actions/influencer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
@@ -24,19 +24,22 @@ class ViewFetchJob extends React.Component {
     }
 
     componentDidMount() {
-        const { getAllInfluencers, current_fetch_job } = this.props
+        const { getAllInfluencers, current_fetch_job, getInfluencersPending } = this.props
+        getInfluencersPending()
         getAllInfluencers(current_fetch_job.hashtag)
     }
 
-    componentWillUnmount() {
-        const { clearCurrentFetchJob } = this.props
-        clearCurrentFetchJob()
-    }
+    // componentWillUnmount() {
+    //     const { clearCurrentFetchJob } = this.props
+    //     clearCurrentFetchJob()
+    // }
 
-    componentDidUpdate(prev) {
-        const { influencers } = this.props
-        console.log(prev.influencers === influencers)
-    }
+    // componentDidUpdate(prev) {
+    //     const { influencers,  } = this.props
+    //     if(prev.influencers === influencers) {
+
+    //     }
+    // }
 
     goToInfluencer = influ => {
         const { setCurrentInfluencer } = this.props
@@ -109,15 +112,13 @@ class ViewFetchJob extends React.Component {
                                         <Text style={styles.title}>View All</Text>
                                     </TouchableOpacity>
                                 </View>
-                                {this.props.loading &&
+                                {this.props.state.influencer.pending &&
                                     <View>
                                         <ActivityIndicator size="large" color="#5d4d50" />
-                                        <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
+                                        <Text style={styles.loadingTxt}>Wait, getting influencers</Text>
                                     </View>}
-                                {this.props.error && <View>
-                                    {this.props.state.project.error && <View style={styles.none}><Text style={styles.noneTxt}>No fetch jobs</Text></View>}
-                                </View>}
-                                {!this.props.state.influencer.pending && !this.props.state.influencer.pending && <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />}
+                                {this.props.state.influencer.error && <View style={styles.none}><Text style={styles.noneTxt}>No influencers</Text></View>}
+                                {!this.props.state.influencer.pending && !this.props.state.influencer.error && <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />}
                             </View >
                             :
                             <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>
@@ -190,7 +191,8 @@ const styles = StyleSheet.create(
             fontFamily: 'Arial',
             fontSize: 15,
             color: '#5d4d50',
-            padding: '4%'
+            padding: '4%',
+            flex: 1
         },
         itemRowRange: {
             display: 'flex',
@@ -234,7 +236,6 @@ const styles = StyleSheet.create(
             marginTop: 50
         },
         none: {
-            height: '10%',
             justifyContent: 'center',
             alignItems: 'center'
         },
@@ -257,11 +258,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchMedia,
-    getAllInfluencers,
-    setCurrentInfluencer,
+    fetchMedia: fetchMedia,
+    getAllInfluencers: getAllInfluencers,
+    setCurrentInfluencer: setCurrentInfluencer,
     setRunningFetchJob: setRunningFetchJob,
-    clearCurrentFetchJob: clearCurrentFetchJob
+    clearCurrentFetchJob: clearCurrentFetchJob,
+    getInfluencersPending: getInfluencersPending
 }, dispatch);
 
 
