@@ -41,6 +41,10 @@ class AllFetchJobs extends React.Component {
         this.setState({ isLoading: false })
     }
 
+    componentWillReceiveProps(props) {
+        console.log(props)
+    }
+
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
         setCurrentFetchJob(fj)
@@ -71,7 +75,6 @@ class AllFetchJobs extends React.Component {
                         <ActivityIndicator size="large" color="#5d4d50" />
                         <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
                     </View>}
-
                 {!isLoading && index == 0 &&
                     <View>
                         {isLoading ?

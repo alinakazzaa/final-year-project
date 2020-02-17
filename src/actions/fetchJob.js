@@ -1,9 +1,9 @@
 import { db } from '../database/config/db';
-import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR } from '../constants';
+import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR, CLEAR_CURRENT_FETCH_JOB } from '../constants';
 import { addInfluencer } from './influencer';
 import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME } from '../constants/endpoints';
 
-export const setProjectFetchJobs = (user_id, project_id) => {
+export const getProjectFetchJobs = (user_id, project_id) => {
 
     const completed = []
     const running = []
@@ -22,11 +22,26 @@ export const setProjectFetchJobs = (user_id, project_id) => {
         })
     })
 
+    if (completed.length == 0 && running.length == 0 && pending.length == 0) {
+        const error = { type: 'no fetch jobs' }
+        return {
+            type: SET_FETCH_JOBS_ERROR,
+            error: error
+        }
+    } else {
+        return {
+            type: SET_FETCH_JOBS_SUCCESS,
+            completed: completed,
+            running: running,
+            pending: running
+        }
+    }
+}
+
+export const setProjectFetchJobsPending = () => {
+
     return {
-        type: SET_FETCH_JOBS,
-        running: running,
-        pending: pending,
-        completed: completed
+        type: SET_FETCH_JOBS_PENDING,
     }
 }
 
@@ -41,6 +56,12 @@ export const setRunningFetchJob = fetch_job => {
     return {
         type: SET_RUNNING_FETCH_JOB,
         payload: fetch_job
+    }
+}
+
+export const clearCurrentFetchJob = () => {
+    return {
+        type: CLEAR_CURRENT_FETCH_JOB,
     }
 }
 

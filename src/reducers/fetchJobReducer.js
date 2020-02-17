@@ -1,4 +1,4 @@
-import { SET_CURRENT_FETCH_JOB, SET_FETCH_JOBS, SET_RUNNING_FETCH_JOB, SET_CURRENT_PAGE_MEDIA_IDS, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR } from '../constants';
+import { SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, CLEAR_CURRENT_FETCH_JOB } from '../constants';
 
 const initialState = {
     fetch_jobs: {
@@ -10,17 +10,29 @@ const initialState = {
     running_fetch_job: {
 
     },
-    pending: true,
+    pending: null,
     error: null
 };
 
 const fetchJobReducer = (state = initialState, action) => {
     const updated_state = { ...state }
     switch (action.type) {
-        case SET_FETCH_JOBS:
+        case SET_FETCH_JOBS_PENDING:
+            updated_state.pending = true
+            return {
+                ...updated_state
+            };
+        case SET_FETCH_JOBS_SUCCESS:
             updated_state.fetch_jobs.completed = action.completed
             updated_state.fetch_jobs.running = action.running
             updated_state.fetch_jobs.pending = action.pending
+            updated_state.pending = false
+            return {
+                ...updated_state
+            };
+        case SET_FETCH_JOBS_ERROR:
+            updated_state.pending = false
+            updated_state.error = action.error
             return {
                 ...updated_state
             };
@@ -45,6 +57,11 @@ const fetchJobReducer = (state = initialState, action) => {
                 ...updated_state,
                 error: action.error
             }
+        case CLEAR_CURRENT_FETCH_JOB:
+            updated_state.current_fetch_job = {}
+            return {
+                ...updated_state
+            };
         default:
             return state;
     }

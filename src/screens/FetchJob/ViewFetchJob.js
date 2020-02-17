@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -13,7 +13,7 @@ import { InfluencerListFjView } from '../../components/list/InfluencerListFjView
 import { getAllInfluencers } from '../../actions/influencer';
 import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { TextButton } from '../../components/buttons/TextButton';
-import { updateFetchJob, setRunningFetchJob } from '../../actions/fetchJob';
+import { updateFetchJob, setRunningFetchJob, clearCurrentFetchJob } from '../../actions/fetchJob';
 import fetchMedia from '../../web/fetchMedia';
 
 
@@ -26,6 +26,16 @@ class ViewFetchJob extends React.Component {
     componentDidMount() {
         const { getAllInfluencers, current_fetch_job } = this.props
         getAllInfluencers(current_fetch_job.hashtag)
+    }
+
+    componentWillUnmount() {
+        const { clearCurrentFetchJob } = this.props
+        clearCurrentFetchJob()
+    }
+
+    componentDidUpdate(prev) {
+        const { influencers } = this.props
+        console.log(prev.influencers === influencers)
     }
 
     goToInfluencer = influ => {
@@ -47,7 +57,6 @@ class ViewFetchJob extends React.Component {
 
     render() {
         const { current_fetch_job, influencers } = this.props
-
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -100,7 +109,15 @@ class ViewFetchJob extends React.Component {
                                         <Text style={styles.title}>View All</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />
+                                {this.props.loading &&
+                                    <View>
+                                        <ActivityIndicator size="large" color="#5d4d50" />
+                                        <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
+                                    </View>}
+                                {this.props.error && <View>
+                                    {this.props.state.project.error && <View style={styles.none}><Text style={styles.noneTxt}>No fetch jobs</Text></View>}
+                                </View>}
+                                {!this.props.state.influencer.pending && !this.props.state.influencer.pending && <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />}
                             </View >
                             :
                             <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>
@@ -169,6 +186,12 @@ const styles = StyleSheet.create(
             justifyContent: 'space-between',
 
         },
+        loadingTxt: {
+            fontFamily: 'Arial',
+            fontSize: 15,
+            color: '#5d4d50',
+            padding: '4%'
+        },
         itemRowRange: {
             display: 'flex',
             flexDirection: 'column',
@@ -209,6 +232,15 @@ const styles = StyleSheet.create(
             height: 40,
             textAlign: 'center',
             marginTop: 50
+        },
+        none: {
+            height: '10%',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        noneTxt: {
+            fontSize: 19,
+            color: '#5d4d50',
         }
     });
 
@@ -219,7 +251,9 @@ const mapStateToProps = state => ({
     fetch_jobs: state.fetch_job.fetch_jobs,
     current_fetch_job: state.fetch_job.current_fetch_job,
     influencers: state.influencer.influencers,
-    running_fetch_job: getRunningFetchJob(state)
+    running_fetch_job: getRunningFetchJob(state),
+    pending: state.influencer.pending,
+    error: state.influencer.error,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -227,6 +261,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     getAllInfluencers,
     setCurrentInfluencer,
     setRunningFetchJob: setRunningFetchJob,
+    clearCurrentFetchJob: clearCurrentFetchJob
 }, dispatch);
 
 
