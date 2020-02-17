@@ -44,9 +44,8 @@ class EditProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user, navigation } = this.props
+        const { user, navigation, updateProject } = this.props
         let project = this.state.project
-
         updateProject(user.id, project.id, project)
         navigation.goBack()
 
@@ -95,12 +94,8 @@ const mapStateToProps = state => ({
     current_project: state.project.current_project
 });
 
-const ActionCreators = Object.assign(
-    {},
-    projectActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    updateProject: updateProject
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProject)

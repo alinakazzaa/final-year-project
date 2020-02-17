@@ -28,11 +28,10 @@ class AddProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user } = this.props
+        const { user, addProject } = this.props
         const { project } = this.state
-        console.log(user)
-        // addProject(user.id, project);
-        // this.props.navigation.navigate("AllProjects")
+        addProject(user.id, project);
+        this.props.navigation.navigate("AllProjects")
     }
 
     render() {
@@ -78,8 +77,9 @@ const ActionCreators = Object.assign(
     userActions,
     projectActions
 );
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    addProject: addProject
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddProject)

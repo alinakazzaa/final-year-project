@@ -1,15 +1,15 @@
 import React from 'react';
-import { AppRegistry } from 'react-native'
+import { AppRegistry, ActivityIndicator } from 'react-native'
 import { StyleSheet, Text, YellowBox, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import * as projectActions from '../../actions/project';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { setProjectFetchJobs, setCurrentFetchJob } from '../../actions/fetchJob';
+import { getProjectFetchJobs, setCurrentFetchJob, setProjectFetchJobsPending } from '../../actions/fetchJob';
 import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView';
+import { clearCurrentProject, setCurrentProject } from '../../actions/project'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -19,11 +19,23 @@ class ViewProjectScreen extends React.Component {
     }
 
     componentDidMount() {
-
-        const { user, current_project, setProjectFetchJobs } = this.props
-        setProjectFetchJobs(user.id, current_project.id)
+        const { user, current_project, getProjectFetchJobs, setProjectFetchJobsPending, setCurrentProject } = this.props
+        const { project } = this.props.navigation.state.params.proj
+        // setCurrentProject(project)
+        setProjectFetchJobsPending()
+        getProjectFetchJobs(user.id, current_project.id)
         this.setState({ isLoading: false })
     }
+
+    // componentWillUnmount() {
+    //     const { clearCurrentProject } = this.props
+    //     clearCurrentProject()
+    // }
+
+    // componentDidUpdate(prev) {
+    //     const { fetch_jobs } = this.props
+    //     // console.log(prev.fetch_jobs == fetch_jobs)
+    // }
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
@@ -50,7 +62,9 @@ class ViewProjectScreen extends React.Component {
     }
 
     render() {
-        const { current_project, fetch_jobs } = this.props;
+
+        const { current_project, fetch_jobs, } = this.props;
+        // console.log(this.props.state.project)
         return (
             <View style={styles.main}>
                 <AppHeader
@@ -107,7 +121,12 @@ class ViewProjectScreen extends React.Component {
                             <View style={styles.listHead}>
                                 <Text style={styles.title}>Fetch Jobs</Text>
                             </View>
-                            <ScrollView
+                            {this.props.state.fetch_job.pending && <View style={styles.loading}>
+                                <ActivityIndicator size="large" color="#5d4d50" />
+                                <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
+                            </View>}
+                            {this.props.state.fetch_job.error && <View style={styles.none}><Text style={styles.noneTxt}>No fetch jobs</Text></View>}
+                            {!this.props.state.fetch_job.error && !this.props.state.fetch_job.pending && <ScrollView
                                 contentContainerStyle={styles.scrollContainer}>
                                 {fetch_jobs ? <View>
                                     <FetchJobListProjectView fetch_jobs={[...fetch_jobs.completed, fetch_jobs.pending]} goToFetchJob={this.goToFetchJob} />
@@ -116,7 +135,7 @@ class ViewProjectScreen extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                                     : <Text>No fetch jobs yet</Text>}
-                            </ScrollView>
+                            </ScrollView>}
                         </View>
                     </View>
                 </View>
@@ -148,13 +167,26 @@ const styles = StyleSheet.create(
         },
         listHead: {
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            marginTop: '5%'
+        },
+        loading: {
+            display: 'flex',
+            height: '60%',
+            justifyContent: 'center',
+            alignItems: 'center'
         },
         infoContainer: {
             margin: '5%',
         },
         details: {
 
+        },
+        loadingTxt: {
+            fontFamily: 'Arial',
+            fontSize: 15,
+            color: '#5d4d50',
+            padding: '4%'
         },
         collab: {
             display: 'flex',
@@ -233,6 +265,15 @@ const styles = StyleSheet.create(
         viewAllBtn: {
             alignSelf: 'center',
             flexWrap: 'wrap'
+        },
+        none: {
+            height: '30%',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        noneTxt: {
+            fontSize: 19,
+            color: '#5d4d50',
         }
     });
 
@@ -240,12 +281,18 @@ const mapStateToProps = state => ({
     state: state,
     user: state.user,
     current_project: state.project.current_project,
-    fetch_jobs: state.fetch_job.fetch_jobs
+    fetch_jobs: state.fetch_job.fetch_jobs,
+    pending: state.fetch_job.pending,
+    error: state.fetch_job.error,
+    influencers: state.influencer.influencers,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentFetchJob: setCurrentFetchJob,
-    setProjectFetchJobs: setProjectFetchJobs
+    getProjectFetchJobs: getProjectFetchJobs,
+    setProjectFetchJobsPending: setProjectFetchJobsPending,
+    clearCurrentProject: clearCurrentProject,
+    setCurrentProject: setCurrentProject
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProjectScreen)

@@ -22,7 +22,6 @@ class AllProjects extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // isLoading: false,
             index: 0,
             selectedTabStyle: {
                 color: 'white',
@@ -43,21 +42,27 @@ class AllProjects extends React.Component {
     }
 
     componentDidMount() {
-        // this.setState({ isLoading: true })
-        let { user, setUserProjectsPending, getUserProjects } = this.props;
+        let { user, setUserProjectsPending, getUserProjects, projects } = this.props;
         setUserProjectsPending()
         getUserProjects(user.id)
-        // this.setState({ isLoading: false })
+    }
+
+    componentDidUpdate(prevProps) {
+        let { user, setUserProjectsPending, getUserProjects, projects } = this.props;
+        if (prevProps.projects !== projects) {
+            setUserProjectsPending()
+            getUserProjects(user.id)
+        }
     }
 
     goToProject = proj => {
         let { setCurrentProject } = this.props;
-        this.props.navigation.navigate('ViewProject')
+        this.props.navigation.navigate('ViewProject', { proj: proj })
         setCurrentProject(proj)
     }
 
     deleteProject = project => {
-        let { user } = this.props;
+        let { user, removeProject } = this.props;
         removeProject(user.id, project)
     }
 
@@ -67,7 +72,8 @@ class AllProjects extends React.Component {
 
     render() {
         const { projects } = this.props;
-        const { index, isLoading, selectedTabStyle, selectedTabItemStyle, pending, error } = this.state
+        const { index, selectedTabStyle, selectedTabItemStyle } = this.state
+        // console.log(projects)
         return (
             <View style={styles.main} >
                 <AppHeader
@@ -85,10 +91,10 @@ class AllProjects extends React.Component {
                 {this.props.state.project.error && <View style={styles.none}><Text style={styles.noneTxt}>No projects</Text></View>}
                 {!this.props.state.project.error && !this.props.state.project.pending && index == 0 ?
                     <View>
-                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects.active} />
+                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={projects.active} />
                     </View> :
                     <View>
-                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects.archived} />
+                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={projects.archived} />
                     </View>}
                 <IconButton name="plus" size={40} color='#646380' onPress={() => this.props.navigation.navigate('AddProject')} />
             </View>
@@ -177,7 +183,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentProject,
     getUserProjects: getUserProjects,
-    setUserProjectsPending: setUserProjectsPending
+    setUserProjectsPending: setUserProjectsPending,
+    removeProject: removeProject
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProjects)
