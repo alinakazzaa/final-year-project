@@ -28,6 +28,7 @@ const projectReducer = (state = initialState, action) => {
             updated_state.projects.active = action.active
             updated_state.projects.archived = action.archived
             updated_state.pending = false
+            updated_state.error = null
             return {
                 ...updated_state
             };
