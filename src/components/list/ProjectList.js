@@ -1,33 +1,10 @@
 import React from 'react'
-import { Icon, Avatar } from 'react-native-elements'
 import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView, Dimensions } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
-import { SceneMap, TabView } from 'react-native-tab-view'
-
-const FirstRoute = () => (
-    < View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
-);
-
-const SecondRoute = () => (
-    <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
-);
-
-const initialLayout = { width: Dimensions.get('window').width };
 
 
 export const ProjectList = ({ active, projects, deleteProject, addProject, goToProject }) => {
-    const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        { key: 'first', title: 'First' },
-        { key: 'second', title: 'Second' },
-    ]);
-
-    const renderScene = SceneMap({
-        first: FirstRoute,
-        second: SecondRoute,
-    });
-
     const projList = (proj, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => goToProject(proj)}>
@@ -37,6 +14,9 @@ export const ProjectList = ({ active, projects, deleteProject, addProject, goToP
                     </View>
                     <View style={styles.middle}>
                         <Text style={styles.hashtag}>{proj.date_created}</Text>
+                    </View>
+                    <View style={styles.right}>
+                        <IconButton name="delete" type="MaterialIcons" size={23} color="#0B0033" onPress={() => deleteProject(proj)} />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -71,14 +51,16 @@ const styles = StyleSheet.create(
             display: 'flex',
             flexDirection: 'row',
             borderBottomWidth: 0.7,
+            borderTopWidth: 0.7,
             borderColor: '#ded4da',
-            padding: 15,
+            paddingTop: 25,
+            paddingBottom: 25,
             fontFamily: 'ArialRoundedMTBold',
-            justifyContent: 'space-between'
+            justifyContent: 'space-evenly'
         },
 
         title: {
-            fontSize: 13,
+            fontSize: 15,
             textAlign: 'left',
             padding: 5,
             color: '#0B0033',
@@ -114,12 +96,14 @@ const styles = StyleSheet.create(
         },
         left: {
             display: 'flex',
+            width: '50%'
         },
         middle: {
             display: 'flex',
         },
         right: {
             display: 'flex',
+            width: '10%'
         },
     });
 
