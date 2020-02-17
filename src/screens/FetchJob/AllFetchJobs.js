@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { updateFetchJob, setCurrentFetchJob, setRunningFetchJob } from '../../actions/fetchJob'
+import { setCurrentFetchJob } from '../../actions/fetchJob'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import fetchMedia from '../../web/fetchMedia';
