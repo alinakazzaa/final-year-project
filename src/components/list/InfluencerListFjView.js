@@ -10,7 +10,7 @@ export const InfluencerListFjView = ({ influencers, goToInfluencer, addInfluence
     const influList = (influ, index) => {
         return (
             <View style={styles.listItem} key={index}>
-                <TouchableOpacity key={index} onPress={() => console.log(influ)}>
+                <TouchableOpacity key={index} onPress={() => goToInfluencer(influ)}>
                     <Avatar
                         size="large"
                         rounded

@@ -18,6 +18,8 @@ const influencerReducer = (state = initialState, action) => {
             };
         case SET_INFLUENCERS_SUCCESS:
             updated_state.influencers = [...action.payload]
+            updated_state.pending = false
+            updated_state.error = null
             return {
                 ...updated_state
             };

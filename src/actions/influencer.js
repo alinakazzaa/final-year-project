@@ -9,17 +9,16 @@ export const getAllInfluencers = hashtag => {
             influencers.push(influ_snap.val())
         })
     });
-
-    if (influencers.length == 0) {
-        let error = { type: 'no projects' }
-        return {
-            type: SET_INFLUENCERS_ERROR,
-            error: error
-        }
-    } else {
+    if (influencers.length > 0) {
         return {
             type: SET_INFLUENCERS_SUCCESS,
             payload: influencers
+        }
+    } else {
+        let error = { type: 'no influencers' }
+        return {
+            type: SET_INFLUENCERS_ERROR,
+            error: error
         }
     }
 }
