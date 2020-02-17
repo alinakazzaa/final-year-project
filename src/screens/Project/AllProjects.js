@@ -7,7 +7,7 @@ import { TextButton } from '../../components/buttons/TextButton';
 import BasicInput from '../../components/input/BasicInput';
 import { ProjectList } from '../../components/list/ProjectList';
 import { Input } from 'react-native-elements';
-import { removeProject, setUserProjects, setCurrentProject } from '../../actions/project'
+import { removeProject, setCurrentProject, getUserProjects, setUserProjectsPending } from '../../actions/project'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -22,7 +22,7 @@ class AllProjects extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
+            // isLoading: false,
             index: 0,
             selectedTabStyle: {
                 color: 'white',
@@ -43,10 +43,11 @@ class AllProjects extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: true })
-        let { user, setUserProjects } = this.props;
-        setUserProjects(user.id)
-        this.setState({ isLoading: false })
+        // this.setState({ isLoading: true })
+        let { user, setUserProjectsPending, getUserProjects } = this.props;
+        setUserProjectsPending()
+        getUserProjects(user.id)
+        // this.setState({ isLoading: false })
     }
 
     goToProject = proj => {
@@ -66,36 +67,28 @@ class AllProjects extends React.Component {
 
     render() {
         const { projects } = this.props;
-        let { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
-
+        const { index, isLoading, selectedTabStyle, selectedTabItemStyle, pending, error } = this.state
         return (
             <View style={styles.main} >
                 <AppHeader
                     center={<BasicInput />}
                     right={<TextButton title="Cancel" />}
                 />
+                {this.props.state.project.pending && <View style={styles.loading}>
+                    <ActivityIndicator size="large" color="#5d4d50" />
+                    <Text style={styles.loadingTxt}>Wait, getting your projects</Text>
+                </View>}
                 <View style={styles.tabView}>
                     <TouchableOpacity onPress={() => this.setState({ index: 0 })} style={index == 0 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 0 ? selectedTabStyle : styles.tab}>Active</Text></TouchableOpacity>
                     <TouchableOpacity onPress={() => this.setState({ index: 1 })} style={index == 1 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 1 ? selectedTabStyle : styles.tab}>Archived</Text></TouchableOpacity>
                 </View>
-                {index == 0 ?
+                {this.props.state.project.error && <View style={styles.none}><Text style={styles.noneTxt}>No projects</Text></View>}
+                {!this.props.state.project.error && !this.props.state.project.pending && index == 0 ?
                     <View>
-                        {isLoading ?
-                            <View>
-                                <ActivityIndicator size="large" color="#5d4d50" />
-                                <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
-                            </View> :
-                            <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects.active} />
-                        }
+                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects.active} />
                     </View> :
                     <View>
-                        {isLoading ?
-                            <View>
-                                <ActivityIndicator size="large" color="#5d4d50" />
-                                <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
-                            </View> :
-                            <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects.archived} />
-                        }
+                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} active projects={projects.archived} />
                     </View>}
                 <IconButton name="plus" size={40} color='#646380' onPress={() => this.props.navigation.navigate('AddProject')} />
             </View>
@@ -110,13 +103,12 @@ const styles = StyleSheet.create(
             backgroundColor: '#f4f1f1',
             display: 'flex',
             flex: 1,
-            // flexDirection: 'column',
         },
         loading: {
             display: 'flex',
             flex: 1,
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'center'
         },
         txtStyle: {
             fontFamily: 'Arial',
@@ -134,14 +126,11 @@ const styles = StyleSheet.create(
             marginRight: 10,
             fontSize: 13
         },
-        scene: {
-            flex: 1,
-        },
         loadingTxt: {
             fontFamily: 'Arial',
             fontSize: 15,
             color: '#5d4d50',
-            padding: '4%'
+            padding: '4%',
         },
         addIcon: {
             alignSelf: 'center',
@@ -166,17 +155,29 @@ const styles = StyleSheet.create(
             color: "#5d4d50",
             borderColor: "#b3b3cc",
         },
+        none: {
+            height: '10%',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        noneTxt: {
+            fontSize: 19,
+            color: '#5d4d50',
+        }
     });
 
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
-    projects: state.project.projects
+    projects: state.project.projects,
+    pending: state.project.pending,
+    error: state.project.error
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    setUserProjects,
-    setCurrentProject
+    setCurrentProject,
+    getUserProjects: getUserProjects,
+    setUserProjectsPending: setUserProjectsPending
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProjects)

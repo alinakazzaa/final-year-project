@@ -5,7 +5,6 @@ import ProjectForm from '../../components/forms/ProjectForm';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
 import { addProject } from '../../actions/project'
-import { DATE_TODAY } from '../../constants/TodayDate'
 import * as userActions from '../../actions/user';
 import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';
@@ -31,9 +30,9 @@ class AddProject extends React.Component {
     handleSubmit = () => {
         const { user } = this.props
         const { project } = this.state
-        project.date_created = DATE_TODAY
-        addProject(user.id, project);
-        this.props.navigation.navigate("AllProjects")
+        console.log(user)
+        // addProject(user.id, project);
+        // this.props.navigation.navigate("AllProjects")
     }
 
     render() {
