@@ -58,8 +58,6 @@ const formStyles = {
 const User = t.struct({
     username: t.String,
     password: t.String,
-    profileURL: t.maybe(t.String),
-    date_created: t.String,
 });
 
 const options = {
@@ -87,13 +85,9 @@ export default class RegistrationForm extends React.Component {
 
     onSubmit = () => {
         const { logIn, registerUser } = this.props
-        let user = { username: '', password: '' }
-        const value = this.state.value
-        user = { ...user, ...value }
-        user.username = value.username
-        user.password = value.password
-        registerUser(user)
-        logIn(user)
+        const { value } = this.state
+        registerUser(value)
+        logIn(value)
     }
 
     render() {
