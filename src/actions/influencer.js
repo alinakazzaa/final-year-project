@@ -1,6 +1,6 @@
 import { db } from '../database/config/db';
 import { DATE_TODAY } from '../constants/TodayDate'
-import { GET_ALL_INFLUENCERS, SET_CURRENT_INFLUENCER } from '../constants';
+import { SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_ERROR, SET_CURRENT_INFLUENCER } from '../constants';
 
 export const getAllInfluencers = hashtag => {
     const influencers = []
@@ -10,9 +10,24 @@ export const getAllInfluencers = hashtag => {
         })
     });
 
+    if (influencers.length == 0) {
+        let error = { type: 'no projects' }
+        return {
+            type: SET_INFLUENCERS_ERROR,
+            error: error
+        }
+    } else {
+        return {
+            type: SET_INFLUENCERS_SUCCESS,
+            payload: influencers
+        }
+    }
+}
+
+export const getInfluencersPending = () => {
+
     return {
-        type: GET_ALL_INFLUENCERS,
-        payload: influencers
+        type: SET_INFLUENCERS_PENDING,
     }
 }
 

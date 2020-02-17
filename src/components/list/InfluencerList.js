@@ -175,11 +175,13 @@ const styles = StyleSheet.create(
             paddingTop: 30
         },
         infoText: {
-            fontSize: 14,
+            fontSize: 18,
             fontFamily: 'Arial',
+            fontWeight: '100',
             paddingBottom: 10,
             paddingTop: 10,
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            color: '#0B0033'
         },
         instaLink: {
             flexDirection: 'row',
