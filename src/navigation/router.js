@@ -13,10 +13,7 @@ class Router extends Component {
 
     render() {
         let { user, error, pending } = this.props
-        console.log(user)
-        // console.log(user.username && "current user: " + user.username || "no user logged in")
         return (
-            // <LogIn />
             pending || error ? <LogIn /> : <MainApp />
         );
     }
