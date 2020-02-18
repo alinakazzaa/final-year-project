@@ -3,6 +3,8 @@ import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDI
 import { addInfluencer } from './influencer';
 import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME } from '../constants/endpoints';
 
+let HASHTAG = ''
+
 export const getProjectFetchJobs = (user_id, project_id) => {
 
     const completed = []
@@ -90,19 +92,18 @@ export const getInfluencerIds = result => {
     let has_next_page = false
     let end_cursor
     const media_ids = []
-    let hashtag
 
     if (result.graphql) {
         edges = [...result.graphql.hashtag.edge_hashtag_to_media.edges]
         has_next_page = result.graphql.hashtag.edge_hashtag_to_media.page_info.has_next_page
-        hashtag = result.graphql.hashtag.name
+        HASHTAG = result.graphql.hashtag.name
         if (has_next_page)
             end_cursor = result.graphql.hashtag.edge_hashtag_to_media.page_info.end_cursor
     }
     else if (result.data) {
         edges = [...result.data.hashtag.edge_hashtag_to_media]
         has_next_page = result.data.hashtag.edge_hashtag_to_media.page_info.has_next_page
-        hashtag = result.data.hashtag.name
+        HASHTAG = result.data.hashtag.name
         if (has_next_page)
             end_cursor = result.data.hashtag.edge_hashtag_to_media.page_info.end_cursor
     }
@@ -116,9 +117,8 @@ export const getInfluencerIds = result => {
         edges.forEach(edge => {
             media_ids.push(edge.node.owner.id)
         })
+        getInfluencersByIDs(media_ids, HASHTAG)
     }
-
-    getInfluencersByIDs(media_ids, hashtag)
 
     // if (has_next_page) {
     //     // get next page
@@ -162,20 +162,19 @@ export const getInfluencersByIDs = (media_ids, hashtag) => {
                 if (res.error) {
                     getUserByIDError(res.error);
                 } else {
-                    getUserByIDSuccess(res, hashtag)
+                    getUserByIDSuccess(res)
                 }
 
             })
             .catch(error => {
                 getUserByIDError(error)
             })
-            , 20000)
+            , 50000)
     })
-
-    return
+    return media_ids
 }
 
-export const getUserByIDSuccess = (result, hashtag) => {
+export const getUserByIDSuccess = (result) => {
     let user = { ...result.data.user.reel.user }
     getUserByUsernamePending()
     setInterval(() => fetch(INSTAGRAM_GET_USER_BY_USERNAME(user.username))
@@ -184,25 +183,27 @@ export const getUserByIDSuccess = (result, hashtag) => {
             if (res.error) {
                 getUserByUsernameError(res.error)
             } else {
-                getUserByUsernameSuccess(res, hashtag)
+                getUserByUsernameSuccess(res)
             }
 
         })
         .catch(error => {
             getUserByUsernameError(error)
         })
-        , 40000)
+        , 50000)
 
     return {
         type: GET_USER_BY_USERNAME_SUCCESS,
-        payload: hashtag
+        payload: HASHTAG
     }
 }
 
 export const getUserByIDError = error => {
+    console.log(error)
     return {
         type: GET_USER_BY_ID_ERROR,
-        error: error
+        error: error,
+        hashtag: HASHTAG
     }
 }
 
@@ -212,7 +213,7 @@ export const getUserByUsernamePending = () => {
     }
 }
 
-export const getUserByUsernameSuccess = (result, hashtag) => {
+export const getUserByUsernameSuccess = result => {
     const user = { ...result.graphql.user }
     let user_obj = {
         biography: user.biography,
@@ -227,18 +228,19 @@ export const getUserByUsernameSuccess = (result, hashtag) => {
         media_count: user.edge_owner_to_timeline_media.count
     }
 
-    addInfluencer(user_obj, hashtag)
+    addInfluencer(user_obj, HASHTAG)
 
     return {
         type: GET_USER_BY_USERNAME_SUCCESS,
-        payload: hashtag
+        payload: HASHTAG
     }
 }
 
 export const getUserByUsernameError = error => {
     return {
         type: GET_USER_BY_USERNAME_ERROR,
-        error: error
+        error: error,
+        hashtag: HASHTAG
     }
 }
 
@@ -289,5 +291,4 @@ export const removeFetchJob = (user_id, project_id, fetchJob) => {
         payload: fetchJob
     }
 }
-
 

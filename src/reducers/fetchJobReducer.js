@@ -1,4 +1,4 @@
-import { SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, CLEAR_CURRENT_FETCH_JOB, ADD_FETCH_JOB, UPDATE_FETCH_JOB, UPDATE_FETCH_JOB_STATUS, REMOVE_FETCH_JOB, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_USER_BY_USERNAME_ERROR, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_SUCCESS } from '../constants';
+import { SET_CURRENT_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, CLEAR_CURRENT_FETCH_JOB, ADD_FETCH_JOB, UPDATE_FETCH_JOB_STATUS, REMOVE_FETCH_JOB, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_USER_BY_USERNAME_ERROR, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_SUCCESS } from '../constants';
 
 const initialState = {
     fetch_jobs: {
@@ -16,8 +16,6 @@ const fetchJobReducer = (state = initialState, action) => {
     let pending
     let completed
     let running
-    let status
-    let running_fetch_jobs
     let completed_fj
 
     switch (action.type) {
@@ -59,9 +57,9 @@ const fetchJobReducer = (state = initialState, action) => {
             }
         case GET_MEDIA_BY_HASHTAG_ERROR:
             updated_state.pending = false
+            updated_state.error = action.error
             return {
-                ...updated_state,
-                error: action.error
+                ...updated_state
             }
         case GET_USER_BY_ID_SUCCESS:
             updated_state.pending = false
@@ -70,9 +68,13 @@ const fetchJobReducer = (state = initialState, action) => {
             }
         case GET_USER_BY_ID_ERROR:
             updated_state.pending = false
+            updated_state.error = action.error
+            running = [...updated_state.fetch_jobs.running]
+            completed = [...updated_state.fetch_jobs.completed]
+            completed_fj = { ...running.find(job => job.hashtag == action.hashtag) };
+            completed.splice(running.length, 1, completed_fj)
             return {
-                ...updated_state,
-                error: action.error
+                ...updated_state
             }
         case GET_USER_BY_ID_PENDING:
             updated_state.pending = true
@@ -88,7 +90,6 @@ const fetchJobReducer = (state = initialState, action) => {
 
             updated_state.fetch_jobs.completed = completed
             updated_state.fetch_jobs.running = [...running.filter(fj => fj.id !== completed_fj.id)]
-
             return {
                 ...updated_state,
             }
@@ -99,9 +100,16 @@ const fetchJobReducer = (state = initialState, action) => {
             }
         case GET_USER_BY_USERNAME_ERROR:
             updated_state.pending = false
+            updated_state.error = action.error
+            running = [...updated_state.fetch_jobs.running]
+            completed = [...updated_state.fetch_jobs.completed]
+            completed_fj = { ...running.find(job => job.hashtag == action.hashtag) };
+            completed.splice(running.length, 1, completed_fj)
+
+            updated_state.fetch_jobs.completed = completed
+            updated_state.fetch_jobs.running = [...running.filter(fj => fj.id !== completed_fj.id)]
             return {
-                ...updated_state,
-                error: action.error
+                ...updated_state
             }
 
         case ADD_FETCH_JOB:

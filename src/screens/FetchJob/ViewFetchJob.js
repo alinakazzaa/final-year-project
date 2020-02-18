@@ -55,12 +55,11 @@ class ViewFetchJob extends React.Component {
     }
 
     startFetchJob = () => {
-        const { user, current_project, current_fetch_job, updateFetchJobStatus, getUserByUsernameSuccess } = this.props
+        const { user, current_project, current_fetch_job, updateFetchJobStatus } = this.props
         this.setState({ isLoading: true })
         let updated_job = { ...current_fetch_job, status: 'running' }
         updateFetchJobStatus(user.id, current_project.id, updated_job)
-        getUserByUsernameSuccess()
-        // fetchMedia(current_fetch_job.hashtag)
+        fetchMedia(current_fetch_job.hashtag)
         this.setState({ isLoading: false })
         this.props.navigation.goBack()
     }
