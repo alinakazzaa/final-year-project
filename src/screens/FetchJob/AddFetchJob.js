@@ -28,7 +28,7 @@ class AddFetchJob extends React.Component {
 
     handleSubmit = () => {
         let { fetch_job } = this.state
-        const { user, current_project } = this.props
+        const { user, current_project, addFetchJob } = this.props
 
         fetch_job.value.date_created = DATE_TODAY
         fetch_job.value.title = 'Fetch: ' + fetch_job.value.hashtag && fetch_job.value.location ?
@@ -110,12 +110,8 @@ const mapStateToProps = state => ({
     current_project: state.project.current_project
 });
 
-const ActionCreators = Object.assign(
-    {},
-    projectActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    addFetchJob: addFetchJob
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)

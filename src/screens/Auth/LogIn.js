@@ -18,6 +18,7 @@ class LogInScreen extends React.Component {
         let error
         const { setLoggedInUserSuccess, setLoggedInUserError } = this.props;
         const user_obj = getUserByUsername(user.username)
+        console.log(user_obj)
         if (user.username == user_obj.username) {
             if (user.password == user_obj.password) {
                 setLoggedInUserSuccess(user_obj)

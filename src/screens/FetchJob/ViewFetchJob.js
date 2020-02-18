@@ -13,7 +13,7 @@ import { InfluencerListFjView } from '../../components/list/InfluencerListFjView
 import { getAllInfluencers } from '../../actions/influencer';
 import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { TextButton } from '../../components/buttons/TextButton';
-import { updateFetchJob, setRunningFetchJob, clearCurrentFetchJob } from '../../actions/fetchJob';
+import { updateFetchJobStatus, clearCurrentFetchJob, getUserByUsernameSuccess } from '../../actions/fetchJob';
 import fetchMedia from '../../web/fetchMedia';
 
 
@@ -27,6 +27,13 @@ class ViewFetchJob extends React.Component {
         const { getAllInfluencers, current_fetch_job, getInfluencersPending } = this.props
         getInfluencersPending()
         getAllInfluencers(current_fetch_job.hashtag)
+    }
+
+    componentDidUpdate(prevProps) {
+        const { fetch_jobs } = this.props
+        if (prevProps.fetch_jobs.running !== fetch_jobs.running) [
+            console.log('not the same')
+        ]
     }
 
     // componentWillUnmount() {
@@ -47,19 +54,20 @@ class ViewFetchJob extends React.Component {
         this.props.navigation.navigate('ViewInfluencer')
     }
 
-    startFetchJob = job => {
-        const { user, fetchMedia, setRunningFetchJob, current_project } = this.props
+    startFetchJob = () => {
+        const { user, current_project, current_fetch_job, updateFetchJobStatus, getUserByUsernameSuccess } = this.props
         this.setState({ isLoading: true })
-
-        let updated_job = { ...job, status: 'in progress' }
-        updateFetchJob(user.id, current_project.id, updated_job)
-        setRunningFetchJob(updated_job);
-        fetchMedia(job.hashtag)
+        let updated_job = { ...current_fetch_job, status: 'running' }
+        updateFetchJobStatus(user.id, current_project.id, updated_job)
+        getUserByUsernameSuccess()
+        // fetchMedia(current_fetch_job.hashtag)
         this.setState({ isLoading: false })
+        this.props.navigation.goBack()
     }
 
     render() {
         const { current_fetch_job, influencers } = this.props
+        console.log(this.props.state.fetch_job.error)
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -118,7 +126,9 @@ class ViewFetchJob extends React.Component {
                                         <Text style={styles.loadingTxt}>Wait, getting influencers</Text>
                                     </View>}
                                 {this.props.state.influencer.error && <View style={styles.none}><Text style={styles.noneTxt}>No influencers</Text></View>}
-                                {!this.props.state.influencer.pending && !this.props.state.influencer.error && <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />}
+                                {!this.props.state.influencer.pending && !this.props.state.influencer.error &&
+                                    <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />
+                                }
                             </View >
                             :
                             <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>
@@ -253,17 +263,17 @@ const mapStateToProps = state => ({
     current_fetch_job: state.fetch_job.current_fetch_job,
     influencers: state.influencer.influencers,
     running_fetch_job: getRunningFetchJob(state),
-    pending: state.influencer.pending,
-    error: state.influencer.error,
+    pending_fj: state.fetch_job.pending,
+    error_fj: state.fetch_job.error,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchMedia: fetchMedia,
     getAllInfluencers: getAllInfluencers,
     setCurrentInfluencer: setCurrentInfluencer,
-    setRunningFetchJob: setRunningFetchJob,
     clearCurrentFetchJob: clearCurrentFetchJob,
-    getInfluencersPending: getInfluencersPending
+    getInfluencersPending: getInfluencersPending,
+    updateFetchJobStatus: updateFetchJobStatus,
+    getUserByUsernameSuccess: getUserByUsernameSuccess
 }, dispatch);
 
 

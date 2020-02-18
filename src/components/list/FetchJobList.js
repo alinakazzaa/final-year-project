@@ -5,7 +5,7 @@ import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 
-export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob }) => {
+export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, deleteFetchJob }) => {
 
     const FJList = (fj, index) => {
         return (
@@ -18,6 +18,9 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob }) => {
                     </View>
                     <View style={styles.middle}>
                         <Text style={styles.date}>{fj.date_created}</Text>
+                    </View>
+                    <View style={styles.right}>
+                        <IconButton name="delete" type="MaterialIcons" size={23} color="#0B0033" onPress={() => deleteFetchJob(fj)} />
                     </View>
                 </View>
             </TouchableOpacity>

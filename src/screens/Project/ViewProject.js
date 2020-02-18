@@ -39,6 +39,7 @@ class ViewProjectScreen extends React.Component {
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
+        console.log(fj)
         setCurrentFetchJob(fj)
         this.props.navigation.navigate('ViewFetchJob')
     }
@@ -64,7 +65,6 @@ class ViewProjectScreen extends React.Component {
     render() {
 
         const { current_project, fetch_jobs, } = this.props;
-        // console.log(this.props.state.project)
         return (
             <View style={styles.main}>
                 <AppHeader

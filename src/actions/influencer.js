@@ -46,7 +46,6 @@ export const addInfluencer = (influencer, hashtag) => {
 }
 
 export const updateInfluencer = (hashtag, influencer) => {
-    console.log(influencer)
     db.ref(`/Influencers/hashtags/${hashtag}/${influencer.id}`).update({
         ...influencer
     });

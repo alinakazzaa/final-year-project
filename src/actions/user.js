@@ -52,7 +52,7 @@ export const getUserByUsername = username => {
     DB_USER_REF.on('value', (user_snapshot) => {
         user_snapshot.forEach(user_snap => {
             if (user_snap.val().details.username == username) {
-                user_obj = { id: user_snap.key, ...user_snap.val().details }
+                user_obj = { ...user_snap.val().details }
             }
         })
     })

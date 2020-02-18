@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { setCurrentFetchJob } from '../../actions/fetchJob'
+import { setCurrentFetchJob, removeFetchJob } from '../../actions/fetchJob'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import fetchMedia from '../../web/fetchMedia';
@@ -15,7 +15,7 @@ class AllFetchJobs extends React.Component {
 
     state = {
         isLoading: true,
-        index: 0,
+        index: 2,
         selectedTabStyle: {
             color: 'white',
             textAlign: 'center',
@@ -41,19 +41,20 @@ class AllFetchJobs extends React.Component {
         this.setState({ isLoading: false })
     }
 
-    componentWillReceiveProps(props) {
-        console.log(props)
-    }
-
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
         setCurrentFetchJob(fj)
         this.props.navigation.navigate('ViewFetchJob')
     }
 
+    deleteFetchJob = fj => {
+        let { user, current_project, removeFetchJob } = this.props;
+        removeFetchJob(user.id, current_project.id, fj)
+    }
+
     render() {
         let { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
-        const { fetch_jobs } = this.props
+        const { fetch_jobs, pending, error } = this.props
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -65,9 +66,9 @@ class AllFetchJobs extends React.Component {
                         />}
                 />
                 <View style={styles.tabView}>
-                    <TouchableOpacity onPress={() => this.setState({ index: 0 })} style={index == 0 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 0 ? selectedTabStyle : styles.tab}>Completed</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ index: 1 })} style={index == 1 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 1 ? selectedTabStyle : styles.tab}>Running</Text></TouchableOpacity>
                     <TouchableOpacity onPress={() => this.setState({ index: 2 })} style={index == 2 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 2 ? selectedTabStyle : styles.tab}>Pending</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.setState({ index: 1 })} style={index == 1 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 1 ? selectedTabStyle : styles.tab}>Running</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.setState({ index: 0 })} style={index == 0 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 0 ? selectedTabStyle : styles.tab}>Completed</Text></TouchableOpacity>
                 </View>
 
                 {isLoading &&
@@ -86,6 +87,7 @@ class AllFetchJobs extends React.Component {
                                 fetchJobs={fetch_jobs.completed}
                                 goToFetchJob={this.goToFetchJob}
                                 addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
+                                deleteFetchJob={this.deleteFetchJob}
                             />
                         }
                     </View>}
@@ -100,6 +102,7 @@ class AllFetchJobs extends React.Component {
                                 fetchJobs={fetch_jobs.running}
                                 goToFetchJob={this.goToFetchJob}
                                 addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
+                                deleteFetchJob={this.deleteFetchJob}
                             />
                         }
                     </View>}
@@ -109,6 +112,7 @@ class AllFetchJobs extends React.Component {
                         fetchJobs={fetch_jobs.pending}
                         goToFetchJob={this.goToFetchJob}
                         addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
+                        deleteFetchJob={this.deleteFetchJob}
                     />
                 </View>}
             </View>
@@ -162,8 +166,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchMedia,
-    setCurrentFetchJob: setCurrentFetchJob
+    setCurrentFetchJob: setCurrentFetchJob,
+    removeFetchJob: removeFetchJob
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)
