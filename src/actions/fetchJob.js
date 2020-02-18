@@ -1,5 +1,5 @@
 import { db } from '../database/config/db';
-import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR, CLEAR_CURRENT_FETCH_JOB } from '../constants';
+import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR, CLEAR_CURRENT_FETCH_JOB, ADD_FETCH_JOB, UPDATE_FETCH_JOB, REMOVE_FETCH_JOB, UPDATE_FETCH_JOB_STATUS, GET_MEDIA_BY_HASHTAG_SUCCESS } from '../constants';
 import { addInfluencer } from './influencer';
 import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME } from '../constants/endpoints';
 
@@ -11,17 +11,25 @@ export const getProjectFetchJobs = (user_id, project_id) => {
 
     DB_PROJECT_FETCH_JOBS_REF(user_id, project_id).on('value', fj_snapshot => {
         fj_snapshot.forEach(fj_snap => {
-            if (fj_snap.val().status == 'completed') {
-                completed.push(fj_snap.val())
-            } else if (fj_snap.val().status == 'in progress') {
-                running.push(fj_snap.val())
+            const fj = {
+                title: fj_snap.val().details.title,
+                status: fj_snap.val().details.status,
+                date_created: fj_snap.val().details.date_created,
+                hashtag: fj_snap.val().details.hashtag,
+                location: fj_snap.val().details.location,
+                criteria: fj_snap.val().details.criteria,
+                id: fj_snap.val().details.id,
+            }
+            if (fj.status == 'completed') {
+                pending.push(fj)
+            } else if (fj.status == 'running') {
+                running.push(fj)
             } else {
-                pending.push(fj_snap.val())
+                completed.push(fj)
             }
 
         })
     })
-
     if (completed.length == 0 && running.length == 0 && pending.length == 0) {
         const error = { type: 'no fetch jobs' }
         return {
@@ -33,7 +41,7 @@ export const getProjectFetchJobs = (user_id, project_id) => {
             type: SET_FETCH_JOBS_SUCCESS,
             completed: completed,
             running: running,
-            pending: running
+            pending: pending
         }
     }
 }
@@ -52,13 +60,6 @@ export const setCurrentFetchJob = fetch_job => {
     }
 }
 
-export const setRunningFetchJob = fetch_job => {
-    return {
-        type: SET_RUNNING_FETCH_JOB,
-        payload: fetch_job
-    }
-}
-
 export const clearCurrentFetchJob = () => {
     return {
         type: CLEAR_CURRENT_FETCH_JOB,
@@ -73,9 +74,8 @@ export const getInitialCursorPending = () => {
 }
 
 export const getInitialCursorSuccess = result => {
-    return dispatch => {
-        dispatch(setCurrentPageInfo(result))
-    }
+    getInfluencerIds(result)
+    return result
 }
 
 export const getInitialCursorError = error => {
@@ -85,8 +85,7 @@ export const getInitialCursorError = error => {
     }
 }
 
-
-export const setCurrentPageInfo = result => {
+export const getInfluencerIds = result => {
     let edges = []
     let has_next_page = false
     let end_cursor
@@ -161,9 +160,11 @@ export const getInfluencersByIDs = (media_ids, hashtag) => {
             .then(result => result.json())
             .then(res => {
                 if (res.error) {
-                    console.log((res.error));
+                    getUserByIDError(res.error);
+                } else {
+                    getUserByIDSuccess(res, hashtag)
                 }
-                getUserByIDSuccess(res, hashtag)
+
             })
             .catch(error => {
                 getUserByIDError(error)
@@ -176,21 +177,26 @@ export const getInfluencersByIDs = (media_ids, hashtag) => {
 
 export const getUserByIDSuccess = (result, hashtag) => {
     let user = { ...result.data.user.reel.user }
-
+    getUserByUsernamePending()
     setInterval(() => fetch(INSTAGRAM_GET_USER_BY_USERNAME(user.username))
         .then(result => result.json())
         .then(res => {
             if (res.error) {
-                console.log((res.error));
+                getUserByUsernameError(res.error)
+            } else {
+                getUserByUsernameSuccess(res, hashtag)
             }
-            getUserByUsernameSuccess(res, hashtag)
+
         })
         .catch(error => {
             getUserByUsernameError(error)
         })
         , 40000)
 
-    return result
+    return {
+        type: GET_USER_BY_USERNAME_SUCCESS,
+        payload: hashtag
+    }
 }
 
 export const getUserByIDError = error => {
@@ -222,7 +228,11 @@ export const getUserByUsernameSuccess = (result, hashtag) => {
     }
 
     addInfluencer(user_obj, hashtag)
-    return result
+
+    return {
+        type: GET_USER_BY_USERNAME_SUCCESS,
+        payload: hashtag
+    }
 }
 
 export const getUserByUsernameError = error => {
@@ -234,29 +244,50 @@ export const getUserByUsernameError = error => {
 
 //DB
 export const addFetchJob = (user_id, project_id, fetch_job) => {
-    const fj_add = db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
+    let fj_obj = {
         title: fetch_job.value.title,
         date_created: fetch_job.value.date_created,
         hashtag: fetch_job.value.hashtag || '',
         location: fetch_job.value.location || '',
         criteria: String(fetch_job.criteria),
         status: 'pending'
+    }
+    const fj_add = db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
+        details: { ...fj_obj }
     });
+
 
     const key = fj_add.key
+    fj_obj = { ...fj_obj, id: key }
     db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${key}`).update({
-        id: key
+        details: { ...fj_obj }
     })
+
+    return {
+        type: ADD_FETCH_JOB,
+        payload: fj_obj
+    }
 }
 
-export const updateFetchJob = (user_id, project_id, fetch_job) => {
-    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${fetch_job.id}`).update({
-        status: fetch_job.status
+export const updateFetchJobStatus = (user_id, project_id, fetch_job) => {
+    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${fetch_job.id}/details`).update({
+        ...fetch_job
     });
+
+    return {
+        type: UPDATE_FETCH_JOB_STATUS,
+        payload: fetch_job
+    }
+
 }
 
-export const removeFetchJob = (user_id, project_id, fetchJob_id) => {
-    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).child(fetchJob_id).remove()
+export const removeFetchJob = (user_id, project_id, fetchJob) => {
+    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).child(fetchJob.id).remove()
+
+    return {
+        type: REMOVE_FETCH_JOB,
+        payload: fetchJob
+    }
 }
 
 
