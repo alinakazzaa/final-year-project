@@ -1,23 +1,23 @@
-import { getInitialCursorPending, getInitialCursorSuccess, getInitialCursorError } from '../actions/fetchJob';
+import { getMediaByHashtagPending, getMediaByHashtagSuccess, getMediaByHashtagError } from '../actions/fetchJob';
 import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from '../constants/endpoints';
 
-const fetchMedia = hashtag => {
-    getInitialCursorPending();
+const fetchMedia = (hashtag) => {
+    let response
     fetch(INSTAGRAM_GET_MEDIA_BY_HASHTAG(hashtag))
-        .then(res => res.json())
-        .then(res => {
-            if (res.error) {
-                getInitialCursorError(res.error)
-            } else if (!res.error && res.graphql.hashtag.edge_hashtag_to_media.count == 0) {
-                let error = { type: 'no media' }
-                getInitialCursorError(error)
+        .then(result => {
+            if (!result.ok) {
+                return { type: 'error', message: 'no destination' }
             } else {
-                getInitialCursorSuccess(res);
+                result.json().then(res => {
+                    return res
+                })
             }
         })
         .catch(error => {
-            getInitialCursorError(error)
+            return error
         })
+
+    return
 }
 
 export default fetchMedia;

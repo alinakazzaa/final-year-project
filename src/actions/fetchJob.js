@@ -12,13 +12,13 @@ export const getProjectFetchJobs = (user_id, project_id) => {
 
         fj_snapshot.forEach(fj_snap => {
             const fj = {
-                title: fj_snap.val().details.title,
+                title: fj_snap.val().title,
                 status: fj_snap.val().status,
-                date_created: fj_snap.val().details.date_created,
-                hashtag: fj_snap.val().details.hashtag,
-                location: fj_snap.val().details.location,
-                criteria: fj_snap.val().details.criteria,
-                id: fj_snap.val().details.id,
+                date_created: fj_snap.val().date_created,
+                hashtag: fj_snap.val().hashtag,
+                location: fj_snap.val().location,
+                criteria: fj_snap.val().criteria,
+                id: fj_snap.val().id,
             }
             fetch_jobs.push(fj)
 
@@ -76,63 +76,59 @@ export const clearCurrentFetchJob = () => {
 
 export const fetchMedia = (running_fetch_job, user_id, project_id) => {
     let response = {}
+    let fj
+    let fj_db
     fetch(INSTAGRAM_GET_MEDIA_BY_HASHTAG(running_fetch_job.hashtag))
         .then(result => {
             if (result.ok) {
                 result.json().then(res => {
                     // extractInfluencerIDs(res)
                     response = { type: 'success', message: 'extracting influencer IDs' }
-                    const fj = { ...running_fetch_job, result: response, status: 'completed' }
-                    updateFetchJob(USER_ID, PROJECT_ID, fj)
-
-                    return {
-                        type: GET_MEDIA_BY_HASHTAG_SUCCESS,
-                        payload: response
-                    }
                 })
             }
         })
         .catch(error => {
             response = { type: 'error', message: error }
-            const fj = { ...running_fetch_job, result: response, status: 'completed' }
-            updateFetchJob(USER_ID, PROJECT_ID, fj)
-            return {
-                type: GET_MEDIA_BY_HASHTAG_ERROR,
-                error: response
-            }
+            fj = { ...running_fetch_job, result: response, status: 'completed' }
+            updateFetchJob(user_id, project_id, fj)
+            return getMediaByHashtagError(response, fj)
         })
 
-    response = { type: 'error', message: 'no destination' }
-    const fj = { ...running_fetch_job, result: response, status: 'completed' }
-    updateFetchJob(USER_ID, PROJECT_ID, fj)
-
-    return {
-        type: GET_MEDIA_BY_HASHTAG_ERROR,
-        error: response
+    if (response.type == 'success') {
+        // fj_db = { details: { ...running_fetch_job }, result: response, status: 'completed' }
+        // updateFetchJob(user_id, project_id, fj)
+        return getMediaByHashtagSuccess(response, fj)
+    } else {
+        response = { type: 'error', message: 'no destination' }
+        fj = { ...running_fetch_job, result: response, status: 'completed' }
+        updateFetchJob(user_id, project_id, fj)
+        return getMediaByHashtagError(response, fj)
     }
-
 
 }
 
 
 // fetch actions
-export const getMediaByHashtagPending = fetch_job => {
+export const getMediaByHashtagPending = () => {
     return {
         type: GET_MEDIA_BY_HASHTAG_PENDING,
-        fetch_job: fetch_job
     }
 }
 
-export const getMediaByHashtagSuccess = result => {
-    console.log(result)
-    // extractInfluencerIDs(result)
-    return result
+export const getMediaByHashtagSuccess = (response, running_fetch_job) => {
+
+    return {
+        type: GET_MEDIA_BY_HASHTAG_SUCCESS,
+        response: response,
+        fetch_job: running_fetch_job
+    }
 }
 
-export const getMediaByHashtagError = error => {
+export const getMediaByHashtagError = (error, running_fetch_job) => {
     return {
         type: GET_MEDIA_BY_HASHTAG_ERROR,
-        error: error
+        error: error,
+        fetch_job: running_fetch_job
     }
 }
 
@@ -296,13 +292,11 @@ export const getUserByUsernameError = error => {
 //DB
 export const addFetchJob = (user_id, project_id, fetch_job) => {
     let fj_obj = {
-        details: {
-            title: fetch_job.value.title,
-            date_created: fetch_job.value.date_created,
-            hashtag: fetch_job.value.hashtag || '',
-            location: fetch_job.value.location || '',
-            criteria: String(fetch_job.criteria),
-        },
+        title: fetch_job.value.title,
+        date_created: fetch_job.value.date_created,
+        hashtag: fetch_job.value.hashtag || '',
+        location: fetch_job.value.location || '',
+        criteria: String(fetch_job.criteria),
         status: 'pending',
         result: {}
     }
@@ -313,10 +307,11 @@ export const addFetchJob = (user_id, project_id, fetch_job) => {
 
 
     const key = fj_add.key
-    fj_obj = { ...fj_obj, id: key }
     db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${key}`).update({
-        details: { ...fj_obj }
+        id: key
     })
+
+    fj_obj = { ...fj_obj, id: key }
 
     return {
         type: ADD_FETCH_JOB,
@@ -330,12 +325,12 @@ export const updateFetchJob = (user_id, project_id, fetch_job) => {
     });
 }
 
-export const removeFetchJob = (user_id, project_id, fetchJob) => {
-    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).child(fetchJob.id).remove()
+export const removeFetchJob = (user_id, project_id, fetch_job) => {
+    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).child(fetch_job.id).remove()
 
     return {
         type: REMOVE_FETCH_JOB,
-        payload: fetchJob
+        payload: fetch_job
     }
 }
 

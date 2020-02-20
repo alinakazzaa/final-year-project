@@ -64,7 +64,7 @@ class AllFetchJobs extends React.Component {
 
     render() {
         const { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
-        const { pending_, completed, in_progress } = this.props
+        const { pending_, completed, in_progress, fetch_jobs } = this.props
 
         return (
             <View style={styles.container}>

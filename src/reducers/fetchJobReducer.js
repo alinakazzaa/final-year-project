@@ -107,20 +107,18 @@ const fetchJobReducer = (state = initialState, action) => {
 
         // get hashtag media
         case GET_MEDIA_BY_HASHTAG_PENDING:
-            updated_state.pending = true
 
             return {
                 ...updated_state
             }
 
         case GET_MEDIA_BY_HASHTAG_SUCCESS:
-            updated_state.pending = false
-            console.log(action.payload)
-            // console.log(action.payload)
-            // fj = updated_state.fetch_jobs.find(f => f.id == action.fetch_job.id);
-            // fj.status = 'completed'
-            // index = updated_state.fetch_jobs.indexOf(f => f.id == action.fetch_job.id);
-            // updated_state.fetch_jobs.splice(index, 1, fj)
+            fjs = [...updated_state.fetch_jobs]
+            fj = { ...action.fetch_job, status: 'completed', result: action.response }
+            index = fjs.indexOf(f => f.id == fj.id);
+            fjs.splice(index, 1, fj)
+            updated_state.fetch_jobs = fjs
+
             return {
                 ...updated_state,
             }
@@ -129,13 +127,11 @@ const fetchJobReducer = (state = initialState, action) => {
         case GET_MEDIA_BY_HASHTAG_ERROR:
             updated_state.pending = false
             updated_state.error = action.error
-
-            //update fetch job status
-            // fj = getRunningFetchJob(state)
-            // fj.status = 'completed'
-            // index = updated_state.fetch_jobs.indexOf(f => f.id == fj.id);
-            // updated_state.fetch_jobs.splice(index, 1, fj)
-            // clear running fetch job state
+            fjs = [...updated_state.fetch_jobs]
+            fj = { ...action.fetch_job, status: 'completed', result: action.error }
+            index = fjs.indexOf(f => f.id == fj.id);
+            fjs.splice(index, 1, fj)
+            updated_state.fetch_jobs = fjs
             updated_state.running_fetch_job = {}
 
             return {
