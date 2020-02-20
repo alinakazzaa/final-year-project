@@ -3,7 +3,7 @@ import { Icon, Avatar } from 'react-native-elements'
 import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
-import { TextButton } from '../buttons/TextButton'
+import { PulseIndicator } from 'react-native-indicators';
 
 export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, deleteFetchJob }) => {
 
@@ -16,11 +16,15 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, deleteFetch
                         <Text style={styles.location}>{`LOCATION    ${fj.location}`}</Text>
 
                     </View>
-                    <View style={styles.middle}>
+                    <View>
                         <Text style={styles.date}>{fj.date_created}</Text>
                     </View>
-                    <View style={styles.right}>
+                    <View>
                         <IconButton name="delete" type="MaterialIcons" size={23} color="#0B0033" onPress={() => deleteFetchJob(fj)} />
+                    </View>
+                    <View>
+                        {fj.status == 'in progress' &&
+                            <PulseIndicator size={20} color="green" />}
                     </View>
                 </View>
             </TouchableOpacity>
@@ -77,7 +81,8 @@ const styles = StyleSheet.create(
             padding: 15,
             marginRight: '5%',
             fontFamily: 'ArialRoundedMTBold',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            alignItems: 'center'
         },
         headerTitle: {
             color: '#0B0033',
@@ -129,12 +134,6 @@ const styles = StyleSheet.create(
             display: 'flex',
             flexDirection: 'column',
         },
-        middle: {
-            display: 'flex',
-        },
-        right: {
-            display: 'flex',
-        }
     });
 
 FetchJobList.propTypes = {

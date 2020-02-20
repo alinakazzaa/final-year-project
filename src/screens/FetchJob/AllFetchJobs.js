@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { setCurrentFetchJob, removeFetchJob } from '../../actions/fetchJob'
+import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs } from '../../actions/fetchJob'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import fetchMedia from '../../web/fetchMedia';
 import { getPending, getError, getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
@@ -30,7 +29,10 @@ class AllFetchJobs extends React.Component {
             justifyContent: 'center',
             backgroundColor: '#646380',
             borderColor: "#b3b3cc",
-        }
+        },
+        pending: [],
+        completed: [],
+        in_progress: []
     }
 
     static navigationOptions = {
@@ -38,8 +40,16 @@ class AllFetchJobs extends React.Component {
     }
 
     componentDidMount() {
+        const { getProjectFetchJobs, user, current_project } = this.props
+        getProjectFetchJobs(user.id, current_project.id)
         this.setState({ isLoading: false })
     }
+
+    // componentDidUpdate(prev) {
+    //     const { fetch_jobs } = this.props
+    //     if (prev.fetch_jobs != fetch_jobs) {
+    //     }
+    // }
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
@@ -48,13 +58,14 @@ class AllFetchJobs extends React.Component {
     }
 
     deleteFetchJob = fj => {
-        let { user, current_project, removeFetchJob } = this.props;
+        const { user, current_project, removeFetchJob } = this.props;
         removeFetchJob(user.id, current_project.id, fj)
     }
 
     render() {
-        let { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
-        const { fetch_jobs, pending, error } = this.props
+        const { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
+        const { pending_, completed, in_progress } = this.props
+
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -67,7 +78,7 @@ class AllFetchJobs extends React.Component {
                 />
                 <View style={styles.tabView}>
                     <TouchableOpacity onPress={() => this.setState({ index: 2 })} style={index == 2 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 2 ? selectedTabStyle : styles.tab}>Pending</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ index: 1 })} style={index == 1 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 1 ? selectedTabStyle : styles.tab}>Running</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.setState({ index: 1 })} style={index == 1 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 1 ? selectedTabStyle : styles.tab}>In Progress</Text></TouchableOpacity>
                     <TouchableOpacity onPress={() => this.setState({ index: 0 })} style={index == 0 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 0 ? selectedTabStyle : styles.tab}>Completed</Text></TouchableOpacity>
                 </View>
 
@@ -84,7 +95,7 @@ class AllFetchJobs extends React.Component {
                                 <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
                             </View> :
                             <FetchJobList
-                                fetchJobs={fetch_jobs.completed}
+                                fetchJobs={completed}
                                 goToFetchJob={this.goToFetchJob}
                                 addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                                 deleteFetchJob={this.deleteFetchJob}
@@ -99,7 +110,7 @@ class AllFetchJobs extends React.Component {
                                 <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
                             </View> :
                             <FetchJobList
-                                fetchJobs={fetch_jobs.running}
+                                fetchJobs={in_progress}
                                 goToFetchJob={this.goToFetchJob}
                                 addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                                 deleteFetchJob={this.deleteFetchJob}
@@ -109,7 +120,7 @@ class AllFetchJobs extends React.Component {
                 {!isLoading && index == 2 && <View>
 
                     <FetchJobList
-                        fetchJobs={fetch_jobs.pending}
+                        fetchJobs={pending_}
                         goToFetchJob={this.goToFetchJob}
                         addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                         deleteFetchJob={this.deleteFetchJob}
@@ -160,14 +171,18 @@ const mapStateToProps = state => ({
     user: state.user,
     current_project: state.project.current_project,
     fetch_jobs: state.fetch_job.fetch_jobs,
+    pending_: state.fetch_job.fetch_jobs.filter(fj => fj.status == "pending"),
+    in_progress: state.fetch_job.fetch_jobs.filter(fj => fj.status == "in progress"),
+    completed: state.fetch_job.fetch_jobs.filter(fj => fj.status == "completed"),
     pending: getPending(state),
     error: getError(state),
-    running_fetch_job: getRunningFetchJob(state)
+    running_fetch_job: getRunningFetchJob(state),
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentFetchJob: setCurrentFetchJob,
-    removeFetchJob: removeFetchJob
+    removeFetchJob: removeFetchJob,
+    getProjectFetchJobs: getProjectFetchJobs
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)

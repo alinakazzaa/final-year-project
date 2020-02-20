@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 
 export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
-    let COUNT = 0
     const FJList = (fj, index) => {
         return <TouchableOpacity style={styles.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
             <Text style={styles.fjData}>{fj.hashtag}</Text>
@@ -18,10 +17,12 @@ export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
     return (
 
         <View>
-            {fetch_jobs.length > 0 && COUNT < 5 && fetch_jobs.map((fj, index) => {
-                COUNT++
-                return FJList(fj, index)
+            {fetch_jobs.length > 0 && fetch_jobs.map((fj, index) => {
+                if (index < 5)
+                    return FJList(fj, index)
+                return
             })}
+
         </View>
     )
 

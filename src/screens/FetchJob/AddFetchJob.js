@@ -27,12 +27,12 @@ class AddFetchJob extends React.Component {
     }
 
     handleSubmit = () => {
-        let { fetch_job } = this.state
         const { user, current_project, addFetchJob } = this.props
+        let { fetch_job } = this.state
 
         fetch_job.value.date_created = DATE_TODAY
         fetch_job.value.title = 'Fetch: ' + fetch_job.value.hashtag && fetch_job.value.location ?
-            `hashtag: ${fetch_job.value.value.hashtag} & location: ${fetch_job.value.value.location} ` :
+            `hashtag: ${fetch_job.value.hashtag} & location: ${fetch_job.value.location} ` :
             fetch_job.value.location ? 'location:' + fetch_job.value.location : 'hashtag:' + fetch_job.value.hashtag
 
         // filter active criteria
@@ -43,9 +43,7 @@ class AddFetchJob extends React.Component {
             if (element[1] == true)
                 active_criteria.push(element[0])
         })
-        fetch_job.criteria = active_criteria
-
-
+        fetch_job.criteria = [...active_criteria]
         addFetchJob(user.id, current_project.id, { ...this.state.fetch_job })
         this.props.navigation.goBack()
     }

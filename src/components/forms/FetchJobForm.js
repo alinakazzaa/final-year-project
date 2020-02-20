@@ -80,14 +80,15 @@ export default class FetchJobForm extends React.Component {
     }
 
     onChangeFormValues(val) {
-        this.setState({ value: val });
-        const fj = { ...this.state }
-        this.props.onChange(fj)
+        this.setState({ ...this.state, value: val }, () => {
+            const fj = { ...this.state }
+            this.props.onChange(fj)
+        })
     }
 
     onChangeCriteria = val => {
         const criteria = { ...this.state.criteria }
-        const fj = { ...this.state }
+
         switch (val.key) {
             case 'zero':
                 criteria.zero = !criteria.zero
@@ -109,8 +110,11 @@ export default class FetchJobForm extends React.Component {
                 break
         }
 
-        this.setState({ ...this.state, criteria })
-        this.props.onChange(fj)
+        this.setState({ ...this.state, criteria }, () => {
+            const fj = { ...this.state }
+            this.props.onChange(fj)
+        })
+
     }
 
     getCriteria = () => {

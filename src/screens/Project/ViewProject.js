@@ -19,7 +19,7 @@ class ViewProjectScreen extends React.Component {
     }
 
     componentDidMount() {
-        const { user, current_project, getProjectFetchJobs, setProjectFetchJobsPending, setCurrentProject } = this.props
+        const { user, current_project, getProjectFetchJobs, setProjectFetchJobsPending } = this.props
         const { project } = this.props.navigation.state.params.proj
         // setCurrentProject(project)
         setProjectFetchJobsPending()
@@ -39,7 +39,6 @@ class ViewProjectScreen extends React.Component {
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
-        console.log(fj)
         setCurrentFetchJob(fj)
         this.props.navigation.navigate('ViewFetchJob')
     }
@@ -63,8 +62,8 @@ class ViewProjectScreen extends React.Component {
     }
 
     render() {
-
         const { current_project, fetch_jobs, } = this.props;
+
         return (
             <View style={styles.main}>
                 <AppHeader
@@ -119,22 +118,22 @@ class ViewProjectScreen extends React.Component {
                         </View>
                         <View>
                             <View style={styles.listHead}>
-                                <Text style={styles.title}>Fetch Jobs</Text>
+                                <Text style={styles.title}>Searches</Text>
+                                <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllFetchJobs')}>
+                                    <Text style={styles.title}>See All</Text>
+                                </TouchableOpacity>
                             </View>
                             {this.props.state.fetch_job.pending && <View style={styles.loading}>
                                 <ActivityIndicator size="large" color="#5d4d50" />
                                 <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
                             </View>}
-                            {this.props.state.fetch_job.error && <View style={styles.none}><Text style={styles.noneTxt}>No fetch jobs</Text></View>}
+                            {this.props.state.fetch_job.error && <View style={styles.none}><Text style={styles.noneTxt}>Error getting searches</Text></View>}
                             {!this.props.state.fetch_job.error && !this.props.state.fetch_job.pending && <ScrollView
                                 contentContainerStyle={styles.scrollContainer}>
                                 {fetch_jobs ? <View>
-                                    <FetchJobListProjectView fetch_jobs={[...fetch_jobs.completed, fetch_jobs.pending]} goToFetchJob={this.goToFetchJob} />
-                                    <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllFetchJobs')}>
-                                        <Text style={styles.title}>See All</Text>
-                                    </TouchableOpacity>
+                                    <FetchJobListProjectView fetch_jobs={fetch_jobs} goToFetchJob={this.goToFetchJob} />
                                 </View>
-                                    : <Text>No fetch jobs yet</Text>}
+                                    : <Text>No searches</Text>}
                             </ScrollView>}
                         </View>
                     </View>
