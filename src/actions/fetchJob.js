@@ -1,9 +1,5 @@
 import { db } from '../database/config/db';
-import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_USER_BY_ID_PENDING, GET_USER_BY_ID_ERROR, GET_USER_BY_USERNAME_PENDING, GET_USER_BY_USERNAME_SUCCESS, GET_USER_BY_USERNAME_ERROR, CLEAR_CURRENT_FETCH_JOB, ADD_FETCH_JOB, UPDATE_FETCH_JOB, REMOVE_FETCH_JOB, UPDATE_FETCH_JOB_STATUS, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_USER_BY_ID_SUCCESS, CLEAR_RUNNING_FETCH_JOB } from '../constants';
-import { addInfluencer } from './influencer';
-import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME, INSTAGRAM_GET_MEDIA_BY_HASHTAG } from '../constants/endpoints';
-
-let PROJECT_ID, USER_ID, RUNNING_FETCH_JOB
+import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, CLEAR_RUNNING_FETCH_JOB, UPDATE_FETCH_JOB_STATUS, ADD_FETCH_JOB, REMOVE_FETCH_JOB } from '../constants';
 
 export const getProjectFetchJobs = (user_id, project_id) => {
     const fetch_jobs = []
@@ -73,105 +69,6 @@ export const clearCurrentFetchJob = () => {
     }
 }
 
-
-export const fetchMedia = (running_fetch_job, user_id, project_id) => {
-    let response = {}
-    let fj
-    let fj_db
-    fetch(INSTAGRAM_GET_MEDIA_BY_HASHTAG(running_fetch_job.hashtag))
-        .then(result => {
-            if (result.ok) {
-                result.json().then(res => {
-                    // extractInfluencerIDs(res)
-                    response = { type: 'success', message: 'extracting influencer IDs' }
-                })
-            }
-        })
-        .catch(error => {
-            response = { type: 'error', message: error }
-            fj = { ...running_fetch_job, result: response, status: 'completed' }
-            updateFetchJob(user_id, project_id, fj)
-            return getMediaByHashtagError(response, fj)
-        })
-
-    if (response.type == 'success') {
-        // fj_db = { details: { ...running_fetch_job }, result: response, status: 'completed' }
-        // updateFetchJob(user_id, project_id, fj)
-        return getMediaByHashtagSuccess(response, fj)
-    } else {
-        response = { type: 'error', message: 'no destination' }
-        fj = { ...running_fetch_job, result: response, status: 'completed' }
-        updateFetchJob(user_id, project_id, fj)
-        return getMediaByHashtagError(response, fj)
-    }
-
-}
-
-
-// fetch actions
-export const getMediaByHashtagPending = () => {
-    return {
-        type: GET_MEDIA_BY_HASHTAG_PENDING,
-    }
-}
-
-export const getMediaByHashtagSuccess = (response, running_fetch_job) => {
-
-    return {
-        type: GET_MEDIA_BY_HASHTAG_SUCCESS,
-        response: response,
-        fetch_job: running_fetch_job
-    }
-}
-
-export const getMediaByHashtagError = (error, running_fetch_job) => {
-    return {
-        type: GET_MEDIA_BY_HASHTAG_ERROR,
-        error: error,
-        fetch_job: running_fetch_job
-    }
-}
-
-export const extractInfluencerIDs = result => {
-    console.log('in extract influencers: ')
-    console.log(result)
-    // let edges = []
-    // let has_next_page = false
-    // let end_cursor
-    const media_ids = []
-
-    // if (result.graphql) {
-    //     edges = [...result.graphql.hashtag.edge_hashtag_to_media.edges]
-    //     has_next_page = result.graphql.hashtag.edge_hashtag_to_media.page_info.has_next_page
-    //     if (has_next_page)
-    //         end_cursor = result.graphql.hashtag.edge_hashtag_to_media.page_info.end_cursor
-    // }
-    // else if (result.data) {
-    //     edges = [...result.data.hashtag.edge_hashtag_to_media]
-    //     has_next_page = result.data.hashtag.edge_hashtag_to_media.page_info.has_next_page
-    //     if (has_next_page)
-    //         end_cursor = result.data.hashtag.edge_hashtag_to_media.page_info.end_cursor
-    // }
-    // else if (result.status == 'fail') {
-    //     console.log("Failed fetch: " + result.message)
-    // } else {
-    //     console.log(result)
-    // }
-
-    // if (edges.length > 0) {
-    //     edges.forEach(edge => {
-    //         media_ids.push(edge.node.owner.id)
-    //     })
-    //     getUserByIDs(media_ids)
-    // }
-
-    // // if (has_next_page) {
-    // //     // get next page
-    // // }
-
-    return media_ids
-}
-
 // export const getNextPagePending = () => {
 //     return {
 //         type: GET_NEXT_PAGE_PENDING
@@ -192,100 +89,11 @@ export const extractInfluencerIDs = result => {
 //     }
 // }
 
-export const getUserByIDs = media_ids => {
-    getUserByIDPending()
-    media_ids.forEach(id => {
-        setInterval(() => fetch(INSTAGRAM_GET_USER_BY_ID(id))
-            .then(result => result.json())
-            .then(res => {
-                if (res.error) {
-                    getUserByIDError(res.error);
-                } else {
-                    getUserByIDSuccess(res)
-                }
-
-            })
-            .catch(error => {
-                getUserByIDError(error)
-            })
-            , 50000)
-    })
-    return media_ids
-}
-
-export const getUserByIDPending = () => {
+export const setFetchJobStatus = (fetch_job, status) => {
     return {
-        type: GET_USER_BY_ID_PENDING
-    }
-}
-
-export const getUserByIDSuccess = result => {
-    let user = { ...result.data.user.reel.user }
-    getUserByUsernamePending()
-    setInterval(() => fetch(INSTAGRAM_GET_USER_BY_USERNAME(user.username))
-        .then(result => result.json())
-        .then(res => {
-            if (res.error) {
-                getUserByUsernameError(res.error)
-            } else {
-                getUserByUsernameSuccess(res)
-            }
-
-        })
-        .catch(error => {
-            getUserByUsernameError(error)
-        })
-        , 50000)
-
-    return {
-        type: GET_USER_BY_ID_SUCCESS,
-        success: { type: 'success', message: 'successfully fetched users by ID' }
-    }
-}
-
-export const getUserByIDError = error => {
-    console.log(error)
-    return {
-        type: GET_USER_BY_ID_ERROR,
-        error: error,
-        hashtag: RUNNING_FETCH_JOB.hashtag
-    }
-}
-
-export const getUserByUsernamePending = () => {
-    return {
-        type: GET_USER_BY_USERNAME_PENDING
-    }
-}
-
-export const getUserByUsernameSuccess = result => {
-    const user = { ...result.graphql.user }
-    let user_obj = {
-        biography: user.biography,
-        followers: user.edge_followed_by.count,
-        following: user.edge_follow.count,
-        full_name: user.full_name,
-        id: user.id,
-        is_business_account: user.is_business_account,
-        is_private: user.is_private,
-        profile_pic_url: user.profile_pic_url,
-        username: user.username,
-        media_count: user.edge_owner_to_timeline_media.count
-    }
-
-    addInfluencer(user_obj, RUNNING_FETCH_JOB.hashtag)
-
-    return {
-        type: GET_USER_BY_USERNAME_SUCCESS,
-        payload: RUNNING_FETCH_JOB.hashtag
-    }
-}
-
-export const getUserByUsernameError = error => {
-    return {
-        type: GET_USER_BY_USERNAME_ERROR,
-        error: error,
-        hashtag: RUNNING_FETCH_JOB.hashtag
+        type: UPDATE_FETCH_JOB_STATUS,
+        fetch_job: fetch_job,
+        status: status
     }
 }
 

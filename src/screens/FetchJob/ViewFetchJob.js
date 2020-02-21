@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -13,8 +13,10 @@ import { InfluencerListFjView } from '../../components/list/InfluencerListFjView
 import { getAllInfluencers } from '../../actions/influencer';
 import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { TextButton } from '../../components/buttons/TextButton';
-import { updateFetchJob, clearCurrentFetchJob, getUserByUsernameSuccess, getMediaByHashtagPending, getMediaByHashtagError, fetchMedia, setRunningFetchJob, clearRunningFetchJob } from '../../actions/fetchJob';
+import { updateFetchJob, clearCurrentFetchJob, setRunningFetchJob, clearRunningFetchJob, setFetchJobStatus } from '../../actions/fetchJob';
+import { getMediaByHashtagPending, getMediaByHashtagError, fetchMedia, getMediaByHashtagSuccess } from '../../web/fetchMedia'
 import { PulseIndicator, DotIndicator } from 'react-native-indicators';
+import { getUserByIDError, getUserByIDSuccess, getUserByIDPending, getUserByID } from '../../web/fetchInfluencerById';
 
 
 class ViewFetchJob extends React.Component {
@@ -24,31 +26,36 @@ class ViewFetchJob extends React.Component {
     }
 
     componentDidMount() {
-        const { getAllInfluencers, current_fetch_job, getInfluencersPending } = this.props
-        getInfluencersPending()
+        const { getAllInfluencers, current_fetch_job } = this.props
         getAllInfluencers(current_fetch_job.hashtag)
     }
 
-    // componentDidUpdate(prevProps) {
-    //     const { fetch_jobs } = this.props
-    //     if (prevProps.fetch_jobs.running !== fetch_jobs.running) {
-    //         console.log('not the same')
-    //     }
-    // }
+    componentDidUpdate(prev) {
+        let prev_running = { ...prev.state.fetch_job.running_fetch_job }
+        const running = { ...this.props.state.fetch_job.running_fetch_job }
 
-    // componentWillUnmount() {
-    //     const { clearCurrentFetchJob } = this.props
-    //     clearCurrentFetchJob()
-    // }
+        if (prev_running.response !== running.response) {
+            if (running.response.type == 'error') {
+                Alert.alert("Search didn't give any result!")
+            }
+            // const infs = [...running.influencers.success]
+            // if (running.response.infs.length > 0) {
+            //     this.getInfluencersById(infs)
+            // }
+        }
+    }
 
-    // componentDidUpdate(prev) {
-    //     let { fetch_job, current_fetch_job } = this.props
-
-    //     if (prev.fetch_job.error !== fetch_job.error) {
-    //         current_fetch_job = { ...current_fetch_job, result: fetch_job.error }
-    //         updateFetchJob(current_fetch_job)
-    //     }
-    // }
+    getInfluencersById = media_ids => {
+        const { getUserByIDPending, getUserByIDSuccess, getUserByIDError } = this.props
+        let i = 0
+        let ref = setInterval(() => {
+            getUserByIDPending()
+            getUserByID(media_ids[i], getUserByIDSuccess, getUserByIDError);
+            ++i
+            // if (i == media_ids.length) clearInterval(ref);
+            if (i == 5) clearInterval(ref);
+        }, 10000);
+    }
 
     goToInfluencer = influ => {
         const { setCurrentInfluencer } = this.props
@@ -57,14 +64,15 @@ class ViewFetchJob extends React.Component {
     }
 
     startFetchJob = () => {
-        const { user, current_project, current_fetch_job, getMediaByHashtagPending, fetchMedia, running_fetch_job, setRunningFetchJob } = this.props
+        const { user, current_project, current_fetch_job, setRunningFetchJob, setFetchJobStatus, getMediaByHashtagPending, getMediaByHashtagSuccess, getMediaByHashtagError } = this.props
         this.setState({ isLoading: true })
-
-        getMediaByHashtagPending(current_fetch_job)
-        setRunningFetchJob(current_fetch_job)
-        fetchMedia(current_fetch_job, user.id, current_project.id)
-
+        let job = { ...current_fetch_job, status: 'in progress' }
+        setRunningFetchJob(job)
+        setFetchJobStatus(job)
         // updateFetchJob(user.id, current_project.id, current_fetch_job, 'in progress')
+        fetchMedia(current_fetch_job, user.id, current_project.id, getMediaByHashtagPending, getMediaByHashtagSuccess, getMediaByHashtagError)
+
+
         // console.log(media)
         // fetchMedia(current_fetch_job.hashtag)
         // console.log(result)
@@ -75,9 +83,9 @@ class ViewFetchJob extends React.Component {
 
     render() {
         const { current_fetch_job, influencers } = this.props
-
-        console.log(current_fetch_job)
-
+        // console.log(current_fetch_job.response)
+        // const isErrorFetch = this.props.state.fetch_job.current_fetch_job.response.type == 'error' || false
+        // console.log(this.props.state.fetch_job.running_fetch_job)
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -128,7 +136,9 @@ class ViewFetchJob extends React.Component {
                                 <View style={styles.statusView}>
                                     {current_fetch_job.status == 'in progress' &&
                                         <DotIndicator size={5} animationDuration={2000} count={10} color="#493649" />}
-                                    {current_fetch_job.status == 'in completed' && this.props.state.fetch_job.error
+                                    {current_fetch_job.status == 'completed' &&
+                                        current_fetch_job.response.type == 'error' &&
+                                        <Text style={styles.lbl}>No result</Text>
                                     }
                                 </View>
                                 <Text style={styles.statusData}>{current_fetch_job.status}</Text>
@@ -136,6 +146,7 @@ class ViewFetchJob extends React.Component {
                         </View>
                         {current_fetch_job.status == 'pending' && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                         {current_fetch_job.status == 'completed' &&
+                            current_fetch_job.response.type != 'error' &&
                             <View style={styles.bottomView}>
                                 {this.props.state.fetch_job.error && <View style={styles.none}><Text style={styles.noneTxt}>{this.props.state.fetch_job.error.message}</Text></View>}
                                 {!this.props.state.fetch_job.error && this.props.state.influencer.error && <View style={styles.none}><Text style={styles.noneTxt}>No influencers</Text></View>}
@@ -287,6 +298,8 @@ const mapStateToProps = state => ({
     running_fetch_job: getRunningFetchJob(state),
     pending_fj: state.fetch_job.pending,
     error_fj: state.fetch_job.error,
+    success: state.fetch_job.running_fetch_job.success,
+    fail: state.fetch_job.running_fetch_job.fail
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -295,12 +308,16 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     clearCurrentFetchJob: clearCurrentFetchJob,
     getInfluencersPending: getInfluencersPending,
     updateFetchJob: updateFetchJob,
-    getUserByUsernameSuccess: getUserByUsernameSuccess,
+    // fetchMedia: fetchMedia,
+    setRunningFetchJob: setRunningFetchJob,
+    clearRunningFetchJob: clearRunningFetchJob,
+    setFetchJobStatus: setFetchJobStatus,
     getMediaByHashtagPending: getMediaByHashtagPending,
     getMediaByHashtagError: getMediaByHashtagError,
-    fetchMedia: fetchMedia,
-    setRunningFetchJob: setRunningFetchJob,
-    clearRunningFetchJob: clearRunningFetchJob
+    getMediaByHashtagSuccess: getMediaByHashtagSuccess,
+    getUserByIDPending: getUserByIDPending,
+    getUserByIDSuccess: getUserByIDSuccess,
+    getUserByIDError: getUserByIDError
 }, dispatch);
 
 

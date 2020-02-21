@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { FetchJobList } from '../../components/list/FetchJobList'
 import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs } from '../../actions/fetchJob'
 import { connect } from 'react-redux';
@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { getPending, getError, getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
+import { getUserByIDPending, getUserByIDSuccess, getUserByIDError, getUserByID } from '../../web/fetchInfluencerById';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -45,11 +46,18 @@ class AllFetchJobs extends React.Component {
         this.setState({ isLoading: false })
     }
 
-    // componentDidUpdate(prev) {
-    //     const { fetch_jobs } = this.props
-    //     if (prev.fetch_jobs != fetch_jobs) {
-    //     }
-    // }
+    componentDidUpdate(prev) {
+        const { running_fetch_job, getUserByID } = this.props
+
+        if (prev.running_fetch_job != running_fetch_job) {
+            console.log('not the same!')
+            if (running_fetch_job.error) {
+                Alert.alert("Fetch job failed: " + { ...running_fetch_job.error.message })
+            } else if (!running_fetch_job.error && running_fetch_job.ids) {
+                console.log("got ids!!")
+            }
+        }
+    }
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
@@ -182,7 +190,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentFetchJob: setCurrentFetchJob,
     removeFetchJob: removeFetchJob,
-    getProjectFetchJobs: getProjectFetchJobs
+    getProjectFetchJobs: getProjectFetchJobs,
+    getUserByIDPending: getUserByIDPending,
+    getUserByIDSuccess: getUserByIDSuccess,
+    getUserByIDError: getUserByIDError,
+    getUserByID: getUserByID
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)
