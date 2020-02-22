@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text, YellowBox, StyleSheet } from 'react-native';
-import { updateProject, getUserProjects } from '../../actions/project'
+import { updateProject } from '../../actions/project'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -18,6 +18,10 @@ import { bindActionCreators } from 'redux';
 let usersRef = db.ref('/Users');
 
 class EditProject extends React.Component {
+
+    static navigationOptions = {
+        headerShown: false
+    }
 
     state = {
         project: {}
@@ -40,9 +44,8 @@ class EditProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user, navigation } = this.props
+        const { user, navigation, updateProject } = this.props
         let project = this.state.project
-
         updateProject(user.id, project.id, project)
         navigation.goBack()
 
@@ -57,6 +60,12 @@ class EditProject extends React.Component {
                         <View style={styles.saveBtn}>
                             <TextButton onPress={this.handleSubmit} title="Save" />
                         </View>}
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
                 />
                 <ProjectForm onChange={this.handleChange} project={current_project} />
             </View>
@@ -85,12 +94,8 @@ const mapStateToProps = state => ({
     current_project: state.project.current_project
 });
 
-const ActionCreators = Object.assign(
-    {},
-    projectActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    updateProject: updateProject
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProject)

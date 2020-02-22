@@ -12,18 +12,18 @@ const MainApp = createAppContainer(BottomNavigator);
 class Router extends Component {
 
     render() {
-        let { user } = this.props
-        // console.log(user.username && "current user: " + user.username || "no user logged in")
+        let { user, error, pending } = this.props
         return (
-            // <LogIn />
-            !user.username ? <LogIn /> : <MainApp />
+            pending || error ? <LogIn /> : <MainApp />
         );
     }
 };
 
 const mapStateToProps = state => ({
     state: state,
-    user: state.user
+    user: state.user,
+    error: state.user.error,
+    pending: state.user.pending
 });
 
 const ActionCreators = Object.assign(

@@ -88,7 +88,7 @@ export default class ProjectForm extends React.Component {
     }
 
     onChange(value) {
-        let updated_project = { ...this.state.value, ...value }
+        let updated_project = { ...value }
         this.setState({ value: updated_project });
         this.props.onChange(updated_project)
     }

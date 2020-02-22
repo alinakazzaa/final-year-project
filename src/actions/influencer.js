@@ -1,18 +1,40 @@
 import { db } from '../database/config/db';
 import { DATE_TODAY } from '../constants/TodayDate'
-import { GET_ALL_INFLUENCERS } from '../constants';
+import { SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_ERROR, SET_CURRENT_INFLUENCER } from '../constants';
 
 export const getAllInfluencers = hashtag => {
+    getInfluencersPending()
     const influencers = []
     db.ref(`Influencers/hashtags/${hashtag}`).on('value', (influ_snapshot) => {
         influ_snapshot.forEach(influ_snap => {
             influencers.push(influ_snap.val())
         })
     });
+    if (influencers.length > 0) {
+        return {
+            type: SET_INFLUENCERS_SUCCESS,
+            payload: influencers
+        }
+    } else {
+        let error = { type: 'no influencers' }
+        return {
+            type: SET_INFLUENCERS_ERROR,
+            error: error
+        }
+    }
+}
+
+export const getInfluencersPending = () => {
 
     return {
-        type: GET_ALL_INFLUENCERS,
-        payload: influencers
+        type: SET_INFLUENCERS_PENDING,
+    }
+}
+
+export const setCurrentInfluencer = influencer => {
+    return {
+        type: SET_CURRENT_INFLUENCER,
+        payload: influencer
     }
 }
 
@@ -25,10 +47,11 @@ export const addInfluencer = (influencer, hashtag) => {
 }
 
 export const updateInfluencer = (hashtag, influencer) => {
-    console.log(influencer)
-    // db.ref(`/Influencers/hashtags/${hashtag}/${influencer.id}`).update({
-    //     ...influencer
-    // });
+    db.ref(`/Influencers/hashtags/${hashtag}/${influencer.id}`).update({
+        ...influencer
+    });
+}
 
-
+export const removeInfluencer = (hashtag, influencer_id) => {
+    db.ref(`/Influencers/hashtags/${hashtag}`).child(influencer_id).remove()
 }

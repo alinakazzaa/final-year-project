@@ -1,27 +1,35 @@
-import { DB_USER_REF, USER_LOGIN, USER_LOGOUT } from '../constants';
+import { DB_USER_REF, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_LOGIN_ERROR } from '../constants';
 import { db } from '../database/config/db'
+import { DATE_TODAY } from '../constants/TodayDate'
 
-export const setLoggedInUser = user => {
+export const setLoggedInUserSuccess = user => {
     return {
-        type: USER_LOGIN,
+        type: USER_LOGIN_SUCCESS,
         payload: user
     }
 }
 
-export const addUser = user => {
+export const setLoggedInUserError = error => {
+    return {
+        type: USER_LOGIN_ERROR,
+        error: error
+    }
+}
 
+export const addUser = user => {
     const user_add = DB_USER_REF.push({
         details: {
             id: '',
             username: user.username,
             password: user.password,
-            date_created: user.date_created,
+            date_created: DATE_TODAY,
             profileURL: `https://www.instagram.com/${user.username}/`,
             avatar: '',
         }
     })
     const key = user_add.key
-    DB_USER_REF.child(key).update({
+
+    db.ref(`/Users/${key}/details`).update({
         id: key
     })
 }
@@ -44,7 +52,7 @@ export const getUserByUsername = username => {
     DB_USER_REF.on('value', (user_snapshot) => {
         user_snapshot.forEach(user_snap => {
             if (user_snap.val().details.username == username) {
-                user_obj = { id: user_snap.key, ...user_snap.val().details }
+                user_obj = { ...user_snap.val().details }
             }
         })
     })

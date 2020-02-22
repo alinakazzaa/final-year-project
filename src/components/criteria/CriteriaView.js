@@ -56,10 +56,10 @@ const styles = StyleSheet.create(
     });
 
 CriteriaView.propTypes = {
-    activeCriteria: PropTypes.array
+    activeCriteria: PropTypes.string
 }
 
 CriteriaView.defaultProps = {
-    activeCriteria: []
+    activeCriteria: ''
 }
 

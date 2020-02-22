@@ -18,17 +18,21 @@ import { addFetchJob } from '../../actions/fetchJob';
 
 class AddFetchJob extends React.Component {
 
+    static navigationOptions = {
+        headerShown: false
+    }
+    s
     state = {
         fetch_job: {}
     }
 
     handleSubmit = () => {
+        const { user, current_project, addFetchJob } = this.props
         let { fetch_job } = this.state
-        const { user, current_project } = this.props
 
         fetch_job.value.date_created = DATE_TODAY
         fetch_job.value.title = 'Fetch: ' + fetch_job.value.hashtag && fetch_job.value.location ?
-            `hashtag: ${fetch_job.value.value.hashtag} & location: ${fetch_job.value.value.location} ` :
+            `hashtag: ${fetch_job.value.hashtag} & location: ${fetch_job.value.location} ` :
             fetch_job.value.location ? 'location:' + fetch_job.value.location : 'hashtag:' + fetch_job.value.hashtag
 
         // filter active criteria
@@ -39,9 +43,7 @@ class AddFetchJob extends React.Component {
             if (element[1] == true)
                 active_criteria.push(element[0])
         })
-        fetch_job.criteria = active_criteria
-
-
+        fetch_job.criteria = [...active_criteria]
         addFetchJob(user.id, current_project.id, { ...this.state.fetch_job })
         this.props.navigation.goBack()
     }
@@ -106,12 +108,8 @@ const mapStateToProps = state => ({
     current_project: state.project.current_project
 });
 
-const ActionCreators = Object.assign(
-    {},
-    projectActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    addFetchJob: addFetchJob
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)

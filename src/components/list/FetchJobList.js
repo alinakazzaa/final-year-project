@@ -3,9 +3,9 @@ import { Icon, Avatar } from 'react-native-elements'
 import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
-import { TextButton } from '../buttons/TextButton'
+import { PulseIndicator } from 'react-native-indicators';
 
-export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJob }) => {
+export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, deleteFetchJob }) => {
 
     const FJList = (fj, index) => {
         return (
@@ -16,12 +16,15 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJ
                         <Text style={styles.location}>{`LOCATION    ${fj.location}`}</Text>
 
                     </View>
-                    <View style={styles.middle}>
+                    <View>
                         <Text style={styles.date}>{fj.date_created}</Text>
                     </View>
-                    <View style={styles.right}>
-                        <IconButton type="foundation" name="download" size={30} onPress={() => startFetchJob(fj)} color="#493649" />
-                        {/* <TextButton style={styles.startBtn} onPress={} title="Start" /> */}
+                    {fj.status != 'in progress' && <View>
+                        <IconButton name="delete" type="MaterialIcons" size={23} color="#0B0033" onPress={() => deleteFetchJob(fj)} />
+                    </View>}
+                    <View>
+                        {fj.status == 'in progress' &&
+                            <PulseIndicator size={20} color="green" />}
                     </View>
                 </View>
             </TouchableOpacity>
@@ -49,7 +52,6 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, startFetchJ
                     size={40}
                     onPress={() => addFetchJob()}
                     style={styles.addIcon}
-                // reverse
                 />
             </ScrollView>
         </View>
@@ -79,7 +81,8 @@ const styles = StyleSheet.create(
             padding: 15,
             marginRight: '5%',
             fontFamily: 'ArialRoundedMTBold',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            alignItems: 'center'
         },
         headerTitle: {
             color: '#0B0033',
@@ -131,21 +134,13 @@ const styles = StyleSheet.create(
             display: 'flex',
             flexDirection: 'column',
         },
-        middle: {
-            display: 'flex',
-        },
-        right: {
-            display: 'flex',
-        }
     });
 
 FetchJobList.propTypes = {
     fetchJobs: PropTypes.array.isRequired,
     goToFetchJob: PropTypes.func,
-    startFetchJob: PropTypes.func,
 }
 
 FetchJobList.defaultProps = {
     goToFetchJob: null,
-    startFetchJob: null
 }

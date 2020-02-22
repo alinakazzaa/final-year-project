@@ -1,16 +1,51 @@
 import React from 'react';
-import { AppRegistry } from 'react-native'
+import { AppRegistry, ActivityIndicator } from 'react-native'
 import { StyleSheet, Text, YellowBox, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import * as projectActions from '../../actions/project';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { getProjectFetchJobs, setCurrentFetchJob, setProjectFetchJobsPending } from '../../actions/fetchJob';
+import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView';
+import { clearCurrentProject, setCurrentProject } from '../../actions/project'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class ViewProjectScreen extends React.Component {
+    state = {
+        isLoading: true
+    }
+
+    componentDidMount() {
+        const { user, current_project, getProjectFetchJobs, setProjectFetchJobsPending } = this.props
+        const { project } = this.props.navigation.state.params.proj
+        // setCurrentProject(project)
+        setProjectFetchJobsPending()
+        getProjectFetchJobs(user.id, current_project.id)
+        this.setState({ isLoading: false })
+    }
+
+    // componentWillUnmount() {
+    //     const { clearCurrentProject } = this.props
+    //     clearCurrentProject()
+    // }
+
+    // componentDidUpdate(prev) {
+    //     const { fetch_jobs } = this.props
+    //     // console.log(prev.fetch_jobs == fetch_jobs)
+    // }
+
+    goToFetchJob = fj => {
+        const { setCurrentFetchJob } = this.props
+        setCurrentFetchJob(fj)
+        this.props.navigation.navigate('ViewFetchJob')
+    }
+
+    static navigationOptions = {
+        headerShown: false
+    }
 
     collabList = (collab, index) => {
 
@@ -26,17 +61,9 @@ class ViewProjectScreen extends React.Component {
 
     }
 
-    FJList = (fj, index) => {
-        return <TouchableOpacity style={styles.fetchJob} key={index} onPress={() => this.props.navigation.navigate('ViewFetchJob', { fj })}>
-            <Text style={styles.fjData}>{fj.title}</Text>
-            <Text style={styles.fjData}>{fj.date_created}</Text>
-            <Text style={styles.fjData}>{fj.hashtag}</Text>
-        </TouchableOpacity>
-    }
-
     render() {
-        const { current_project } = this.props;
-        let active;
+        const { current_project, fetch_jobs, } = this.props;
+
         return (
             <View style={styles.main}>
                 <AppHeader
@@ -44,7 +71,14 @@ class ViewProjectScreen extends React.Component {
                         name='edit'
                         size={27}
                         onPress={() => this.props.navigation.navigate('EditProject')}
-                    />} />
+                    />}
+                    left={
+                        <IconButton color="#493649"
+                            name='angle-left'
+                            size={40}
+                            onPress={() => this.props.navigation.goBack()}
+                        />}
+                />
 
                 <View style={styles.infoContainer}>
                     <View>
@@ -74,24 +108,33 @@ class ViewProjectScreen extends React.Component {
                                     <Text style={styles.title}>View All</Text>
                                 </TouchableOpacity>
                             </View>
-                            <ScrollView horizontal>
-                                {current_project.collabs ? current_project.collabs.map((collab, index) => {
-                                    return this.collabList(collab, index)
-                                }) : <Text>No collaborations yet</Text>}
-                            </ScrollView>
+                            {/* <ScrollView horizontal> */}
+                            {/* {current_project.collabs ? current_project.collabs.map((collab, index) => { */}
+                            {/* return this.collabList(collab, index) */}
+                            {/* }) :  */}
+                            <Text style={styles.noneMsg}>No collaborations yet</Text>
+                            {/* } */}
+                            {/* </ScrollView> */}
                         </View>
                         <View>
                             <View style={styles.listHead}>
-                                <Text style={styles.title}>Fetch Jobs</Text>
+                                <Text style={styles.title}>Searches</Text>
                                 <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllFetchJobs')}>
-                                    <Text style={styles.title}>View All</Text>
+                                    <Text style={styles.title}>See All</Text>
                                 </TouchableOpacity>
                             </View>
-                            <ScrollView>
-                                {current_project.fetchJobs ? current_project.fetchJobs.map((fj, index) => {
-                                    return this.FJList(fj, index)
-                                }) : <Text>No fetch jobs yet</Text>}
-                            </ScrollView>
+                            {this.props.state.fetch_job.pending && <View style={styles.loading}>
+                                <ActivityIndicator size="large" color="#5d4d50" />
+                                <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
+                            </View>}
+                            {this.props.state.fetch_job.error && <View style={styles.none}><Text style={styles.noneTxt}>Error getting searches</Text></View>}
+                            {!this.props.state.fetch_job.error && !this.props.state.fetch_job.pending && <ScrollView
+                                contentContainerStyle={styles.scrollContainer}>
+                                {fetch_jobs ? <View>
+                                    <FetchJobListProjectView fetch_jobs={fetch_jobs} goToFetchJob={this.goToFetchJob} />
+                                </View>
+                                    : <Text>No searches</Text>}
+                            </ScrollView>}
                         </View>
                     </View>
                 </View>
@@ -108,6 +151,10 @@ const styles = StyleSheet.create(
             flex: 1
 
         },
+        scrollContainer: {
+            padding: 5,
+            paddingLeft: 0,
+        },
         top: {
             display: 'flex',
             flexDirection: 'row',
@@ -119,13 +166,26 @@ const styles = StyleSheet.create(
         },
         listHead: {
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            marginTop: '5%'
+        },
+        loading: {
+            display: 'flex',
+            height: '60%',
+            justifyContent: 'center',
+            alignItems: 'center'
         },
         infoContainer: {
             margin: '5%',
         },
         details: {
 
+        },
+        loadingTxt: {
+            fontFamily: 'Arial',
+            fontSize: 15,
+            color: '#5d4d50',
+            padding: '4%'
         },
         collab: {
             display: 'flex',
@@ -185,6 +245,11 @@ const styles = StyleSheet.create(
             fontSize: 18,
             color: '#826478',
         },
+        noneMsg: {
+            marginLeft: '4%',
+            fontSize: 16,
+            color: '#826478',
+        },
         influName: {
             color: '#846284',
             textTransform: 'uppercase',
@@ -199,21 +264,34 @@ const styles = StyleSheet.create(
         viewAllBtn: {
             alignSelf: 'center',
             flexWrap: 'wrap'
+        },
+        none: {
+            height: '30%',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        noneTxt: {
+            fontSize: 19,
+            color: '#5d4d50',
         }
     });
 
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
-    current_project: state.project.current_project
+    current_project: state.project.current_project,
+    fetch_jobs: state.fetch_job.fetch_jobs,
+    pending: state.fetch_job.pending,
+    error: state.fetch_job.error,
+    influencers: state.influencer.influencers,
 });
 
-const ActionCreators = Object.assign(
-    {},
-    projectActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    setCurrentFetchJob: setCurrentFetchJob,
+    getProjectFetchJobs: getProjectFetchJobs,
+    setProjectFetchJobsPending: setProjectFetchJobsPending,
+    clearCurrentProject: clearCurrentProject,
+    setCurrentProject: setCurrentProject
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewProjectScreen)

@@ -5,7 +5,6 @@ import ProjectForm from '../../components/forms/ProjectForm';
 import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
 import { addProject } from '../../actions/project'
-import { DATE_TODAY } from '../../constants/TodayDate'
 import * as userActions from '../../actions/user';
 import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';
@@ -16,6 +15,10 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 class AddProject extends React.Component {
 
+    static navigationOptions = {
+        headerShown: false
+    }
+
     state = {
         project: {}
     }
@@ -25,9 +28,8 @@ class AddProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user } = this.props
+        const { user, addProject } = this.props
         const { project } = this.state
-        project.date_created = DATE_TODAY
         addProject(user.id, project);
         this.props.navigation.navigate("AllProjects")
     }
@@ -75,8 +77,9 @@ const ActionCreators = Object.assign(
     userActions,
     projectActions
 );
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    addProject: addProject
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddProject)

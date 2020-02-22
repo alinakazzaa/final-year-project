@@ -12,9 +12,12 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 class HomeScreen extends React.Component {
 
+    static navigationOptions = {
+        headerShown: false
+    }
+
     render() {
-        const { user, actions } = this.props
-        const current_user = { ...user }
+        const { user, actions, project } = this.props
         return (
             <View style={styles.main}>
                 <AppHeader
@@ -27,7 +30,7 @@ class HomeScreen extends React.Component {
                 <View style={styles.logInMsg}><Text style={styles.largeTitle}>Welcome!</Text></View>
                 <View style={styles.logInMsg}>
                     <Text style={styles.largeTitle}>Recent posts by influencers....</Text>
-                    <Text style={styles.largeTitle}>{`Current user ${current_user.username}`}</Text>
+                    <Text style={styles.largeTitle}>{`Current user ${user.username}`}</Text>
                 </View>
                 <View style={styles.logInMsg}>
                     <Text style={styles.largeTitle}>Maybe recently openet projects....</Text>
@@ -67,6 +70,7 @@ const styles = StyleSheet.create(
 
 const mapStateToProps = state => ({
     user: state.user,
+    project: state.project
 });
 
 const ActionCreators = Object.assign(
