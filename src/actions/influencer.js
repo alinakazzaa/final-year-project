@@ -3,6 +3,7 @@ import { DATE_TODAY } from '../constants/TodayDate'
 import { SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_ERROR, SET_CURRENT_INFLUENCER } from '../constants';
 
 export const getAllInfluencers = hashtag => {
+    getInfluencersPending()
     const influencers = []
     db.ref(`Influencers/hashtags/${hashtag}`).on('value', (influ_snapshot) => {
         influ_snapshot.forEach(influ_snap => {
