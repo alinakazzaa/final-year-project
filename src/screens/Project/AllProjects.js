@@ -73,7 +73,6 @@ class AllProjects extends React.Component {
     render() {
         const { projects } = this.props;
         const { index, selectedTabStyle, selectedTabItemStyle } = this.state
-        // console.log(projects)
         return (
             <View style={styles.main} >
                 <AppHeader

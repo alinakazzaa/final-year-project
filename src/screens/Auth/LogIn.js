@@ -10,6 +10,16 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 class LogInScreen extends React.Component {
 
+    componentDidMount() {
+        const { setLoggedInUserSuccess } = this.props;
+        const user_obj = getUserByUsername("A")
+        if (user_obj.username) {
+            setLoggedInUserSuccess(user_obj)
+        }
+
+    }
+
+
     goToRegister = () => {
         this.props.navigation.navigate("Registration")
     }
@@ -18,18 +28,22 @@ class LogInScreen extends React.Component {
         let error
         const { setLoggedInUserSuccess, setLoggedInUserError } = this.props;
         const user_obj = getUserByUsername(user.username)
-        console.log(user_obj)
-        if (user.username == user_obj.username) {
-            if (user.password == user_obj.password) {
-                setLoggedInUserSuccess(user_obj)
+
+        if (user_obj) {
+            if (user.username == user_obj.username) {
+                if (user.password == user_obj.password) {
+                    setLoggedInUserSuccess(user_obj)
+                } else {
+                    error = { type: 'incorrect password' }
+                    setLoggedInUserError(error)
+                }
             } else {
-                error = { type: 'incorrect password' }
+                error = { type: 'no user' }
                 setLoggedInUserError(error)
             }
-        } else {
-            error = { type: 'no user' }
-            setLoggedInUserError(error)
         }
+
+
 
     }
 
@@ -48,7 +62,8 @@ const styles = StyleSheet.create(
         container: {
             flex: 1,
             justifyContent: 'center',
-            alignContent: 'center',
+            // alignContent: 'center',
+            alignItems: 'center'
         },
     });
 

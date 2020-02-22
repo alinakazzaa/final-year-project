@@ -15,7 +15,6 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
     }
 
     const influList = (influ, index) => {
-        console.log(influ)
         return (
             <View style={styles.listItem} key={index}>
                 <View style={styles.itemHeader}>
