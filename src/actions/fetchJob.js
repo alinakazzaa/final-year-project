@@ -89,14 +89,6 @@ export const clearCurrentFetchJob = () => {
 //     }
 // }
 
-export const setFetchJobStatus = (fetch_job, status) => {
-    return {
-        type: UPDATE_FETCH_JOB_STATUS,
-        fetch_job: fetch_job,
-        status: status
-    }
-}
-
 //DB
 export const addFetchJob = (user_id, project_id, fetch_job) => {
     let fj_obj = {
