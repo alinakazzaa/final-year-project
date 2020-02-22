@@ -19,9 +19,9 @@ export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, deleteFetch
                     <View>
                         <Text style={styles.date}>{fj.date_created}</Text>
                     </View>
-                    <View>
+                    {fj.status != 'in progress' && <View>
                         <IconButton name="delete" type="MaterialIcons" size={23} color="#0B0033" onPress={() => deleteFetchJob(fj)} />
-                    </View>
+                    </View>}
                     <View>
                         {fj.status == 'in progress' &&
                             <PulseIndicator size={20} color="green" />}

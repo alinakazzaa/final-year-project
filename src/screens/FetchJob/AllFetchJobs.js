@@ -46,18 +46,18 @@ class AllFetchJobs extends React.Component {
         this.setState({ isLoading: false })
     }
 
-    componentDidUpdate(prev) {
-        const { running_fetch_job, getUserByID } = this.props
+    // componentDidUpdate(prev) {
+    //     const { running_fetch_job, getUserByID } = this.props
 
-        if (prev.running_fetch_job != running_fetch_job) {
-            console.log('not the same!')
-            if (running_fetch_job.error) {
-                Alert.alert("Fetch job failed: " + { ...running_fetch_job.error.message })
-            } else if (!running_fetch_job.error && running_fetch_job.ids) {
-                console.log("got ids!!")
-            }
-        }
-    }
+    //     if (prev.running_fetch_job != running_fetch_job) {
+    //         console.log('not the same!')
+    //         if (running_fetch_job.error) {
+    //             Alert.alert("Fetch job failed: " + { ...running_fetch_job.error.message })
+    //         } else if (!running_fetch_job.error && running_fetch_job.ids) {
+    //             console.log("got ids!!")
+    //         }
+    //     }
+    // }
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
@@ -97,36 +97,23 @@ class AllFetchJobs extends React.Component {
                     </View>}
                 {!isLoading && index == 0 &&
                     <View>
-                        {isLoading ?
-                            <View>
-                                <ActivityIndicator size="large" color="#5d4d50" />
-                                <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
-                            </View> :
-                            <FetchJobList
-                                fetchJobs={completed}
-                                goToFetchJob={this.goToFetchJob}
-                                addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
-                                deleteFetchJob={this.deleteFetchJob}
-                            />
-                        }
+                        <FetchJobList
+                            fetchJobs={completed}
+                            goToFetchJob={this.goToFetchJob}
+                            addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
+                            deleteFetchJob={this.deleteFetchJob}
+                        />
                     </View>}
                 {!isLoading && index == 1 &&
                     <View>
-                        {isLoading ?
-                            <View>
-                                <ActivityIndicator size="large" color="#5d4d50" />
-                                <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
-                            </View> :
-                            <FetchJobList
-                                fetchJobs={in_progress}
-                                goToFetchJob={this.goToFetchJob}
-                                addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
-                                deleteFetchJob={this.deleteFetchJob}
-                            />
-                        }
+                        <FetchJobList
+                            fetchJobs={in_progress}
+                            goToFetchJob={this.goToFetchJob}
+                            addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
+                            deleteFetchJob={this.deleteFetchJob}
+                        />
                     </View>}
                 {!isLoading && index == 2 && <View>
-
                     <FetchJobList
                         fetchJobs={pending_}
                         goToFetchJob={this.goToFetchJob}
@@ -179,9 +166,9 @@ const mapStateToProps = state => ({
     user: state.user,
     current_project: state.project.current_project,
     fetch_jobs: state.fetch_job.fetch_jobs,
-    pending_: state.fetch_job.fetch_jobs.filter(fj => fj.status == "pending"),
-    in_progress: state.fetch_job.fetch_jobs.filter(fj => fj.status == "in progress"),
-    completed: state.fetch_job.fetch_jobs.filter(fj => fj.status == "completed"),
+    pending_: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.status == "pending") : [],
+    in_progress: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.status == "in progress") : [],
+    completed: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.status == "completed") : [],
     pending: getPending(state),
     error: getError(state),
     running_fetch_job: getRunningFetchJob(state),
