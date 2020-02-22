@@ -100,7 +100,7 @@ export default class LogInForm extends React.Component {
                 />
                 {error && <Text>{error.type}</Text>}
                 <TextButton title="Log In" onPress={() => logIn(value)} style={styles.logInBtn} />
-                <TextButton title="Registration" onPress={goToRegister} />
+                <TextButton title="Registration" style={styles.logInBtn} onPress={goToRegister} />
             </View>
         )
     }
@@ -111,9 +111,11 @@ const styles = StyleSheet.create(
         container: {
             display: 'flex',
             backgroundColor: '#ffffff',
+            padding: 50
         },
         textInput: {
             borderWidth: 1,
+            padding: 10
         },
         logInBtn: {
             padding: 6,
@@ -124,6 +126,7 @@ const styles = StyleSheet.create(
             borderWidth: 1.5,
             borderColor: '#493649',
             borderRadius: 5,
+            margin: 10
         }
     });
 
