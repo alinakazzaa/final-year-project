@@ -37,6 +37,11 @@ class AllInfluencers extends React.Component {
         }
     }
 
+    componentDidMount() {
+        const { user, current_project, getAllInfluencers, current_fetch_job } = this.props
+        getAllInfluencers(user.id, current_project.id, current_fetch_job)
+    }
+
     goToInfluencer = influ => {
         const { setCurrentInfluencer } = this.props
         setCurrentInfluencer(influ)
@@ -127,6 +132,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentInfluencer,
+    getAllInfluencers: getAllInfluencers
 }, dispatch);
 
 
