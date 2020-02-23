@@ -15,6 +15,7 @@ export const getProjectFetchJobs = (user_id, project_id) => {
                 location: fj_snap.val().location,
                 criteria: fj_snap.val().criteria,
                 id: fj_snap.val().id,
+                response: fj_snap.val().response || {}
             }
             fetch_jobs.push(fj)
 
@@ -98,7 +99,7 @@ export const addFetchJob = (user_id, project_id, fetch_job) => {
         location: fetch_job.value.location || '',
         criteria: String(fetch_job.criteria),
         status: 'pending',
-        result: {}
+        response: {},
     }
 
     const fj_add = db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({

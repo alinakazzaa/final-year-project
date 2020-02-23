@@ -17,7 +17,16 @@ import {
     SET_RUNNING_FETCH_JOB,
     CLEAR_RUNNING_FETCH_JOB,
     UPDATE_FETCH_JOB_STATUS,
-    GET_USER_BY_ID_SUCCESS
+    GET_USER_BY_ID_SUCCESS,
+    MEDIA_FETCH,
+    IN_PROGRESS,
+    COMPLETED,
+    USER_BY_ID_FETCH,
+    USER_BY_USERNAME_FETCH,
+    COMPLETED_GET_ALL_USERS_BY_ID_SUCCESS,
+    COMPLETED_GET_ALL_USERS_BY_ID_ERROR,
+    COMPLETED_GET_USERS_BY_USERNAME_SUCCESS,
+    COMPLETED_GET_USERS_BY_USERNAME_ERROR
 } from '../constants';
 import { updateFetchJob } from '../actions/fetchJob';
 
@@ -32,7 +41,7 @@ const initialState = {
             fail: []
         },
         progress: { total: 0, done: 0 },
-        stage: 'media_fetch'
+        stage: null
     },
     pending: null,
     error: null
@@ -103,7 +112,7 @@ const fetchJobReducer = (state = initialState, action) => {
         case SET_RUNNING_FETCH_JOB:
             fetch_jobs = [...state.fetch_jobs]
             index = fetch_jobs.map(fj => { return fj.id }).indexOf(action.fetch_job.id);
-            running = { ...state.running_fetch_job, ...action.fetch_job, status: 'in progress' }
+            running = { ...initialState.running_fetch_job, ...action.fetch_job, status: IN_PROGRESS }
             fetch_jobs.splice(index, 1, running)
 
             return {
@@ -122,13 +131,14 @@ const fetchJobReducer = (state = initialState, action) => {
         case GET_MEDIA_BY_HASHTAG_PENDING:
             fetch_jobs = [...state.fetch_jobs]
             index = fetch_jobs.map(fj => { return fj.id }).indexOf(action.fetch_job.id);
-            running = { ...state.running_fetch_job, pending: true }
+            running = { ...state.running_fetch_job, pending: true, stage: MEDIA_FETCH }
             fetch_jobs.splice(index, 1, running)
 
             return {
                 ...state,
                 running_fetch_job: running,
-                fetch_jobs: fetch_jobs
+                fetch_jobs: fetch_jobs,
+                response: { ...initialState.running_fetch_job.response }
             }
 
         case GET_MEDIA_BY_HASHTAG_SUCCESS:
@@ -136,11 +146,13 @@ const fetchJobReducer = (state = initialState, action) => {
             index = fetch_jobs.map(fj => { return fj.id }).indexOf(action.fetch_job.id);
             running = {
                 ...state.running_fetch_job,
-                response: action.response,
+                response: { type: action.type, message: action.response },
                 influencers: {
                     ...state.running_fetch_job.influencers,
                     success: action.ids
-                }
+                },
+                pending: false,
+                progress: { ...state.running_fetch_job.progress, total: action.total }
             }
 
             fetch_jobs.splice(index, 1, running)
@@ -153,10 +165,9 @@ const fetchJobReducer = (state = initialState, action) => {
 
 
         case GET_MEDIA_BY_HASHTAG_ERROR:
-
             fetch_jobs = [...state.fetch_jobs]
             index = fetch_jobs.map(fj => { return fj.id }).indexOf(action.fetch_job.id);
-            running = { ...state.running_fetch_job, response: action.error, status: 'completed', pending: false }
+            running = { ...state.running_fetch_job, response: { type: action.type, message: action.error }, status: COMPLETED, pending: false }
             fetch_jobs.splice(index, 1, running)
 
             updateFetchJob(action.user_id, action.project_id, running)
@@ -168,14 +179,14 @@ const fetchJobReducer = (state = initialState, action) => {
             }
 
         case GET_USER_BY_ID_PENDING:
-
             fetch_jobs = [...state.fetch_jobs]
             index = fetch_jobs.map(fj => { return fj.id }).indexOf(action.fetch_job.id);
             running = {
                 ...state.running_fetch_job,
-                pending: true, stage: 'user_by_id_fetch',
+                pending: true,
+                // TESTING 
                 response: { ...initialState.running_fetch_job.response },
-                progress: { ...state.running_fetch_job.progress, total: action.total }
+                stage: USER_BY_ID_FETCH,
             }
 
             fetch_jobs.splice(index, 1, running)
@@ -188,21 +199,29 @@ const fetchJobReducer = (state = initialState, action) => {
 
         case GET_USER_BY_ID_SUCCESS:
             fetch_jobs = [...state.fetch_jobs]
+            index = fetch_jobs.map(fj => { return fj.id }).indexOf(action.fetch_job.id);
+
             success = [...state.running_fetch_job.influencers.success]
-            index = success.map(i => { return i }).indexOf(action.influencer.id);
-            success.splice(index, 1, { ...action.influencer })
+            let index_inf = success.map(i => { return i }).indexOf(action.influencer.id);
+            success.splice(index_inf, 1, action.influencer)
 
             running = {
                 ...state.running_fetch_job,
+                progress: {
+                    ...state.running_fetch_job.progress,
+                    done: state.running_fetch_job.progress.done + 0.5
+                },
                 influencers: {
                     ...state.running_fetch_job.influencers,
                     success: success
                 },
-                response: action.response,
-                progress: {
-                    ...state.running_fetch_job.progress,
-                    done: state.running_fetch_job.progress.done + 1
-                }
+                response: { type: action.type, message: action.response }
+            }
+
+            if (running.progress.total == running.progress.done && running.influencers.success.length > 0) {
+                index = fetch_jobs.map(i => { return i }).indexOf(action.fetch_job.id);
+                fetch_jobs.splice(index, 1, running)
+                running = { ...running, pending: false, response: { type: COMPLETED_GET_ALL_USERS_BY_ID_SUCCESS, message: 'got influencers by ID' } }
             }
 
             fetch_jobs.splice(index, 1, running)
@@ -217,11 +236,10 @@ const fetchJobReducer = (state = initialState, action) => {
             // add to fail
             fetch_jobs = [...state.fetch_jobs]
             fail = [...state.running_fetch_job.influencers.fail]
-            fail.splice(fail.length, 1, action.id)
+            fail.splice(fail.length, 1, action.error)
 
             running = {
                 ...state.running_fetch_job,
-                response: action.error,
                 influencers: {
                     // remove from success
                     success: [...state.running_fetch_job.influencers.success.filter(id => id != action.id)],
@@ -229,14 +247,19 @@ const fetchJobReducer = (state = initialState, action) => {
                 },
                 progress: {
                     ...state.running_fetch_job.progress,
-                    done: state.running_fetch_job.progress.done + 1
+                    done: state.running_fetch_job.progress.done + 0.5
                 },
-                status: 'completed'
             }
 
             if (running.progress.total == running.progress.done && running.influencers.success.length == 0) {
                 index = fetch_jobs.map(i => { return i }).indexOf(action.fetch_job.id);
                 fetch_jobs.splice(index, 1, running)
+                running = {
+                    ...running,
+                    status: COMPLETED,
+                    pending: false,
+                    response: { type: COMPLETED_GET_ALL_USERS_BY_ID_ERROR, message: action.error }
+                }
                 updateFetchJob(action.user_id, action.project_id, running)
             }
 
@@ -244,52 +267,105 @@ const fetchJobReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                running_fetch_job: { ...initialState.running_fetch_job },
+                fetch_jobs: fetch_jobs,
+                running_fetch_job: running
+            }
+
+
+        case GET_USER_BY_USERNAME_PENDING:
+            fetch_jobs = [...state.fetch_jobs]
+            index = fetch_jobs.map(fj => { return fj.id }).indexOf(action.fetch_job.id);
+            running = {
+                ...state.running_fetch_job,
+                pending: true,
+                stage: USER_BY_USERNAME_FETCH,
+                response: { ...initialState.running_fetch_job.response }
+            }
+
+            fetch_jobs.splice(index, 1, running)
+
+            return {
+                ...state,
+                running_fetch_job: running,
                 fetch_jobs: fetch_jobs
             }
 
-        // case GET_USER_BY_USERNAME_SUCCESS:
-        //     // updated_state.pending = false
-        //     // running = [...updated_state.fetch_jobs.running]
-        //     // completed = [...updated_state.fetch_jobs.completed]
-        //     // completed_fj = { ...running.find(job => job.hashtag == action.payload) };
-        //     // completed.splice(running.length, 1, completed_fj)
+        case GET_USER_BY_USERNAME_SUCCESS:
+            fetch_jobs = [...state.fetch_jobs]
 
-        //     // updated_state.fetch_jobs.completed = completed
-        //     // updated_state.fetch_jobs.running = [...running.filter(fj => fj.id !== completed_fj.id)]
+            running = {
+                ...state.running_fetch_job,
+                response: { type: action.type, message: action.response },
+                progress: {
+                    ...state.running_fetch_job.progress,
+                    done: state.running_fetch_job.progress.done + 0.5
+                }
+            }
 
-        //     return {
-        //         ...state,
-        //     }
+            if (running.progress.total == running.progress.done && running.influencers.success.length > 0) {
+                index = fetch_jobs.map(i => { return i }).indexOf(action.fetch_job.id);
+                running = {
+                    ...running,
+                    status: COMPLETED,
+                    pending: false,
+                    response: {
+                        type: COMPLETED_GET_USERS_BY_USERNAME_SUCCESS,
+                        message: 'success getting influencers by username'
+                    }
+                }
+                updateFetchJob(action.user_id, action.project_id, running)
+            }
 
-        // case GET_USER_BY_USERNAME_PENDING:
-        //     state.pending = true
+            fetch_jobs.splice(index, 1, running)
 
-        //     return {
-        //         ...state
-        //     }
+            return {
+                ...state,
+                running_fetch_job: running,
+                fetch_jobs: fetch_jobs
+            }
 
-        // case GET_USER_BY_USERNAME_ERROR:
-        //     // updated_state.pending = false
-        //     // updated_state.error = action.error
-        //     // running = [...updated_state.fetch_jobs.running]
-        //     // completed = [...updated_state.fetch_jobs.completed]
-        //     // completed_fj = { ...running.find(job => job.hashtag == action.hashtag) };
-        //     job = { ...state.fetch_jobs.find(job => job.hashtag == action.hashtag) }
-        //     fj.status = 'completed'
+        case GET_USER_BY_USERNAME_ERROR:
+            fetch_jobs = [...state.fetch_jobs]
+            fail = [...state.running_fetch_job.influencers.fail]
+            fail.splice(fail.length, 1, action.username)
 
-        //     // updated_state.fetch_jobs.completed = completed
-        //     // updated_state.fetch_jobs.running = [...running.filter(fj => fj.id !== completed_fj.id)]
-        //     return {
-        //         ...updated_state
-        //     }
+            running = {
+                ...state.running_fetch_job,
+                response: { type: action.type, message: action.error },
+                influencers: {
+                    // remove from success
+                    success: [...state.running_fetch_job.influencers.success.filter(influ => influ.username != action.username)],
+                    fail: fail
+                },
+                progress: {
+                    ...state.running_fetch_job.progress,
+                    done: state.running_fetch_job.progress.done + 0.5
+                }
+            }
 
-        // case CLEAR_CURRENT_FETCH_JOB:
-        //     updated_state.current_fetch_job = {}
+            if (running.progress.total == running.progress.done && running.influencers.success.length == 0) {
+                index = fetch_jobs.map(i => { return i }).indexOf(action.fetch_job.id);
+                fetch_jobs.splice(index, 1, running)
+                running = {
+                    ...running,
+                    status: COMPLETED,
+                    pending: false,
+                    response:
+                    {
+                        type: COMPLETED_GET_USERS_BY_USERNAME_ERROR,
+                        message: 'failed to get all influencers by username'
+                    }
+                }
+                updateFetchJob(action.user_id, action.project_id, running)
+            }
 
-        //     return {
-        //         ...updated_state
-        //     };
+            fetch_jobs.splice(index, 1, running)
+
+            return {
+                ...state,
+                fetch_jobs: fetch_jobs,
+                running_fetch_job: running
+            }
 
         default:
             return state;
