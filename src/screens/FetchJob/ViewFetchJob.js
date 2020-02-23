@@ -17,27 +17,39 @@ import { updateFetchJob, clearCurrentFetchJob, setRunningFetchJob, clearRunningF
 import { getMediaByHashtagPending, getMediaByHashtagError, fetchMedia, getMediaByHashtagSuccess } from '../../web/fetchMedia'
 import { PulseIndicator, DotIndicator } from 'react-native-indicators';
 import { getUserByIDError, getUserByIDSuccess, getUserByIDPending, getUserByID } from '../../web/fetchInfluencerById';
+import { getUserByUsernameSuccess, getUserByUsernameError } from '../../web/fetchInfluencerByUsername'
+import { Bar } from 'react-native-progress';
+import { getUserByUsername, getUserByUsernamePending } from '../../web/fetchInfluencerByUsername';
+import { MEDIA_FETCH, GET_MEDIA_BY_HASHTAG_SUCCESS, COMPLETED, COMPLETED_GET_USERS_BY_USERNAME_SUCCESS } from '../../constants';
 
 
 class ViewFetchJob extends React.Component {
+
+    state = {
+        have_influencers: false
+    }
 
     static navigationOptions = {
         headerShown: false
     }
 
     componentDidMount() {
-        const { getAllInfluencers, current_fetch_job } = this.props
-        getAllInfluencers(current_fetch_job.hashtag)
+        const { user, current_project, current_fetch_job, getAllInfluencers } = this.props
+        if (current_fetch_job.status == 'completed' && current_fetch_job.response.type == 'success') {
+            // if(current_fetch_job.response.type == COMPLETED_GET_USERS_BY_USERNAME_SUCCESS)
+            getAllInfluencers(user.id, current_project.id, current_fetch_job)
+            this.setState({ have_influencers: true })
+        }
+
     }
 
     componentDidUpdate(prev) {
         const running = { ...this.props.state.fetch_job.running_fetch_job }
         const influs = this.props.state.fetch_job.running_fetch_job.influencers
 
-        if (running.response !== null) {
-
-            if (running.stage == 'media_fetch') {
-                if (running.response.type == 'success') {
+        if (running.response != null) {
+            if (running.stage == MEDIA_FETCH && !running.pending) {
+                if (running.response.type == GET_MEDIA_BY_HASHTAG_SUCCESS) {
                     if (running.influencers.success.length > 0) {
                         this.getInfluencersById(influs.success)
 
@@ -45,74 +57,34 @@ class ViewFetchJob extends React.Component {
                         Alert.alert('Influencer list is empty. Failed media fetch')
                         console.log('influencer list is empty. Failed media fetch')
                     }
-                } else {
-                    Alert.alert('Failed fetch: ' + running.response.message)
-                    console.log('Failed fetch: ' + running.response.message)
                 }
 
             }
-
-            else if (running.stage == 'user_by_id_fetch') {
-
-                if (this.props.state.fetch_job.running_fetch_job.progress.total == this.props.state.fetch_job.running_fetch_job.progress.done) {
-                    console.log("all done")
-                    if (influs.success.length == 0) {
-                        console.log('Failed all influencers by ID fetch')
-                        Alert.alert("Couldn't fetch profiles! Please retry")
-                    } else {
-                        console.log('Failed ' + influs.fail.length + ' influencers by ID fetch out of ' + this.props.state.fetch_job.running_fetch_job.progress.total + ' successful ' + influs.success.length)
-                    }
-
-                }
-                // if (running.response.type == 'error' && running.response.type == 'no user') {
-                //     console.log('Failed influencer by ID fetch')
-                //     console.log(influs.fail)
-                // }
-                // else {
-                //     // console.log(running.response.message)
-                //     //             Alert.alert('Influencer list is empty. Failed media fetch')
-
-                //     // console.log(influs.fail)
-                // }
-                //     }
-                // else {
-                //     Alert.alert('Failed getting user by ID: ' + running.response.message)
-                //     console.log('Failed fetch: ' + running.response.message)
-                // }
-            }
-
-
         }
     }
 
     getInfluencersById = media_ids => {
-        const { user, current_project, getUserByIDPending, getUserByIDSuccess, getUserByIDError, running_fetch_job } = this.props
+        const { user, current_project, getUserByIDPending, getUserByIDSuccess, getUserByIDError, running_fetch_job, getUserByUsernameSuccess, getUserByUsernameError } = this.props
         let i = 0
         let ref = setInterval(() => {
             getUserByIDPending(media_ids.length, running_fetch_job)
-            getUserByID(media_ids[i], user.id, current_project.id, running_fetch_job, getUserByIDSuccess, getUserByIDError);
+            getUserByID(media_ids[i], user.id, current_project.id, running_fetch_job, getUserByIDSuccess, getUserByIDError, getUserByUsernameSuccess, getUserByUsernameError);
             ++i
             if (i == media_ids.length) clearInterval(ref);
         }, 6000);
     }
 
-    goToInfluencer = influ => {
-        const { setCurrentInfluencer } = this.props
-        setCurrentInfluencer(influ)
-        this.props.navigation.navigate('ViewInfluencer')
-    }
-
     startFetchJob = () => {
         const { user, current_project, current_fetch_job, setRunningFetchJob, getMediaByHashtagPending, getMediaByHashtagSuccess, getMediaByHashtagError } = this.props
         this.setState({ isLoading: true })
-        let job = { ...current_fetch_job, status: 'in progress' }
-        setRunningFetchJob(job)
+        setRunningFetchJob(current_fetch_job)
         fetchMedia(current_fetch_job, user.id, current_project.id, getMediaByHashtagPending, getMediaByHashtagSuccess, getMediaByHashtagError)
         this.setState({ isLoading: false })
         this.props.navigation.goBack()
     }
 
     render() {
+        const { have_influencers } = this.state
         const { current_fetch_job, influencers, running_fetch_job, progress_percent } = this.props
 
         return (
@@ -153,35 +125,30 @@ class ViewFetchJob extends React.Component {
                             <Text style={styles.lblRange}>Follower range</Text>
                             <CriteriaView activeCriteria={current_fetch_job.criteria} />
                         </View>
-                        <View style={styles.influencers}>
-                            <Text style={styles.title}>Influencers</Text>
-                            <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
-                                <Text style={styles.title}>View All</Text>
-                            </TouchableOpacity>
-                        </View>
                         <View style={styles.middle}>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Status</Text>
                                 <View style={styles.statusView}>
                                     {current_fetch_job.status == 'in progress' &&
-                                        <DotIndicator size={5} animationDuration={2000} count={10} color="#493649" />}
-                                    {current_fetch_job.status == 'completed' &&
-                                        current_fetch_job.response.type == 'error' &&
-                                        <Text style={styles.lbl}>No result</Text>
+                                        <Bar progress={progress_percent} width={200} />
                                     }
                                 </View>
                                 <Text style={styles.statusData}>{current_fetch_job.status}</Text>
                             </View>
                         </View>
-                        {current_fetch_job.status == 'pending' && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                         {current_fetch_job.status == 'completed' &&
-                            current_fetch_job.response.type != 'error' &&
+                            current_fetch_job.response.type == 'success' &&
                             <View style={styles.bottomView}>
-                                {this.props.state.fetch_job.error && <View style={styles.none}><Text style={styles.noneTxt}>{this.props.state.fetch_job.error.message}</Text></View>}
-                                {!this.props.state.fetch_job.error && this.props.state.influencer.error && <View style={styles.none}><Text style={styles.noneTxt}>No influencers</Text></View>}
-                                {!this.props.state.influencer.pending && !this.props.state.influencer.error &&
-                                    <InfluencerListFjView influencers={influencers} goToInfluencer={this.goToInfluencer} />}
-                            </View>}
+                                <View style={styles.influencers}>
+                                    <Text style={styles.title}>Influencers</Text>
+                                    <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
+                                        <Text style={styles.title}>View All</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                {have_influencers && <InfluencerListFjView influencers={influencers} />}
+                            </View>
+                        }
+                        {current_fetch_job.status == 'pending' && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                     </View >
 
                 </View >
@@ -228,6 +195,7 @@ const styles = StyleSheet.create(
         influencers: {
             flexDirection: 'row',
             justifyContent: 'space-between',
+            paddingTop: 30
         },
         infoContainer: {
             // display: 'flex',
@@ -329,7 +297,7 @@ const mapStateToProps = state => ({
     error_fj: state.fetch_job.error,
     success: state.fetch_job.running_fetch_job.success,
     fail: state.fetch_job.running_fetch_job.fail,
-    progress_percent: (state.fetch_job.running_fetch_job.progress.done / state.fetch_job.running_fetch_job.progress.total * 100) || 'loading'
+    progress_percent: (state.fetch_job.running_fetch_job.progress.done / state.fetch_job.running_fetch_job.progress.total) || 0
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -346,7 +314,10 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     getMediaByHashtagSuccess: getMediaByHashtagSuccess,
     getUserByIDPending: getUserByIDPending,
     getUserByIDSuccess: getUserByIDSuccess,
-    getUserByIDError: getUserByIDError
+    getUserByIDError: getUserByIDError,
+    getUserByUsernamePending: getUserByUsernamePending,
+    getUserByUsernameSuccess: getUserByUsernameSuccess,
+    getUserByUsernameError: getUserByUsernameError,
 }, dispatch);
 
 
