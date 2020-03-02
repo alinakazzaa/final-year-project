@@ -33,7 +33,7 @@ const formStyles = {
             borderColor: '#cccccc', // <= relevant style here
             borderWidth: 1,
             marginBottom: 5,
-            textTransform: 'uppercase'
+            textTransform: 'lowercase'
         },
         error: {
             color: '#000000',

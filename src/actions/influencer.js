@@ -2,19 +2,22 @@ import { db } from '../database/config/db';
 import { DATE_TODAY } from '../constants/TodayDate'
 import { SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_ERROR, SET_CURRENT_INFLUENCER } from '../constants';
 
-export const getAllInfluencers = (user_id, project_id, fetch_job) => {
+export const getAllInfluencers = fetch_job => {
+
     getInfluencersPending()
+
     let influencers = []
     let influencers_success = []
 
-    db.ref(`Users/${user_id}/Projects/${project_id}/FetchJobs/${fetch_job.id}/influencers/success`).on('value', (success) => {
-        influencers = [...success.val()]
+    db.ref(`Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}/influencers/success`).on('value', (success) => {
+        influencers = success.val()
     });
 
-    influencers.forEach(influ => {
+
+    influencers.forEach(id => {
         db.ref('Influencers/').on('value', (influ_snapshot) => {
             influ_snapshot.forEach(influ_snap => {
-                if (influ_snap.key == influ.id)
+                if (influ_snap.key == id)
                     influencers_success.push(influ_snap.val())
             })
         });
@@ -24,13 +27,13 @@ export const getAllInfluencers = (user_id, project_id, fetch_job) => {
     if (influencers_success.length > 0) {
         return {
             type: SET_INFLUENCERS_SUCCESS,
-            payload: influencers_success
+            influencers: influencers_success
         }
     } else {
         let error = { type: 'no influencers' }
         return {
             type: SET_INFLUENCERS_ERROR,
-            error: error
+            message: error
         }
     }
 }

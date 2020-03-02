@@ -7,7 +7,6 @@ import { TextButton } from '../buttons/TextButton'
 import { removeInfluencer } from '../../actions/influencer'
 
 export const InfluencerList = ({ influencers, current_project, current_fetch_job, goToInfluencer, addInfluencerByUsername, addToPotential }) => {
-
     const formatNumber = num => {
         let parsed
         { num ? parsed = num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : 'loading...' }
@@ -95,7 +94,7 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                             color="red"
                             type='MaterialIcons'
                             style={styles.icon}
-                            onPress={() => removeInfluencer(current_fetch_job.hashtag, influ.id)}
+                            onPress={() => removeInfluencer(current_fetch_job.details.hashtag, influ.id)}
                         /></TouchableOpacity>
                 </View>
             </View>
@@ -107,8 +106,8 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
         <View>
             <View style={styles.pageHead}>
                 <Text style={styles.headerTitle}>{current_project.title}</Text>
-                <Text style={styles.headerTitle}>{`# fetch ${current_fetch_job.hashtag}`
-                    || `location fetch ${current_fetch_job.location}`}</Text>
+                <Text style={styles.headerTitle}>{`# fetch ${current_fetch_job.details.hashtag}`
+                    || `location fetch ${current_fetch_job.details.location}`}</Text>
             </View>
             <ScrollView keyboardDismissMode='on-drag'
                 contentContainerStyle={styles.scrollContainer}>
@@ -168,6 +167,7 @@ const styles = StyleSheet.create(
         },
         scrollContainer: {
             padding: '3%',
+            marginBottom: 200
         },
         info: {
             justifyContent: 'space-between',

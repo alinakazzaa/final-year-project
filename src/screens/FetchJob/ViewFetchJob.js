@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -11,82 +11,48 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
 import { getAllInfluencers } from '../../actions/influencer';
-import { getRunningFetchJob } from '../../reducers/fetchJobReducer';
 import { TextButton } from '../../components/buttons/TextButton';
-import { updateFetchJob, clearCurrentFetchJob, setRunningFetchJob, clearRunningFetchJob } from '../../actions/fetchJob';
-import { getMediaByHashtagPending, getMediaByHashtagError, fetchMedia, getMediaByHashtagSuccess } from '../../web/fetchMedia'
-import { PulseIndicator, DotIndicator } from 'react-native-indicators';
-import { getUserByIDError, getUserByIDSuccess, getUserByIDPending, getUserByID } from '../../web/fetchInfluencerById';
-import { getUserByUsernameSuccess, getUserByUsernameError } from '../../web/fetchInfluencerByUsername'
+import { clearCurrentFetchJob, updateStateFetchJob, updateFetchJob } from '../../actions/fetchJob';
+import { fetchMedia } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress';
-import { getUserByUsername, getUserByUsernamePending } from '../../web/fetchInfluencerByUsername';
-import { MEDIA_FETCH, GET_MEDIA_BY_HASHTAG_SUCCESS, COMPLETED, COMPLETED_GET_USERS_BY_USERNAME_SUCCESS } from '../../constants';
+import { COMPLETED, PENDING, IN_PROGRESS, GET_MEDIA_BY_HASHTAG_ERROR, COMPLETED_GET_ALL_USERS } from '../../constants';
+import { fetchPending, fetchError, fetchSuccess, clearRunningFetchJob } from '../../actions/fetch';
 
 
 class ViewFetchJob extends React.Component {
 
     state = {
-        have_influencers: false
+        have_influencers: false,
+        fetch_job: {}
     }
 
     static navigationOptions = {
         headerShown: false
     }
 
-    componentDidMount() {
-        const { user, current_project, current_fetch_job, getAllInfluencers } = this.props
-        if (current_fetch_job.status == 'completed' && current_fetch_job.response.type == 'success') {
-            // if(current_fetch_job.response.type == COMPLETED_GET_USERS_BY_USERNAME_SUCCESS)
-            getAllInfluencers(user.id, current_project.id, current_fetch_job)
-            this.setState({ have_influencers: true })
-        }
-
-    }
-
     componentDidUpdate(prev) {
-        const running = { ...this.props.state.fetch_job.running_fetch_job }
-        const influs = this.props.state.fetch_job.running_fetch_job.influencers
+        const { running_fetch, updateStateFetchJob, current_fetch_job } = this.props
 
-        if (running.response != null) {
-            if (running.stage == MEDIA_FETCH && !running.pending) {
-                if (running.response.type == GET_MEDIA_BY_HASHTAG_SUCCESS) {
-                    if (running.influencers.success.length > 0) {
-                        this.getInfluencersById(influs.success)
-
-                    } else {
-                        Alert.alert('Influencer list is empty. Failed media fetch')
-                        console.log('influencer list is empty. Failed media fetch')
-                    }
-                }
-
+        if (prev.running_fetch.details.status !== running_fetch.details.status) {
+            updateStateFetchJob(running_fetch)
+            if (running_fetch.details.status == COMPLETED) {
+                updateFetchJob(running_fetch)
             }
         }
     }
 
-    getInfluencersById = media_ids => {
-        const { user, current_project, getUserByIDPending, getUserByIDSuccess, getUserByIDError, running_fetch_job, getUserByUsernameSuccess, getUserByUsernameError } = this.props
-        let i = 0
-        let ref = setInterval(() => {
-            getUserByIDPending(media_ids.length, running_fetch_job)
-            getUserByID(media_ids[i], user.id, current_project.id, running_fetch_job, getUserByIDSuccess, getUserByIDError, getUserByUsernameSuccess, getUserByUsernameError);
-            ++i
-            if (i == media_ids.length) clearInterval(ref);
-        }, 6000);
-    }
-
     startFetchJob = () => {
-        const { user, current_project, current_fetch_job, setRunningFetchJob, getMediaByHashtagPending, getMediaByHashtagSuccess, getMediaByHashtagError } = this.props
+        const { user, current_project, current_fetch_job, fetchPending, fetchSuccess, fetchError } = this.props
         this.setState({ isLoading: true })
-        setRunningFetchJob(current_fetch_job)
-        fetchMedia(current_fetch_job, user.id, current_project.id, getMediaByHashtagPending, getMediaByHashtagSuccess, getMediaByHashtagError)
+        fetchMedia(current_fetch_job, fetchPending, fetchSuccess, fetchError)
         this.setState({ isLoading: false })
         this.props.navigation.goBack()
     }
 
     render() {
-        const { have_influencers } = this.state
-        const { current_fetch_job, influencers, running_fetch_job, progress_percent } = this.props
-
+        const { have_influencers, fetch_job } = this.state
+        const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
+        console.log(running_fetch)
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -103,41 +69,43 @@ class ViewFetchJob extends React.Component {
                             <Text style={styles.title}>Job Details</Text>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Title</Text>
-                                <Text style={styles.data}>{current_fetch_job.title}</Text>
+                                <Text style={styles.data}>{current_fetch_job.details.title}</Text>
                             </View>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Date Created</Text>
-                                <Text style={styles.data}>{current_fetch_job.date_created}</Text>
+                                <Text style={styles.data}>{current_fetch_job.details.date_created}</Text>
                             </View>
                         </View>
                         <View style={styles.middle}>
                             <Text style={styles.title}>Fetch Criteria</Text>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Hashtag</Text>
-                                <Text style={styles.data}># {current_fetch_job.hashtag}</Text>
+                                <Text style={styles.data}># {current_fetch_job.details.hashtag}</Text>
                             </View>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Location</Text>
-                                <Text style={styles.data}>{current_fetch_job.location}</Text>
+                                <Text style={styles.data}>{current_fetch_job.details.location}</Text>
                             </View>
                         </View>
                         <View style={styles.itemRowRange}>
                             <Text style={styles.lblRange}>Follower range</Text>
-                            <CriteriaView activeCriteria={current_fetch_job.criteria} />
+                            <CriteriaView activeCriteria={current_fetch_job.details.criteria} />
                         </View>
                         <View style={styles.middle}>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Status</Text>
                                 <View style={styles.statusView}>
-                                    {current_fetch_job.status == 'in progress' &&
-                                        <Bar progress={progress_percent} width={200} />
+                                    {current_fetch_job.details.status == IN_PROGRESS &&
+                                        <View style={styles.progress}>
+                                            <Bar progress={progress_percent} width={150} height={15} color="#5d4d50" />
+                                        </View>
                                     }
                                 </View>
-                                <Text style={styles.statusData}>{current_fetch_job.status}</Text>
+                                <Text style={styles.statusData}>{current_fetch_job.details.status}</Text>
                             </View>
                         </View>
-                        {current_fetch_job.status == 'completed' &&
-                            current_fetch_job.response.type == 'success' &&
+                        {current_fetch_job.details.status == COMPLETED &&
+                            current_fetch_job.response.type == COMPLETED_GET_ALL_USERS &&
                             <View style={styles.bottomView}>
                                 <View style={styles.influencers}>
                                     <Text style={styles.title}>Influencers</Text>
@@ -148,7 +116,11 @@ class ViewFetchJob extends React.Component {
                                 {have_influencers && <InfluencerListFjView influencers={influencers} />}
                             </View>
                         }
-                        {current_fetch_job.status == 'pending' && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
+                        {current_fetch_job.details.status == COMPLETED &&
+                            current_fetch_job.response.type == GET_MEDIA_BY_HASHTAG_ERROR &&
+                            <View style={styles.bottomView}><Text style={styles.lbl}>{current_fetch_job.response.message}</Text></View>
+                        }
+                        {current_fetch_job.details.status == PENDING && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                     </View >
 
                 </View >
@@ -178,8 +150,8 @@ const styles = StyleSheet.create(
         },
         bottomView: {
             height: '20%',
-            justifyContent: 'center'
-            // paddingTop: '4%',
+            justifyContent: 'center',
+            paddingTop: '4%',
         },
         button: {
             alignItems: 'center',
@@ -208,6 +180,9 @@ const styles = StyleSheet.create(
             fontWeight: 'bold',
             textTransform: 'uppercase',
             textAlign: 'left',
+        },
+        progress: {
+
         },
         itemRow: {
             display: 'flex',
@@ -280,7 +255,7 @@ const styles = StyleSheet.create(
         },
         statusView: {
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-evenly'
         }
     });
 
@@ -292,12 +267,12 @@ const mapStateToProps = state => ({
     fetch_jobs: state.fetch_job.fetch_jobs,
     current_fetch_job: state.fetch_job.current_fetch_job,
     influencers: state.influencer.influencers,
-    running_fetch_job: state.fetch_job.running_fetch_job,
+    running_fetch: state.running_fetch,
     pending_fj: state.fetch_job.pending,
     error_fj: state.fetch_job.error,
-    success: state.fetch_job.running_fetch_job.success,
-    fail: state.fetch_job.running_fetch_job.fail,
-    progress_percent: (state.fetch_job.running_fetch_job.progress.done / state.fetch_job.running_fetch_job.progress.total) || 0
+    success: state.running_fetch.success,
+    fail: state.running_fetch.fail,
+    progress_percent: (state.running_fetch.progress.done / state.running_fetch.progress.total) || 0
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -305,19 +280,11 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentInfluencer: setCurrentInfluencer,
     clearCurrentFetchJob: clearCurrentFetchJob,
     getInfluencersPending: getInfluencersPending,
-    updateFetchJob: updateFetchJob,
-    // fetchMedia: fetchMedia,
-    setRunningFetchJob: setRunningFetchJob,
     clearRunningFetchJob: clearRunningFetchJob,
-    getMediaByHashtagPending: getMediaByHashtagPending,
-    getMediaByHashtagError: getMediaByHashtagError,
-    getMediaByHashtagSuccess: getMediaByHashtagSuccess,
-    getUserByIDPending: getUserByIDPending,
-    getUserByIDSuccess: getUserByIDSuccess,
-    getUserByIDError: getUserByIDError,
-    getUserByUsernamePending: getUserByUsernamePending,
-    getUserByUsernameSuccess: getUserByUsernameSuccess,
-    getUserByUsernameError: getUserByUsernameError,
+    fetchPending: fetchPending,
+    fetchError: fetchError,
+    fetchSuccess: fetchSuccess,
+    updateStateFetchJob: updateStateFetchJob
 }, dispatch);
 
 

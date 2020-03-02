@@ -38,8 +38,8 @@ class AllInfluencers extends React.Component {
     }
 
     componentDidMount() {
-        const { user, current_project, getAllInfluencers, current_fetch_job } = this.props
-        getAllInfluencers(user.id, current_project.id, current_fetch_job)
+        const { getAllInfluencers, current_fetch_job } = this.props
+        getAllInfluencers(current_fetch_job)
     }
 
     goToInfluencer = influ => {
@@ -52,6 +52,7 @@ class AllInfluencers extends React.Component {
     render() {
         const { influencers, current_project, current_fetch_job } = this.props
         let { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
+        console.log(this.props.state.influencer)
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -68,19 +69,19 @@ class AllInfluencers extends React.Component {
                 </View>
                 {index == 0 ?
                     <View>
-                        {isLoading ?
+                        {this.props.state.influencer.pending ?
                             <View>
                                 <ActivityIndicator size="large" color="#5d4d50" />
-                                <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
+                                <Text style={styles.loadingTxt}>Wait, getting your influencers</Text>
                             </View> :
                             <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} />
                         }
                     </View> :
                     <View>
-                        {isLoading ?
+                        {this.props.state.influencer.pending ?
                             <View>
                                 <ActivityIndicator size="large" color="#5d4d50" />
-                                <Text style={styles.loadingTxt}>Wait, getting your searches</Text>
+                                <Text style={styles.loadingTxt}>Wait, getting your influencers</Text>
                             </View> :
                             <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} />
                         }

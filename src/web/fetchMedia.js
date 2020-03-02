@@ -1,85 +1,68 @@
-import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from "../constants/endpoints"
-import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR } from "../constants"
+import { INSTAGRAM_GET_MEDIA_BY_HASHTAG, INSTAGRAM_GET_NEXT_PAGE_MEDIA } from "../constants/endpoints"
+import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_ERROR, GET_USER_PENDING } from "../constants"
+import { fetchInfluencer } from "./fetchInfluencer"
 
-export const fetchMedia = (running_fetch_job, user_id, project_id, getMediaByHashtagPending, getMediaByHashtagSuccess, getMediaByHashtagError) => {
-    getMediaByHashtagPending(running_fetch_job)
+export const fetchMedia = (fetch_job, fetchPending, fetchSuccess, fetchError) => {
     let response
+    let i = 0
+    let media_ids = []
+    fetchPending(GET_MEDIA_BY_HASHTAG_PENDING, fetch_job)
 
-    fetch(INSTAGRAM_GET_MEDIA_BY_HASHTAG(running_fetch_job.hashtag))
+    fetch(INSTAGRAM_GET_MEDIA_BY_HASHTAG(fetch_job.details.hashtag))
         .then(result => {
+
             if (!result.ok || result.ok === null) {
-                response = { message: 'no destination' }
-                return getMediaByHashtagError(response, user_id, project_id, running_fetch_job)
-            } else {
+                response = {
+                    type: GET_MEDIA_BY_HASHTAG_ERROR,
+                    message: 'no media with this hashtag'
+                }
+                fetchError(response)
+            }
+            else {
                 result.json().then(res => {
-                    response = { message: 'extracted influencer IDs' }
-                    return getMediaByHashtagSuccess(response, [...extractInfluencerIDs(res)], running_fetch_job)
+
+                    let edge_hashtag_to_media = res.graphql.hashtag.edge_hashtag_to_media
+                    // let edge_hashtag_to_top_posts = res.graphql.hashtag.edge_hashtag_to_top_posts
+
+                    if (edge_hashtag_to_media.edges.length > 0) {
+                        edge_hashtag_to_media.edges.forEach(edge => {
+                            media_ids.push(edge.node.owner.id)
+                        })
+                    }
+
+                    // if (edge_hashtag_to_top_posts.edges.length > 0) {
+                    //     edge_hashtag_to_top_posts.edges.forEach(edge => {
+                    //         media_ids.push(edge.node.owner.id)
+                    //     })
+                    // }
+
+                    response = {
+                        type: GET_MEDIA_BY_HASHTAG_SUCCESS,
+                        // media_ids: media_ids,
+                        media_ids: [media_ids[0], media_ids[1], media_ids[2], media_ids[3], media_ids[4]],
+                        message: 'success getting media by hashtag',
+                    }
+                    fetchPending(GET_USER_PENDING)
+                    getInfluencers(response.media_ids, fetch_job, fetchSuccess, fetchError)
+                    fetchSuccess(response)
                 })
             }
         }).catch(error => {
-            response = { message: error }
-            return getMediaByHashtagError(response, user_id, project_id, running_fetch_job)
+            response = {
+                type: GET_MEDIA_BY_HASHTAG_ERROR,
+                message: String(error)
+            }
+            return fetchError(response)
         })
 }
 
-// fetch actions
-export const getMediaByHashtagPending = fetch_job => {
-    return {
-        type: GET_MEDIA_BY_HASHTAG_PENDING,
-        fetch_job: fetch_job
-    }
-}
+export const getInfluencers = (ids, fetch_job, fetchSuccess, fetchError) => {
+    let i = 0
 
-export const getMediaByHashtagSuccess = (response, ids, fetch_job) => {
-    return {
-        type: GET_MEDIA_BY_HASHTAG_SUCCESS,
-        response: response,
-        ids: ids,
-        fetch_job: fetch_job,
-        total: ids.length,
-    }
-}
+    let ref = setInterval(() => {
+        fetchInfluencer(ids[i], fetch_job, fetchSuccess, fetchError);
+        ++i
+        if (i == ids.length) clearInterval(ref);
+    }, 6000);
 
-export const getMediaByHashtagError = (error, user_id, project_id, fetch_job) => {
-
-    return {
-        type: GET_MEDIA_BY_HASHTAG_ERROR,
-        error: error,
-        fetch_job: fetch_job,
-        user_id: user_id,
-        project_id: project_id
-    }
-}
-
-export const extractInfluencerIDs = result => {
-    let edges = []
-    let has_next_page = false
-    let end_cursor
-    const media_ids = []
-
-    if (result.graphql) {
-        edges = [...result.graphql.hashtag.edge_hashtag_to_media.edges]
-        has_next_page = result.graphql.hashtag.edge_hashtag_to_media.page_info.has_next_page
-        if (has_next_page)
-            end_cursor = result.graphql.hashtag.edge_hashtag_to_media.page_info.end_cursor
-    }
-    else if (result.data) {
-        edges = [...result.data.hashtag.edge_hashtag_to_media]
-        has_next_page = result.data.hashtag.edge_hashtag_to_media.page_info.has_next_page
-        if (has_next_page)
-            end_cursor = result.data.hashtag.edge_hashtag_to_media.page_info.end_cursor
-    }
-
-    if (edges.length > 0) {
-        edges.forEach(edge => {
-            media_ids.push(edge.node.owner.id)
-        })
-    }
-
-    // if (has_next_page) {
-    //     // get next page
-    // }
-
-    let ids = [media_ids[0], media_ids[1], media_ids[2], media_ids[3], media_ids[4]]
-    return ids
 }
