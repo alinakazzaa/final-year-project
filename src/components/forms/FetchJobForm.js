@@ -32,7 +32,8 @@ const formStyles = {
             borderRadius: 4,
             borderColor: '#cccccc', // <= relevant style here
             borderWidth: 1,
-            marginBottom: 5
+            marginBottom: 5,
+            textTransform: 'lowercase'
         },
         error: {
             color: '#000000',
@@ -80,7 +81,14 @@ export default class FetchJobForm extends React.Component {
     }
 
     onChangeFormValues(val) {
-        this.setState({ ...this.state, value: val }, () => {
+        let fj = val
+        if (fj.hashtag != null)
+            fj.hashtag = fj.hashtag.toLowerCase()
+
+        if (fj.location != null)
+            fj.location = fj.location.toLowerCase()
+
+        this.setState({ value: fj }, () => {
             const fj = { ...this.state }
             this.props.onChange(fj)
         })
@@ -110,7 +118,7 @@ export default class FetchJobForm extends React.Component {
                 break
         }
 
-        this.setState({ ...this.state, criteria }, () => {
+        this.setState({ criteria }, () => {
             const fj = { ...this.state }
             this.props.onChange(fj)
         })
@@ -195,6 +203,7 @@ const styles = StyleSheet.create(
         },
         textInput: {
             borderWidth: 1,
+            textTransform: 'lowercase'
         },
         title: {
             fontSize: 16,

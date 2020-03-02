@@ -5,25 +5,27 @@ import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { PulseIndicator } from 'react-native-indicators';
 
-export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, deleteFetchJob }) => {
+import { IN_PROGRESS } from '../../constants/index'
 
+export const FetchJobList = ({ fetchJobs, goToFetchJob, addFetchJob, deleteFetchJob }) => {
     const FJList = (fj, index) => {
+
         return (
             <TouchableOpacity key={index} onPress={() => goToFetchJob(fj)}>
                 <View style={styles.listItem}>
                     <View style={styles.left}>
-                        <Text style={styles.hashtag}>{`HASHTAG    ${fj.hashtag}`}</Text>
-                        <Text style={styles.location}>{`LOCATION    ${fj.location}`}</Text>
+                        <Text style={styles.hashtag}>{`HASHTAG    ${fj.details.hashtag}`}</Text>
+                        <Text style={styles.location}>{`LOCATION    ${fj.details.location}`}</Text>
 
                     </View>
                     <View>
-                        <Text style={styles.date}>{fj.date_created}</Text>
+                        <Text style={styles.date}>{fj.details.date_created}</Text>
                     </View>
-                    {fj.status != 'in progress' && <View>
+                    {fj.details.status != IN_PROGRESS && <View>
                         <IconButton name="delete" type="MaterialIcons" size={23} color="#0B0033" onPress={() => deleteFetchJob(fj)} />
                     </View>}
                     <View>
-                        {fj.status == 'in progress' &&
+                        {fj.details.status == IN_PROGRESS &&
                             <PulseIndicator size={20} color="green" />}
                     </View>
                 </View>

@@ -1,5 +1,5 @@
 import { db } from '../database/config/db';
-import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH_JOB, CLEAR_RUNNING_FETCH_JOB, UPDATE_FETCH_JOB_STATUS, ADD_FETCH_JOB, REMOVE_FETCH_JOB } from '../constants';
+import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH, CLEAR_RUNNING_FETCH, UPDATE_FETCH_JOB_STATUS, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB } from '../constants';
 
 export const getProjectFetchJobs = (user_id, project_id) => {
     const fetch_jobs = []
@@ -8,19 +8,14 @@ export const getProjectFetchJobs = (user_id, project_id) => {
 
         fj_snapshot.forEach(fj_snap => {
             const fj = {
-                title: fj_snap.val().title,
-                status: fj_snap.val().status,
-                date_created: fj_snap.val().date_created,
-                hashtag: fj_snap.val().hashtag,
-                location: fj_snap.val().location,
-                criteria: fj_snap.val().criteria,
-                id: fj_snap.val().id,
+                ...fj_snap.val()
             }
             fetch_jobs.push(fj)
 
         })
 
     })
+
     if (fetch_jobs.length == 0) {
         const error = { type: 'no fetch jobs' }
         return {
@@ -45,21 +40,7 @@ export const setProjectFetchJobsPending = () => {
 export const setCurrentFetchJob = fetch_job => {
     return {
         type: SET_CURRENT_FETCH_JOB,
-        payload: fetch_job
-    }
-}
-
-export const setRunningFetchJob = fetch_job => {
-    return {
-        type: SET_RUNNING_FETCH_JOB,
         fetch_job: fetch_job
-    }
-}
-
-export const clearRunningFetchJob = fetch_job => {
-    return {
-        type: CLEAR_RUNNING_FETCH_JOB,
-        payload: fetch_job
     }
 }
 
@@ -89,16 +70,23 @@ export const clearCurrentFetchJob = () => {
 //     }
 // }
 
+/// UPDATE FETCH JOBS WITH UPDATED ITEM IN THE STATE!!!!
+
 //DB
 export const addFetchJob = (user_id, project_id, fetch_job) => {
     let fj_obj = {
-        title: fetch_job.value.title,
-        date_created: fetch_job.value.date_created,
-        hashtag: fetch_job.value.hashtag || '',
-        location: fetch_job.value.location || '',
-        criteria: String(fetch_job.criteria),
-        status: 'pending',
-        result: {}
+        details: {
+            title: fetch_job.value.title,
+            date_created: fetch_job.value.date_created,
+            hashtag: fetch_job.value.hashtag || '',
+            location: fetch_job.value.location || '',
+            criteria: String(fetch_job.criteria),
+            status: PENDING,
+            response: {},
+            user_id: user_id,
+            project_id: project_id,
+            id: ''
+        }
     }
 
     const fj_add = db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
@@ -107,30 +95,40 @@ export const addFetchJob = (user_id, project_id, fetch_job) => {
 
 
     const key = fj_add.key
-    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${key}`).update({
+    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${key}/details`).update({
         id: key
     })
 
-    fj_obj = { ...fj_obj, id: key }
+
+    let updated = { ...fj_obj, id: key }
 
     return {
         type: ADD_FETCH_JOB,
-        fetch_job: fj_obj
+        fetch_job: updated
     }
 }
 
-export const updateFetchJob = (user_id, project_id, fetch_job) => {
-    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${fetch_job.id}`).update({
+export const updateStateFetchJob = fetch_job => {
+
+    return {
+        type: UPDATE_FETCH_JOB,
+        fetch_job: fetch_job
+    }
+}
+
+export const updateFetchJob = fetch_job => {
+    console.log(fetch_job)
+    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
         ...fetch_job
     });
 }
 
-export const removeFetchJob = (user_id, project_id, fetch_job) => {
-    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).child(fetch_job.id).remove()
+export const removeFetchJob = fetch_job => {
+    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs`).child(fetch_job.details.id).remove()
 
     return {
         type: REMOVE_FETCH_JOB,
-        payload: fetch_job
+        fetch_job: fetch_job
     }
 }
 

@@ -4,10 +4,10 @@ import { FetchJobList } from '../../components/list/FetchJobList'
 import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs } from '../../actions/fetchJob'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getPending, getError, getRunningFetchJob } from '../../reducers/fetchJobReducer';
+import { getPending, getError } from '../../reducers/fetchJobReducer';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-import { getUserByIDPending, getUserByIDSuccess, getUserByIDError, getUserByID } from '../../web/fetchInfluencerById';
+import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -46,19 +46,6 @@ class AllFetchJobs extends React.Component {
         this.setState({ isLoading: false })
     }
 
-    // componentDidUpdate(prev) {
-    //     const { running_fetch_job, getUserByID } = this.props
-
-    //     if (prev.running_fetch_job != running_fetch_job) {
-    //         console.log('not the same!')
-    //         if (running_fetch_job.error) {
-    //             Alert.alert("Fetch job failed: " + { ...running_fetch_job.error.message })
-    //         } else if (!running_fetch_job.error && running_fetch_job.ids) {
-    //             console.log("got ids!!")
-    //         }
-    //     }
-    // }
-
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
         setCurrentFetchJob(fj)
@@ -66,14 +53,13 @@ class AllFetchJobs extends React.Component {
     }
 
     deleteFetchJob = fj => {
-        const { user, current_project, removeFetchJob } = this.props;
-        removeFetchJob(user.id, current_project.id, fj)
+        const { removeFetchJob } = this.props;
+        removeFetchJob(fj)
     }
 
     render() {
         const { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
         const { pending_, completed, in_progress, fetch_jobs } = this.props
-
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -166,22 +152,18 @@ const mapStateToProps = state => ({
     user: state.user,
     current_project: state.project.current_project,
     fetch_jobs: state.fetch_job.fetch_jobs,
-    pending_: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.status == "pending") : [],
-    in_progress: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.status == "in progress") : [],
-    completed: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.status == "completed") : [],
+    pending_: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == PENDING) : [],
+    in_progress: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == IN_PROGRESS) : [],
+    completed: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == COMPLETED) : [],
     pending: getPending(state),
     error: getError(state),
-    running_fetch_job: getRunningFetchJob(state),
+    running_fetch: state.running_fetch,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentFetchJob: setCurrentFetchJob,
     removeFetchJob: removeFetchJob,
     getProjectFetchJobs: getProjectFetchJobs,
-    getUserByIDPending: getUserByIDPending,
-    getUserByIDSuccess: getUserByIDSuccess,
-    getUserByIDError: getUserByIDError,
-    getUserByID: getUserByID
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)

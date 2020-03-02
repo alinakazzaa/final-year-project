@@ -8,8 +8,8 @@ import { TextButton } from '../buttons/TextButton'
 export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
     const FJList = (fj, index) => {
         return <TouchableOpacity style={styles.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
-            <Text style={styles.fjData}>{fj.hashtag}</Text>
-            <Text style={styles.fjData}>{fj.date_created}</Text>
+            <Text style={styles.fjData}>{fj.details.hashtag}</Text>
+            <Text style={styles.fjData}>{fj.details.date_created}</Text>
             {/* <Text style={styles.fjData}>{fj.no_of_influencers}</Text> */}
         </TouchableOpacity >
     }
