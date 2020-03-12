@@ -48,6 +48,11 @@ class AllInfluencers extends React.Component {
         this.props.navigation.navigate('ViewInfluencer')
     }
 
+    createCollab = influencer => {
+        const { current_project } = this.props
+        this.props.navigation.navigate('AddCollab', { influencer, current_project })
+    }
+
 
     render() {
         const { influencers, current_project, current_fetch_job } = this.props
@@ -74,7 +79,7 @@ class AllInfluencers extends React.Component {
                                 <ActivityIndicator size="large" color="#5d4d50" />
                                 <Text style={styles.loadingTxt}>Wait, getting your influencers</Text>
                             </View> :
-                            <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} />
+                            <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} createCollab={this.createCollab} />
                         }
                     </View> :
                     <View>
@@ -83,7 +88,7 @@ class AllInfluencers extends React.Component {
                                 <ActivityIndicator size="large" color="#5d4d50" />
                                 <Text style={styles.loadingTxt}>Wait, getting your influencers</Text>
                             </View> :
-                            <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} />
+                            <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} createCollab={this.createCollab} />
                         }
                     </View>}
             </View>
