@@ -8,6 +8,7 @@ import {
     REMOVE_FETCH_JOB,
     UPDATE_FETCH_JOB,
 } from '../constants';
+import { State } from 'react-native-gesture-handler';
 
 const initialState = {
     fetch_jobs: [],

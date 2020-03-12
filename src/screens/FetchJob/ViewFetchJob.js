@@ -13,10 +13,11 @@ import { InfluencerListFjView } from '../../components/list/InfluencerListFjView
 import { getAllInfluencers } from '../../actions/influencer';
 import { TextButton } from '../../components/buttons/TextButton';
 import { clearCurrentFetchJob, updateStateFetchJob, updateFetchJob } from '../../actions/fetchJob';
-import { fetchMedia } from '../../web/fetchMedia'
+import { fetchMedia, getInfluencers } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress';
-import { COMPLETED, PENDING, IN_PROGRESS, GET_MEDIA_BY_HASHTAG_ERROR, COMPLETED_GET_ALL_USERS } from '../../constants';
+import { COMPLETED, PENDING, IN_PROGRESS, GET_MEDIA_BY_HASHTAG_ERROR, COMPLETED_GET_ALL_USERS, GET_MEDIA_NEXT_PAGE_COMPLETED, GET_USER_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_NEXT_PAGE_SUCCESS } from '../../constants';
 import { fetchPending, fetchError, fetchSuccess, clearRunningFetchJob } from '../../actions/fetch';
+import { fetchNextPage } from '../../web/fetchNextPage';
 
 
 class ViewFetchJob extends React.Component {
@@ -31,7 +32,7 @@ class ViewFetchJob extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { running_fetch, updateStateFetchJob, current_fetch_job } = this.props
+        const { running_fetch, updateStateFetchJob, fetchPending, fetchSuccess, fetchError } = this.props
 
         if (prev.running_fetch.details.status !== running_fetch.details.status) {
             updateStateFetchJob(running_fetch)
@@ -39,20 +40,46 @@ class ViewFetchJob extends React.Component {
                 updateFetchJob(running_fetch)
             }
         }
+
+        if (running_fetch.response != null) {
+
+            if (running_fetch.response.type == GET_MEDIA_BY_HASHTAG_SUCCESS || running_fetch.response.type == GET_MEDIA_NEXT_PAGE_SUCCESS) {
+
+                if (running_fetch.has_next_page && running_fetch.progress.total < 100) {
+                    fetchNextPage(running_fetch, fetchPending, fetchSuccess, fetchError)
+                }
+
+                if (running_fetch.total >= 100) {
+                    let response = {
+                        type: GET_MEDIA_NEXT_PAGE_COMPLETED,
+                        message: 'completed: get next page',
+                    }
+
+                    fetchSuccess(response)
+                }
+
+            }
+
+            if (running_fetch.response.type == GET_MEDIA_NEXT_PAGE_COMPLETED) {
+                fetchPending(GET_USER_PENDING)
+                getInfluencers(running_fetch.influencers.pending, running_fetch, fetchSuccess, fetchError)
+            }
+        }
     }
 
     startFetchJob = () => {
-        const { user, current_project, current_fetch_job, fetchPending, fetchSuccess, fetchError } = this.props
+        const { running_fetch, current_fetch_job, fetchPending, fetchSuccess, fetchError } = this.props
         this.setState({ isLoading: true })
-        fetchMedia(current_fetch_job, fetchPending, fetchSuccess, fetchError)
+        let running = { ...running_fetch, details: { ...current_fetch_job.details } }
+        fetchMedia(running, fetchPending, fetchSuccess, fetchError)
         this.setState({ isLoading: false })
         this.props.navigation.goBack()
     }
 
     render() {
-        const { have_influencers, fetch_job } = this.state
+        const { have_influencers } = this.state
         const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
-        console.log(running_fetch)
+
         return (
             <View style={styles.container}>
                 <AppHeader

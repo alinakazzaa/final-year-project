@@ -1,4 +1,4 @@
-import { GET_USER_ERROR, GET_USER_SUCCESS, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR, SET_RUNNING_FETCH, CLEAR_RUNNING_FETCH, COMPLETED, FAIL_CRITERIA } from "../constants"
+import { GET_USER_ERROR, GET_USER_SUCCESS, GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR, SET_RUNNING_FETCH, CLEAR_RUNNING_FETCH, COMPLETED, FAIL_CRITERIA, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_COMPLETED } from "../constants"
 
 export const fetchPending = (action_type, fetch_job) => {
     return {
@@ -14,26 +14,40 @@ export const fetchSuccess = response => {
         return {
             type: response.type,
             message: response.message,
-            media_ids: response.media_ids
+            media_ids: response.media_ids,
+            has_next_page: response.has_next_page,
+            end_cursor: response.end_cursor,
+            related_tags: response.related_tags,
+        }
+
+    } else if (response.type == GET_MEDIA_NEXT_PAGE_SUCCESS) {
+
+        return {
+            type: response.type,
+            message: response.message,
+            media_ids: response.media_ids,
+            end_cursor: response.end_cursor,
+            has_next_page: response.has_next_page,
         }
     }
     else if (response.type == GET_USER_SUCCESS) {
 
         return {
             type: response.type,
-            message: response.message
+            message: response.message,
+            id: response.id
         }
     }
 
     return {
         type: response.type,
-        message: response.message,
+        message: response.message
     }
 }
 
 export const fetchError = response => {
 
-    if (response.type == GET_USER_ERROR || response.type == FAIL_CRITERIA) {
+    if (response.type == GET_USER_ERROR) {
 
         return {
             type: response.type,
@@ -47,34 +61,6 @@ export const fetchError = response => {
         message: response.message
     }
 
-}
-
-export const getNextPagePending = fetch_job => {
-
-    return {
-        type: GET_MEDIA_BY_HASHTAG_PENDING,
-        fetch_job: fetch_job
-    }
-}
-
-export const getNextPageSuccess = (response, ids, fetch_job) => {
-
-    return {
-        type: GET_MEDIA_BY_HASHTAG_SUCCESS,
-        response: response,
-        ids: ids,
-        fetch_job: fetch_job,
-        total: ids.length,
-    }
-}
-
-export const getNextPageError = (error, user_id, project_id, fetch_job) => {
-
-    return {
-        type: GET_MEDIA_BY_HASHTAG_ERROR,
-        error: error,
-        fetch_job: fetch_job,
-    }
 }
 
 export const setRunningFetchJob = fetch_job => {
