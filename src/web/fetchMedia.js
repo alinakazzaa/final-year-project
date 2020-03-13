@@ -34,8 +34,6 @@ export const fetchMedia = (fetch_job, pending, success, error) => {
                         end_cursor: edge_hashtag_to_media.page_info.end_cursor
                     }
 
-                    // pending(GET_USER_PENDING)
-                    // getInfluencers(response.media_ids, fetch_job, success, error)
                     success(response)
 
                 })
@@ -57,7 +55,6 @@ export const getInfluencers = (ids, fetch_job, fetchSuccess, fetchError) => {
         fetchInfluencer(ids[i], fetch_job, fetchSuccess, fetchError);
         ++i
         if (i == ids.length) clearInterval(ref);
-        // if (i == 1) clearInterval(ref);
     }, 6000);
 
 }
@@ -68,7 +65,8 @@ export const extractIds = (edges, criteria) => {
     if (edges.length > 0) {
         edges.forEach(edge => {
             if (edge.node.edge_liked_by.count > likesMin(criteria)) {
-                media_ids.push(edge.node.owner.id)
+                if (media_ids.find(id => id == edge.node.owner.id) == null)
+                    media_ids.push(edge.node.owner.id)
             }
         })
     }
