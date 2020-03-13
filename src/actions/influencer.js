@@ -56,7 +56,8 @@ export const addInfluencer = influencer => {
     db.ref('/Influencers').child(influencer.id).set({
         ...influencer,
         profile_url: `https://www.instagram.com/${influencer.username}/`,
-        date_added: DATE_TODAY
+        date_added: DATE_TODAY,
+        to_do: true
     })
 }
 

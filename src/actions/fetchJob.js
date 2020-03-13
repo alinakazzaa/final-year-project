@@ -1,5 +1,6 @@
 import { db } from '../database/config/db';
-import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH, CLEAR_RUNNING_FETCH, UPDATE_FETCH_JOB_STATUS, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB } from '../constants';
+import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH, CLEAR_RUNNING_FETCH, UPDATE_FETCH_JOB_STATUS, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, DB_USER_PROJECTS_REF } from '../constants';
+import { getUserProjects } from './project';
 
 export const getProjectFetchJobs = (user_id, project_id) => {
     const fetch_jobs = []
@@ -117,7 +118,6 @@ export const updateStateFetchJob = fetch_job => {
 }
 
 export const updateFetchJob = fetch_job => {
-    console.log(fetch_job)
     db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
         ...fetch_job
     });

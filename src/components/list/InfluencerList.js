@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
 import { removeInfluencer } from '../../actions/influencer'
 
-export const InfluencerList = ({ influencers, current_project, current_fetch_job, goToInfluencer, addInfluencerByUsername, addToPotential }) => {
+export const InfluencerList = ({ influencers, current_project, current_fetch_job, goToInfluencer, createCollab, addInfluencerByUsername, addToPotential }) => {
     const formatNumber = num => {
         let parsed
         { num ? parsed = num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : 'loading...' }
@@ -86,6 +86,7 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                             size={40}
                             color="#ded4da"
                             type='MaterialIcons'
+                            onPress={() => createCollab(influ)}
                         /></TouchableOpacity>
                     <TouchableOpacity style={styles.footerNo}>
                         <Icon

@@ -1,23 +1,40 @@
-// import { INSTAGRAM_GET_NEXT_PAGE_MEDIA } from "../constants/endpoints"
-// import { extractInfluencerIDs } from "./fetchMedia"
+import { INSTAGRAM_GET_NEXT_PAGE_MEDIA } from "../constants/endpoints"
+import { extractIds } from './fetchMedia'
+import { GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_ERROR, GET_MEDIA_NEXT_PAGE_COMPLETED } from "../constants"
 
-// export const getNextPage = (end_cursor, user_id, project_id, current_fetch_job, pending, success, error) => {
-//     pending()
-//     let parsed_end_cursor = end_cursor.replace('==', '%3D%3D')
-//     let response
+export const fetchNextPage = (fetch_job, pending, success, error) => {
+    pending(GET_MEDIA_NEXT_PAGE_PENDING)
+    let parsed_end_cursor = fetch_job.end_cursor.replace('==', '%3D%3D')
+    let response
 
-//     fetch(INSTAGRAM_GET_NEXT_PAGE_MEDIA(current_fetch_job.hashtag, parsed_end_cursor))
-//         .then(result => {
-//             result.json().then(res => {
-//                 if (res.status = 'ok') {
-//                     response = 'got next page, extracting media'
-//                     return success(response, [...extractInfluencerIDs(res)], current_fetch_job)
-//                 } else {
-//                     response = 'does not have next page'
-//                     return error(response, user_id, project_id, current_fetch_job)
-//                 }
-//             })
-//         }).catch(error => {
-//             return error(error, user_id, project_id, current_fetch_job)
-//         })
-// }
+    fetch(INSTAGRAM_GET_NEXT_PAGE_MEDIA(fetch_job.details.hashtag, parsed_end_cursor))
+        .then(result => {
+            result.json().then(res => {
+
+                if (res.status = 'ok') {
+                    let edge_hashtag_to_media = { ...res.data.hashtag.edge_hashtag_to_media }
+
+                    response = {
+                        type: GET_MEDIA_NEXT_PAGE_SUCCESS,
+                        media_ids: [...extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria)],
+                        message: 'success: next page',
+                        has_next_page: edge_hashtag_to_media.page_info.has_next_page,
+                        end_cursor: edge_hashtag_to_media.page_info.end_cursor
+                    }
+
+                    success(response)
+
+                } else if (res.status = 'fail') {
+                    response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: res.message }
+                    error(response)
+                }
+                else {
+                    response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: 'error: next page' }
+                    error(response)
+                }
+            })
+        }).catch(error => {
+            response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: 'error: next page' }
+            error(response)
+        })
+}
