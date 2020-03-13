@@ -17,7 +17,6 @@ class HomeScreen extends React.Component {
 
     static navigationOptions = {
         headerShown: false,
-        recent_hashtags: []
     }
 
     componentDidMount() {
@@ -25,17 +24,16 @@ class HomeScreen extends React.Component {
     }
 
     getLastFetchJobHashtags = () => {
-        const { user, active_projects, getProjectFetchJobs } = this.props
+        const { user, active_projects, getUserProjects, getProjectFetchJobs } = this.props
         getUserProjects(user.id)
-        let project_id = active_projects[0].id
+        let project_id = active_projects[0].id // should be active_projects.length -1
 
         getProjectFetchJobs(user.id, project_id)
     }
 
     render() {
         const { user, actions, completed } = this.props
-        // const { recent_hashtags } = this.state
-        // console.log(recent_tags)
+
         return (
             <View style={styles.main}>
                 <AppHeader
@@ -46,11 +44,11 @@ class HomeScreen extends React.Component {
                     />}
                 />
                 <View style={styles.top}>
-                    <Text style={styles.title}>Because you recently fetched #{completed[0].details.hashtag}</Text>
+                    <Text style={styles.title}>Because you recently fetched #{completed[completed.length - 1].details.hashtag}</Text>
                     <Text style={styles.data}>Consider the below tags...</Text>
                     <View style={styles.itemRow}>
                         {completed.length > 0 && <Tags
-                            initialTags={completed[0].related_tags}
+                            initialTags={completed[completed.length - 1].related_tags}
                             // onChangeTags={tags => console.log(tags)}
                             onTagPress={(index, tagLabel, event) => console.log(index, tagLabel, event)}
                         // inputStyle={{ display: "none" }}
@@ -137,7 +135,8 @@ const mapStateToProps = state => ({
 
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getProjectFetchJobs: getProjectFetchJobs
+    getProjectFetchJobs: getProjectFetchJobs,
+    getUserProjects: getUserProjects
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
