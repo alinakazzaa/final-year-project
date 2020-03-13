@@ -8,6 +8,7 @@ import { CheckBox } from "native-base";
 import { criteria } from '../../constants/Criteria'
 import { Checkbox } from '../checkbox/Checkbox';
 import { addFetchJob } from '../../actions/fetchJob';
+import Slider from '@react-native-community/slider';
 
 const Form = t.form.Form;
 
@@ -77,7 +78,9 @@ export default class FetchJobForm extends React.Component {
             twenty: false,
             fifty: false,
             two_hundred: false,
-        }
+        },
+        follower_min: 0,
+        follower_max: 0
     }
 
     onChangeFormValues(val) {
@@ -179,6 +182,17 @@ export default class FetchJobForm extends React.Component {
                     <View style={styles.criteriaBox}>
                         {this.getCriteria()}
                     </View>
+                    <Text>{this.state.follower_min}</Text>
+                    <Slider
+                        style={{ width: '100%', height: 90 }}
+                        // step={1000}
+                        minimumValue={1000}
+                        maximumValue={100000000}
+                        minimumTrackTintColor="#0026ff"
+                        maximumTrackTintColor="#ffffff"
+                        onValueChange={val => console.log(val)}
+                    />
+                    <Text>{this.state.follower_max}</Text>
                 </View>
             </View>
         )
