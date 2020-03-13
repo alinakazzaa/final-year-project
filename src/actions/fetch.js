@@ -41,9 +41,7 @@ export const fetchSuccess = response => {
         }
     }
 
-    return {
-        ...running
-    }
+    return running
 }
 
 export const fetchError = response => {
