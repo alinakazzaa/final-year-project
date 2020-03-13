@@ -9,10 +9,10 @@ import { ProjectStack } from './ProjectStack';
 
 export const BottomNavigator = createBottomTabNavigator(
     {
+        // @ts-ignore
         Home: {
             screen: HomeScreen,
             navigationOptions: {
-                title: 'Home',
                 tabBarIcon: () => (
                     <Icon name="home" size={30} color="#5d4d50" />
                 )
@@ -21,7 +21,6 @@ export const BottomNavigator = createBottomTabNavigator(
         Projects: {
             screen: ProjectStack,
             navigationOptions: {
-                title: 'Projects',
                 tabBarIcon: () => (
                     <Icon name="assignment" size={30} color="#5d4d50" />
                 )
@@ -30,7 +29,6 @@ export const BottomNavigator = createBottomTabNavigator(
         Collabs: {
             screen: CollabStack,
             navigationOptions: {
-                title: 'Collabs',
                 tabBarIcon: () => (
                     <Icon name="people" size={35} color="#5d4d50" />
                 )
@@ -39,7 +37,6 @@ export const BottomNavigator = createBottomTabNavigator(
         Settings: {
             screen: SettingsScreen,
             navigationOptions: {
-                title: 'Settings',
                 tabBarIcon: () => (
                     <Icon name="settings" size={30} color="#5d4d50" />
                 )
