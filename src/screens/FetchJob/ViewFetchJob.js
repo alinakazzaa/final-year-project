@@ -32,50 +32,46 @@ class ViewFetchJob extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { running_fetch, updateStateFetchJob, fetchPending, fetchSuccess, fetchError } = this.props
+        const { running_fetch, updateStateFetchJob, pending, success, error } = this.props
 
         if (prev.running_fetch.details.status !== running_fetch.details.status) {
             updateStateFetchJob(running_fetch)
             if (running_fetch.details.status == COMPLETED) {
-                // updateFetchJob(running_fetch)
-                console.log(running_fetch)
+                updateFetchJob(running_fetch)
             }
         }
 
+        if (running_fetch.response !== null)
+            if (running_fetch.response.type == GET_MEDIA_BY_HASHTAG_SUCCESS || running_fetch.response.type == GET_MEDIA_NEXT_PAGE_SUCCESS) {
 
-
-        if (running_fetch.end_cursor != prev.running_fetch.end_cursor) {
-
-            if (running_fetch.has_next_page) {
-                if (running_fetch.progress.total < 3) {
-                    fetchNextPage(running_fetch, fetchPending, fetchSuccess, fetchError)
-                } else {
-                    let response = {
-                        type: GET_MEDIA_NEXT_PAGE_COMPLETED,
-                        message: 'completed: get next page',
+                if (running_fetch.has_next_page) {
+                    if (running_fetch.progress.total < 5) {
+                        fetchNextPage(running_fetch, pending, success, error)
+                    } else {
+                        let response = {
+                            type: GET_MEDIA_NEXT_PAGE_COMPLETED,
+                            message: 'completed: get next page',
+                        }
+                        success(response)
                     }
-
-                    fetchSuccess(response)
                 }
             }
-        }
-
 
         if (running_fetch.response != null) {
             if (running_fetch.response.type == GET_MEDIA_NEXT_PAGE_COMPLETED && running_fetch.stage == MEDIA_NEXT_PAGE) {
-                fetchPending(GET_USER_PENDING)
+                pending(GET_USER_PENDING)
             }
         }
 
         if (running_fetch.stage == USER_FETCH && running_fetch.response == null)
-            getInfluencers(running_fetch.influencers.pending, running_fetch, fetchSuccess, fetchError)
+            getInfluencers(running_fetch.influencers.pending, running_fetch, success, error)
     }
 
     startFetchJob = () => {
-        const { running_fetch, current_fetch_job, fetchPending, fetchSuccess, fetchError } = this.props
+        const { running_fetch, current_fetch_job, pending, success, error } = this.props
         this.setState({ isLoading: true })
         let running = { ...running_fetch, details: { ...current_fetch_job.details } }
-        fetchMedia(running, fetchPending, fetchSuccess, fetchError)
+        fetchMedia(running, pending, success, error)
         this.setState({ isLoading: false })
         this.props.navigation.goBack()
     }
@@ -83,7 +79,8 @@ class ViewFetchJob extends React.Component {
     render() {
         const { have_influencers } = this.state
         const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
-        console.log(running_fetch)
+        let fetch_job = current_fetch_job.details.id == running_fetch.details.id ? running_fetch : current_fetch_job
+        console.log(fetch_job)
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -100,43 +97,43 @@ class ViewFetchJob extends React.Component {
                             <Text style={styles.title}>Job Details</Text>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Title</Text>
-                                <Text style={styles.data}>{current_fetch_job.details.title}</Text>
+                                <Text style={styles.data}>{fetch_job.details.title}</Text>
                             </View>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Date Created</Text>
-                                <Text style={styles.data}>{current_fetch_job.details.date_created}</Text>
+                                <Text style={styles.data}>{fetch_job.details.date_created}</Text>
                             </View>
                         </View>
                         <View style={styles.middle}>
                             <Text style={styles.title}>Fetch Criteria</Text>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Hashtag</Text>
-                                <Text style={styles.data}># {current_fetch_job.details.hashtag}</Text>
+                                <Text style={styles.data}># {fetch_job.details.hashtag}</Text>
                             </View>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Location</Text>
-                                <Text style={styles.data}>{current_fetch_job.details.location}</Text>
+                                <Text style={styles.data}>{fetch_job.details.location}</Text>
                             </View>
                         </View>
                         <View style={styles.itemRowRange}>
                             <Text style={styles.lblRange}>Follower range</Text>
-                            <CriteriaView activeCriteria={current_fetch_job.details.criteria} />
+                            <CriteriaView activeCriteria={fetch_job.details.criteria} />
                         </View>
                         <View style={styles.middle}>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Status</Text>
                                 <View style={styles.statusView}>
-                                    {current_fetch_job.details.status == IN_PROGRESS &&
+                                    {fetch_job.details.status == IN_PROGRESS &&
                                         <View style={styles.progress}>
                                             <Bar progress={progress_percent} width={150} height={15} color="#5d4d50" />
                                         </View>
                                     }
                                 </View>
-                                <Text style={styles.statusData}>{current_fetch_job.details.status}</Text>
+                                <Text style={styles.statusData}>{fetch_job.details.status}</Text>
                             </View>
                         </View>
-                        {current_fetch_job.details.status == COMPLETED &&
-                            current_fetch_job.response.type == COMPLETED_GET_ALL_USERS &&
+                        {fetch_job.details.status == COMPLETED &&
+                            fetch_job.response.type == COMPLETED_GET_ALL_USERS && influencers.length > 0 &&
                             <View style={styles.bottomView}>
                                 <View style={styles.influencers}>
                                     <Text style={styles.title}>Influencers</Text>
@@ -147,11 +144,11 @@ class ViewFetchJob extends React.Component {
                                 {have_influencers && <InfluencerListFjView influencers={influencers} />}
                             </View>
                         }
-                        {current_fetch_job.details.status == COMPLETED &&
-                            current_fetch_job.response.type == GET_MEDIA_BY_HASHTAG_ERROR &&
-                            <View style={styles.bottomView}><Text style={styles.lbl}>{current_fetch_job.response.message}</Text></View>
+                        {fetch_job.details.status == COMPLETED &&
+                            fetch_job.response.type == GET_MEDIA_BY_HASHTAG_ERROR &&
+                            <View style={styles.bottomView}><Text style={styles.lbl}>{fetch_job.response.message}</Text></View>
                         }
-                        {current_fetch_job.details.status == PENDING && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
+                        {fetch_job.details.status == PENDING && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                     </View >
 
                 </View >
@@ -312,9 +309,9 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     clearCurrentFetchJob: clearCurrentFetchJob,
     getInfluencersPending: getInfluencersPending,
     clearRunningFetchJob: clearRunningFetchJob,
-    fetchPending: fetchPending,
-    fetchError: fetchError,
-    fetchSuccess: fetchSuccess,
+    pending: fetchPending,
+    error: fetchError,
+    success: fetchSuccess,
     updateStateFetchJob: updateStateFetchJob
 }, dispatch);
 
