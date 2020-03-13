@@ -107,6 +107,8 @@ const fetchReducer = (state = initialState, action) => {
             running = {
                 ...state,
                 response: { type: action.type, message: action.message },
+                pending: false,
+                details: { ...state.details, status: COMPLETED }
             }
 
             return {
@@ -114,6 +116,7 @@ const fetchReducer = (state = initialState, action) => {
             }
 
         case GET_MEDIA_NEXT_PAGE_COMPLETED:
+
             running = {
                 ...state,
                 response: { type: action.type, message: action.message },
@@ -123,13 +126,11 @@ const fetchReducer = (state = initialState, action) => {
                 ...running
             }
 
-
-
-
         case GET_USER_PENDING:
 
             running = {
                 ...state,
+                response: null,
                 stage: USER_FETCH,
             }
 
@@ -138,6 +139,9 @@ const fetchReducer = (state = initialState, action) => {
             }
 
         case GET_USER_SUCCESS:
+            let success = [...state.influencers.success]
+            success.splice(success.length, 0, action.id)
+
             running = {
                 ...state,
                 progress: {
@@ -148,7 +152,7 @@ const fetchReducer = (state = initialState, action) => {
                 influencers: {
                     ...state.influencers,
                     pending: [...state.influencers.success.filter(id => id != action.id)],
-                    success: [...state.influencers.success, action.id]
+                    success: success
                 }
             }
 
