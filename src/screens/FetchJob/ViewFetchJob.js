@@ -15,7 +15,7 @@ import { TextButton } from '../../components/buttons/TextButton';
 import { clearCurrentFetchJob, updateStateFetchJob, updateFetchJob } from '../../actions/fetchJob';
 import { fetchMedia, getInfluencers } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress';
-import { COMPLETED, PENDING, IN_PROGRESS, GET_MEDIA_BY_HASHTAG_ERROR, COMPLETED_GET_ALL_USERS, GET_MEDIA_NEXT_PAGE_COMPLETED, GET_USER_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_NEXT_PAGE_SUCCESS } from '../../constants';
+import { COMPLETED, PENDING, IN_PROGRESS, GET_MEDIA_BY_HASHTAG_ERROR, COMPLETED_GET_ALL_USERS, GET_MEDIA_NEXT_PAGE_COMPLETED, GET_USER_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_NEXT_PAGE_SUCCESS, USER_FETCH, MEDIA_NEXT_PAGE } from '../../constants';
 import { fetchPending, fetchError, fetchSuccess, clearRunningFetchJob } from '../../actions/fetch';
 import { fetchNextPage } from '../../web/fetchNextPage';
 
@@ -37,19 +37,19 @@ class ViewFetchJob extends React.Component {
         if (prev.running_fetch.details.status !== running_fetch.details.status) {
             updateStateFetchJob(running_fetch)
             if (running_fetch.details.status == COMPLETED) {
-                updateFetchJob(running_fetch)
+                // updateFetchJob(running_fetch)
+                console.log(running_fetch)
             }
         }
 
-        if (running_fetch.response != null) {
 
-            if (running_fetch.response.type == GET_MEDIA_BY_HASHTAG_SUCCESS || running_fetch.response.type == GET_MEDIA_NEXT_PAGE_SUCCESS) {
 
-                if (running_fetch.has_next_page && running_fetch.progress.total < 100) {
+        if (running_fetch.end_cursor != prev.running_fetch.end_cursor) {
+
+            if (running_fetch.has_next_page) {
+                if (running_fetch.progress.total < 3) {
                     fetchNextPage(running_fetch, fetchPending, fetchSuccess, fetchError)
-                }
-
-                if (running_fetch.total >= 100) {
+                } else {
                     let response = {
                         type: GET_MEDIA_NEXT_PAGE_COMPLETED,
                         message: 'completed: get next page',
@@ -57,14 +57,18 @@ class ViewFetchJob extends React.Component {
 
                     fetchSuccess(response)
                 }
-
-            }
-
-            if (running_fetch.response.type == GET_MEDIA_NEXT_PAGE_COMPLETED) {
-                fetchPending(GET_USER_PENDING)
-                getInfluencers(running_fetch.influencers.pending, running_fetch, fetchSuccess, fetchError)
             }
         }
+
+
+        if (running_fetch.response != null) {
+            if (running_fetch.response.type == GET_MEDIA_NEXT_PAGE_COMPLETED && running_fetch.stage == MEDIA_NEXT_PAGE) {
+                fetchPending(GET_USER_PENDING)
+            }
+        }
+
+        if (running_fetch.stage == USER_FETCH && running_fetch.response == null)
+            getInfluencers(running_fetch.influencers.pending, running_fetch, fetchSuccess, fetchError)
     }
 
     startFetchJob = () => {
@@ -79,7 +83,7 @@ class ViewFetchJob extends React.Component {
     render() {
         const { have_influencers } = this.state
         const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
-
+        console.log(running_fetch)
         return (
             <View style={styles.container}>
                 <AppHeader
