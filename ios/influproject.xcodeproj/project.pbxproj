@@ -839,8 +839,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = influproject;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.influapp;
+				PRODUCT_NAME = InfluenceMe;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -903,8 +903,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = influproject;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.influapp;
+				PRODUCT_NAME = InfluenceMe;
 				VALIDATE_PRODUCT = NO;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
