@@ -33,7 +33,6 @@ class LogInScreen extends React.Component {
     logIn = user => {
         const { setLoggedInUserSuccess, setLoggedInUserError } = this.props;
         const user_obj = getUserByUsername(user.username)
-        let error
         if (user_obj) {
             if (user.username == user_obj.username) {
                 if (user.password == user_obj.password) {

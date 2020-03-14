@@ -5,9 +5,9 @@ export const authenticationStyles = StyleSheet.create(
     {
         container: {
             ...container,
+            paddingTop: '30%',
             height: dimensions.fullHeight,
             backgroundColor: 'transparent',
-            justifyContent: 'center',
             alignItems: 'center',
         },
         formContainer: {
