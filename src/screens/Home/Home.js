@@ -9,6 +9,7 @@ import Tags from "react-native-tags";
 import { getUserProjects } from '../../actions/project';
 import { getProjectFetchJobs } from '../../actions/fetchJob';
 import { COMPLETED } from '../../constants';
+import { logOutUser } from '../../actions/user';
 
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -32,7 +33,7 @@ class HomeScreen extends React.Component {
     }
 
     render() {
-        const { user, actions, completed } = this.props
+        const { user, logOutUser, completed } = this.props
 
         return (
             <View style={styles.main}>
@@ -40,10 +41,10 @@ class HomeScreen extends React.Component {
                     right={<IconButton color="#5d4d50"
                         name='sign-out'
                         size={30}
-                        onPress={() => actions.logOutUser()}
+                        onPress={() => logOutUser()}
                     />}
                 />
-                <View style={styles.top}>
+                {/* <View style={styles.top}>
                     <Text style={styles.title}>Because you recently fetched #{completed[completed.length - 1].details.hashtag}</Text>
                     <Text style={styles.data}>Consider the below tags...</Text>
                     <View style={styles.itemRow}>
@@ -54,7 +55,7 @@ class HomeScreen extends React.Component {
                         // inputStyle={{ display: "none" }}
                         />}
                     </View>
-                </View>
+                </View> */}
                 <View style={styles.logInMsg}>
                     <Text style={styles.largeTitle}>Recent posts by influencers....</Text>
                     <Text style={styles.largeTitle}>{`Current user ${user.username}`}</Text>
@@ -136,7 +137,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     getProjectFetchJobs: getProjectFetchJobs,
-    getUserProjects: getUserProjects
+    getUserProjects: getUserProjects,
+    logOutUser: logOutUser
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)

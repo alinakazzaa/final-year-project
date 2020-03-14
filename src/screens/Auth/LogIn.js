@@ -1,23 +1,29 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, YellowBox, Image } from 'react-native';
 import LogInForm from '../../components/forms/LogInForm';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUserByUsername, setLoggedInUserError, setLoggedInUserSuccess } from '../../actions/user';
-// import { getAllUsers } from '../../actions/user';
+import { styles } from './styles'
+import { spacing } from '../../styles/base';
+import { Gradient } from '../../styles/Gradient';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class LogInScreen extends React.Component {
 
-    componentDidMount() {
-        const { setLoggedInUserSuccess } = this.props;
-        const user_obj = getUserByUsername("A")
-        if (user_obj.username) {
-            setLoggedInUserSuccess(user_obj)
-        }
-
+    static navigationOptions = {
+        headerShown: false,
     }
+
+    // componentDidMount() {
+    //     const { setLoggedInUserSuccess } = this.props;
+    //     const user_obj = getUserByUsername("A")
+    //     if (user_obj.username) {
+    //         setLoggedInUserSuccess(user_obj)
+    //     }
+
+    // }
 
 
     goToRegister = () => {
@@ -42,30 +48,23 @@ class LogInScreen extends React.Component {
                 setLoggedInUserError(error)
             }
         }
-
-
-
     }
 
     render() {
         const { error } = this.props
         return (
-            <View style={styles.container}>
-                <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={error} />
+            <View>
+                <Gradient horizontal={true}>
+                    <View style={styles.container}>
+                        <Image style={styles.logo} source={require('../../assets/resources/images/logo-white.png')} />
+                        <Text style={styles.title}>Influence Me</Text>
+                        <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={error} />
+                    </View>
+                </Gradient>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-            justifyContent: 'center',
-            // alignContent: 'center',
-            alignItems: 'center'
-        },
-    });
 
 const mapStateToProps = state => ({
     user: state.user,
