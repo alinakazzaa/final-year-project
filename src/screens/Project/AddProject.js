@@ -1,17 +1,15 @@
-import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
-import { AppHeader } from '../../layouts/Header';
-import ProjectForm from '../../components/forms/ProjectForm';
-import { IconButton } from '../../components/buttons/IconButton';
-import { TextButton } from '../../components/buttons/TextButton';
+import * as React from 'react'
+import { View, YellowBox, StyleSheet } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import ProjectForm from '../../components/forms/ProjectForm'
+import { IconButton } from '../../components/buttons/IconButton'
+import { TextButton } from '../../components/buttons/TextButton'
 import { addProject } from '../../actions/project'
-import * as userActions from '../../actions/user';
-import * as projectActions from '../../actions/project';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
 
 class AddProject extends React.Component {
 
@@ -24,13 +22,13 @@ class AddProject extends React.Component {
     }
 
     handleChange = project => {
-        this.setState({ project });
+        this.setState({ project })
     }
 
     handleSubmit = () => {
         const { user, addProject } = this.props
         const { project } = this.state
-        addProject(user.id, project);
+        addProject(user.id, project)
         this.props.navigation.navigate("AllProjects")
     }
 
@@ -51,7 +49,7 @@ class AddProject extends React.Component {
                 />
                 <ProjectForm onChange={this.handleChange} />
             </View>
-        );
+        )
     }
 }
 
@@ -64,22 +62,16 @@ const styles = StyleSheet.create(
             marginRight: 10,
             fontWeight: '700'
         },
-    });
+    })
 
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
     current_project: state.project.current_project
-});
-
-const ActionCreators = Object.assign(
-    {},
-    userActions,
-    projectActions
-);
+})
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     addProject: addProject
-}, dispatch);
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddProject)

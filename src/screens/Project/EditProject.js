@@ -1,21 +1,14 @@
-import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
+import * as React from 'react'
+import { View, YellowBox, StyleSheet } from 'react-native'
 import { updateProject } from '../../actions/project'
+import { AppHeader } from '../../layouts/Header'
+import { TextButton } from '../../components/buttons/TextButton'
+import { IconButton } from '../../components/buttons/IconButton'
+import ProjectForm from '../../components/forms/ProjectForm'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-import { createStackNavigator } from 'react-navigation-stack';
-import { AppHeader } from '../../layouts/Header';
-import { TextButton } from '../../components/buttons/TextButton';
-import { IconButton } from '../../components/buttons/IconButton';
-import ProjectForm from '../../components/forms/ProjectForm';
-import { db } from '../../database/config/db';
-
-import * as projectActions from '../../actions/project';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
-let usersRef = db.ref('/Users');
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
 
 class EditProject extends React.Component {
 
@@ -28,7 +21,7 @@ class EditProject extends React.Component {
     }
 
     componentDidMount() {
-        const { current_project } = this.props;
+        const { current_project } = this.props
         if (current_project.title) {
             this.setState({ project: { ...current_project } })
         }
@@ -40,7 +33,7 @@ class EditProject extends React.Component {
             ...this.state.project,
             ...project
         }
-        this.setState({ project: updatedProject });
+        this.setState({ project: updatedProject })
     }
 
     handleSubmit = () => {
@@ -69,7 +62,7 @@ class EditProject extends React.Component {
                 />
                 <ProjectForm onChange={this.handleChange} project={current_project} />
             </View>
-        );
+        )
     }
 }
 
@@ -86,16 +79,16 @@ const styles = StyleSheet.create(
             marginRight: 10,
             fontWeight: '700'
         },
-    });
+    })
 
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
     current_project: state.project.current_project
-});
+})
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     updateProject: updateProject
-}, dispatch);
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProject)
