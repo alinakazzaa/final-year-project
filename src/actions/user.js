@@ -20,10 +20,11 @@ export const setLoggedInUserError = message => {
 export const addUser = user => {
     const user_add = DB_USER_REF.push({
         details: {
-            ...user,
+            username: user.username,
+            password: user.password,
+            email: user.email,
             id: '',
             date_created: DATE_TODAY,
-            avatar: '',
         }
     })
     const key = user_add.key
