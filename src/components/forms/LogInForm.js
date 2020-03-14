@@ -3,7 +3,7 @@ import { Text, View, Keyboard } from 'react-native';
 import { TextButton } from '../../components/buttons/TextButton';
 // @ts-ignore
 import t from 'tcomb-form-native';
-import { authenticationStyles } from '../../styles/authentication/authenticationStyles';
+import { auth } from '../../styles/auth';
 import { form } from '../../styles/base'
 
 const v = require('tcomb-validation');
@@ -50,8 +50,8 @@ export default class LogInForm extends React.Component {
         const { value } = this.state
 
         return (
-            <View style={authenticationStyles.formContainer}>
-                <Text style={authenticationStyles.text}>Please log in</Text>
+            <View style={auth.formContainer}>
+                <Text style={auth.text}>Please log in</Text>
                 <Form
                     ref={c => this._form = c}
                     type={User}
@@ -61,8 +61,8 @@ export default class LogInForm extends React.Component {
                     onBlur={Keyboard.dismiss}
                 />
                 {error && <Text>{error.message}</Text>}
-                <TextButton title="Log In" onPress={() => logIn(value)} style={authenticationStyles.logInButton} />
-                <TextButton title="Registration" style={authenticationStyles.regButton} onPress={goToRegister} />
+                <TextButton title="Log In" onPress={() => logIn(value)} style={auth.logInButton} />
+                <TextButton title="Registration" style={auth.regButton} onPress={goToRegister} />
             </View>
         )
     }

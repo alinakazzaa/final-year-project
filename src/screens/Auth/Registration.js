@@ -1,20 +1,23 @@
-import * as React from 'react';
-import { View, YellowBox } from 'react-native';
-import RegistrationForm from '../../components/forms/RegistrationForm';
+import * as React from 'react'
+import { View, YellowBox } from 'react-native'
+import RegistrationForm from '../../components/forms/RegistrationForm'
 import { DB_USER_REF } from '../../constants/index'
 import { addUser, setLoggedInUserSuccess } from '../../actions/user'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Gradient } from '../../styles/Gradient';
-import { authenticationStyles } from '../../styles/authentication/authenticationStyles'
-import { IconButton } from '../../components/buttons/IconButton';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { Gradient } from '../../styles/Gradient'
+import { auth } from '../../styles/auth'
+import { IconButton } from '../../components/buttons/IconButton'
+import { AppLogo } from '../../components/logo/AppLogo'
+import { AppHeader } from '../../layouts/Header';
+import { colors } from '../../styles/base'
 
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
 
 class RegistrationScreen extends React.Component {
 
     static navigationOptions = {
-        headerShown: false
+        headerShown: false,
     }
 
     registerUser = user => {
@@ -26,7 +29,7 @@ class RegistrationScreen extends React.Component {
     }
 
     logIn = user => {
-        const { setLoggedInUserSuccess } = this.props;
+        const { setLoggedInUserSuccess } = this.props
         DB_USER_REF.on('value', u_snap => {
             u_snap.forEach(item => {
                 let details = { ...item.val().details }
@@ -43,12 +46,14 @@ class RegistrationScreen extends React.Component {
         return (
             <View>
                 <Gradient horizontal={true}>
-                    <View style={authenticationStyles.container}>
-                        <IconButton color="#493649"
+                    <AppHeader transparent={true}
+                        left={<IconButton color={colors.BLACK}
                             name='angle-left'
                             size={40}
                             onPress={() => this.props.navigation.goBack()}
-                        />
+                        />} />
+                    <View style={auth.regContainer}>
+                        <AppLogo large={true} />
                         <RegistrationForm registerUser={this.registerUser} logIn={this.logIn} />
                     </View>
                 </Gradient>
@@ -59,10 +64,10 @@ class RegistrationScreen extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.user,
-});
+})
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setLoggedInUserSuccess: setLoggedInUserSuccess
-}, dispatch);
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationScreen)

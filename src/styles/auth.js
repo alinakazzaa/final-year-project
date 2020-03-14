@@ -1,11 +1,17 @@
 import { StyleSheet } from 'react-native';
-import { colors, container, button, spacing, fonts, dimensions } from '../base';
+import { colors, container, button, spacing, fonts, dimensions } from './base';
 
-export const authenticationStyles = StyleSheet.create(
+export const auth = StyleSheet.create(
     {
-        container: {
+        logInContainer: {
             ...container,
             paddingTop: '30%',
+            height: dimensions.fullHeight,
+            backgroundColor: 'transparent',
+            alignItems: 'center',
+        },
+        regContainer: {
+            ...container,
             height: dimensions.fullHeight,
             backgroundColor: 'transparent',
             alignItems: 'center',
@@ -49,9 +55,5 @@ export const authenticationStyles = StyleSheet.create(
             backgroundColor: colors.SECONDARY,
             margin: spacing.MEDIUM,
         },
-        logo: {
-            width: 100,
-            height: 100,
-        }
     });
 

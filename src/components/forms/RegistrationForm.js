@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text, View, Keyboard } from 'react-native';
-import { TextButton } from '../../components/buttons/TextButton';
+import React from 'react'
+import { View, Keyboard } from 'react-native'
+import { TextButton } from '../../components/buttons/TextButton'
 // @ts-ignore
-import t from 'tcomb-form-native';
-import { authenticationStyles } from '../../styles/authentication/authenticationStyles';
+import t from 'tcomb-form-native'
+import { auth } from '../../styles/auth'
 import { form } from '../../styles/base'
 
 const Form = t.form.Form;
@@ -60,7 +60,7 @@ export default class RegistrationForm extends React.Component {
     render() {
 
         return (
-            <View style={authenticationStyles.formContainer}>
+            <View style={auth.formContainer}>
                 <Form
                     ref={c => this._form = c}
                     type={User}
@@ -69,7 +69,7 @@ export default class RegistrationForm extends React.Component {
                     onChange={(value) => this.onChange(value)}
                     onBlur={Keyboard.dismiss}
                 />
-                <TextButton title="Register" onPress={this.onSubmit} style={authenticationStyles.regButton} />
+                <TextButton title="Register" onPress={this.onSubmit} style={auth.regButton} />
             </View>
         )
     }

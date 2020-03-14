@@ -13,7 +13,8 @@ export const IconButton = ({ type, name, color, size, onPress, raised, style, re
         reverse={reverse}
         type={type}
         onPress={onPress}
-        iconStyle={style} />
+        iconStyle={style}
+        underlayColor='transparent' />
 }
 
 IconButton.propTypes = {

@@ -4,9 +4,10 @@ import LogInForm from '../../components/forms/LogInForm';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUserByUsername, setLoggedInUserError, setLoggedInUserSuccess } from '../../actions/user';
-import { authenticationStyles } from '../../styles/authentication/authenticationStyles'
+import { auth } from '../../styles/auth'
 import { Gradient } from '../../styles/Gradient';
 import { INCORRECT_PASSWORD, NO_USER } from '../../constants/response/messages';
+import { AppLogo } from '../../components/logo/AppLogo'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -51,9 +52,8 @@ class LogInScreen extends React.Component {
         return (
             <View>
                 <Gradient horizontal={true}>
-                    <View style={authenticationStyles.container}>
-                        <Image style={authenticationStyles.logo} source={require('../../assets/resources/images/logo-white.png')} />
-                        <Text style={authenticationStyles.title}>Influence Me</Text>
+                    <View style={auth.logInContainer}>
+                        <AppLogo large={true} />
                         <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={error} />
                     </View>
                 </Gradient>
