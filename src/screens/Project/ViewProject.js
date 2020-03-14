@@ -27,10 +27,10 @@ class ViewProjectScreen extends React.Component {
         this.setState({ isLoading: false })
     }
 
-    // componentWillUnmount() {
-    //     const { clearCurrentProject } = this.props
-    //     clearCurrentProject()
-    // }
+    componentWillUnmount() {
+        const { clearCurrentProject } = this.props
+        clearCurrentProject()
+    }
 
     // componentDidUpdate(prev) {
     //     const { fetch_jobs } = this.props
