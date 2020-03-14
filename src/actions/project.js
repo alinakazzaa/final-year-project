@@ -5,8 +5,7 @@ import { SET_PROJECTS_ERROR, SET_PROJECTS_SUCCESS, SET_PROJECTS_PENDING } from '
 import { NO_PROJECTS } from '../constants/response/messages';
 
 export const getUserProjects = user_id => {
-    const active = []
-    const archived = []
+    const projects = []
 
     DB_USER_PROJECTS_REF(user_id).on('value', proj_snapshot => {
         proj_snapshot.forEach(proj_snap => {
@@ -18,15 +17,12 @@ export const getUserProjects = user_id => {
                 id: proj_snap.val().details.id,
                 user_id: user_id
             }
-            if (proj_snap.val().details.active == true) {
-                active.push(proj)
-            } else {
-                archived.push(proj)
-            }
+
+            projects.push(proj)
         })
     })
 
-    if (active.length == 0 && archived.length == 0) {
+    if (projects.length == 0) {
         return {
             type: SET_PROJECTS_ERROR,
             message: NO_PROJECTS
@@ -34,8 +30,7 @@ export const getUserProjects = user_id => {
     } else {
         return {
             type: SET_PROJECTS_SUCCESS,
-            active: active,
-            archived: archived
+            projects: projects
         }
     }
 }

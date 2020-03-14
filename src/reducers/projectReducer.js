@@ -1,105 +1,87 @@
-import { SET_PROJECTS_PENDING, SET_CURRENT_PROJECT, SET_PROJECTS_SUCCESS, SET_PROJECTS_ERROR, CLEAR_CURRENT_PROJECT, ADD_PROJECT, REMOVE_PROJECT, UPDATE_PROJECT } from '../constants';
+import { SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, REMOVE_PROJECT, UPDATE_PROJECT } from '../constants'
+import { SET_PROJECTS_PENDING, SET_PROJECTS_SUCCESS, SET_PROJECTS_ERROR } from '../constants/response/types'
 
 const initialState = {
-    projects: {
-        active: [],
-        archived: []
-    },
+    projects: [],
     current_project: {},
     pending: null,
     error: null
-};
+}
 
 const projectReducer = (state = initialState, action) => {
-    let updated_state = { ...state }
-    let proj
-    let active
-    let archived
-
+    let projects
     switch (action.type) {
 
         case SET_PROJECTS_PENDING:
-            updated_state.pending = true
+
             return {
-                ...updated_state
-            };
+                ...state,
+                pending: true
+            }
 
         case SET_PROJECTS_SUCCESS:
-            updated_state.projects.active = action.active
-            updated_state.projects.archived = action.archived
-            updated_state.pending = false
-            updated_state.error = null
+
             return {
-                ...updated_state
-            };
+                ...state,
+                projects: action.projects,
+                pending: false
+            }
 
         case SET_PROJECTS_ERROR:
-            updated_state.pending = false
-            updated_state.error = action.error
+
             return {
-                ...updated_state
-            };
+                ...state,
+                pending: false,
+                error: action.error
+            }
 
         case SET_CURRENT_PROJECT:
-            updated_state.current_project = { ...action.payload }
-            updated_state.pending = false
+
             return {
-                ...updated_state
-            };
+                ...state,
+                current_project: action.payload,
+                pending: false
+            }
 
         case CLEAR_CURRENT_PROJECT:
-            updated_state.current_project = {}
+
             return {
-                ...updated_state
-            };
+                ...state,
+                current_project: {}
+            }
 
         case ADD_PROJECT:
-            if (action.payload.active) {
-                active = [...updated_state.projects.active]
-                active.splice(active.length, 1, action.payload);
-                updated_state.projects = { ...updated_state.projects, active: active }
-            } else {
-                archived = [...state.projects.archived]
-                archived.splice(archived.length, 1, action.payload);
-                updated_state.projects = { ...updated_state.projects, archived: archived }
-            }
-            return {
-                ...updated_state
-            };
-        case UPDATE_PROJECT:
-            if (action.payload.active) {
-                active = [...updated_state.projects.active]
-                let index = active.findIndex(proj => proj.id == action.payload.id);
-                active.splice(index, 1, action.payload);
-                updated_state.projects = { ...updated_state.projects, active: active }
-            } else {
-                archived = [...updated_state.projects.archived]
-                let index = archived.findIndex(proj => proj.id == action.payload.id);
-                archived.splice(index, 1, action.payload);
-                updated_state.projects = { ...updated_state.projects, archived: archived }
-            }
-            return {
-                ...updated_state,
+            projects = [...state.projects]
+            projects.splice(projects.length, 1, action.payload)
 
-            };
+            return {
+                ...state,
+                projects: projects
+            }
+        case UPDATE_PROJECT:
+            projects = [...state.projects]
+            let index = projects.findIndex(proj => proj.id == action.payload.id)
+            projects.splice(index, 1, action.payload)
+
+            return {
+                ...state,
+                projects: projects
+
+            }
 
         case REMOVE_PROJECT:
-            proj = action.payload
-            if (proj.active) {
-                active = [...updated_state.projects.active]
-                active.filter(project => project.id !== action.payload.id)
-                updated_state.projects = { ...updated_state.projects, active: active }
-            } else {
-                archived = [...updated_state.projects.archived]
-                archived.filter(project => project.id !== action.payload.id)
-                updated_state.projects = { ...updated_state.projects, archived: archived }
-            }
+
             return {
-                ...updated_state
-            };
+                ...state,
+                projects: [...state.projects.filter(project => project.id !== action.payload.id)]
+            }
 
         default:
-            return state;
+            return state
     }
 }
-export default projectReducer;
+
+export const activeProjects = state => [...state.project.projects.filter(proj => proj.active == true)]
+export const archivedProjects = state => [...state.project.projects.filter(proj => proj.active == false)]
+
+export default projectReducer

@@ -10,6 +10,7 @@ import { Input } from 'react-native-elements';
 import { removeProject, setCurrentProject, getUserProjects, setUserProjectsPending } from '../../actions/project'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { activeProjects, archivedProjects } from '../../reducers/projectReducer'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -62,7 +63,7 @@ class AllProjects extends React.Component {
     }
 
     deleteProject = project => {
-        let { user, removeProject } = this.props;
+        let { user, removeProject, active, archived } = this.props;
         removeProject(user.id, project)
     }
 
@@ -71,8 +72,9 @@ class AllProjects extends React.Component {
     }
 
     render() {
-        const { projects } = this.props;
+        const { active, archived } = this.props;
         const { index, selectedTabStyle, selectedTabItemStyle } = this.state
+
         return (
             <View style={styles.main} >
                 <AppHeader
@@ -90,10 +92,10 @@ class AllProjects extends React.Component {
                 {this.props.state.project.error && <View style={styles.none}><Text style={styles.noneTxt}>No projects</Text></View>}
                 {!this.props.state.project.error && !this.props.state.project.pending && index == 0 ?
                     <View>
-                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={projects.active} />
+                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={active} />
                     </View> :
                     <View>
-                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={projects.archived} />
+                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={archived} />
                     </View>}
                 <IconButton name="plus" size={40} color='#646380' onPress={() => this.props.navigation.navigate('AddProject')} />
             </View>
@@ -174,7 +176,8 @@ const styles = StyleSheet.create(
 const mapStateToProps = state => ({
     state: state,
     user: state.user,
-    projects: state.project.projects,
+    active: activeProjects(state),
+    archived: archivedProjects(state),
     pending: state.project.pending,
     error: state.project.error
 });

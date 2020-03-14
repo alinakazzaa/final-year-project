@@ -11,6 +11,7 @@ import { getProjectFetchJobs } from '../../actions/fetchJob';
 import { COMPLETED } from '../../constants';
 import { logOutUser } from '../../actions/user';
 import { SET_PROJECTS_ERROR, SET_PROJECTS_SUCCESS } from '../../constants/response/types';
+import { activeProjects } from '../../reducers/projectReducer';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -33,12 +34,11 @@ class HomeScreen extends React.Component {
         const { user, active_projects, getUserProjects, getProjectFetchJobs } = this.props
         getUserProjects(user.id)
         let project_id = active_projects[0].id // should be active_projects.length -1
-
         getProjectFetchJobs(user.id, project_id)
     }
 
     render() {
-        const { user, logOutUser, completed } = this.props
+        const { user, logOutUser, completed_fetch_jobs } = this.props
 
         return (
             <View style={styles.main}>
@@ -49,18 +49,18 @@ class HomeScreen extends React.Component {
                         onPress={() => logOutUser()}
                     />}
                 />
-                {/* <View style={styles.top}>
-                    <Text style={styles.title}>Because you recently fetched #{completed[completed.length - 1].details.hashtag}</Text>
+                <View style={styles.top}>
+                    <Text style={styles.title}>Because you recently fetched #{completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag}</Text>
                     <Text style={styles.data}>Consider the below tags...</Text>
                     <View style={styles.itemRow}>
-                        {completed.length > 0 && <Tags
-                            initialTags={completed[completed.length - 1].related_tags}
+                        {/* {completed_fetch_jobs.length > 0 && <Tags
+                            initialTags={completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags}
                             // onChangeTags={tags => console.log(tags)}
                             onTagPress={(index, tagLabel, event) => console.log(index, tagLabel, event)}
                         // inputStyle={{ display: "none" }}
-                        />}
+                        />} */}
                     </View>
-                </View> */}
+                </View>
                 <View style={styles.logInMsg}>
                     <Text style={styles.largeTitle}>Recent posts by influencers....</Text>
                     <Text style={styles.largeTitle}>{`Current user ${user.username}`}</Text>
@@ -135,8 +135,8 @@ const styles = StyleSheet.create(
 
 const mapStateToProps = state => ({
     user: state.user,
-    active_projects: state.project.projects.active,
-    completed: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == COMPLETED) : [],
+    active_projects: activeProjects(state),
+    completed_fetch_jobs: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == COMPLETED) : [],
 });
 
 
