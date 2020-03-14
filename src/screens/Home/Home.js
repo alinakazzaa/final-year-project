@@ -10,7 +10,7 @@ import { getUserProjects } from '../../actions/project';
 import { getProjectFetchJobs } from '../../actions/fetchJob';
 import { COMPLETED } from '../../constants';
 import { logOutUser } from '../../actions/user';
-
+import { SET_PROJECTS_ERROR, SET_PROJECTS_SUCCESS } from '../../constants/response/types';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -21,7 +21,12 @@ class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.getLastFetchJobHashtags()
+        const { user, getUserProjects } = this.props
+
+        if (getUserProjects(user.id).type == SET_PROJECTS_SUCCESS) {
+            this.getLastFetchJobHashtags()
+        }
+
     }
 
     getLastFetchJobHashtags = () => {

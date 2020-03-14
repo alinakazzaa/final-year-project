@@ -1,14 +1,7 @@
 import {
-    SET_CURRENT_FETCH_JOB,
-    SET_FETCH_JOBS_SUCCESS,
-    SET_FETCH_JOBS_PENDING,
-    SET_FETCH_JOBS_ERROR,
-    CLEAR_CURRENT_FETCH_JOB,
-    ADD_FETCH_JOB,
-    REMOVE_FETCH_JOB,
-    UPDATE_FETCH_JOB,
+    SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, UPDATE_FETCH_JOB
 } from '../constants';
-import { State } from 'react-native-gesture-handler';
+import { SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_ERROR } from '../constants/response/types';
 
 const initialState = {
     fetch_jobs: [],

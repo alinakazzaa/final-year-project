@@ -1,6 +1,7 @@
 import { db } from '../database/config/db';
 import { DATE_TODAY } from '../constants/TodayDate'
-import { SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_ERROR, SET_CURRENT_INFLUENCER } from '../constants';
+import { SET_CURRENT_INFLUENCER } from '../constants';
+import { SET_INFLUENCERS_ERROR, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS } from '../constants/response/types';
 
 export const getAllInfluencers = fetch_job => {
 

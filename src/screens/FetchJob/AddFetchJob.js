@@ -54,8 +54,6 @@ class AddFetchJob extends React.Component {
 
     render() {
 
-        const { current_project, user } = this.props
-
         return (
             <View style={styles.container}>
                 <AppHeader

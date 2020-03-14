@@ -1,4 +1,5 @@
-import { USER_LOGIN_SUCCESS, USER_LOGOUT, USER_LOGIN_ERROR } from '../constants';
+import { USER_LOGOUT } from '../constants';
+import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR } from '../constants/response/types';
 
 const initialState = {
     pending: true,
@@ -9,13 +10,13 @@ const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case USER_LOGIN_SUCCESS:
             return {
-                ...action.payload,
+                ...action.user,
                 pending: false
             };
         case USER_LOGIN_ERROR:
             return {
                 pending: false,
-                error: action.error,
+                error: { type: action.type, message: action.message },
             };
         case USER_LOGOUT:
             return {

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { Icon } from 'react-native-elements';
+import { colors } from '../../styles/base';
 
 
 export const IconButton = ({ type, name, color, size, onPress, raised, style, reverse }) => {
@@ -27,7 +28,7 @@ IconButton.propTypes = {
 
 IconButton.defaultProps = {
     type: 'font-awesome',
-    color: '#994d6e',
+    color: colors.TERTIARY,
     size: 50,
     onPress: null,
     raised: false,

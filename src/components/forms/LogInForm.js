@@ -1,20 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Switch, TextInput, Keyboard, Button } from 'react-native';
-import { IconButton } from '../../components/buttons/IconButton';
+import { Text, View, Keyboard } from 'react-native';
 import { TextButton } from '../../components/buttons/TextButton';
+// @ts-ignore
 import t from 'tcomb-form-native';
-// import { validate } from 'tcomb-form-native/lib';
-import { styles, loginForm } from '../../screens/Auth/styles';
-import { Gradient } from '../../styles/Gradient';
+import { authenticationStyles } from '../../styles/authentication/authenticationStyles';
+import { form } from '../../styles/base'
 
 const v = require('tcomb-validation');
-let validate = v.validate
 
 const Form = t.form.Form;
 
 const formStyles = {
     ...Form.stylesheet,
-    ...loginForm
+    ...form
 }
 
 const User = t.struct({
@@ -42,13 +40,6 @@ export default class LogInForm extends React.Component {
     }
 
     onChange(value) {
-        if (validate(value.username, t.Nil).isValid()) {
-            console.log("username empty")
-        }
-
-        if (validate(value.password, t.Nil).isValid()) {
-            console.log("username empty")
-        }
         this.setState({ value });
 
     }
@@ -59,8 +50,8 @@ export default class LogInForm extends React.Component {
         const { value } = this.state
 
         return (
-            <View style={styles.formContainer}>
-                <Text style={styles.text}>Please log in</Text>
+            <View style={authenticationStyles.formContainer}>
+                <Text style={authenticationStyles.text}>Please log in</Text>
                 <Form
                     ref={c => this._form = c}
                     type={User}
@@ -69,9 +60,9 @@ export default class LogInForm extends React.Component {
                     onChange={(value) => this.onChange(value)}
                     onBlur={Keyboard.dismiss}
                 />
-                {error && <Text>{error.type}</Text>}
-                <TextButton title="Log In" onPress={() => logIn(value)} style={styles.logInButton} />
-                <TextButton title="Registration" style={styles.regButton} onPress={goToRegister} />
+                {error && <Text>{error.message}</Text>}
+                <TextButton title="Log In" onPress={() => logIn(value)} style={authenticationStyles.logInButton} />
+                <TextButton title="Registration" style={authenticationStyles.regButton} onPress={goToRegister} />
             </View>
         )
     }

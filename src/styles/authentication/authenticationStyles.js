@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { colors, input, inputLabel, container, button, spacing, fonts, dimensions, height } from '../../styles/base';
+import { colors, container, button, spacing, fonts, dimensions } from '../base';
 
-export const styles = StyleSheet.create(
+export const authenticationStyles = StyleSheet.create(
     {
         container: {
             ...container,
@@ -18,13 +18,18 @@ export const styles = StyleSheet.create(
             alignItems: 'center',
             borderRadius: 5,
             width: dimensions.fullWidth * .85,
+            shadowColor: colors.BLACK,
+            shadowOffset: { width: 4, height: 4 },
+            shadowOpacity: 0.5,
+            shadowRadius: 10,
+            elevation: 1,
         },
         title: {
             fontSize: 27,
             fontFamily: fonts.PRIMARY,
             color: colors.WHITE,
             marginBottom: spacing.LARGE,
-            fontWeight: fonts.WEIGHT_LEIGHT
+            fontWeight: fonts.WEIGHT_LEIGHT,
         },
         text: {
             color: colors.TERTIARY,
@@ -50,31 +55,3 @@ export const styles = StyleSheet.create(
         }
     });
 
-export const loginForm = {
-    controlLabel: {
-        normal: {
-            ...inputLabel
-        },
-        error: {
-            color: 'Purple',
-            fontSize: 18,
-            marginBottom: 7,
-            fontWeight: '600'
-        }
-    },
-    textbox: {
-        normal: {
-            ...input
-        },
-        error: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#a94442', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        }
-    },
-}

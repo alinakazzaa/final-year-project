@@ -1,6 +1,7 @@
 import { db } from '../database/config/db';
-import { DB_PROJECT_FETCH_JOBS_REF, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_ERROR, SET_CURRENT_FETCH_JOB, SET_RUNNING_FETCH, CLEAR_RUNNING_FETCH, UPDATE_FETCH_JOB_STATUS, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, DB_USER_PROJECTS_REF } from '../constants';
-import { getUserProjects } from './project';
+import { DB_PROJECT_FETCH_JOBS_REF, SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, CLEAR_CURRENT_FETCH_JOB } from '../constants';
+import { SET_FETCH_JOBS_ERROR, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING } from '../constants/response/types';
+
 
 export const getProjectFetchJobs = (user_id, project_id) => {
     const fetch_jobs = []
@@ -51,34 +52,11 @@ export const clearCurrentFetchJob = () => {
     }
 }
 
-// export const getNextPagePending = () => {
-//     return {
-//         type: GET_NEXT_PAGE_PENDING
-//     }
-// }
-
-// export const getNextPageSuccess = result => {
-//     return {
-//         type: GET_NEXT_PAGE_SUCCESS,
-//         payload: result
-//     }
-// }
-
-// export const getNextPageError = error => {
-//     return {
-//         type: GET_NEXT_PAGE_ERROR,
-//         error: error
-//     }
-// }
-
-/// UPDATE FETCH JOBS WITH UPDATED ITEM IN THE STATE!!!!
-
 //DB
 export const addFetchJob = (user_id, project_id, fetch_job) => {
     let fj_obj = {
         details: {
-            title: fetch_job.value.title,
-            date_created: fetch_job.value.date_created,
+            ...fetch_job.value,
             hashtag: fetch_job.value.hashtag || '',
             location: fetch_job.value.location || '',
             criteria: String(fetch_job.criteria),

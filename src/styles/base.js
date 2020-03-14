@@ -14,11 +14,6 @@ export const colors = {
     BORDER: 'rgb(228, 226, 233)'
 }
 
-export const container = {
-    backgroundColor: colors.WHITE,
-    // padding: dimensions.fullHeight * 0.05
-}
-
 export const spacing = {
     SMALL: 5,
     MEDIUM: 10,
@@ -47,6 +42,28 @@ export const fonts = {
     WEIGHT_HEAVY: '800'
 }
 
+// containers
+
+export const container = {
+    backgroundColor: colors.WHITE,
+}
+
+export const formContainer = {
+    borderWidth: 1,
+    borderColor: colors.BORDER,
+    padding: 30,
+    // backgroundColor: colors.WHITE,
+    alignItems: 'center',
+    borderRadius: 5,
+    width: dimensions.fullWidth * .85,
+    shadowColor: colors.BLACK,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 1,
+}
+
+
 // components
 
 export const input = {
@@ -72,6 +89,27 @@ export const inputLabel = {
     textTransform: 'uppercase',
     fontWeight: fonts.WEIGHT_LEIGHT
 }
+
+export const form = {
+    controlLabel: {
+        normal: {
+            ...inputLabel
+        },
+        error: {
+
+        }
+    },
+    textbox: {
+        normal: {
+            ...input
+        },
+        error: {
+
+        }
+    },
+}
+
+// buttons
 
 export const button = {
     backgroundColor: 'transparent',

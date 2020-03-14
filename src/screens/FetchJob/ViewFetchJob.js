@@ -15,9 +15,11 @@ import { TextButton } from '../../components/buttons/TextButton';
 import { clearCurrentFetchJob, updateStateFetchJob, updateFetchJob } from '../../actions/fetchJob';
 import { fetchMedia, getInfluencers } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress';
-import { COMPLETED, PENDING, IN_PROGRESS, GET_MEDIA_BY_HASHTAG_ERROR, COMPLETED_GET_ALL_USERS, GET_MEDIA_NEXT_PAGE_COMPLETED, GET_USER_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_NEXT_PAGE_SUCCESS, USER_FETCH, MEDIA_NEXT_PAGE } from '../../constants';
+import { COMPLETED, PENDING, IN_PROGRESS, USER_FETCH, MEDIA_NEXT_PAGE } from '../../constants';
 import { fetchPending, fetchError, fetchSuccess, clearRunningFetchJob } from '../../actions/fetch';
 import { fetchNextPage } from '../../web/fetchNextPage';
+import { GET_MEDIA_NEXT_PAGE_COMPLETED, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_USER_PENDING, COMPLETED_GET_ALL_USERS, GET_MEDIA_BY_HASHTAG_ERROR } from '../../constants/response/types';
+import { COMPLETED_NEXT_PAGE } from '../../constants/response/messages';
 
 
 class ViewFetchJob extends React.Component {
@@ -50,7 +52,7 @@ class ViewFetchJob extends React.Component {
                     } else {
                         let response = {
                             type: GET_MEDIA_NEXT_PAGE_COMPLETED,
-                            message: 'completed: get next page',
+                            message: COMPLETED_NEXT_PAGE,
                         }
                         success(response)
                     }
@@ -80,7 +82,7 @@ class ViewFetchJob extends React.Component {
         const { have_influencers } = this.state
         const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
         let fetch_job = current_fetch_job.details.id == running_fetch.details.id ? running_fetch : current_fetch_job
-        console.log(fetch_job)
+
         return (
             <View style={styles.container}>
                 <AppHeader

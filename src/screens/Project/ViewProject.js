@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry, ActivityIndicator } from 'react-native'
+import { ActivityIndicator } from 'react-native'
 import { StyleSheet, Text, YellowBox, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { AppHeader } from '../../layouts/Header';

@@ -4,9 +4,9 @@ import LogInForm from '../../components/forms/LogInForm';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUserByUsername, setLoggedInUserError, setLoggedInUserSuccess } from '../../actions/user';
-import { styles } from './styles'
-import { spacing } from '../../styles/base';
+import { authenticationStyles } from '../../styles/authentication/authenticationStyles'
 import { Gradient } from '../../styles/Gradient';
+import { INCORRECT_PASSWORD, NO_USER } from '../../constants/response/messages';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -31,21 +31,18 @@ class LogInScreen extends React.Component {
     }
 
     logIn = user => {
-        let error
         const { setLoggedInUserSuccess, setLoggedInUserError } = this.props;
         const user_obj = getUserByUsername(user.username)
-
+        let error
         if (user_obj) {
             if (user.username == user_obj.username) {
                 if (user.password == user_obj.password) {
                     setLoggedInUserSuccess(user_obj)
                 } else {
-                    error = { type: 'incorrect password' }
-                    setLoggedInUserError(error)
+                    setLoggedInUserError(INCORRECT_PASSWORD)
                 }
             } else {
-                error = { type: 'no user' }
-                setLoggedInUserError(error)
+                setLoggedInUserError(NO_USER)
             }
         }
     }
@@ -55,9 +52,9 @@ class LogInScreen extends React.Component {
         return (
             <View>
                 <Gradient horizontal={true}>
-                    <View style={styles.container}>
-                        <Image style={styles.logo} source={require('../../assets/resources/images/logo-white.png')} />
-                        <Text style={styles.title}>Influence Me</Text>
+                    <View style={authenticationStyles.container}>
+                        <Image style={authenticationStyles.logo} source={require('../../assets/resources/images/logo-white.png')} />
+                        <Text style={authenticationStyles.title}>Influence Me</Text>
                         <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={error} />
                     </View>
                 </Gradient>
