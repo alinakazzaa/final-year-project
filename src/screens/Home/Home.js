@@ -55,7 +55,7 @@ class HomeScreen extends React.Component {
 
                     />}
                 />
-                <View style={home.conntainer}>
+                <View style={home.container}>
                     <View style={home.top}>
                         <Text style={home.title}>Because you recently searched #{completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag}</Text>
                         <Text style={home.text}>Consider these hashtagtags...</Text>

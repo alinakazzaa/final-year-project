@@ -3,7 +3,7 @@ import { colors, fonts, spacing, height, width, container } from './base';
 
 export const home = StyleSheet.create(
     {
-        conntainer: {
+        container: {
             ...container,
         },
         top: {
