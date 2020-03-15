@@ -12,6 +12,9 @@ import { COMPLETED } from '../../constants';
 import { logOutUser } from '../../actions/user';
 import { SET_PROJECTS_ERROR, SET_PROJECTS_SUCCESS } from '../../constants/response/types';
 import { activeProjects } from '../../reducers/projectReducer';
+import { TagList } from '../../components/list/TagList';
+import { home } from '../../styles/home';
+import { colors } from '../../styles/base';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -31,7 +34,7 @@ class HomeScreen extends React.Component {
     }
 
     getLastFetchJobHashtags = () => {
-        const { user, active_projects, getUserProjects, getProjectFetchJobs } = this.props
+        const { user, active_projects, getUserProjects, getProjectFetchJobs, completed_fetch_jobs } = this.props
         getUserProjects(user.id)
         let project_id = active_projects[0].id // should be active_projects.length -1
         getProjectFetchJobs(user.id, project_id)
@@ -39,99 +42,39 @@ class HomeScreen extends React.Component {
 
     render() {
         const { user, logOutUser, completed_fetch_jobs } = this.props
+        let tags = completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags
 
         return (
-            <View style={styles.main}>
+            <View>
                 <AppHeader
-                    right={<IconButton color="#5d4d50"
+                    gradient={true}
+                    right={<IconButton color={colors.WHITE}
                         name='sign-out'
                         size={30}
                         onPress={() => logOutUser()}
+
                     />}
                 />
-                <View style={styles.top}>
-                    <Text style={styles.title}>Because you recently fetched #{completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag}</Text>
-                    <Text style={styles.data}>Consider the below tags...</Text>
-                    <View style={styles.itemRow}>
-                        {/* {completed_fetch_jobs.length > 0 && <Tags
-                            initialTags={completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags}
-                            // onChangeTags={tags => console.log(tags)}
-                            onTagPress={(index, tagLabel, event) => console.log(index, tagLabel, event)}
-                        // inputStyle={{ display: "none" }}
-                        />} */}
+                <View style={home.conntainer}>
+                    <View style={home.top}>
+                        <Text style={home.title}>Because you recently searched #{completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag}</Text>
+                        <Text style={home.text}>Consider these hashtagtags...</Text>
+                        <View style={home.itemRow}>
+                            {completed_fetch_jobs.length > 0 && <TagList tags={tags} />}
+                        </View>
                     </View>
-                </View>
-                <View style={styles.logInMsg}>
-                    <Text style={styles.largeTitle}>Recent posts by influencers....</Text>
-                    <Text style={styles.largeTitle}>{`Current user ${user.username}`}</Text>
-                </View>
-                <View style={styles.logInMsg}>
-                    <Text style={styles.largeTitle}>Maybe recently openet projects....</Text>
+                    <View style={home.logInMsg}>
+                        <Text style={home.largeTitle}>Recent posts by influencers....</Text>
+                        <Text style={home.largeTitle}>{`Current user ${user.username}`}</Text>
+                    </View>
+                    <View style={home.logInMsg}>
+                        <Text style={home.largeTitle}>Maybe recently openet projects....</Text>
+                    </View>
                 </View>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create(
-    {
-        main:
-        {
-            backgroundColor: '#F5F5F5',
-            flex: 1
-        },
-        top: {
-            marginLeft: '3%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            borderBottomWidth: 0.3,
-            borderBottomColor: '#b3b3cc',
-        },
-        title: {
-            padding: 10,
-            fontSize: 13,
-            color: '#493649',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            textAlign: 'left',
-        },
-        itemRow: {
-            display: 'flex',
-            flexDirection: 'row',
-            padding: 10,
-            justifyContent: 'space-between',
-
-        },
-        lbl: {
-            fontSize: 16,
-            color: '#5d4d50',
-            textTransform: 'uppercase',
-        },
-        data: {
-            padding: 10,
-            fontSize: 16,
-            color: '#826478'
-        },
-        largeTitle: {
-            fontSize: 18,
-            color: '#0B0033',
-            fontFamily: 'Avenir-Book',
-            fontWeight: "700",
-            textAlign: 'center',
-        },
-        logInMsg: {
-            justifyContent: 'center',
-            height: "20%",
-        },
-        container: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-        },
-        textCenter: {
-            textAlign: 'center'
-        }
-    });
 
 const mapStateToProps = state => ({
     user: state.user,

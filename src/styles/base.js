@@ -6,12 +6,12 @@ export const dimensions = {
 }
 
 export const colors = {
-    PRIMARY: 'rgb(26, 69, 244)',
-    SECONDARY: 'rgb(223, 32, 220)',
-    TERTIARY: 'rgb(83, 75, 98)',
+    PRIMARY: 'rgb(0, 45, 227)',
+    SECONDARY: 'rgb(255, 0, 225)',
+    TERTIARY: 'rgb(0, 30, 99)',
     BLACK: 'rgb(27, 23, 37)',
-    WHITE: 'rgb(253, 255, 250)',
-    BORDER: 'rgb(228, 226, 233)'
+    WHITE: 'rgb(255, 255, 255)',
+    GREEN: 'rgb(48, 207, 12)'
 }
 
 export const spacing = {
@@ -36,16 +36,19 @@ export const fonts = {
     SMALL: 14,
     MEDIUM: 18,
     LARGE: 20,
-    PRIMARY: 'Arial',
-    WEIGHT_LIGHT: '200',
-    WEIGHT_MEDIUM: '600',
-    WEIGHT_HEAVY: '800'
+    PRIMARY: "Arial",
+    WEIGHT_LIGHT: "200",
+    WEIGHT_MEDIUM: "600",
+    WEIGHT_HEAVY: "800"
 }
 
 // containers
 
 export const container = {
     backgroundColor: colors.WHITE,
+    margin: '3%',
+    marginRight: '5%',
+    marginLeft: '5%'
 }
 
 export const formContainer = {

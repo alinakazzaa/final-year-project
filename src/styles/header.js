@@ -8,7 +8,7 @@ export const header = StyleSheet.create(
             backgroundColor: 'transparent',
             height: 100,
             marginLeft: spacing.LARGE,
-            borderBottomColor: 'transparent'
+            borderBottomColor: 'transparent',
         },
         color: {
             backgroundColor: colors.WHITE,
