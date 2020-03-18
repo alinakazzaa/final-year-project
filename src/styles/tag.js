@@ -4,9 +4,9 @@ import { colors, fonts, spacing, height, width } from './base';
 export const tag = StyleSheet.create(
     {
         container: {
-            backgroundColor: 'transparent',
-            borderRadius: 20,
-            padding: spacing.SMALL * 0.7,
+            backgroundColor: colors.TERTIARY,
+            borderRadius: 14,
+            padding: spacing.MEDIUM * 0.8,
             margin: spacing.SMALL,
         },
         title: {

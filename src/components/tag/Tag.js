@@ -7,9 +7,11 @@ import { Gradient } from '../../styles/Gradient';
 
 
 export const Tag = ({ title, onPress }) => {
-    return <Gradient horizontal={true} style={tag.container}><TouchableOpacity activeOpacity={0.8} onPress={onPress} containerStyle={tag.container}>
+    return <TouchableOpacity activeOpacity={0.8} onPress={onPress} containerStyle={tag.container}>
         <Text style={tag.title}># {title}</Text>
-    </TouchableOpacity></Gradient>
+    </TouchableOpacity>
+    // <Gradient horizontal={true} style={tag.container}>
+    //    </Gradient>
 }
 
 Tag.propTypes = {

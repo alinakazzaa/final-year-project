@@ -42,8 +42,7 @@ class HomeScreen extends React.Component {
 
     render() {
         const { user, logOutUser, completed_fetch_jobs } = this.props
-        let tags = completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags
-
+        console.log(completed_fetch_jobs)
         return (
             <View>
                 <AppHeader
@@ -57,10 +56,10 @@ class HomeScreen extends React.Component {
                 />
                 <View style={home.container}>
                     <View style={home.top}>
-                        <Text style={home.title}>Because you recently searched #{completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag}</Text>
-                        <Text style={home.text}>Consider these hashtagtags...</Text>
+                        <Text style={home.title}>Based on your previous searches</Text>
+                        <Text style={home.text}>Consider these hashtagtags</Text>
                         <View style={home.itemRow}>
-                            {completed_fetch_jobs.length > 0 && <TagList tags={tags} />}
+                            {completed_fetch_jobs.length > 0 && <TagList tags={completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags} />}
                         </View>
                     </View>
                     <View style={home.logInMsg}>
