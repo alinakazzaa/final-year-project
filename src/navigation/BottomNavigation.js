@@ -44,7 +44,7 @@ export const BottomNavigator = createBottomTabNavigator(
             screen: HomeScreen,
             navigationOptions: {
                 tabBarIcon: () => (
-                    <Icon name={home ? 'home' : 'home-outline'} type='material-community' size={32} color={colors.BLACK} onPress={() => changeActive('home')} />
+                    <Icon name={home ? 'home' : 'home-outline'} type='material-community' size={32} color={colors.TERTIARY} onPress={() => changeActive('home')} />
                 )
             },
 
@@ -53,7 +53,7 @@ export const BottomNavigator = createBottomTabNavigator(
             screen: ProjectStack,
             navigationOptions: {
                 tabBarIcon: () => (
-                    <Icon name={proj ? 'folder' : 'folder-outline'} type='material-community' size={32} color={colors.BLACK} onPress={() => changeActive('proj')} />
+                    <Icon name={proj ? 'folder' : 'folder-outline'} type='material-community' size={32} color={colors.TERTIARY} onPress={() => changeActive('proj')} />
                 )
             }
         },
@@ -61,7 +61,7 @@ export const BottomNavigator = createBottomTabNavigator(
             screen: CollabStack,
             navigationOptions: {
                 tabBarIcon: () => (
-                    <Icon name={collab ? 'people' : 'people-outline'} type='material' size={32} color={colors.BLACK} onPress={() => changeActive('collab')} />
+                    <Icon name={collab ? 'people' : 'people-outline'} type='material' size={32} color={colors.TERTIARY} onPress={() => changeActive('collab')} />
                 )
             },
         },
@@ -69,7 +69,7 @@ export const BottomNavigator = createBottomTabNavigator(
             screen: SettingsScreen,
             navigationOptions: {
                 tabBarIcon: () => (
-                    <Icon name={settings ? 'settings' : 'settings-outline'} type='material-community' size={32} color={colors.BLACK} onPress={() => changeActive('settings')} />
+                    <Icon name={settings ? 'settings' : 'settings-outline'} type='material-community' size={32} color={colors.TERTIARY} onPress={() => changeActive('settings')} />
                 )
             }
         },

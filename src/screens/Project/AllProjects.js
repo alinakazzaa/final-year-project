@@ -6,11 +6,13 @@ import { IconButton } from '../../components/buttons/IconButton';
 import { TextButton } from '../../components/buttons/TextButton';
 import BasicInput from '../../components/input/BasicInput';
 import { ProjectList } from '../../components/list/ProjectList';
-import { Input } from 'react-native-elements';
+import { Input, Icon } from 'react-native-elements';
 import { removeProject, setCurrentProject, getUserProjects, setUserProjectsPending } from '../../actions/project'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { activeProjects, archivedProjects } from '../../reducers/projectReducer'
+import { project } from '../../styles/project'
+import { colors } from '../../styles/base';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -24,22 +26,7 @@ class AllProjects extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: 0,
-            selectedTabStyle: {
-                color: 'white',
-                textAlign: 'center',
-                padding: '5%',
-                fontSize: 14,
-                textTransform: 'uppercase'
-            },
-            selectedTabItemStyle: {
-                width: '50%',
-                borderBottomWidth: 1,
-                borderRightWidth: 1,
-                justifyContent: 'center',
-                backgroundColor: '#646380',
-                borderColor: "#b3b3cc",
-            }
+            index: 0
         }
     }
 
@@ -64,7 +51,7 @@ class AllProjects extends React.Component {
     }
 
     deleteProject = project => {
-        let { user, removeProject, active, archived } = this.props;
+        let { user, removeProject } = this.props;
         removeProject(user.id, project)
     }
 
@@ -74,105 +61,39 @@ class AllProjects extends React.Component {
 
     render() {
         const { active, archived } = this.props;
-        const { index, selectedTabStyle, selectedTabItemStyle } = this.state
+        const { index } = this.state
 
         return (
-            <View style={styles.main} >
-                <AppHeader
-                    center={<BasicInput />}
-                    right={<TextButton title="Cancel" />}
-                />
-                {this.props.state.project.pending && <View style={styles.loading}>
+            <View>
+                {this.props.state.project.pending ? <View style={project.loading}>
                     <ActivityIndicator size="large" color="#5d4d50" />
-                    <Text style={styles.loadingTxt}>Wait, getting your projects</Text>
-                </View>}
-                <View style={styles.tabView}>
-                    <TouchableOpacity onPress={() => this.setState({ index: 0 })} style={index == 0 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 0 ? selectedTabStyle : styles.tab}>Active</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ index: 1 })} style={index == 1 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 1 ? selectedTabStyle : styles.tab}>Archived</Text></TouchableOpacity>
-                </View>
-                {this.props.state.project.error && <View style={styles.none}><Text style={styles.noneTxt}>No projects</Text></View>}
-                {!this.props.state.project.error && !this.props.state.project.pending && index == 0 ?
+                    <Text style={project.loadingTxt}>Wait, getting your projects</Text>
+                </View> :
                     <View>
-                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={active} />
-                    </View> :
-                    <View>
-                        <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={archived} />
-                    </View>}
-                <IconButton name="plus" size={40} color='#646380' onPress={() => this.props.navigation.navigate('AddProject')} />
+                        <AppHeader
+                            center={<BasicInput />}
+                            gradient={true}
+                            right={<TextButton title="Cancel" />}
+                        />
+                        <View style={project.container} >
+                            <View style={project.tabView}>
+                                <TouchableOpacity onPress={() => this.setState({ index: 0 })} style={index == 0 ? project.selectedTabItem : project.tabItem}><Text style={index == 0 ? project.selectedTab : project.tab}>Active</Text></TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.setState({ index: 1 })} style={index == 1 ? project.selectedTabItem : project.tabItem}><Text style={index == 1 ? project.selectedTab : project.tab}>Archived</Text></TouchableOpacity>
+                            </View>
+                            {this.props.state.project.error && <View style={project.none}><Text style={project.noneTxt}>No projects</Text></View>}
+                            {!this.props.state.project.error && !this.props.state.project.pending && index == 0 ?
+                                <View>
+                                    <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={active} />
+                                </View> :
+                                <View>
+                                    <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={archived} />
+                                </View>}
+                            <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} />
+                        </View></View>}
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create(
-    {
-        main:
-        {
-            backgroundColor: '#f4f1f1',
-            display: 'flex',
-            flex: 1,
-        },
-        loading: {
-            display: 'flex',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-        },
-        txtStyle: {
-            fontFamily: 'Arial',
-            fontSize: 19,
-            color: '#5d4d50',
-        },
-        inputStyle: {
-            height: '87%',
-            borderColor: '#b3b3cc',
-            borderWidth: 1,
-            borderRadius: 10,
-            padding: 10,
-        },
-        cancelBtn: {
-            marginRight: 10,
-            fontSize: 13
-        },
-        loadingTxt: {
-            fontFamily: 'Arial',
-            fontSize: 15,
-            color: '#5d4d50',
-            padding: '4%',
-        },
-        addIcon: {
-            alignSelf: 'center',
-            backgroundColor: 'transparent'
-        },
-        tabView: {
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            padding: 10
-        },
-        tabItem: {
-            justifyContent: 'center',
-            width: '45%',
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderColor: "#b3b3cc",
-        },
-        tab: {
-            textTransform: 'uppercase',
-            textAlign: 'center',
-            padding: '5%',
-            color: "#5d4d50",
-            borderColor: "#b3b3cc",
-        },
-        none: {
-            height: '10%',
-            justifyContent: 'center',
-            alignItems: 'center'
-        },
-        noneTxt: {
-            fontSize: 19,
-            color: '#5d4d50',
-        }
-    });
 
 const mapStateToProps = state => ({
     state: state,

@@ -12,7 +12,7 @@ export const colors = {
     BLACK: 'rgb(27, 23, 37)',
     WHITE: 'rgb(255, 255, 255)',
     GREEN: 'rgb(48, 207, 12)',
-    BORDER: 'rgb(237, 237, 237)',
+    BORDER: 'rgb(179, 179, 204)',
     GRAY: 'rgb(88, 91, 97)'
 }
 
@@ -38,7 +38,7 @@ export const fonts = {
     SMALL: 14,
     MEDIUM: 18,
     LARGE: 20,
-    PRIMARY: "Arial",
+    PRIMARY: 'ArialRoundedMTBold',
     WEIGHT_LIGHT: "200",
     WEIGHT_MEDIUM: "600",
     WEIGHT_HEAVY: "800"
@@ -57,7 +57,6 @@ export const formContainer = {
     borderWidth: 1,
     borderColor: colors.BORDER,
     padding: 30,
-    // backgroundColor: colors.WHITE,
     alignItems: 'center',
     borderRadius: 5,
     width: dimensions.fullWidth * .85,

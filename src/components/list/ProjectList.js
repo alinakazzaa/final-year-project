@@ -1,22 +1,24 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView, Dimensions } from 'react-native'
-import { IconButton } from '../buttons/IconButton'
+import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
+import { project } from '../../styles/project'
+import { Icon } from 'react-native-elements'
+import { colors } from '../../styles/base'
 
 
-export const ProjectList = ({ active, projects, deleteProject, addProject, goToProject }) => {
+export const ProjectList = ({ projects, deleteProject, goToProject }) => {
     const projList = (proj, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => goToProject(proj)}>
-                <View style={styles.listItem}>
-                    <View style={styles.left}>
-                        <Text style={styles.username}>{proj.title}</Text>
+                <View style={project.listItem}>
+                    <View style={project.left}>
+                        <Text style={project.title}>{proj.title}</Text>
                     </View>
-                    <View style={styles.middle}>
-                        <Text style={styles.hashtag}>{proj.date_created}</Text>
+                    <View style={project.middle}>
+                        <Text style={project.title}>{proj.date_created}</Text>
                     </View>
-                    <View style={styles.right}>
-                        <IconButton name="delete" type="MaterialIcons" size={23} color="#0B0033" onPress={() => deleteProject(proj)} />
+                    <View style={project.right}>
+                        <Icon name="delete" type="material" size={23} color={colors.TERTIARY} onPress={() => deleteProject(proj)} />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -25,7 +27,7 @@ export const ProjectList = ({ active, projects, deleteProject, addProject, goToP
 
     return (
         <ScrollView keyboardDismissMode='on-drag'
-            contentContainerStyle={styles.scrollContainer}
+            contentContainerStyle={project.scrollContainer}
         >
             <View>
                 {
@@ -40,72 +42,6 @@ export const ProjectList = ({ active, projects, deleteProject, addProject, goToP
         </ScrollView >
     )
 }
-
-const styles = StyleSheet.create(
-    {
-        scrollContainer: {
-            padding: '4%',
-            paddingBottom: '7%',
-        },
-        listItem: {
-            display: 'flex',
-            flexDirection: 'row',
-            borderBottomWidth: 0.7,
-            borderTopWidth: 0.7,
-            borderColor: '#ded4da',
-            paddingTop: 25,
-            paddingBottom: 25,
-            fontFamily: 'ArialRoundedMTBold',
-            justifyContent: 'space-evenly'
-        },
-
-        title: {
-            fontSize: 15,
-            textAlign: 'left',
-            padding: 5,
-            color: '#0B0033',
-            fontFamily: 'ArialRoundedMTBold',
-        },
-        date: {
-            fontSize: 15,
-            fontFamily: 'ArialRoundedMTBold',
-            color: '#0B0033',
-        },
-        hashtag: {
-            fontSize: 13,
-            fontFamily: 'ArialRoundedMTBold',
-            color: '#0B0033',
-        },
-        username: {
-            fontSize: 13,
-            fontFamily: 'ArialRoundedMTBold',
-            color: '#0B0033',
-        },
-        location: {
-            fontSize: 13,
-            fontFamily: 'ArialRoundedMTBold',
-            color: '#0B0033',
-        },
-        startBtn: {
-            fontSize: 15,
-        },
-        addIcon: {
-            alignSelf: 'center',
-            backgroundColor: 'transparent',
-            marginTop: '3%'
-        },
-        left: {
-            display: 'flex',
-            width: '50%'
-        },
-        middle: {
-            display: 'flex',
-        },
-        right: {
-            display: 'flex',
-            width: '10%'
-        },
-    });
 
 ProjectList.propTypes = {
     active: PropTypes.bool,
