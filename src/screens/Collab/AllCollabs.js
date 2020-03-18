@@ -6,6 +6,10 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 class AllCollabs extends React.Component {
 
+    static navigationOptions = {
+        headerShown: false
+    }
+
     render() {
         return (
             <View style={styles.container}>

@@ -17,7 +17,8 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 class AllProjects extends React.Component {
 
     static navigationOptions = {
-        headerShown: false
+        headerShown: false,
+        title: ''
     }
 
     constructor(props) {

@@ -11,7 +11,9 @@ export const colors = {
     TERTIARY: 'rgb(0, 30, 99)',
     BLACK: 'rgb(27, 23, 37)',
     WHITE: 'rgb(255, 255, 255)',
-    GREEN: 'rgb(48, 207, 12)'
+    GREEN: 'rgb(48, 207, 12)',
+    BORDER: 'rgb(237, 237, 237)',
+    GRAY: 'rgb(88, 91, 97)'
 }
 
 export const spacing = {
