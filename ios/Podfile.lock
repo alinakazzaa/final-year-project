@@ -290,6 +290,8 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - ReactNativeNavigation (4.8.4):
     - React
+  - rn-range-slider (1.3.1):
+    - React
   - RNCMaskedView (0.1.6):
     - React
   - RNFBApp (6.3.3):
@@ -338,6 +340,7 @@ DEPENDENCIES:
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeNavigation (from `../node_modules/react-native-navigation`)
+  - rn-range-slider (from `../node_modules/rn-range-slider`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -420,6 +423,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeNavigation:
     :path: "../node_modules/react-native-navigation"
+  rn-range-slider:
+    :path: "../node_modules/rn-range-slider"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNFBApp:
@@ -477,6 +482,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   ReactNativeNavigation: 656ef429622d09e62e50ed162fb23936f95d1f03
+  rn-range-slider: 5f4efc2f1bc8428aa039284503575b652748344b
   RNCMaskedView: e5b99bc191945f157adeede68da9d424462de177
   RNFBApp: 887ccc5840f93abad3202ff23eb0faf7bee4ac12
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
