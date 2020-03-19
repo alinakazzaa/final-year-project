@@ -1,13 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Switch, TextInput, Keyboard, FlatList } from 'react-native';
-import { IconButton } from '../../components/buttons/IconButton';
-import { TextButton } from '../../components/buttons/TextButton';
-import BasicInput from '../input/BasicInput';
+import { StyleSheet, Text, View, Keyboard, FlatList } from 'react-native';
 import t from 'tcomb-form-native';
-import { CheckBox } from "native-base";
 import { criteria } from '../../constants/Criteria'
 import { Checkbox } from '../checkbox/Checkbox';
-import { addFetchJob } from '../../actions/fetchJob';
 import Slider from '@react-native-community/slider';
 
 const Form = t.form.Form;
@@ -185,8 +180,8 @@ export default class FetchJobForm extends React.Component {
                     <Text>{this.state.follower_min}</Text>
                     <Slider
                         style={{ width: '100%', height: 90 }}
-                        // step={1000}
-                        minimumValue={1000}
+                        step={1}
+                        minimumValue={100}
                         maximumValue={100000000}
                         minimumTrackTintColor="#0026ff"
                         maximumTrackTintColor="#ffffff"

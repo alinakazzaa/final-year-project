@@ -18,6 +18,7 @@ export const getAllInfluencers = fetch_job => {
     influencers.forEach(id => {
         db.ref('Influencers/').on('value', (influ_snapshot) => {
             influ_snapshot.forEach(influ_snap => {
+
                 if (influ_snap.key == id)
                     influencers_success.push(influ_snap.val())
             })

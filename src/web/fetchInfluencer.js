@@ -1,13 +1,15 @@
 import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME } from "../constants/endpoints"
-import { GET_USER_SUCCESS, GET_USER_ERROR } from "../constants"
 import { addInfluencer } from "../actions/influencer"
 import { criteria } from "../constants/Criteria"
+import { GET_USER_SUCCESS, GET_USER_ERROR, GET_USER_PENDING } from "../constants/response/types"
 
-export const fetchInfluencer = (id, fetch_job, fetchSuccess, fetchError) => {
+export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
     let influ_obj
     let response
     let active = fetch_job.details.criteria.split(',')
     let pass = false
+
+    pending(GET_USER_PENDING)
 
     fetch(INSTAGRAM_GET_USER_BY_ID(id))
         .then(result => result.json())
@@ -37,23 +39,22 @@ export const fetchInfluencer = (id, fetch_job, fetchSuccess, fetchError) => {
 
                             if (pass) {
                                 response = { type: GET_USER_SUCCESS, message: 'success: user within range', id: id }
-                                fetchSuccess(response)
                                 addInfluencer(influ_obj)
-                                fetchSuccess(response)
+                                success(response)
 
                             } else {
                                 response = { type: GET_USER_ERROR, message: 'fail: user not within range', id: id }
-                                fetchError(response)
+                                error(response)
                             }
                         }
                         else {
                             response = { type: GET_USER_ERROR, message: 'fail:username', id: id }
-                            fetchError(response)
+                            error(response)
                         }
                     })
                     .catch(error => {
                         response = { type: GET_USER_ERROR, message: String(error), id: id }
-                        fetchError(response)
+                        error(response)
                     })
             }
         })

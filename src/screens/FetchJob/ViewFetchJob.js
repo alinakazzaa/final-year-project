@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, TouchableOpacity } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -13,13 +13,14 @@ import { InfluencerListFjView } from '../../components/list/InfluencerListFjView
 import { getAllInfluencers } from '../../actions/influencer';
 import { TextButton } from '../../components/buttons/TextButton';
 import { clearCurrentFetchJob, updateStateFetchJob, updateFetchJob } from '../../actions/fetchJob';
-import { fetchMedia, getInfluencers } from '../../web/fetchMedia'
+import { fetchMedia } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress';
-import { COMPLETED, PENDING, IN_PROGRESS, USER_FETCH, MEDIA_NEXT_PAGE } from '../../constants';
+import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants';
 import { fetchPending, fetchError, fetchSuccess, clearRunningFetchJob } from '../../actions/fetch';
 import { fetchNextPage } from '../../web/fetchNextPage';
-import { GET_MEDIA_NEXT_PAGE_COMPLETED, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_USER_PENDING, COMPLETED_GET_ALL_USERS, GET_MEDIA_BY_HASHTAG_ERROR } from '../../constants/response/types';
+import { GET_MEDIA_NEXT_PAGE_COMPLETED, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_BY_HASHTAG_SUCCESS, COMPLETED_GET_ALL_USERS } from '../../constants/response/types';
 import { COMPLETED_NEXT_PAGE } from '../../constants/response/messages';
+import { spacing } from '../../styles/base';
 
 
 class ViewFetchJob extends React.Component {
@@ -33,10 +34,19 @@ class ViewFetchJob extends React.Component {
         headerShown: false
     }
 
+    componentDidMount() {
+        const { current_fetch_job, getAllInfluencers } = this.props
+
+        if (current_fetch_job.influencers.success.length > 0) {
+            console.log(current_fetch_job)
+            getAllInfluencers(current_fetch_job)
+            this.setState({ have_influencers: true })
+        }
+    }
+
     componentDidUpdate(prev) {
         const { running_fetch, updateStateFetchJob, pending, success, error } = this.props
-
-        if (prev.running_fetch.details.status !== running_fetch.details.status) {
+        if (running_fetch.pending !== null && prev.running_fetch.details.status !== running_fetch.details.status) {
             updateStateFetchJob(running_fetch)
             if (running_fetch.details.status == COMPLETED) {
                 updateFetchJob(running_fetch)
@@ -47,7 +57,8 @@ class ViewFetchJob extends React.Component {
             if (running_fetch.response.type == GET_MEDIA_BY_HASHTAG_SUCCESS || running_fetch.response.type == GET_MEDIA_NEXT_PAGE_SUCCESS) {
 
                 if (running_fetch.has_next_page) {
-                    if (running_fetch.progress.total < 5) {
+                    if (running_fetch.influencers.success.length < 5) {
+                        console.log('should fetch next page')
                         fetchNextPage(running_fetch, pending, success, error)
                     } else {
                         let response = {
@@ -58,15 +69,6 @@ class ViewFetchJob extends React.Component {
                     }
                 }
             }
-
-        if (running_fetch.response != null) {
-            if (running_fetch.response.type == GET_MEDIA_NEXT_PAGE_COMPLETED && running_fetch.stage == MEDIA_NEXT_PAGE) {
-                pending(GET_USER_PENDING)
-            }
-        }
-
-        if (running_fetch.stage == USER_FETCH && running_fetch.response == null)
-            getInfluencers(running_fetch.influencers.pending, running_fetch, success, error)
     }
 
     startFetchJob = () => {
@@ -82,7 +84,7 @@ class ViewFetchJob extends React.Component {
         const { have_influencers } = this.state
         const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
         let fetch_job = current_fetch_job.details.id == running_fetch.details.id ? running_fetch : current_fetch_job
-
+        console.log(this.props.state.influencer)
         return (
             <View style={styles.container}>
                 <AppHeader
@@ -135,7 +137,7 @@ class ViewFetchJob extends React.Component {
                             </View>
                         </View>
                         {fetch_job.details.status == COMPLETED &&
-                            fetch_job.response.type == COMPLETED_GET_ALL_USERS && influencers.length > 0 &&
+                            fetch_job.response.type == COMPLETED_GET_ALL_USERS ?
                             <View style={styles.bottomView}>
                                 <View style={styles.influencers}>
                                     <Text style={styles.title}>Influencers</Text>
@@ -143,13 +145,10 @@ class ViewFetchJob extends React.Component {
                                         <Text style={styles.title}>View All</Text>
                                     </TouchableOpacity>
                                 </View>
-                                {have_influencers && <InfluencerListFjView influencers={influencers} />}
-                            </View>
-                        }
-                        {fetch_job.details.status == COMPLETED &&
-                            fetch_job.response.type == GET_MEDIA_BY_HASHTAG_ERROR &&
-                            <View style={styles.bottomView}><Text style={styles.lbl}>{fetch_job.response.message}</Text></View>
-                        }
+                                {have_influencers ? <InfluencerListFjView influencers={influencers} /> :
+                                    <View style={styles.none}><Text style={styles.data}>None found</Text></View>}
+                            </View> :
+                            <View style={styles.bottomView}><Text style={styles.lbl}>{fetch_job.response.message}</Text></View>}
                         {fetch_job.details.status == PENDING && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                     </View >
 
@@ -179,9 +178,9 @@ const styles = StyleSheet.create(
             paddingBottom: 20
         },
         bottomView: {
-            height: '20%',
+            // height: '20%',
             justifyContent: 'center',
-            paddingTop: '4%',
+            // paddingTop: '4%',
         },
         button: {
             alignItems: 'center',
@@ -197,7 +196,7 @@ const styles = StyleSheet.create(
         influencers: {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingTop: 30
+            marginTop: spacing.MEDIUM
         },
         infoContainer: {
             // display: 'flex',
@@ -277,7 +276,9 @@ const styles = StyleSheet.create(
         },
         none: {
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            alignContent: 'center',
+            padding: spacing.LARGE
         },
         noneTxt: {
             fontSize: 19,
