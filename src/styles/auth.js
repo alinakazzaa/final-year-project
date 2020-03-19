@@ -1,34 +1,25 @@
 import { StyleSheet } from 'react-native';
-import { colors, container, button, spacing, fonts, dimensions } from './base';
+import { colors, container, button, spacing, fonts, dimensions, formContainer } from './base';
 
 export const auth = StyleSheet.create(
     {
         logInContainer: {
             ...container,
+            padding: 30,
             paddingTop: '30%',
-            height: dimensions.fullHeight,
             backgroundColor: 'transparent',
             alignItems: 'center',
         },
         regContainer: {
             ...container,
-            height: dimensions.fullHeight,
+            padding: 30,
             backgroundColor: 'transparent',
             alignItems: 'center',
         },
         formContainer: {
-            borderWidth: 1,
-            borderColor: colors.BORDER,
-            padding: 30,
-            backgroundColor: colors.WHITE,
+            ...formContainer,
             alignItems: 'center',
-            borderRadius: 5,
-            width: dimensions.fullWidth * .85,
-            shadowColor: colors.BLACK,
-            shadowOffset: { width: 4, height: 4 },
-            shadowOpacity: 0.5,
-            shadowRadius: 10,
-            elevation: 1,
+            backgroundColor: colors.WHITE,
         },
         title: {
             fontSize: 27,

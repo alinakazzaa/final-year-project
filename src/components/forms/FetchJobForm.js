@@ -1,64 +1,42 @@
 import React from 'react';
-import { StyleSheet, Text, View, Keyboard, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Keyboard } from 'react-native';
+// @ts-ignore
 import t from 'tcomb-form-native';
+import Slider from '../slider/Slider';
+import { form } from '../../styles/base';
+import { fetch } from '../../styles/fetch'
+import { Divider } from 'react-native-elements';
+import TabView from '../tabview/TabView';
+import { TextButton } from '../buttons/TextButton';
 import { criteria } from '../../constants/Criteria'
-import { Checkbox } from '../checkbox/Checkbox';
-import Slider from '@react-native-community/slider';
+
 
 const Form = t.form.Form;
 
 const formStyles = {
     ...Form.stylesheet,
-    controlLabel: {
-        normal: {
-        },
-        error: {
-            color: 'Purple',
-            fontSize: 18,
-            marginBottom: 7,
-            fontWeight: '600'
-        }
-    },
-    textbox: {
-        normal: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#cccccc', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5,
-            textTransform: 'lowercase'
-        },
-        error: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#a94442', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        }
-    }
+    ...form
 }
 
+const no_of_profiles = t.enums.of(['0 - 20', '20 - 50', '50 - 100', '100 - 200', '200 - 300']);
+
 const FetchJob = t.struct({
-    hashtag: t.maybe(t.String),
-    location: t.maybe(t.String),
+    hashtag: t.String,
+    no_profiles: no_of_profiles,
 });
+
 
 const options = {
     fields: {
         hashtag: {
             label: 'Hashtag  #',
         },
-        location: {
-            label: 'Location',
+        no_profiles: {
+            label: 'No. of profiles:',
+            nullOption: { value: '', text: 'Choose amount' }
         },
-    },
-    stylesheet: formStyles,
+        stylesheet: formStyles,
+    }
 };
 
 
@@ -66,16 +44,11 @@ export default class FetchJobForm extends React.Component {
 
     state = {
         value: {},
-        criteria: {
-            zero: false,
-            five: false,
-            ten: false,
-            twenty: false,
-            fifty: false,
-            two_hundred: false,
-        },
-        follower_min: 0,
-        follower_max: 0
+        follower_min: criteria.micro.min,
+        follower_max: criteria.micro.max,
+        index: 0,
+        min: criteria.micro.min,
+        max: criteria.micro.max
     }
 
     onChangeFormValues(val) {
@@ -83,87 +56,47 @@ export default class FetchJobForm extends React.Component {
         if (fj.hashtag != null)
             fj.hashtag = fj.hashtag.toLowerCase()
 
-        if (fj.location != null)
-            fj.location = fj.location.toLowerCase()
-
         this.setState({ value: fj }, () => {
             const fj = { ...this.state }
             this.props.onChange(fj)
         })
     }
 
-    onChangeCriteria = val => {
-        const criteria = { ...this.state.criteria }
+    onChangeSlider = (min, max) => {
+        this.setState({ follower_min: min, follower_max: max })
+    }
 
-        switch (val.key) {
-            case 'zero':
-                criteria.zero = !criteria.zero
-                break
-            case 'five':
-                criteria.five = !criteria.five
-                break
-            case 'ten':
-                criteria.ten = !criteria.ten
-                break
-            case 'twenty':
-                criteria.twenty = !criteria.twenty
-                break
-            case 'fifty':
-                criteria.fifty = !criteria.fifty
-                break
-            case 'two_hundred':
-                criteria.two_hundred = !criteria.two_hundred
-                break
+    changeTab = index => {
+        let min, max
+
+        if (index == 0) {
+            min = criteria.micro.min
+            max = criteria.micro.max
+        } else if (index == 1) {
+            min = criteria.midi.min
+            max = criteria.midi.max
+        } else if (index == 2) {
+            min = criteria.macro.min
+            max = criteria.macro.max
         }
 
-        this.setState({ criteria }, () => {
-            const fj = { ...this.state }
-            this.props.onChange(fj)
-        })
+        this.setState({ index, follower_min: min, follower_max: max })
 
     }
 
-    getCriteria = () => {
-        return <View>
-            <FlatList
-                numColumns={2}
-                data={criteria}
-                renderItem={({ item }) => <Checkbox checked={this.getChecked(item)} criteria={item} onPress={() => this.onChangeCriteria(item)} />}
-                keyExtractor={item => item.key}
-            /></View>
+    formatNumber = num => {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    getChecked = item => {
-        let checked = false
-        let st
-        switch (item.key) {
-            case 'zero':
-                checked = this.state.criteria.zero
-                break
-            case 'five':
-                checked = this.state.criteria.five
-                break
-            case 'ten':
-                checked = this.state.criteria.ten
-                break
-            case 'twenty':
-                checked = this.state.criteria.twenty
-                break
-            case 'fifty':
-                checked = this.state.criteria.fifty
-                break
-            case 'two_hundred':
-                checked = this.state.criteria.two_hundred
-                break
+    getRange = index => {
 
-        }
-        return checked
     }
 
     render() {
+        const { index, follower_max, follower_min, min, max } = this.state
 
         return (
-            <View style={styles.container}>
+            <View style={fetch.formContainer}>
                 <Form
                     ref={c => this._form = c}
                     type={FetchJob}
@@ -172,58 +105,29 @@ export default class FetchJobForm extends React.Component {
                     onChange={(value) => this.onChangeFormValues(value)}
                     onBlur={Keyboard.dismiss}
                 />
-                <View style={styles.midView}>
-                    <Text style={styles.title}>Choose follower range</Text>
-                    <View style={styles.criteriaBox}>
-                        {this.getCriteria()}
+
+                <View style={fetch.info}><Text style={fetch.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
+                <Divider />
+                <View style={fetch.midView}>
+                    <Text style={fetch.title}>Choose influencer target type</Text>
+                    <TabView index={index} titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} />
+                    <View style={fetch.slider}>
+                        <View style={fetch.rangeBox}>
+                            <Text style={fetch.label}>{this.formatNumber(follower_min)}</Text>
+                            <Text style={fetch.label}>{this.formatNumber(follower_max)}</Text>
+                        </View>
+                        {index == 0 && <Slider min={min} max={max} step={100} onChange={this.onChangeSlider} />}
+                        {index == 1 && <Slider min={min} max={max} step={1000} onChange={this.onChangeSlider} />}
+                        {index == 2 && <Slider min={min} max={max} step={10000} onChange={this.onChangeSlider} />}
                     </View>
-                    <Text>{this.state.follower_min}</Text>
-                    <Slider
-                        style={{ width: '100%', height: 90 }}
-                        step={1}
-                        minimumValue={100}
-                        maximumValue={100000000}
-                        minimumTrackTintColor="#0026ff"
-                        maximumTrackTintColor="#ffffff"
-                        onValueChange={val => console.log(val)}
-                    />
-                    <Text>{this.state.follower_max}</Text>
+                    <View style={fetch.bottomView}>
+                        <TextButton style={fetch.saveBtn} onPress={this.props.handleSubmit} title="Save" />
+                    </View>
                 </View>
             </View>
         )
     }
 }
-
-const styles = StyleSheet.create(
-    {
-        container: {
-            justifyContent: 'center',
-            marginTop: 50,
-            padding: 20,
-            backgroundColor: '#ffffff',
-        },
-        criteriaBox: {
-            borderBottomWidth: 0.5,
-            borderTopWidth: 0.5,
-            borderColor: '#ded4da',
-        },
-        midView: {
-            padding: '4%',
-        },
-        textInput: {
-            borderWidth: 1,
-            textTransform: 'lowercase'
-        },
-        title: {
-            fontSize: 16,
-            color: '#493649',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            textAlign: 'left',
-            padding: '4%'
-        },
-
-    });
 
 FetchJobForm.propTypes = {
 

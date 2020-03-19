@@ -14,6 +14,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { addFetchJob } from '../../actions/fetchJob';
+import { Gradient } from '../../styles/Gradient';
+import { fetch } from '../../styles/fetch'
 
 
 class AddFetchJob extends React.Component {
@@ -55,18 +57,19 @@ class AddFetchJob extends React.Component {
     render() {
 
         return (
-            <View style={styles.container}>
+            <View>
                 <AppHeader
                     left={
                         <IconButton color="#493649"
                             name='angle-left'
                             size={40}
                             onPress={() => this.props.navigation.goBack()}
-                        />}
+                        />
+                    }
+                    gradient={true}
                 />
-                <FetchJobForm goBack={this.props.navigation.goBack} onChange={this.handleChange} />
-                <View style={styles.bottomView}>
-                    <TextButton style={styles.saveBtn} onPress={this.handleSubmit} title="Save" />
+                <View style={fetch.container}>
+                    <FetchJobForm goBack={this.props.navigation.goBack} onChange={this.handleChange} handleSubmit={this.handleSubmit} />
                 </View>
             </View>
         );
@@ -75,9 +78,6 @@ class AddFetchJob extends React.Component {
 
 const styles = StyleSheet.create(
     {
-        container: {
-            flex: 1,
-        },
         saveBtn: {
             padding: 6,
             fontSize: 18,
@@ -87,12 +87,6 @@ const styles = StyleSheet.create(
             borderWidth: 1.5,
             borderColor: '#493649',
             borderRadius: 5,
-        },
-        bottomView: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
         },
         text: {
             textAlign: 'center',

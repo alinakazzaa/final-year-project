@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native'
+import { StyleSheet } from 'react-native';
 
 export const dimensions = {
     fullHeight: Dimensions.get('window').height,
@@ -6,14 +7,14 @@ export const dimensions = {
 }
 
 export const colors = {
-    PRIMARY: 'rgb(0, 45, 227)',
-    SECONDARY: 'rgb(255, 0, 225)',
-    TERTIARY: 'rgb(0, 30, 99)',
-    BLACK: 'rgb(27, 23, 37)',
-    WHITE: 'rgb(255, 255, 255)',
-    GREEN: 'rgb(48, 207, 12)',
-    BORDER: 'rgb(179, 179, 204)',
-    GRAY: 'rgb(88, 91, 97)'
+    PRIMARY: '#004bed',
+    SECONDARY: '#ff00dd',
+    TERTIARY: '#001e63',
+    BLACK: '#1b1725',
+    WHITE: '#ffffff',
+    GREEN: '#30cf0c',
+    BORDER: '#b3b3cc',
+    GRAY: '#585b61'
 }
 
 export const spacing = {
@@ -50,14 +51,13 @@ export const container = {
     backgroundColor: colors.WHITE,
     margin: '3%',
     marginRight: '5%',
-    marginLeft: '5%'
+    marginLeft: '5%',
+    height: dimensions.fullHeight,
 }
 
 export const formContainer = {
-    borderWidth: 1,
-    borderColor: colors.BORDER,
     padding: 30,
-    alignItems: 'center',
+    margin: 0,
     borderRadius: 5,
     width: dimensions.fullWidth * .85,
     shadowColor: colors.BLACK,
@@ -74,7 +74,7 @@ export const input = {
     color: colors.BLACK,
     fontSize: fonts.MEDIUM,
     fontWeight: fonts.WEIGHT_LEIGHT,
-    height: height.MEDIUM,
+    height: height.MEDIUM * 0.8,
     width: width.LARGE,
     padding: spacing.MEDIUM,
     paddingLeft: spacing.LARGE,
@@ -85,13 +85,19 @@ export const input = {
     marginBottom: spacing.SMALL,
 }
 
+export const select = {
+    height: 100,
+    color: colors.PRIMARY
+}
+
 export const inputLabel = {
-    color: colors.BLACK,
-    margin: spacing.SMALL,
+    color: colors.TERTIARY,
+    marginTop: spacing.SMALL,
     marginBottom: spacing.MEDIUM,
     fontSize: fonts.SMALL,
     textTransform: 'uppercase',
-    fontWeight: fonts.WEIGHT_LEIGHT
+    fontWeight: fonts.WEIGHT_LEIGHT,
+    fontFamily: fonts.PRIMARY
 }
 
 export const form = {
@@ -111,6 +117,14 @@ export const form = {
 
         }
     },
+    select: {
+        normal: {
+            ...select
+        },
+        error: {
+
+        }
+    }
 }
 
 // buttons
@@ -129,3 +143,19 @@ export const buttonText = {
     textTransform: 'uppercase',
     fontWeight: fonts.WEIGHT_MEDIUM
 }
+
+
+export const base = StyleSheet.create(
+    {
+        slider: {
+            height: 20,
+            justifyContent: 'center',
+            borderWidth: 1,
+            borderRadius: 8,
+            opacity: 0.3,
+            padding: spacing.SMALL * 0.3,
+            paddingLeft: 0,
+            paddingRight: 0,
+            borderColor: colors.BORDER
+        }
+    });
