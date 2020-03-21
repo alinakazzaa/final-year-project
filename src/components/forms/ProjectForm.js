@@ -1,58 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Switch, TextInput, Keyboard, Button } from 'react-native';
-import { IconButton } from '../../components/buttons/IconButton';
-import { TextButton } from '../../components/buttons/TextButton';
-import BasicInput from '../input/BasicInput';
+import { View, Keyboard } from 'react-native';
+import PropTypes from 'prop-types'
+// @ts-ignore
 import t from 'tcomb-form-native';
-import { validate } from 'tcomb-form-native/lib';
+import { project } from '../../screens/Project/styles/project.styles';
+import { form, colors } from '../../styles/base';
 
 const Form = t.form.Form;
 
 const formStyles = {
     ...Form.stylesheet,
-    controlLabel: {
-        normal: {
-            // display: 'none',
-        },
-        error: {
-            color: 'Purple',
-            fontSize: 18,
-            marginBottom: 7,
-            fontWeight: '600'
-        }
-    },
-    textbox: {
-        normal: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#cccccc', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        },
-        error: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#a94442', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        }
-    },
-    checkbox: {
-        normal: {
-
-        },
-        error: {
-
-        },
-    },
-
-
+    ...form
 }
 
 const Project = t.struct({
@@ -64,10 +22,17 @@ const Project = t.struct({
 const options = {
     fields: {
         title: {
+            label: '',
             error: 'Project requires a title!',
+            display: 'none'
+
+        },
+        description: {
+            label: '',
         },
         active: {
-            label: 'Active Project',
+            label: '',
+            onTintColor: colors.SECONDARY
         },
     },
     stylesheet: formStyles,
@@ -81,7 +46,7 @@ export default class ProjectForm extends React.Component {
     }
 
     componentDidMount() {
-        let project = this.props.project
+        const { project } = this.props
         if (project) {
             this.setState({ value: project })
         }
@@ -95,7 +60,7 @@ export default class ProjectForm extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={project.formContainer}>
                 <Form
                     ref={c => this._form = c}
                     type={Project}
@@ -109,26 +74,12 @@ export default class ProjectForm extends React.Component {
     }
 }
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            justifyContent: 'center',
-            marginTop: 50,
-            padding: 20,
-            backgroundColor: '#ffffff',
-        },
-        textInput: {
-            borderWidth: 1,
-        },
-
-    });
-
 ProjectForm.propTypes = {
-
+    project: PropTypes.object
 }
 
 ProjectForm.defaultProps = {
-
+    project: null,
 }
 
 

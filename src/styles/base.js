@@ -80,20 +80,12 @@ export const input = {
     color: colors.TERTIARY,
     fontSize: fonts.MEDIUM,
     fontWeight: fonts.WEIGHT_LEIGHT,
-    height: height.MEDIUM * 0.8,
+    height: height.MEDIUM,
     width: width.LARGE,
     padding: spacing.MEDIUM,
-    paddingLeft: spacing.LARGE * 0.7,
-    paddingRight: spacing.LARGE * 0.7,
-    borderRadius: 25,
-    borderColor: colors.BLACK,
-    borderWidth: 1,
+    borderColor: colors.TERTIARY,
+    borderBottomWidth: 1,
     marginBottom: spacing.SMALL,
-}
-
-export const select = {
-    height: 100,
-    color: colors.PRIMARY
 }
 
 export const inputLabel = {
@@ -104,6 +96,11 @@ export const inputLabel = {
     textTransform: 'uppercase',
     fontWeight: fonts.WEIGHT_LEIGHT,
     fontFamily: fonts.PRIMARY
+}
+
+export const select = {
+    height: 100,
+    color: colors.PRIMARY
 }
 
 export const form = {
@@ -123,14 +120,6 @@ export const form = {
 
         }
     },
-    select: {
-        normal: {
-            ...select
-        },
-        error: {
-
-        }
-    }
 }
 
 
@@ -150,6 +139,9 @@ export const base = StyleSheet.create(
         inputStyle: {
             color: colors.TERTIARY,
             fontSize: fonts.MEDIUM,
-            fontWeight: fonts.WEIGHT_LEIGHT,
+            fontWeight: fonts.WEIGHT_MEDIUM,
+        },
+        btnView: {
+            alignItems: 'center',
         }
     });

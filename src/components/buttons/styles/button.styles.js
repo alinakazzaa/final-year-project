@@ -14,6 +14,6 @@ export const button = StyleSheet.create(
             backgroundColor: 'transparent',
             padding: spacing.MEDIUM,
             width: width.LARGE,
-            borderRadius: 25,
+            borderRadius: 10,
         },
     });

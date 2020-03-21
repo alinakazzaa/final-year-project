@@ -8,6 +8,7 @@ import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { BackButton } from '../../components/buttons/BackButton'
+import { project } from './styles/project.styles'
 
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
@@ -35,32 +36,19 @@ class AddProject extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View>
                 <AppHeader
                     gradient={true}
-                    left={
-                        <BackButton onPress={() => this.props.navigation.goBack()} />}
-                    right={
-                        <View style={styles.saveBtn}>
-                            <TextButton onPress={this.handleSubmit} title="Save" />
-                        </View>}
+                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
+                    right={<TextButton containerStyle={project.saveBtn} onPress={this.handleSubmit} title="Save" />}
                 />
-                <ProjectForm onChange={this.handleChange} />
+                <View style={project.addContainer}>
+                    <ProjectForm onChange={this.handleChange} />
+                </View>
             </View>
         )
     }
 }
-
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-        },
-        saveBtn: {
-            marginRight: 10,
-            fontWeight: '700'
-        },
-    })
 
 const mapStateToProps = state => ({
     state: state,

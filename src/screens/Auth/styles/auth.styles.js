@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, container, spacing, fonts, formContainer } from '../../../styles/base';
+import { colors, container, spacing, fonts, formContainer, input, inputLabel } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
 export const auth = StyleSheet.create(
@@ -48,5 +48,8 @@ export const auth = StyleSheet.create(
         },
         back: {
             marginLeft: spacing.LARGE
+        },
+        btnView: {
+            marginTop: spacing.LARGE
         }
     });

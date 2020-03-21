@@ -53,10 +53,10 @@ const projectReducer = (state = initialState, action) => {
         case ADD_PROJECT:
             projects = [...state.projects]
             projects.splice(projects.length, 1, action.project)
-            console.log(projects)
+
             return {
                 ...state,
-                projects: projects
+                projects
             }
         case UPDATE_PROJECT:
             projects = [...state.projects]
@@ -83,5 +83,6 @@ const projectReducer = (state = initialState, action) => {
 
 export const activeProjects = state => [...state.project.projects.filter(proj => proj.active == true)]
 export const archivedProjects = state => [...state.project.projects.filter(proj => proj.active == false)]
+export const searchedProjects = (state, text) => [...state.project.projects.filter(proj => proj.title.toLowerCase().includes(text.toLowerCase()))]
 
 export default projectReducer

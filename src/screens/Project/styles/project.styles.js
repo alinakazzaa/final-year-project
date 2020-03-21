@@ -1,16 +1,26 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, container, inputLabel, dimensions, input } from '../../../styles/base';
+import { colors, fonts, spacing, container, inputLabel, dimensions, input, formContainer, form, select, height } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
 export const project = StyleSheet.create(
     {
-        container: {
+        allContainer: {
             ...container,
-            paddingLeft: spacing.MEDIUM
+            backgroundColor: 'transparent',
+        },
+        addContainer: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '30%'
         },
         scrollContainer: {
             padding: spacing.LARGE,
-            paddingBottom: '7%',
+            marginBottom: '7%',
+        },
+        formContainer: {
+            ...formContainer,
+            width: dimensions.fullWidth * .9,
+            alignItems: 'center',
         },
         tabView: {
             flexDirection: 'row',
@@ -81,7 +91,7 @@ export const project = StyleSheet.create(
         },
         searchInput: {
             ...input,
-            width: dimensions.fullWidth * 0.6,
+            width: dimensions.fullWidth * 0.68,
             borderRadius: 20,
             borderColor: colors.WHITE,
             borderWidth: 1,
@@ -98,4 +108,8 @@ export const project = StyleSheet.create(
             display: 'flex',
             width: '10%'
         },
+        saveBtn: {
+            ...button.btnContainer,
+            alignSelf: 'flex-end'
+        }
     });
