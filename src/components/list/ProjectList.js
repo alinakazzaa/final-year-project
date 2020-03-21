@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
-import { project } from '../../styles/project'
+import { project } from '../../screens/Project/styles/project.styles'
 import { Icon } from 'react-native-elements'
 import { colors } from '../../styles/base'
 

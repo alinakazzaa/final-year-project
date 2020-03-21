@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, YellowBox, StyleSheet } from 'react-native'
+import { View, YellowBox } from 'react-native'
 import { updateProject } from '../../actions/project'
 import { AppHeader } from '../../layouts/Header'
 import { TextButton } from '../../components/buttons/TextButton'
@@ -7,6 +7,7 @@ import { IconButton } from '../../components/buttons/IconButton'
 import ProjectForm from '../../components/forms/ProjectForm'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { project } from './styles/project.styles'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
 
@@ -47,10 +48,11 @@ class EditProject extends React.Component {
     render() {
         const { current_project } = this.props
         return (
-            <View style={styles.container}>
+            <View>
                 <AppHeader
+                    gradient={true}
                     right={
-                        <View style={styles.saveBtn}>
+                        <View style={project.saveBtn}>
                             <TextButton onPress={this.handleSubmit} title="Save" />
                         </View>}
                     left={
@@ -60,26 +62,13 @@ class EditProject extends React.Component {
                             onPress={() => this.props.navigation.goBack()}
                         />}
                 />
-                <ProjectForm onChange={this.handleChange} project={current_project} />
+                <View style={project.container}>
+                    <ProjectForm onChange={this.handleChange} project={current_project} />
+                </View>
             </View>
         )
     }
 }
-
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-        },
-        text: {
-            textAlign: 'center',
-            color: 'black'
-        },
-        saveBtn: {
-            marginRight: 10,
-            fontWeight: '700'
-        },
-    })
 
 const mapStateToProps = state => ({
     state: state,

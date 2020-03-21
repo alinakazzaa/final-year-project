@@ -7,6 +7,7 @@ import { TextButton } from '../../components/buttons/TextButton'
 import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { BackButton } from '../../components/buttons/BackButton'
 
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
@@ -36,12 +37,9 @@ class AddProject extends React.Component {
         return (
             <View style={styles.container}>
                 <AppHeader
+                    gradient={true}
                     left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
+                        <BackButton onPress={() => this.props.navigation.goBack()} />}
                     right={
                         <View style={styles.saveBtn}>
                             <TextButton onPress={this.handleSubmit} title="Save" />
