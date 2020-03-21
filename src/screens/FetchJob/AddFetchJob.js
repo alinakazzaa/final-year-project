@@ -1,21 +1,16 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
+import { View, YellowBox } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-import { createStackNavigator } from 'react-navigation-stack';
 import FetchJobForm from '../../components/forms/FetchJobForm';
 import { AppHeader } from '../../layouts/Header';
-import { TextButton } from '../../components/buttons/TextButton';
 import { IconButton } from '../../components/buttons/IconButton';
-import { criteria } from '../../constants/Criteria';
-import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { addFetchJob } from '../../actions/fetchJob';
-import { Gradient } from '../../styles/Gradient';
-import { fetch } from '../../styles/fetch'
+import { fetchJobStyle } from './fetchJob.style'
 
 
 class AddFetchJob extends React.Component {
@@ -23,35 +18,15 @@ class AddFetchJob extends React.Component {
     static navigationOptions = {
         headerShown: false
     }
-    s
-    state = {
-        fetch_job: {}
-    }
 
-    handleSubmit = () => {
+    handleSubmit = fetch_job => {
         const { user, current_project, addFetchJob } = this.props
-        let { fetch_job } = this.state
 
-        fetch_job.value.date_created = DATE_TODAY
-        fetch_job.value.title = 'Fetch: ' + fetch_job.value.hashtag && fetch_job.value.location ?
-            `hashtag: ${fetch_job.value.hashtag} & location: ${fetch_job.value.location} ` :
-            fetch_job.value.location ? 'location:' + fetch_job.value.location : 'hashtag:' + fetch_job.value.hashtag
+        fetch_job.date_created = DATE_TODAY
+        fetch_job.title = 'Fetch: ' + fetch_job.hashtag
 
-        // filter active criteria
-        let criteria = Object.entries(fetch_job.criteria);
-        let active_criteria = []
-
-        criteria.forEach(element => {
-            if (element[1] == true)
-                active_criteria.push(element[0])
-        })
-        fetch_job.criteria = [...active_criteria]
-        addFetchJob(user.id, current_project.id, { ...this.state.fetch_job })
+        addFetchJob(user.id, current_project.id, fetch_job)
         this.props.navigation.goBack()
-    }
-
-    handleChange = fj => {
-        this.setState({ fetch_job: fj });
     }
 
     render() {
@@ -68,31 +43,13 @@ class AddFetchJob extends React.Component {
                     }
                     gradient={true}
                 />
-                <View style={fetch.container}>
-                    <FetchJobForm goBack={this.props.navigation.goBack} onChange={this.handleChange} handleSubmit={this.handleSubmit} />
+                <View style={fetchJobStyle.container}>
+                    <FetchJobForm goBack={this.props.navigation.goBack} handleSubmit={this.handleSubmit} />
                 </View>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create(
-    {
-        saveBtn: {
-            padding: 6,
-            fontSize: 18,
-            fontWeight: '400',
-            display: 'flex',
-            marginRight: 10,
-            borderWidth: 1.5,
-            borderColor: '#493649',
-            borderRadius: 5,
-        },
-        text: {
-            textAlign: 'center',
-            color: 'black'
-        }
-    });
 
 const mapStateToProps = state => ({
     state: state,

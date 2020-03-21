@@ -77,7 +77,6 @@ export const BottomNavigator = createBottomTabNavigator(
     {
         initialRouteName: 'Projects',
         tabBarOptions: {
-            // activeBackgroundColor: colors.GRAY,
             showLabel: false,
             style: { ...nav.tabBar },
             tabStyle: { ...nav.tabItem }

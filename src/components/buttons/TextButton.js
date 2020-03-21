@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { button, buttonText } from '../../styles/base'
+import { base } from '../../styles/base'
 
 
-export const TextButton = ({ title, onPress, style }) => {
-    return <TouchableOpacity onPress={onPress} style={style !== null ? style : button}>
-        <Text style={buttonText}>{title}</Text>
+export const TextButton = ({ title, onPress, containerStyle, buttonText }) => {
+    return <TouchableOpacity onPress={onPress} style={containerStyle !== null ? containerStyle : base.button}>
+        <Text style={buttonText !== null ? buttonText : base.defaultTxt}>{title}</Text>
     </TouchableOpacity>
 }
 

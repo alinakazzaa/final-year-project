@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, YellowBox, TouchableOpacity } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-import { CriteriaView } from '../../components/criteria/CriteriaView';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
 import { setCurrentInfluencer, getInfluencersPending } from '../../actions/influencer';
@@ -20,8 +19,9 @@ import { fetchPending, fetchError, fetchSuccess, clearRunningFetchJob } from '..
 import { fetchNextPage } from '../../web/fetchNextPage';
 import { GET_MEDIA_NEXT_PAGE_COMPLETED, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_BY_HASHTAG_SUCCESS, COMPLETED_GET_ALL_USERS } from '../../constants/response/types';
 import { COMPLETED_NEXT_PAGE } from '../../constants/response/messages';
-import { spacing } from '../../styles/base';
-
+import { fetchJobStyle } from './fetchJob.style'
+import { Input } from 'react-native-elements';
+import { base } from '../../styles/base';
 
 class ViewFetchJob extends React.Component {
 
@@ -37,7 +37,7 @@ class ViewFetchJob extends React.Component {
     componentDidMount() {
         const { current_fetch_job, getAllInfluencers } = this.props
 
-        if (current_fetch_job.influencers.success.length > 0) {
+        if (current_fetch_job.details.status == COMPLETED && current_fetch_job.influencers.success.length > 0) {
             console.log(current_fetch_job)
             getAllInfluencers(current_fetch_job)
             this.setState({ have_influencers: true })
@@ -84,10 +84,11 @@ class ViewFetchJob extends React.Component {
         const { have_influencers } = this.state
         const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
         let fetch_job = current_fetch_job.details.id == running_fetch.details.id ? running_fetch : current_fetch_job
-        console.log(this.props.state.influencer)
+
         return (
-            <View style={styles.container}>
+            <View>
                 <AppHeader
+                    gradient={true}
                     left={
                         <IconButton color="#493649"
                             name='angle-left'
@@ -95,200 +96,70 @@ class ViewFetchJob extends React.Component {
                             onPress={() => this.props.navigation.goBack()}
                         />}
                 />
-                <View style={styles.infoContainer}>
-                    <View>
-                        <View style={styles.top}>
-                            <Text style={styles.title}>Job Details</Text>
-                            <View style={styles.itemRow}>
-                                <Text style={styles.lbl}>Title</Text>
-                                <Text style={styles.data}>{fetch_job.details.title}</Text>
-                            </View>
-                            <View style={styles.itemRow}>
-                                <Text style={styles.lbl}>Date Created</Text>
-                                <Text style={styles.data}>{fetch_job.details.date_created}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.middle}>
-                            <Text style={styles.title}>Fetch Criteria</Text>
-                            <View style={styles.itemRow}>
-                                <Text style={styles.lbl}>Hashtag</Text>
-                                <Text style={styles.data}># {fetch_job.details.hashtag}</Text>
-                            </View>
-                            <View style={styles.itemRow}>
-                                <Text style={styles.lbl}>Location</Text>
-                                <Text style={styles.data}>{fetch_job.details.location}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.itemRowRange}>
-                            <Text style={styles.lblRange}>Follower range</Text>
-                            <CriteriaView activeCriteria={fetch_job.details.criteria} />
-                        </View>
-                        <View style={styles.middle}>
-                            <View style={styles.itemRow}>
-                                <Text style={styles.lbl}>Status</Text>
-                                <View style={styles.statusView}>
-                                    {fetch_job.details.status == IN_PROGRESS &&
-                                        <View style={styles.progress}>
-                                            <Bar progress={progress_percent} width={150} height={15} color="#5d4d50" />
-                                        </View>
-                                    }
+                <View style={fetchJobStyle.container}>
+                    <View style={fetchJobStyle.infoContainer}>
+                        <View>
+                            <View style={fetchJobStyle.top}>
+                                <Text style={fetchJobStyle.title}>Job Details</Text>
+                                <View style={fetchJobStyle.itemRow}>
+                                    <Text style={fetchJobStyle.lbl}>Title</Text>
+                                    <Text style={fetchJobStyle.data}>{fetch_job.details.title}</Text>
                                 </View>
-                                <Text style={styles.statusData}>{fetch_job.details.status}</Text>
-                            </View>
-                        </View>
-                        {fetch_job.details.status == COMPLETED &&
-                            fetch_job.response.type == COMPLETED_GET_ALL_USERS ?
-                            <View style={styles.bottomView}>
-                                <View style={styles.influencers}>
-                                    <Text style={styles.title}>Influencers</Text>
-                                    <TouchableOpacity style={styles.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
-                                        <Text style={styles.title}>View All</Text>
-                                    </TouchableOpacity>
+                                <View style={fetchJobStyle.itemRow}>
+                                    <Text style={fetchJobStyle.lbl}>Date Created</Text>
+                                    <Text style={fetchJobStyle.data}>{fetch_job.details.date_created}</Text>
                                 </View>
-                                {have_influencers ? <InfluencerListFjView influencers={influencers} /> :
-                                    <View style={styles.none}><Text style={styles.data}>None found</Text></View>}
-                            </View> :
-                            <View style={styles.bottomView}><Text style={styles.lbl}>{fetch_job.response.message}</Text></View>}
-                        {fetch_job.details.status == PENDING && <View style={styles.button}><TextButton style={styles.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
-                    </View >
+                            </View>
+                            <View style={fetchJobStyle.middle}>
+                                <Text style={fetchJobStyle.title}>Fetch Criteria</Text>
+                                <View style={fetchJobStyle.itemRow}>
+                                    <Text style={fetchJobStyle.lbl}>Hashtag</Text>
+                                    <Text style={fetchJobStyle.data}># {fetch_job.details.hashtag}</Text>
+                                </View>
+                                <View style={fetchJobStyle.itemRow}>
+                                    <Text style={fetchJobStyle.lbl}>Location</Text>
+                                    <Text style={fetchJobStyle.data}>{fetch_job.details.location}</Text>
+                                </View>
+                            </View>
+                            <View style={fetchJobStyle.itemRowRange}>
+                                <Text style={fetchJobStyle.lblRange}>Follower range</Text>
+                                {/* <CriteriaView activeCriteria={fetch_job.details.criteria} /> */}
+                            </View>
+                            <View style={fetchJobStyle.middle}>
+                                <View style={fetchJobStyle.itemRow}>
+                                    <Text style={fetchJobStyle.lbl}>Status</Text>
+                                    <View style={fetchJobStyle.statusView}>
+                                        {fetch_job.details.status == IN_PROGRESS &&
+                                            <View style={fetchJobStyle.progress}>
+                                                <Bar progress={progress_percent} width={150} height={15} color="#5d4d50" />
+                                            </View>
+                                        }
+                                    </View>
+                                    <Text style={fetchJobStyle.statusData}>{fetch_job.details.status}</Text>
+                                </View>
+                            </View>
+                            {fetch_job.details.status == COMPLETED &&
+                                fetch_job.response.type == COMPLETED_GET_ALL_USERS &&
+                                <View style={fetchJobStyle.bottomView}>
+                                    <View style={fetchJobStyle.influencers}>
+                                        <Text style={fetchJobStyle.title}>Influencers</Text>
+                                        <TouchableOpacity style={fetchJobStyle.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
+                                            <Text style={fetchJobStyle.title}>View All</Text>
+                                        </TouchableOpacity>
+                                        {have_influencers ? <InfluencerListFjView influencers={influencers} /> :
+                                            <View style={fetchJobStyle.none}><Text style={fetchJobStyle.data}>None found</Text></View>}
+                                    </View>
+                                </View>}
+                            {fetch_job.details.status == PENDING && <View style={fetchJobStyle.button}><TextButton style={fetchJobStyle.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
+                        </View >
 
-                </View >
+                    </View>
+                </View>
             </View >
         );
     }
 }
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1
-        },
-        top: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            borderBottomWidth: 0.3,
-            borderBottomColor: '#b3b3cc',
-        },
-        middle: {
-            paddingTop: 10,
-            display: 'flex',
-            justifyContent: 'space-between',
-            borderBottomWidth: 0.3,
-            borderBottomColor: '#b3b3cc',
-            paddingBottom: 20
-        },
-        bottomView: {
-            // height: '20%',
-            justifyContent: 'center',
-            // paddingTop: '4%',
-        },
-        button: {
-            alignItems: 'center',
-        },
-        scrollContainer: {
-            padding: '2%',
-            paddingLeft: 0,
-        },
-        listHead: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-        },
-        influencers: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: spacing.MEDIUM
-        },
-        infoContainer: {
-            // display: 'flex',
-            margin: '5%',
-        },
-        title: {
-            padding: 10,
-            fontSize: 13,
-            color: '#493649',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            textAlign: 'left',
-        },
-        progress: {
-
-        },
-        itemRow: {
-            display: 'flex',
-            flexDirection: 'row',
-            padding: 10,
-            justifyContent: 'space-between',
-
-        },
-        loadingTxt: {
-            fontFamily: 'Arial',
-            fontSize: 15,
-            color: '#5d4d50',
-            padding: '4%',
-            flex: 1
-        },
-        itemRowRange: {
-            display: 'flex',
-            flexDirection: 'column',
-            padding: 10,
-            paddingTop: 20,
-            justifyContent: 'space-evenly',
-            borderBottomWidth: 0.3,
-            borderBottomColor: '#b3b3cc',
-        },
-        lbl: {
-            fontSize: 16,
-            color: '#5d4d50',
-            textTransform: 'uppercase',
-        },
-        lblRange: {
-            fontSize: 13,
-            color: '#493649',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            textAlign: 'left',
-            marginBottom: 20
-        },
-        data: {
-            fontSize: 16,
-            color: '#826478'
-        },
-        statusData: {
-            fontSize: 16,
-            color: '#826478',
-            textTransform: 'uppercase',
-            paddingRight: 10
-        },
-        viewAllBtn: {
-            alignSelf: 'center',
-            flexWrap: 'wrap'
-        },
-        startBtn: {
-            fontSize: 24,
-            color: '#493649',
-            borderWidth: 3,
-            borderColor: '#493649',
-            borderRadius: 10,
-            width: 140,
-            height: 40,
-            textAlign: 'center',
-            marginTop: 50
-        },
-        none: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignContent: 'center',
-            padding: spacing.LARGE
-        },
-        noneTxt: {
-            fontSize: 19,
-            color: '#5d4d50',
-        },
-        statusView: {
-            flexDirection: 'row',
-            justifyContent: 'space-evenly'
-        }
-    });
 
 const mapStateToProps = state => ({
     state: state,
