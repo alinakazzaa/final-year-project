@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Keyboard } from 'react-native';
 // @ts-ignore
 import t from 'tcomb-form-native';
 import Slider from '../slider/Slider';
-import { form } from '../../styles/base';
+import { form, colors } from '../../styles/base';
 import { fetchJobStyle } from '../../screens/FetchJob/fetchJob.style'
 import { Divider } from 'react-native-elements';
 import TabView from '../tabview/TabView';
@@ -124,7 +124,7 @@ export default class FetchJobForm extends React.Component {
                     <Text
                         // @ts-ignore
                         style={fetchJobStyle.title}>Choose influencer target type</Text>
-                    <TabView index={index} titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} />
+                    <TabView index={index} color={colors.SECONDARY} width={100} titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
                     <View style={fetchJobStyle.slider}>
                         <View style={fetchJobStyle.rangeBox}>
                             <Text
