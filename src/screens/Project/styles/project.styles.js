@@ -91,10 +91,10 @@ export const project = StyleSheet.create(
 
         },
         searchInput: {
-            width: dimensions.fullWidth * 0.7,
+            width: dimensions.fullWidth * 0.67,
             borderColor: colors.BORDER,
             borderBottomWidth: 2,
-
+            height: spacing.LARGE * 1.5,
         },
         left: {
             display: 'flex',

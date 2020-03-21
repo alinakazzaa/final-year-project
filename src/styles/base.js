@@ -145,7 +145,6 @@ export const base = StyleSheet.create(
             color: colors.WHITE,
             fontSize: fonts.SMALL,
             fontWeight: fonts.WEIGHT_HEAVY,
-            padding: 0
         },
         btnView: {
             alignItems: 'center',
