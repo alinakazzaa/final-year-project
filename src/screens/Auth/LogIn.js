@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { View, Text, YellowBox, Image } from 'react-native';
+import { View, YellowBox } from 'react-native';
 import LogInForm from '../../components/forms/LogInForm';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUserByUsername, setLoggedInUserError, setLoggedInUserSuccess } from '../../actions/user';
-import { auth } from '../../styles/auth'
+import { auth } from './styles/auth.styles'
 import { Gradient } from '../../styles/Gradient';
 import { INCORRECT_PASSWORD, NO_USER } from '../../constants/response/messages';
 import { AppLogo } from '../../components/logo/AppLogo'
@@ -17,14 +17,13 @@ class LogInScreen extends React.Component {
         headerShown: false,
     }
 
-    // componentDidMount() {
-    //     const { setLoggedInUserSuccess } = this.props;
-    //     const user_obj = getUserByUsername("A")
-    //     if (user_obj.username) {
-    //         setLoggedInUserSuccess(user_obj)
-    //     }
-
-    // }
+    componentDidMount() {
+        const { setLoggedInUserSuccess } = this.props;
+        const user_obj = getUserByUsername("A")
+        if (user_obj.username) {
+            setLoggedInUserSuccess(user_obj)
+        }
+    }
 
 
     goToRegister = () => {
