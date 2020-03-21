@@ -8,7 +8,7 @@ import { base } from '../../styles/base';
 export default class Slider extends React.Component {
 
     render() {
-        const { min, max, step, onChange, setMinMax } = this.props
+        const { min, max, step, onChange } = this.props
         return (
             <View style={base.slider}>
                 <RangeSlider
@@ -17,7 +17,6 @@ export default class Slider extends React.Component {
                     labelStyle="none"
                     thumbRadius={13}
                     thumbBorderWidth={1}
-                    // gravity={'center'}
                     min={min}
                     max={max}
                     step={step}
@@ -25,7 +24,7 @@ export default class Slider extends React.Component {
                         onChange(low, high)
                         this.setState({ min: low, max: high })
                     }}
-                    selectionColor={colors.BORDER}
+                    selectionColor={colors.PRIMARY}
                 />
             </View>
         )

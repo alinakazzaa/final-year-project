@@ -13,7 +13,6 @@ export const getProjectFetchJobs = (user_id, project_id) => {
                 ...fj_snap.val()
             }
             fetch_jobs.push(fj)
-
         })
 
     })
@@ -54,12 +53,12 @@ export const clearCurrentFetchJob = () => {
 
 //DB
 export const addFetchJob = (user_id, project_id, fetch_job) => {
+    console.log(project_id)
     let fj_obj = {
         details: {
-            ...fetch_job.value,
-            hashtag: fetch_job.value.hashtag || '',
-            location: fetch_job.value.location || '',
-            criteria: String(fetch_job.criteria),
+            ...fetch_job,
+            hashtag: fetch_job.hashtag,
+            criteria: { ...fetch_job.criteria },
             status: PENDING,
             response: {},
             user_id: user_id,

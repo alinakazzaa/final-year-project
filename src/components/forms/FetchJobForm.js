@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Keyboard } from 'react-native';
 import t from 'tcomb-form-native';
 import Slider from '../slider/Slider';
 import { form } from '../../styles/base';
-import { fetch } from '../../styles/fetch'
+import { fetchJobStyle } from '../../screens/FetchJob/fetchJob.style'
 import { Divider } from 'react-native-elements';
 import TabView from '../tabview/TabView';
 import { TextButton } from '../buttons/TextButton';
@@ -18,11 +18,11 @@ const formStyles = {
     ...form
 }
 
-const no_of_profiles = t.enums.of(['0 - 20', '20 - 50', '50 - 100', '100 - 200', '200 - 300']);
+const no_profiles = t.enums.of(['0 - 20', '20 - 50', '50 - 100', '100 - 200', '200 - 300'])
 
 const FetchJob = t.struct({
     hashtag: t.String,
-    no_profiles: no_of_profiles,
+    no_profiles: no_profiles
 });
 
 
@@ -33,7 +33,14 @@ const options = {
         },
         no_profiles: {
             label: 'No. of profiles:',
-            nullOption: { value: '', text: 'Choose amount' }
+            nullOption: { value: '', text: 'Choose amount' },
+            options: [
+                { value: '20', text: '0 - 20' },
+                { value: '50', text: '20 - 50' },
+                { value: '100', text: '50 - 100' },
+                { value: '200', text: '100 - 200' },
+                { value: '300', text: '200 - 300' },
+            ]
         },
         stylesheet: formStyles,
     }
@@ -53,13 +60,10 @@ export default class FetchJobForm extends React.Component {
 
     onChangeFormValues(val) {
         let fj = val
-        if (fj.hashtag != null)
+        if (fj.hashtag !== null && fj.hashtag == '')
             fj.hashtag = fj.hashtag.toLowerCase()
 
-        this.setState({ value: fj }, () => {
-            const fj = { ...this.state }
-            this.props.onChange(fj)
-        })
+        this.setState({ value: { ...this.state.value, ...fj } })
     }
 
     onChangeSlider = (min, max) => {
@@ -84,19 +88,27 @@ export default class FetchJobForm extends React.Component {
 
     }
 
-    formatNumber = num => {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    handleSubmit = () => {
+        const { handleSubmit } = this.props
+        const { value, follower_max, follower_min } = this.state
+        let fj = { ...value, criteria: { follower_min, follower_max } }
+        handleSubmit(fj)
     }
 
-    getRange = index => {
-
+    formatNumber = num => {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     render() {
         const { index, follower_max, follower_min, min, max } = this.state
 
         return (
-            <View style={fetch.formContainer}>
+            <View style={fetchJobStyle.formContainer}>
+                <View style={fetchJobStyle.info}>
+                    <Text style={fetchJobStyle.text}>Search users by hashtag they recently used in their media</Text>
+                </View>
+                <View style={fetchJobStyle.info}>
+                    <Text style={fetchJobStyle.text}>Avoid overly specific tags</Text></View>
                 <Form
                     ref={c => this._form = c}
                     type={FetchJob}
@@ -106,22 +118,28 @@ export default class FetchJobForm extends React.Component {
                     onBlur={Keyboard.dismiss}
                 />
 
-                <View style={fetch.info}><Text style={fetch.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
+                <View style={fetchJobStyle.info}><Text style={fetchJobStyle.text}>To consider: the more influencers you fetchJobStyle, the longer it will take</Text></View>
                 <Divider />
-                <View style={fetch.midView}>
-                    <Text style={fetch.title}>Choose influencer target type</Text>
+                <View style={fetchJobStyle.midView}>
+                    <Text
+                        // @ts-ignore
+                        style={fetchJobStyle.title}>Choose influencer target type</Text>
                     <TabView index={index} titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} />
-                    <View style={fetch.slider}>
-                        <View style={fetch.rangeBox}>
-                            <Text style={fetch.label}>{this.formatNumber(follower_min)}</Text>
-                            <Text style={fetch.label}>{this.formatNumber(follower_max)}</Text>
+                    <View style={fetchJobStyle.slider}>
+                        <View style={fetchJobStyle.rangeBox}>
+                            <Text
+                                // @ts-ignore
+                                style={fetchJobStyle.label}>{this.formatNumber(follower_min)}</Text>
+                            <Text
+                                // @ts-ignore
+                                style={fetchJobStyle.label}>{this.formatNumber(follower_max)}</Text>
                         </View>
                         {index == 0 && <Slider min={min} max={max} step={100} onChange={this.onChangeSlider} />}
                         {index == 1 && <Slider min={min} max={max} step={1000} onChange={this.onChangeSlider} />}
                         {index == 2 && <Slider min={min} max={max} step={10000} onChange={this.onChangeSlider} />}
                     </View>
-                    <View style={fetch.bottomView}>
-                        <TextButton style={fetch.saveBtn} onPress={this.props.handleSubmit} title="Save" />
+                    <View style={fetchJobStyle.bottomView}>
+                        <TextButton style={fetchJobStyle.saveBtn} onPress={this.handleSubmit} title="Save" />
                     </View>
                 </View>
             </View>
