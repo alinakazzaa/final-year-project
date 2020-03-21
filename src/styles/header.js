@@ -6,7 +6,7 @@ export const header = StyleSheet.create(
     {
         transparent: {
             backgroundColor: 'transparent',
-            height: 100,
+            height: 110,
             marginLeft: spacing.LARGE,
             borderBottomColor: 'transparent',
         },

@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, height, width, container } from './base';
+import { colors, fonts, spacing, height, width, container, inputLabel, defaultTxt } from './base';
 
 export const project = StyleSheet.create(
     {
         container: {
-            // ...container,
+            ...container,
         },
         scrollContainer: {
             padding: '4%',
@@ -14,6 +14,7 @@ export const project = StyleSheet.create(
             flexDirection: 'row',
             justifyContent: 'space-around',
             padding: spacing.MEDIUM,
+            marginTop: spacing.MEDIUM
         },
         tab: {
             textTransform: 'uppercase',
@@ -63,12 +64,17 @@ export const project = StyleSheet.create(
             textTransform: 'uppercase',
         },
         text: {
-            fontSize: fonts.SMALL,
-            color: colors.TERTIARY,
-            fontFamily: fonts.PRIMARY,
+            ...inputLabel,
+            color: colors.WHITE,
             fontWeight: fonts.WEIGHT_MEDIUM,
-            marginTop: spacing.MEDIUM,
-            marginBottom: spacing.MEDIUM
+            fontSize: fonts.MEDIUM,
+        },
+        cancelBtn: {
+
+        },
+        buttonText: {
+            ...defaultTxt,
+            fontSize: fonts.SMALL,
         },
         lbl: {
             // fontSize: 16,
@@ -113,10 +119,6 @@ export const project = StyleSheet.create(
             borderWidth: 1,
             borderRadius: 10,
             padding: 10,
-        },
-        cancelBtn: {
-            marginRight: 10,
-            fontSize: 13
         },
         loadingTxt: {
             fontFamily: 'Arial',

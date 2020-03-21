@@ -4,14 +4,13 @@ import { colors, fonts, spacing, height, width } from './base';
 export const nav = StyleSheet.create(
     {
         tabBar: {
-            backgroundColor: 'transparent',
-            borderWidth: 0.5,
-            borderColor: colors.BORDER,
+            backgroundColor: colors.SCREEN,
+            borderTopColor: colors.BORDER
         },
         tabItem: {
-            borderRightWidth: 1,
+            borderRightWidth: 0.5,
             borderRightColor: colors.BORDER,
-            paddingTop: 10,
+            marginTop: 10,
             paddingBottom: 10
         }
     });
