@@ -20,8 +20,6 @@ class ViewProjectScreen extends React.Component {
 
     componentDidMount() {
         const { user, current_project, getProjectFetchJobs, setProjectFetchJobsPending } = this.props
-        const { project } = this.props.navigation.state.params.proj
-        // setCurrentProject(project)
         setProjectFetchJobsPending()
         getProjectFetchJobs(user.id, current_project.id)
         this.setState({ isLoading: false })

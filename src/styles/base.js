@@ -13,8 +13,9 @@ export const colors = {
     BLACK: '#1b1725',
     WHITE: '#ffffff',
     GREEN: '#30cf0c',
-    BORDER: '#b3b3cc',
-    GRAY: '#585b61'
+    BORDER: '#C8C8C8',
+    GRAY: '#585b61',
+    SCREEN: '#F8F8F8'
 }
 
 export const spacing = {
@@ -48,16 +49,18 @@ export const fonts = {
 // containers
 
 export const container = {
-    backgroundColor: colors.WHITE,
+    width: dimensions.fullWidth,
+    height: dimensions.fullHeight,
+    backgroundColor: colors.SCREEN
+}
+
+
+
+export const formContainer = {
     margin: '3%',
     marginRight: '5%',
     marginLeft: '5%',
-    height: dimensions.fullHeight,
-}
-
-export const formContainer = {
     padding: 30,
-    margin: 0,
     borderRadius: 5,
     width: dimensions.fullWidth * .85,
     shadowColor: colors.BLACK,
@@ -67,18 +70,21 @@ export const formContainer = {
     elevation: 1,
 }
 
+export const infoContainer = {
+    margin: '3%',
+}
 
 // components
 
 export const input = {
-    color: colors.BLACK,
+    color: colors.TERTIARY,
     fontSize: fonts.MEDIUM,
     fontWeight: fonts.WEIGHT_LEIGHT,
     height: height.MEDIUM * 0.8,
     width: width.LARGE,
     padding: spacing.MEDIUM,
-    paddingLeft: spacing.LARGE,
-    paddingRight: spacing.LARGE,
+    paddingLeft: spacing.LARGE * 0.7,
+    paddingRight: spacing.LARGE * 0.7,
     borderRadius: 25,
     borderColor: colors.BLACK,
     borderWidth: 1,
@@ -127,35 +133,23 @@ export const form = {
     }
 }
 
-// buttons
-
-export const button = {
-    backgroundColor: 'transparent',
-    padding: spacing.MEDIUM,
-    width: width.LARGE,
-    borderRadius: 25,
-}
-
-export const buttonText = {
-    textAlign: 'center',
-    color: colors.WHITE,
-    fontSize: fonts.LARGE,
-    textTransform: 'uppercase',
-    fontWeight: fonts.WEIGHT_MEDIUM
-}
-
 
 export const base = StyleSheet.create(
     {
         slider: {
             height: 20,
             justifyContent: 'center',
-            borderWidth: 1,
-            borderRadius: 8,
-            opacity: 0.3,
-            padding: spacing.SMALL * 0.3,
+            borderWidth: 0.5,
+            borderRadius: 10,
+            padding: spacing.SMALL * 0.5,
             paddingLeft: 0,
             paddingRight: 0,
-            borderColor: colors.BORDER
+            borderColor: colors.PRIMARY
+        },
+
+        inputStyle: {
+            color: colors.TERTIARY,
+            fontSize: fonts.MEDIUM,
+            fontWeight: fonts.WEIGHT_LEIGHT,
         }
     });

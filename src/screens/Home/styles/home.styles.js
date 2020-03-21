@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, height, width, container } from './base';
+import { colors, fonts, spacing, height, width, container } from '../../../styles/base';
 
 export const home = StyleSheet.create(
     {
@@ -54,5 +54,8 @@ export const home = StyleSheet.create(
         },
         textCenter: {
             textAlign: 'center'
+        },
+        iconContainer: {
+            marginRight: spacing.SMALL
         }
     });

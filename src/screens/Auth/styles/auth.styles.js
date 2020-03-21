@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { colors, container, button, spacing, fonts, dimensions, formContainer } from './base';
+import { colors, container, spacing, fonts, formContainer } from '../../../styles/base';
+import { button } from '../../../components/buttons/styles/button.styles';
 
 export const auth = StyleSheet.create(
     {
@@ -12,7 +13,6 @@ export const auth = StyleSheet.create(
         },
         regContainer: {
             ...container,
-            padding: 30,
             backgroundColor: 'transparent',
             alignItems: 'center',
         },
@@ -37,14 +37,16 @@ export const auth = StyleSheet.create(
             fontWeight: fonts.WEIGHT_LEIGHT
         },
         logInButton: {
-            ...button,
+            ...button.btnContainer,
             backgroundColor: colors.PRIMARY,
             margin: spacing.MEDIUM,
         },
         regButton: {
-            ...button,
+            ...button.btnContainer,
             backgroundColor: colors.SECONDARY,
             margin: spacing.MEDIUM,
         },
+        back: {
+            marginLeft: spacing.LARGE
+        }
     });
-
