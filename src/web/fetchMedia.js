@@ -67,7 +67,6 @@ export const extractIds = (edges, criteria) => {
         edges.forEach(edge => {
             if (edge.node.edge_liked_by.count > likesMin(criteria)) {
                 if (media_ids.find(id => id == edge.node.owner.id) == null)
-
                     media_ids.push(edge.node.owner.id)
             }
         })
@@ -90,7 +89,7 @@ export const extractTags = edges => {
 
 export const likesMin = active => {
 
-    let likes_min = (criteria.find(crit => crit.key == active.split(',')[0]).value.min * .2)
+    let likes_min = (active.followers_min * .2)
 
     return likes_min
 }

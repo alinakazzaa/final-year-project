@@ -6,7 +6,7 @@ import { GET_USER_SUCCESS, GET_USER_ERROR, GET_USER_PENDING } from "../constants
 export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
     let influ_obj
     let response
-    let active = fetch_job.details.criteria.split(',')
+
     let pass = false
 
     pending(GET_USER_PENDING)
@@ -35,7 +35,7 @@ export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
                                 media_count: influ.edge_owner_to_timeline_media.count
                             }
 
-                            pass = checkCriteria(active, influ_obj.followers)
+                            pass = checkCriteria(fetch_job.criteria, influ_obj.followers)
 
                             if (pass) {
                                 response = { type: GET_USER_SUCCESS, message: 'success: user within range', id: id }
@@ -61,29 +61,11 @@ export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
 }
 
 
-export const checkCriteria = (active, followers) => {
-    let min = criteria.find(crit => crit.key == active[0])
-    let max = criteria.find(crit => crit.key == active[active.length - 1])
+export const checkCriteria = (criteria, followers) => {
     let isValid = false
 
-    if (max.key == 'two_hundred') {
-        if (min.key == max.key) {
-            // only 500000+
-            if (followers >= max.value.min) {
-                isValid = true
-            }
-        } else {
-            // not only 500000
-            if (followers <= max.value.min && followers >= min.value.min) {
-                isValid = true
-            }
-        }
-
-    } else {
-        if (followers <= max.value.max && followers >= min.value.min) {
-            isValid = true
-        }
-    }
+    if (followers >= criteria.followers_min && followers <= criteria.followers_max)
+        isValid = true
 
     return isValid
 }
