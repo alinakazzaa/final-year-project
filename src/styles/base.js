@@ -37,7 +37,7 @@ export const height = {
 }
 
 export const fonts = {
-    SMALL: 14,
+    SMALL: 16,
     MEDIUM: 18,
     LARGE: 20,
     PRIMARY: 'ArialRoundedMTBold',
@@ -140,6 +140,12 @@ export const base = StyleSheet.create(
             color: colors.TERTIARY,
             fontSize: fonts.MEDIUM,
             fontWeight: fonts.WEIGHT_MEDIUM,
+        },
+        inputStyleSearch: {
+            color: colors.WHITE,
+            fontSize: fonts.SMALL,
+            fontWeight: fonts.WEIGHT_HEAVY,
+            padding: 0
         },
         btnView: {
             alignItems: 'center',

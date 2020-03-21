@@ -86,15 +86,14 @@ export const project = StyleSheet.create(
         },
         buttonText: {
             ...button.btnText,
-            fontSize: fonts.SMALL,
-            fontWeight: fonts.WEIGHT_MEDIUM
+            fontSize: fonts.SMALL * 0.9,
+            fontWeight: fonts.WEIGHT_MEDIUM,
+
         },
         searchInput: {
-            ...input,
-            width: dimensions.fullWidth * 0.68,
-            borderRadius: 20,
-            borderColor: colors.WHITE,
-            borderWidth: 1,
+            width: dimensions.fullWidth * 0.7,
+            borderColor: colors.BORDER,
+            borderBottomWidth: 2,
 
         },
         left: {

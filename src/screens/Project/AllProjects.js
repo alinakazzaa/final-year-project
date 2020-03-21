@@ -63,7 +63,7 @@ class AllProjects extends React.Component {
                     <View>
                         <AppHeader
                             left={<View><Input
-                                onChangeText={text => this.searchProject(text)} inputStyle={base.inputStyle} inputContainerStyle={project.searchInput} /></View>}
+                                onChangeText={text => this.searchProject(text)} inputStyle={base.inputStyleSearch} inputContainerStyle={project.searchInput} /></View>}
                             gradient={true}
                             right={<TextButton containerStyle={project.cancelBtn} buttonText={project.buttonText} title="Cancel" />}
                         />

@@ -27,6 +27,7 @@ const options = {
         },
         password: {
             error: 'Password is required',
+
         },
     },
     stylesheet: formStyles,
