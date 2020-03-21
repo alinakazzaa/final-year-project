@@ -85,7 +85,6 @@ export const input = {
     padding: spacing.MEDIUM,
     borderColor: colors.TERTIARY,
     borderBottomWidth: 1,
-    marginBottom: spacing.SMALL,
 }
 
 export const inputLabel = {
@@ -135,16 +134,10 @@ export const base = StyleSheet.create(
             paddingRight: 0,
             borderColor: colors.PRIMARY
         },
-
         inputStyle: {
             color: colors.TERTIARY,
             fontSize: fonts.MEDIUM,
             fontWeight: fonts.WEIGHT_MEDIUM,
-        },
-        inputStyleSearch: {
-            color: colors.WHITE,
-            fontSize: fonts.SMALL,
-            fontWeight: fonts.WEIGHT_HEAVY,
         },
         btnView: {
             alignItems: 'center',
