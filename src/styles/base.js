@@ -25,15 +25,15 @@ export const spacing = {
 }
 
 export const width = {
-    SMALL: 50,
-    MEDIUM: 100,
+    SMALL: 90,
+    MEDIUM: 160,
     LARGE: 200,
 }
 
 export const height = {
     SMALL: 30,
-    MEDIUM: 50,
-    LARGE: 80,
+    MEDIUM: 40,
+    LARGE: 60,
 }
 
 export const fonts = {
@@ -63,11 +63,10 @@ export const formContainer = {
     padding: 30,
     borderRadius: 5,
     width: dimensions.fullWidth * .85,
-    shadowColor: colors.BLACK,
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 1,
+    // shadowColor: colors.BLACK,
+    // shadowOffset: { width: 4, height: 4 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 10,
 }
 
 export const infoContainer = {
@@ -82,19 +81,51 @@ export const input = {
     fontWeight: fonts.WEIGHT_LEIGHT,
     height: height.MEDIUM,
     width: width.LARGE,
-    padding: spacing.MEDIUM,
     borderColor: colors.TERTIARY,
     borderBottomWidth: 1,
 }
 
+export const inputView = {
+    color: colors.TERTIARY,
+    fontWeight: fonts.WEIGHT_LEIGHT,
+    width: dimensions.fullWidth * 0.6,
+    minHeight: height.MEDIUM,
+    borderColor: colors.BORDER,
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    fontSize: fonts.MEDIUM
+}
+
+
+
 export const inputLabel = {
+    padding: 0,
+    margin: 0,
     color: colors.TERTIARY,
     marginTop: spacing.SMALL,
     marginBottom: spacing.MEDIUM,
     fontSize: fonts.SMALL,
     textTransform: 'uppercase',
     fontWeight: fonts.WEIGHT_LEIGHT,
-    fontFamily: fonts.PRIMARY
+    fontFamily: fonts.PRIMARY,
+}
+
+export const inputViewLabel = {
+
+    textTransform: 'uppercase',
+    color: colors.TERTIARY,
+    fontWeight: fonts.WEIGHT_LEIGHT,
+    marginBottom: spacing.MEDIUM,
+    margin: 0,
+    minWidth: width.MEDIUM,
+    height: height.MEDIUM,
+    fontSize: fonts.SMALL,
+    paddingTop: spacing.MEDIUM * 0.8
+}
+
+export const boolSelect = {
+    height: 100,
+    padding: spacing.MEDIUM
 }
 
 export const select = {
@@ -119,6 +150,11 @@ export const form = {
 
         }
     },
+    checkbox: {
+        normal: {
+            ...boolSelect
+        }
+    }
 }
 
 

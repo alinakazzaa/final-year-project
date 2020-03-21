@@ -3,36 +3,31 @@ import { View, Keyboard } from 'react-native';
 import PropTypes from 'prop-types'
 // @ts-ignore
 import t from 'tcomb-form-native';
-import { project } from '../../screens/Project/styles/project.styles';
-import { form, colors } from '../../styles/base';
+import { project, projectForm } from '../../screens/Project/styles/project.styles';
 
 const Form = t.form.Form;
 
 const formStyles = {
     ...Form.stylesheet,
-    ...form
+    ...projectForm
 }
 
 const Project = t.struct({
     title: t.String,
+    date_created: t.String,
     description: t.maybe(t.String),
-    active: t.Boolean
 });
 
 const options = {
+    auto: 'none',
     fields: {
         title: {
-            label: '',
             error: 'Project requires a title!',
-            display: 'none'
 
         },
         description: {
-            label: '',
-        },
-        active: {
-            label: '',
-            onTintColor: colors.SECONDARY
+            multiline: true,
+            numberOfLines: 3
         },
     },
     stylesheet: formStyles,
@@ -58,14 +53,17 @@ export default class ProjectForm extends React.Component {
         this.props.onChange(updated_project)
     }
 
+
+
     render() {
+        const { value } = this.state
         return (
-            <View style={project.formContainer}>
+            <View style={project.inputBox}>
                 <Form
                     ref={c => this._form = c}
                     type={Project}
                     options={options}
-                    value={this.state.value}
+                    value={value}
                     onChange={(value) => this.onChange(value)}
                     onBlur={Keyboard.dismiss}
                 />

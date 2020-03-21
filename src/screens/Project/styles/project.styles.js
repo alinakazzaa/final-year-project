@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, container, inputLabel, dimensions, input, formContainer, form, select, height } from '../../../styles/base';
+import { colors, fonts, spacing, container, inputLabel, dimensions, input, formContainer, form, select, height, inputView, boolSelect, width, inputViewLabel } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
 export const project = StyleSheet.create(
@@ -8,24 +8,41 @@ export const project = StyleSheet.create(
             ...container,
             backgroundColor: 'transparent',
         },
-        addContainer: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: '30%'
+        viewContainer: {
+            marginLeft: spacing.MEDIUM
         },
         scrollContainer: {
             padding: spacing.LARGE,
-            marginBottom: '7%',
         },
-        formContainer: {
+        addContainer: {
             ...formContainer,
+            borderRadius: 0,
+            marginTop: spacing.MEDIUM,
+            paddingLeft: 0,
             width: dimensions.fullWidth * .9,
-            alignItems: 'center',
+            margin: 0,
+            padding: 0
         },
         searchView: {
             flexDirection: 'row',
             padding: spacing.LARGE,
             paddingBottom: 0
+        },
+        detailsBox: {
+            flexDirection: 'row',
+            paddingTop: spacing.MEDIUM,
+            borderTopWidth: 1,
+            borderColor: colors.BORDER
+        },
+        inputBox: {
+            padding: 0,
+            margin: 0
+        },
+        switchView: {
+            flexDirection: 'row',
+            paddingTop: spacing.MEDIUM,
+            borderBottomWidth: 1,
+            borderColor: colors.BORDER
         },
         tab: {
             textTransform: 'uppercase',
@@ -72,19 +89,32 @@ export const project = StyleSheet.create(
             shadowRadius: 10,
             elevation: 1,
         },
+        header: {
+            paddingTop: spacing.LARGE,
+            paddingLeft: 0
+        },
+        labelsCol: {
+
+        },
+        label: {
+            ...inputViewLabel
+        },
+        labelActive: {
+            ...inputViewLabel,
+            marginBottom: spacing.MEDIUM,
+
+        },
         title: {
-            fontSize: fonts.SMALL,
-            fontFamily: fonts.PRIMARY,
-            color: colors.TERTIARY,
+            ...inputLabel,
             fontWeight: fonts.WEIGHT_HEAVY,
-            textTransform: 'uppercase',
-            alignSelf: 'center'
+            borderBottomWidth: 1,
+            borderColor: colors.BORDER
         },
         text: {
             ...inputLabel,
-            color: colors.WHITE,
+            color: colors.TERTIARY,
             fontWeight: fonts.WEIGHT_MEDIUM,
-            fontSize: fonts.MEDIUM,
+            fontSize: fonts.SMALL,
         },
         cancelBtn: {
             paddingRight: spacing.LARGE
@@ -93,6 +123,7 @@ export const project = StyleSheet.create(
             ...button.btnText,
             fontSize: fonts.SMALL * 0.9,
             fontWeight: fonts.WEIGHT_MEDIUM,
+            color: colors.TERTIARY
 
         },
         searchInput: {
@@ -117,3 +148,20 @@ export const project = StyleSheet.create(
             alignSelf: 'flex-end'
         }
     });
+
+export const projectForm = {
+    ...form,
+    textbox: {
+        normal: {
+            ...inputView
+        },
+        error: {
+
+        }
+    },
+    checkbox: {
+        normal: {
+            ...boolSelect
+        }
+    }
+}

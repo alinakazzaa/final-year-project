@@ -1,38 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View, Switch } from 'react-native';
+import { base, colors } from '../../styles/base';
 
-export default class Switch extends React.Component {
+export const SwitchItem = ({ label, value, onChange }) => {
 
-    render() {
-        return (
-            <View>
-                <Text style={styles.lbl}>{this.props.label}</Text>
-                <Switch
-                    value={this.props.value}
-                    onValueChange={value => console.log(value)}
-                    onChange={value => console.log(value)}
-                />
-            </View>
-        )
-    }
+    return <View>
+        {label !== null && <Text style={base.inputLabel}>{label}</Text>}
+        <Switch
+            value={value}
+            onValueChange={onChange}
+            trackColor={{ false: colors.WHITE, true: colors.SECONDARY }}
+        />
+    </View>
 }
 
-const styles = StyleSheet.create(
-    {
-        lbl: {
-            fontSize: 18,
-            color: '#5d4d50',
-            textTransform: 'uppercase',
-        },
-    });
-
-Switch.propTypes = {
+SwitchItem.propTypes = {
     label: PropTypes.string,
-    active: PropTypes.bool
+    value: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired
 }
 
-Switch.defaultProps = {
-    label: '',
-    active: false
+SwitchItem.defaultProps = {
+    label: null,
 }

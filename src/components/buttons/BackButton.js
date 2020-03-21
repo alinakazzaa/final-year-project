@@ -8,7 +8,7 @@ export const BackButton = ({ onPress }) => {
     return <Icon
         name='arrow-left'
         size={35}
-        color={colors.WHITE}
+        color={colors.TERTIARY}
         type='material-community'
         onPress={onPress}
         underlayColor='transparent' />
