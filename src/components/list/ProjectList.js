@@ -18,7 +18,7 @@ export const ProjectList = ({ projects, deleteProject, goToProject }) => {
                         <Text style={project.title}>{proj.date_created}</Text>
                     </View>
                     <View style={project.right}>
-                        <Icon name="delete" type="material" size={23} color={colors.TERTIARY} onPress={() => deleteProject(proj)} />
+                        <Icon name='delete-outline' type="material-community" size={25} color={colors.TERTIARY} onPress={() => deleteProject(proj)} />
                     </View>
                 </View>
             </TouchableOpacity>

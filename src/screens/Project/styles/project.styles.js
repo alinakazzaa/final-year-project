@@ -22,11 +22,10 @@ export const project = StyleSheet.create(
             width: dimensions.fullWidth * .9,
             alignItems: 'center',
         },
-        tabView: {
+        searchView: {
             flexDirection: 'row',
-            justifyContent: 'space-around',
-            padding: spacing.MEDIUM,
-            marginTop: spacing.MEDIUM
+            padding: spacing.LARGE,
+            paddingBottom: 0
         },
         tab: {
             textTransform: 'uppercase',
@@ -59,21 +58,27 @@ export const project = StyleSheet.create(
         listItem: {
             display: 'flex',
             flexDirection: 'row',
-            borderBottomWidth: 0.7,
-            borderTopWidth: 0.7,
+            borderBottomWidth: 1,
+            borderRightWidth: 1,
+            borderRadius: 5,
             borderColor: colors.BORDER,
-            paddingTop: spacing.LARGE,
-            paddingBottom: spacing.LARGE,
+            padding: spacing.LARGE,
             fontFamily: fonts.PRIMARY,
             justifyContent: 'space-between',
+            marginBottom: spacing.MEDIUM,
+            shadowColor: colors.BLACK,
+            shadowOffset: { width: 4, height: 4 },
+            shadowOpacity: 0.5,
+            shadowRadius: 10,
+            elevation: 1,
         },
         title: {
             fontSize: fonts.SMALL,
             fontFamily: fonts.PRIMARY,
             color: colors.TERTIARY,
-            marginBottom: spacing.MEDIUM,
             fontWeight: fonts.WEIGHT_HEAVY,
             textTransform: 'uppercase',
+            alignSelf: 'center'
         },
         text: {
             ...inputLabel,
