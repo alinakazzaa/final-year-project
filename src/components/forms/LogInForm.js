@@ -4,7 +4,7 @@ import { TextButton } from '../../components/buttons/TextButton';
 // @ts-ignore
 import t from 'tcomb-form-native';
 import { auth } from '../../styles/auth';
-import { form } from '../../styles/base'
+import { form, base } from '../../styles/base'
 
 const v = require('tcomb-validation');
 
@@ -61,8 +61,8 @@ export default class LogInForm extends React.Component {
                     onBlur={Keyboard.dismiss}
                 />
                 {error && <Text>{error.message}</Text>}
-                <TextButton title="Log In" onPress={() => logIn(value)} style={auth.logInButton} />
-                <TextButton title="Registration" style={auth.regButton} onPress={goToRegister} />
+                <TextButton title="Log In" onPress={() => logIn(value)} buttonText={base.defaultTxt} containerStyle={auth.logInButton} />
+                <TextButton title="Registration" style={auth.regButton} buttonText={base.defaultTxt} containerStyle={auth.regButton} onPress={goToRegister} />
             </View>
         )
     }

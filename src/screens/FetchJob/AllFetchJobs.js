@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { FetchJobList } from '../../components/list/FetchJobList'
 import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs } from '../../actions/fetchJob'
 import { connect } from 'react-redux';
@@ -63,12 +63,15 @@ class AllFetchJobs extends React.Component {
         return (
             <View style={styles.container}>
                 <AppHeader
+                    gradient={true}
                     left={
                         <IconButton color="#493649"
                             name='angle-left'
                             size={40}
                             onPress={() => this.props.navigation.goBack()}
-                        />}
+
+                        />
+                    }
                 />
                 <View style={styles.tabView}>
                     <TouchableOpacity onPress={() => this.setState({ index: 2 })} style={index == 2 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 2 ? selectedTabStyle : styles.tab}>Pending</Text></TouchableOpacity>
