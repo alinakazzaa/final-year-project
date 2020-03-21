@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { View, Text, TouchableOpacity } from 'react-native';
-import { twoTabs, threeTabs } from '../../styles/tabview'
+import { twoTabs, threeTabs } from './styles/tabview'
 
 export default class TabView extends React.Component {
 

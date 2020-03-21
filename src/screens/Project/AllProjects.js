@@ -73,7 +73,7 @@ class AllProjects extends React.Component {
                                 <Text style={project.title}>Search</Text><Input
                                     onChangeText={text => this.searchProject(text)} inputStyle={base.inputStyle} inputContainerStyle={project.searchInput} />
                             </View>
-                            <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='45%' index={index} />
+                            <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
                             {this.props.state.project.error && <View style={project.none}><Text style={project.noneTxt}>No projects</Text></View>}
                             {!this.props.state.project.error && !this.props.state.project.pending &&
                                 index == 0 ?

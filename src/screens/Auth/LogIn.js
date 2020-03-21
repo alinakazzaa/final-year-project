@@ -17,11 +17,11 @@ class LogInScreen extends React.Component {
         headerShown: false,
     }
 
-    componentDidMount() {
-        const { setLoggedInUserSuccess } = this.props;
-        const user_obj = getUserByUsername("A")
-        setLoggedInUserSuccess(user_obj)
-    }
+    // componentDidMount() {
+    //     const { setLoggedInUserSuccess } = this.props;
+    //     const user_obj = getUserByUsername("A")
+    //     setLoggedInUserSuccess(user_obj)
+    // }
 
     goToRegister = () => {
         this.props.navigation.navigate("Registration")

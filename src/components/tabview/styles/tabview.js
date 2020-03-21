@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing } from './base';
+import { colors, fonts, spacing } from '../../../styles/base';
 
 export const container = {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     padding: spacing.MEDIUM,
-    marginTop: spacing.MEDIUM
+    margin: spacing.MEDIUM,
+
 }
 
 export const tab = {
