@@ -1,24 +1,32 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, height, width } from './base';
+import { colors, fonts, spacing } from './base';
 
-export const tabview = StyleSheet.create(
+export const container = {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: spacing.MEDIUM,
+    marginTop: spacing.MEDIUM
+}
+
+export const tab = {
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    color: colors.TERTIARY,
+    borderColor: colors.TERTIARY,
+    fontWeight: fonts.WEIGHT_MEDIUM
+}
+
+
+export const threeTabs = (color, size) => StyleSheet.create(
     {
         container: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingTop: spacing.MEDIUM,
-            paddingBottom: spacing.MEDIUM,
+            ...container
         },
         tab: {
-            textTransform: 'uppercase',
-            textAlign: 'center',
-            padding: '5%',
-            color: colors.TERTIARY,
-            borderColor: colors.TERTIARY,
-            fontWeight: fonts.WEIGHT_MEDIUM
+            ...tab
         },
         tabItem: {
-            width: '30%',
+            width: size,
             justifyContent: 'center',
             borderBottomWidth: 1,
             borderRightWidth: 1,
@@ -33,8 +41,40 @@ export const tabview = StyleSheet.create(
             fontWeight: fonts.WEIGHT_MEDIUM
         },
         selectedTabItem: {
-            width: '30%',
+            width: size,
             justifyContent: 'center',
-            backgroundColor: colors.SECONDARY,
+            backgroundColor: color,
         },
     });
+
+
+export const twoTabs = (color, size) => StyleSheet.create(
+    {
+        container: {
+            ...container
+        },
+        tab: {
+            ...tab,
+        },
+        tabItem: {
+            width: size,
+            justifyContent: 'center',
+            borderBottomWidth: 1,
+            borderRightWidth: 1,
+            borderColor: colors.BORDER,
+        },
+        selectedTab: {
+            color: colors.WHITE,
+            textAlign: 'center',
+            padding: spacing.SMALL,
+            fontSize: fonts.SMALL,
+            textTransform: 'uppercase',
+            fontWeight: fonts.WEIGHT_MEDIUM
+        },
+        selectedTabItem: {
+            width: size,
+            justifyContent: 'center',
+            backgroundColor: color,
+        },
+    });
+
