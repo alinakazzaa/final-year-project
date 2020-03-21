@@ -3,7 +3,7 @@ import { Text, View, Keyboard } from 'react-native';
 import { TextButton } from '../../components/buttons/TextButton';
 // @ts-ignore
 import t from 'tcomb-form-native';
-import { auth } from '../../styles/auth';
+import { auth } from '../../screens/Auth/styles/auth.styles'
 import { form, base } from '../../styles/base'
 
 const v = require('tcomb-validation');
