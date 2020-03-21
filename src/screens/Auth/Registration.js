@@ -6,11 +6,12 @@ import { addUser, setLoggedInUserSuccess } from '../../actions/user'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Gradient } from '../../styles/Gradient'
-import { auth } from '../../styles/auth'
+import { auth } from './styles/auth.styles'
 import { IconButton } from '../../components/buttons/IconButton'
 import { AppLogo } from '../../components/logo/AppLogo'
 import { AppHeader } from '../../layouts/Header';
 import { colors } from '../../styles/base'
+import { BackButton } from '../../components/buttons/BackButton'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
 
@@ -47,11 +48,7 @@ class RegistrationScreen extends React.Component {
             <View>
                 <Gradient horizontal={true}>
                     <AppHeader transparent={true}
-                        left={<IconButton color={colors.BLACK}
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />} />
+                        left={<View style={auth.back}><BackButton onPress={() => this.props.navigation.goBack()} /></View>} />
                     <View style={auth.regContainer}>
                         <AppLogo large={true} />
                         <RegistrationForm registerUser={this.registerUser} logIn={this.logIn} />
