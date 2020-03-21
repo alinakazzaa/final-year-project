@@ -24,7 +24,7 @@ IconButton.propTypes = {
 }
 
 IconButton.defaultProps = {
-    type: 'font-awesome',
+    type: 'material-community',
     color: colors.TERTIARY,
     size: 50,
     onPress: null,
