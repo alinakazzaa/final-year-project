@@ -76,7 +76,7 @@ export const addProject = (user_id, project) => {
 
     return {
         type: ADD_PROJECT,
-        payload: project_obj
+        project: project_obj
     }
 }
 
