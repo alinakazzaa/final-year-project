@@ -1,5 +1,5 @@
 import { db } from '../database/config/db';
-import { DB_PROJECT_FETCH_JOBS_REF, SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, CLEAR_CURRENT_FETCH_JOB } from '../constants';
+import { DB_PROJECT_FETCH_JOBS_REF, SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, CLEAR_CURRENT_FETCH_JOB, CLEAR_FETCH_JOB_STATE } from '../constants';
 import { SET_FETCH_JOBS_ERROR, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING } from '../constants/response/types';
 
 
@@ -48,6 +48,12 @@ export const setCurrentFetchJob = fetch_job => {
 export const clearCurrentFetchJob = () => {
     return {
         type: CLEAR_CURRENT_FETCH_JOB,
+    }
+}
+
+export const clearFetchJobState = () => {
+    return {
+        type: CLEAR_FETCH_JOB_STATE,
     }
 }
 
@@ -108,4 +114,6 @@ export const removeFetchJob = fetch_job => {
         fetch_job: fetch_job
     }
 }
+
+
 
