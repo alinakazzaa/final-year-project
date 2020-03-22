@@ -9,10 +9,15 @@ export const project = StyleSheet.create(
             backgroundColor: 'transparent',
         },
         viewContainer: {
-            marginLeft: spacing.MEDIUM
+            marginLeft: spacing.LARGE,
+            marginRight: spacing.LARGE,
         },
         scrollContainer: {
             padding: spacing.LARGE,
+        },
+        fetchScroll: {
+            padding: 5,
+            paddingLeft: 0,
         },
         addContainer: {
             ...formContainer,
@@ -35,14 +40,24 @@ export const project = StyleSheet.create(
             borderColor: colors.BORDER
         },
         inputBox: {
-            padding: 0,
-            margin: 0
+            marginRight: spacing.LARGE
         },
         switchView: {
             flexDirection: 'row',
             paddingTop: spacing.MEDIUM,
             borderBottomWidth: 1,
             borderColor: colors.BORDER
+        },
+        collabBox: {
+            maxHeight: dimensions.fullHeight * 0.2,
+            flexDirection: 'column',
+            borderBottomWidth: 1,
+            borderColor: colors.BORDER,
+            paddingBottom: spacing.MEDIUM,
+        },
+        listView: {
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         tab: {
             textTransform: 'uppercase',
@@ -83,15 +98,12 @@ export const project = StyleSheet.create(
             fontFamily: fonts.PRIMARY,
             justifyContent: 'space-between',
             marginBottom: spacing.MEDIUM,
-            shadowColor: colors.BLACK,
-            shadowOffset: { width: 4, height: 4 },
-            shadowOpacity: 0.5,
-            shadowRadius: 10,
-            elevation: 1,
         },
         header: {
             paddingTop: spacing.LARGE,
-            paddingLeft: 0
+            paddingLeft: 0,
+            flexDirection: 'row',
+            justifyContent: 'space-between'
         },
         labelsCol: {
 
@@ -146,6 +158,9 @@ export const project = StyleSheet.create(
         saveBtn: {
             ...button.btnContainer,
             alignSelf: 'flex-end'
+        },
+        noneMsg: {
+            padding: spacing.LARGE
         }
     });
 
