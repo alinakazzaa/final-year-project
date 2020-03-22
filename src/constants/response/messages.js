@@ -1,5 +1,7 @@
 // USER
+
 //ERROR
+export const NO_USERS = 'No users yet registered.'
 export const NO_USER = 'User not found. Please register.'
 export const INCORRECT_PASSWORD = 'Incorrect password. Please try again'
 
