@@ -115,6 +115,7 @@ const fetchReducer = (state = initialState, action) => {
             running = {
                 ...state,
                 response: { type: action.type, message: action.message },
+                details: { ...state.details, status: COMPLETED }
             }
 
             return {
@@ -135,7 +136,10 @@ const fetchReducer = (state = initialState, action) => {
 
         case GET_USER_SUCCESS:
             let success = [...state.influencers.success]
-            success.splice(success.length, 0, action.id)
+
+            if (!success.find(id => id == action.id)) {
+                success.splice(success.length, 0, action.id)
+            }
 
             running = {
                 ...state,
@@ -146,7 +150,7 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type, message: action.message },
                 influencers: {
                     ...state.influencers,
-                    pending: [...state.influencers.success.filter(id => id != action.id)],
+                    pending: [...state.influencers.pending.filter(id => id == action.id)],
                     success: success
                 }
             }
@@ -154,7 +158,7 @@ const fetchReducer = (state = initialState, action) => {
             if (running.progress.total == running.progress.done) {
                 running = {
                     ...running,
-                    details: { ...state.details, status: COMPLETED },
+                    details: { ...state.details },
                     pending: false,
                     response: {
                         type: COMPLETED_GET_ALL_USERS,
@@ -178,7 +182,7 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type, message: action.message },
                 influencers: {
                     ...state.influencers,
-                    pending: [...state.influencers.success.filter(id => id != action.id)],
+                    pending: [...state.influencers.pending.filter(id => id == action.id)],
                     fail: [...state.influencers.fail, action.id]
                 }
             }
@@ -186,13 +190,12 @@ const fetchReducer = (state = initialState, action) => {
             if (running.progress.total == running.progress.done) {
                 running = {
                     ...running,
-                    details: { ...state.details, status: COMPLETED },
+                    details: { ...state.details },
                     pending: false,
                     response: {
                         type: COMPLETED_GET_ALL_USERS,
                         message: 'finished getting influencers'
                     },
-                    stage: COMPLETED
                 }
             }
 
