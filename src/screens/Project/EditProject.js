@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { View, YellowBox, TouchableOpacity, Text } from 'react-native'
-import { updateProject } from '../../actions/project'
+import { View, YellowBox, TouchableOpacity, Text, ScrollView } from 'react-native'
+import { updateProject, clearCurrentProject, setCurrentProject } from '../../actions/project'
 import { AppHeader } from '../../layouts/Header'
 import { TextButton } from '../../components/buttons/TextButton'
 import { IconButton } from '../../components/buttons/IconButton'
@@ -10,6 +10,9 @@ import { bindActionCreators } from 'redux'
 import { project } from './styles/project.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import { SwitchItem } from '../../components/switch/Switch'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { setCurrentFetchJob, getProjectFetchJobs, setProjectFetchJobsPending, clearCurrentFetchJob, clearFetchJobState } from '../../actions/fetchJob'
+import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
 
@@ -26,11 +29,20 @@ class EditProject extends React.Component {
     }
 
     componentDidMount() {
-        const { current_project } = this.props
+        const { user, current_project, getProjectFetchJobs, setProjectFetchJobsPending } = this.props
+
         if (current_project.title) {
+            setProjectFetchJobsPending()
+            getProjectFetchJobs(user.id, current_project.id)
             this.setState({ project_value: { ...current_project } })
         }
 
+    }
+
+    goToFetchJob = fj => {
+        const { setCurrentFetchJob } = this.props
+        setCurrentFetchJob(fj)
+        this.props.navigation.navigate('ViewFetchJob')
     }
 
     handleChange = project => {
@@ -44,7 +56,7 @@ class EditProject extends React.Component {
     handleSubmit = () => {
         const { user, navigation, updateProject } = this.props
         let { project_value } = this.state
-        updateProject(user.id, project_value.id, project)
+        updateProject(user.id, project_value.id, project_value)
         navigation.goBack()
     }
 
@@ -54,9 +66,16 @@ class EditProject extends React.Component {
         this.setState({ project_value })
     }
 
+    componentWillUnmount() {
+        const { clearCurrentProject, clearFetchJobState } = this.props
+        clearCurrentProject()
+        clearFetchJobState()
+    }
+
     render() {
-        const { current_project } = this.props
+        const { current_project, fetch_job, fetch_jobs } = this.props
         const { project_value } = this.state
+
         return (
             <View>
                 <AppHeader
@@ -83,12 +102,29 @@ class EditProject extends React.Component {
                         </View>
                     </View>
                     <View style={project.collabBox}>
-                        <View style={project.listHead}>
+                        <View style={project.header}>
                             <Text style={project.title}>Collaborations</Text>
-                            <TouchableOpacity style={project.viewAllBtn} onPress={() => this.props.navigation.navigate('AllCollabs')}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('AllCollabs')}>
                                 <Text style={project.title}>View All</Text>
                             </TouchableOpacity>
                         </View>
+                        <View style={project.listView}><Text style={project.noneMsg}>No collaborations yet</Text></View>
+                    </View>
+                    <View>
+                        <View style={project.header}>
+                            <Text style={project.title}>Searches</Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('AllFetchJobs')}>
+                                <Text style={project.title}>See All</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {fetch_job.pending && <LoadingScreen text="Wait, getting searches" />}
+                        {fetch_job.error && <View style={project.listView}><Text style={project.noneMsg}>No searches</Text></View>}
+                        {!fetch_job.error && !this.props.state.fetch_job.pending && <ScrollView
+                            contentContainerStyle={project.fetchScroll}>
+                            {fetch_jobs && <View>
+                                <FetchJobListProjectView fetch_jobs={fetch_jobs} goToFetchJob={this.goToFetchJob} />
+                            </View>}
+                        </ScrollView>}
                     </View>
                 </View>
             </View>
@@ -98,12 +134,22 @@ class EditProject extends React.Component {
 
 const mapStateToProps = state => ({
     state: state,
-    user: state.user,
-    current_project: state.project.current_project
-})
+    user: state.user.current_user,
+    current_project: state.project.current_project,
+    fetch_job: state.fetch_job,
+    fetch_jobs: state.fetch_job.fetch_jobs,
+    pending: state.fetch_job.pending,
+    error: state.fetch_job.error,
+    influencers: state.influencer.influencers,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    updateProject: updateProject
-}, dispatch)
+    setCurrentFetchJob: setCurrentFetchJob,
+    getProjectFetchJobs: getProjectFetchJobs,
+    setProjectFetchJobsPending: setProjectFetchJobsPending,
+    clearCurrentProject: clearCurrentProject,
+    setCurrentProject: setCurrentProject,
+    clearFetchJobState: clearFetchJobState,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProject)

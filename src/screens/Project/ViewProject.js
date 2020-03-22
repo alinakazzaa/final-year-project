@@ -276,7 +276,7 @@ const styles = StyleSheet.create(
 
 const mapStateToProps = state => ({
     state: state,
-    user: state.user,
+    user: state.user.current_user,
     current_project: state.project.current_project,
     fetch_jobs: state.fetch_job.fetch_jobs,
     pending: state.fetch_job.pending,

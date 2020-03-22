@@ -52,7 +52,7 @@ class AddProject extends React.Component {
 
 const mapStateToProps = state => ({
     state: state,
-    user: state.user,
+    user: state.user.current_user,
     current_project: state.project.current_project
 })
 

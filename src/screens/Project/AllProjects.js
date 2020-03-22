@@ -92,7 +92,7 @@ class AllProjects extends React.Component {
 
 const mapStateToProps = state => ({
     state: state,
-    user: state.user,
+    user: state.user.current_user,
     projects: state.project.projects,
     active: activeProjects(state),
     archived: archivedProjects(state),

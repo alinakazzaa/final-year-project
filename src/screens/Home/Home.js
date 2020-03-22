@@ -54,7 +54,7 @@ class HomeScreen extends React.Component {
     render() {
         const { user, logOutUser, completed_fetch_jobs } = this.props
         // const { recent_tags } = this.state
-
+        console.log(this.props.user)
         return (
             <View>
                 <AppHeader
@@ -88,7 +88,7 @@ class HomeScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user,
+    user: state.user.current_user,
     active_projects: activeProjects(state),
     completed_fetch_jobs: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == COMPLETED) : [],
 });

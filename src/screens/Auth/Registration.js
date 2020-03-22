@@ -60,7 +60,7 @@ class RegistrationScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user,
+    user: state.user.current_user,
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
