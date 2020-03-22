@@ -3,7 +3,7 @@ import { View, YellowBox } from 'react-native';
 import LogInForm from '../../components/forms/LogInForm';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUserByUsername, setLoggedInUserError, setLoggedInUserSuccess } from '../../actions/user';
+import { setLoggedInUserError, setLoggedInUserSuccess, setUsersPending, getAllUsers } from '../../actions/user';
 import { auth } from './styles/auth.styles'
 import { Gradient } from '../../styles/Gradient';
 import { INCORRECT_PASSWORD, NO_USER } from '../../constants/response/messages';
@@ -17,35 +17,37 @@ class LogInScreen extends React.Component {
         headerShown: false,
     }
 
-    // componentDidMount() {
-    //     const { setLoggedInUserSuccess } = this.props;
-    //     const user_obj = getUserByUsername("A")
-    //     setLoggedInUserSuccess(user_obj)
-    // }
+    componentDidMount() {
+        const { getAllUsers, setUsersPending, users } = this.props;
+        setUsersPending()
+        getAllUsers()
+        let user_obj = users.find(u => u.username == "A") || {}
+        setLoggedInUserSuccess(user_obj)
+    }
 
     goToRegister = () => {
         this.props.navigation.navigate("Registration")
     }
 
     logIn = user => {
-        const { setLoggedInUserSuccess, setLoggedInUserError } = this.props;
+        const { setLoggedInUserSuccess, setLoggedInUserError, users } = this.props;
+        let user_obj
 
-        const user_obj = getUserByUsername(user.username)
-        if (user_obj) {
-            if (user.username == user_obj.username) {
-                if (user.password == user_obj.password) {
-                    setLoggedInUserSuccess(user_obj)
-                } else {
-                    setLoggedInUserError(INCORRECT_PASSWORD)
-                }
+        if (user.username == null || user.username == '') {
+            setLoggedInUserError(NO_USER)
+        } else {
+            user_obj = users.find(u => u.username == user.username) || {}
+            if (user.password == null || user.password == '' || user.password != user_obj.password) {
+                setLoggedInUserError(INCORRECT_PASSWORD)
             } else {
-                setLoggedInUserError(NO_USER)
+                setLoggedInUserSuccess(user_obj)
             }
         }
     }
 
     render() {
-        const { error } = this.props
+        const { error, state } = this.props
+
         return (
             <View>
                 <Gradient horizontal={true}>
@@ -60,7 +62,8 @@ class LogInScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user,
+    state: state.user,
+    users: state.user.users,
     error: state.user.error,
     pending: state.user.pending
 });
@@ -68,7 +71,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setLoggedInUserError: setLoggedInUserError,
-    setLoggedInUserSuccess: setLoggedInUserSuccess
+    setLoggedInUserSuccess: setLoggedInUserSuccess,
+    setUsersPending: setUsersPending,
+    getAllUsers: getAllUsers,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogInScreen)

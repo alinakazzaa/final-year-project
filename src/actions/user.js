@@ -1,7 +1,42 @@
 import { DB_USER_REF, USER_LOGOUT } from '../constants';
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
-import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR } from '../constants/response/types';
+import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR, SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types';
+import { NO_USERS } from '../constants/response/messages';
+
+
+export const getAllUsers = () => {
+    const users = []
+
+    DB_USER_REF.on('value', u_snapshot => {
+        u_snapshot.forEach(u_snap => {
+            const user = {
+                ...u_snap.val().details
+            }
+
+            users.push(user)
+        })
+    })
+
+    if (users.length == 0) {
+        return {
+            type: SET_USERS_ERROR,
+            message: NO_USERS
+        }
+    } else {
+        return {
+            type: SET_USERS_SUCCESS,
+            users: users
+        }
+    }
+}
+
+export const setUsersPending = () => {
+
+    return {
+        type: SET_USERS_PENDING,
+    }
+}
 
 export const setLoggedInUserSuccess = user => {
     return {
