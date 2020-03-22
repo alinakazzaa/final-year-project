@@ -13,15 +13,16 @@ class Router extends Component {
 
     render() {
         let { user, error, pending } = this.props
+
         return (
-            pending || error ? <LogIn /> : <MainApp />
+            user.username == null ? <LogIn /> : <MainApp />
         );
     }
 };
 
 const mapStateToProps = state => ({
     state: state,
-    user: state.user,
+    user: state.user.current_user,
     error: state.user.error,
     pending: state.user.pending
 });
