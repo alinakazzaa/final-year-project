@@ -60,7 +60,7 @@ export default class FetchJobForm extends React.Component {
 
     onChangeFormValues(val) {
         let fj = val
-        if (fj.hashtag !== null && fj.hashtag == '')
+        if (fj.hashtag !== null && fj.hashtag != '')
             fj.hashtag = fj.hashtag.toLowerCase()
 
         this.setState({ value: { ...this.state.value, ...fj } })
