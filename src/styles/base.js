@@ -41,9 +41,9 @@ export const fonts = {
     MEDIUM: 18,
     LARGE: 20,
     PRIMARY: 'ArialRoundedMTBold',
-    WEIGHT_LIGHT: "200",
-    WEIGHT_MEDIUM: "600",
-    WEIGHT_HEAVY: "800"
+    WEIGHT_LIGHT: '200',
+    WEIGHT_MEDIUM: '700',
+    WEIGHT_HEAVY: '800'
 }
 
 // containers
@@ -117,7 +117,8 @@ export const inputViewLabel = {
     fontWeight: fonts.WEIGHT_LEIGHT,
     marginBottom: spacing.MEDIUM,
     margin: 0,
-    minWidth: width.MEDIUM,
+    marginRight: spacing.LARGE,
+    minWidth: width.MEDIUM * 0.8,
     height: height.MEDIUM,
     fontSize: fonts.SMALL,
     paddingTop: spacing.MEDIUM * 0.8
