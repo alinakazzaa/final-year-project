@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Keyboard } from 'react-native';
 import t from 'tcomb-form-native';
 import Slider from '../slider/Slider';
 import { form, colors } from '../../styles/base';
-import { fetchJobStyle } from '../../screens/FetchJob/fetchJob.style'
+import { fetchJobStyle, fetchJobForm } from '../../screens/FetchJob/fetchJob.style'
 import { Divider } from 'react-native-elements';
 import TabView from '../tabview/TabView';
 import { TextButton } from '../buttons/TextButton';
@@ -15,7 +15,7 @@ const Form = t.form.Form;
 
 const formStyles = {
     ...Form.stylesheet,
-    ...form
+    ...fetchJobForm
 }
 
 const no_profiles = t.enums.of(['0 - 20', '20 - 50', '50 - 100', '100 - 200', '200 - 300'])
@@ -56,6 +56,17 @@ export default class FetchJobForm extends React.Component {
         index: 0,
         min: criteria.micro.min,
         max: criteria.micro.max
+    }
+
+    componentDidMount() {
+        const { tag } = this.props
+        let { value } = this.state
+        let new_value
+        console.log(tag)
+        if (tag) {
+            new_value = { ...value, hashtag: tag }
+            this.setState({ value: new_value })
+        }
     }
 
     onChangeFormValues(val) {
@@ -101,14 +112,14 @@ export default class FetchJobForm extends React.Component {
 
     render() {
         const { index, follower_max, follower_min, min, max } = this.state
-
+        const { tag } = this.props
         return (
             <View style={fetchJobStyle.formContainer}>
                 <View style={fetchJobStyle.info}>
                     <Text style={fetchJobStyle.text}>Search users by hashtag they recently used in their media</Text>
                 </View>
-                <View style={fetchJobStyle.info}>
-                    <Text style={fetchJobStyle.text}>Avoid overly specific tags</Text></View>
+                {!tag && <View style={fetchJobStyle.info}>
+                    <Text style={fetchJobStyle.text}>Avoid overly specific tags</Text></View>}
                 <Form
                     ref={c => this._form = c}
                     type={FetchJob}
@@ -118,7 +129,7 @@ export default class FetchJobForm extends React.Component {
                     onBlur={Keyboard.dismiss}
                 />
 
-                <View style={fetchJobStyle.info}><Text style={fetchJobStyle.text}>To consider: the more influencers you fetchJobStyle, the longer it will take</Text></View>
+                <View style={fetchJobStyle.info}><Text style={fetchJobStyle.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 <Divider />
                 <View style={fetchJobStyle.midView}>
                     <Text

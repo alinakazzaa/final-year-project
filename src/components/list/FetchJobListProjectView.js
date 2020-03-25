@@ -4,13 +4,13 @@ import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from '
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
+import { project } from '../../screens/Project/styles/project.styles'
 
 export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
     const FJList = (fj, index) => {
-        return <TouchableOpacity style={styles.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
-            <Text style={styles.fjData}>{fj.details.hashtag}</Text>
-            <Text style={styles.fjData}>{fj.details.date_created}</Text>
-            {/* <Text style={styles.fjData}>{fj.no_of_influencers}</Text> */}
+        return <TouchableOpacity style={project.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
+            <Text style={project.text}>{fj.details.hashtag}</Text>
+            <Text style={project.text}>{fj.details.date_created}</Text>
         </TouchableOpacity >
     }
 
@@ -27,37 +27,6 @@ export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
     )
 
 }
-
-const styles = StyleSheet.create(
-    {
-        fetchJob: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: 13,
-            borderBottomWidth: 0.5,
-            borderColor: '#ded4da',
-        },
-        fjData: {
-            color: '#846284',
-            textTransform: 'uppercase',
-            fontSize: 14,
-        },
-        viewAllBtn: {
-            alignSelf: 'center',
-            flexWrap: 'wrap'
-        },
-        title: {
-            fontSize: 16,
-            color: '#493649',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            textAlign: 'left',
-            marginBottom: '4%',
-            paddingTop: '3%',
-            marginLeft: '3%'
-        },
-    });
 
 FetchJobListProjectView.propTypes = {
     fetch_jobs: PropTypes.array.isRequired,
