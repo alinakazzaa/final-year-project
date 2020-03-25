@@ -37,12 +37,12 @@ export const auth = StyleSheet.create(
             fontWeight: fonts.WEIGHT_LEIGHT
         },
         logInButton: {
-            ...button.btnContainer,
+            ...button.borderBtn,
             backgroundColor: colors.PRIMARY,
             margin: spacing.MEDIUM,
         },
         regButton: {
-            ...button.btnContainer,
+            ...button.borderBtn,
             backgroundColor: colors.SECONDARY,
             margin: spacing.MEDIUM,
         },

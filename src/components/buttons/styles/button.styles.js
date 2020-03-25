@@ -4,16 +4,21 @@ import { colors, spacing, fonts, width } from '../../../styles/base';
 export const button = StyleSheet.create(
     {
         btnText: {
-            textAlign: 'center',
             color: colors.WHITE,
-            fontSize: fonts.LARGE,
+            fontSize: fonts.MEDIUM,
             textTransform: 'uppercase',
             fontWeight: fonts.WEIGHT_MEDIUM
         },
         btnContainer: {
             backgroundColor: 'transparent',
             padding: spacing.MEDIUM,
+            alignSelf: 'flex-end'
+        },
+        borderBtn: {
+            alignItems: 'center',
             width: width.LARGE,
             borderRadius: 10,
-        },
+            backgroundColor: 'transparent',
+            padding: spacing.MEDIUM,
+        }
     });

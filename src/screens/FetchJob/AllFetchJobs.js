@@ -8,6 +8,7 @@ import { getPending, getError } from '../../reducers/fetchJobReducer';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants';
+import { BackButton } from '../../components/buttons/BackButton';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -64,14 +65,7 @@ class AllFetchJobs extends React.Component {
             <View style={styles.container}>
                 <AppHeader
                     gradient={true}
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-
-                        />
-                    }
+                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                 />
                 <View style={styles.tabView}>
                     <TouchableOpacity onPress={() => this.setState({ index: 2 })} style={index == 2 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 2 ? selectedTabStyle : styles.tab}>Pending</Text></TouchableOpacity>

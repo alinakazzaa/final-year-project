@@ -22,6 +22,7 @@ import { COMPLETED_NEXT_PAGE } from '../../constants/response/messages';
 import { fetchJobStyle } from './fetchJob.style'
 import { Input } from 'react-native-elements';
 import { base } from '../../styles/base';
+import { BackButton } from '../../components/buttons/BackButton';
 
 class ViewFetchJob extends React.Component {
 
@@ -54,21 +55,22 @@ class ViewFetchJob extends React.Component {
         }
 
         if (running_fetch.response !== null)
-            if (running_fetch.response.type == GET_MEDIA_BY_HASHTAG_SUCCESS || running_fetch.response.type == GET_MEDIA_NEXT_PAGE_SUCCESS) {
+            console.log(running_fetch.response)
+        // if (running_fetch.response.type == GET_MEDIA_BY_HASHTAG_SUCCESS || running_fetch.response.type == GET_MEDIA_NEXT_PAGE_SUCCESS) {
 
-                if (running_fetch.has_next_page) {
-                    if (running_fetch.influencers.success.length < 5) {
-                        console.log('should fetch next page')
-                        fetchNextPage(running_fetch, pending, success, error)
-                    } else {
-                        let response = {
-                            type: GET_MEDIA_NEXT_PAGE_COMPLETED,
-                            message: COMPLETED_NEXT_PAGE,
-                        }
-                        success(response)
-                    }
-                }
-            }
+        //     if (running_fetch.has_next_page) {
+        //         if (running_fetch.influencers.success.length < 5) {
+        //             console.log('should fetch next page')
+        //             fetchNextPage(running_fetch, pending, success, error)
+        //         } else {
+        //             let response = {
+        //                 type: GET_MEDIA_NEXT_PAGE_COMPLETED,
+        //                 message: COMPLETED_NEXT_PAGE,
+        //             }
+        //             success(response)
+        //         }
+        //     }
+        // }
     }
 
     startFetchJob = () => {
@@ -84,17 +86,12 @@ class ViewFetchJob extends React.Component {
         const { have_influencers } = this.state
         const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
         let fetch_job = current_fetch_job.details.id == running_fetch.details.id ? running_fetch : current_fetch_job
-
+        console.log(fetch_job)
         return (
             <View>
                 <AppHeader
                     gradient={true}
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
+                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                 />
                 <View style={fetchJobStyle.container}>
                     <View style={fetchJobStyle.infoContainer}>

@@ -11,6 +11,8 @@ import { bindActionCreators } from 'redux';
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { addFetchJob } from '../../actions/fetchJob';
 import { fetchJobStyle } from './fetchJob.style'
+import { colors } from 'react-native-elements';
+import { BackButton } from '../../components/buttons/BackButton';
 
 
 class AddFetchJob extends React.Component {
@@ -31,20 +33,16 @@ class AddFetchJob extends React.Component {
 
     render() {
 
+        const { tag } = this.props.navigation.state.params || null
+
         return (
             <View>
                 <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />
-                    }
+                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                     gradient={true}
                 />
                 <View style={fetchJobStyle.container}>
-                    <FetchJobForm goBack={this.props.navigation.goBack} handleSubmit={this.handleSubmit} />
+                    <FetchJobForm goBack={this.props.navigation.goBack} tag={tag} handleSubmit={this.handleSubmit} />
                 </View>
             </View>
         );
