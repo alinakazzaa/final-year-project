@@ -88,7 +88,7 @@ export const input = {
 export const inputView = {
     color: colors.TERTIARY,
     fontWeight: fonts.WEIGHT_LEIGHT,
-    width: dimensions.fullWidth * 0.6,
+    width: dimensions.fullWidth * 0.55,
     minHeight: height.MEDIUM,
     borderColor: colors.BORDER,
     borderWidth: 0,

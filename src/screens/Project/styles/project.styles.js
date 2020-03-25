@@ -16,7 +16,7 @@ export const project = StyleSheet.create(
             padding: spacing.LARGE,
         },
         fetchScroll: {
-            padding: 5,
+            padding: spacing.SMALL,
             paddingLeft: 0,
         },
         addContainer: {
@@ -46,7 +46,7 @@ export const project = StyleSheet.create(
             flexDirection: 'row',
             paddingTop: spacing.MEDIUM,
             borderBottomWidth: 1,
-            borderColor: colors.BORDER
+            borderColor: colors.BORDER,
         },
         collabBox: {
             maxHeight: dimensions.fullHeight * 0.2,
@@ -99,6 +99,14 @@ export const project = StyleSheet.create(
             justifyContent: 'space-between',
             marginBottom: spacing.MEDIUM,
         },
+        fetchJob: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            padding: spacing.SMALL,
+            borderBottomWidth: 0.5,
+            borderColor: colors.BORDER,
+        },
         header: {
             paddingTop: spacing.LARGE,
             paddingLeft: 0,
@@ -123,10 +131,7 @@ export const project = StyleSheet.create(
             borderColor: colors.BORDER
         },
         text: {
-            ...inputLabel,
-            color: colors.TERTIARY,
-            fontWeight: fonts.WEIGHT_MEDIUM,
-            fontSize: fonts.SMALL,
+            ...inputViewLabel
         },
         cancelBtn: {
             paddingRight: spacing.LARGE
@@ -156,8 +161,7 @@ export const project = StyleSheet.create(
             width: '10%'
         },
         saveBtn: {
-            ...button.btnContainer,
-            alignSelf: 'flex-end'
+            ...button.btnContainer
         },
         noneMsg: {
             padding: spacing.LARGE

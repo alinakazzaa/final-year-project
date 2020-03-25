@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, formContainer, container, dimensions, inputLabel, button, infoContainer } from '../../styles/base';
+import { colors, fonts, spacing, formContainer, container, dimensions, inputLabel, button, infoContainer, form, input, boolSelect } from '../../styles/base';
 
 export const fetchJobStyle = StyleSheet.create(
     {
@@ -170,3 +170,16 @@ export const fetchJobStyle = StyleSheet.create(
             justifyContent: 'space-evenly'
         }
     });
+
+
+export const fetchJobForm = {
+    ...form,
+    textbox: {
+        normal: {
+            ...input
+        },
+        error: {
+
+        }
+    }
+}
