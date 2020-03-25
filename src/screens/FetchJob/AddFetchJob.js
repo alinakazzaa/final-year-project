@@ -5,14 +5,13 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 
 import FetchJobForm from '../../components/forms/FetchJobForm';
 import { AppHeader } from '../../layouts/Header';
-import { IconButton } from '../../components/buttons/IconButton';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { addFetchJob } from '../../actions/fetchJob';
-import { fetchJobStyle } from './fetchJob.style'
-import { colors } from 'react-native-elements';
+import { fetchJob } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton';
+import { TextButton } from '../../components/buttons/TextButton';
 
 
 class AddFetchJob extends React.Component {
@@ -39,9 +38,10 @@ class AddFetchJob extends React.Component {
             <View>
                 <AppHeader
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
+                    right={<TextButton containerStyle={fetchJob.saveBtn} onPress={this.handleSubmit} title="Save" />}
                     gradient={true}
                 />
-                <View style={fetchJobStyle.container}>
+                <View style={fetchJob.container}>
                     <FetchJobForm goBack={this.props.navigation.goBack} tag={tag} handleSubmit={this.handleSubmit} />
                 </View>
             </View>

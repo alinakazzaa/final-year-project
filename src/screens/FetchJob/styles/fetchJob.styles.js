@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, formContainer, container, dimensions, inputLabel, infoContainer, form, input } from '../../../styles/base';
+import { colors, fonts, spacing, formContainer, container, dimensions, inputLabel, infoContainer, form, inputViewLabel, inputView } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
 export const fetchJob = StyleSheet.create(
@@ -31,27 +31,22 @@ export const fetchJob = StyleSheet.create(
         rangeBox: {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            margin: spacing.SMALL,
+            margin: spacing.LARGE,
+            marginTop: 0
+        },
+        rangeSlider: {
+            marginRight: spacing.LARGE,
+            marginLeft: spacing.LARGE,
         },
         text: {
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,
             fontWeight: fonts.WEIGHT_LEIGHT,
         },
-        label: {
-            ...inputLabel,
-            marginTop: spacing.LARGE,
-            fontSize: fonts.MEDIUM
-        },
         slider: {
             padding: 0,
             marginTop: 0,
             marginBottom: spacing.LARGE
-        },
-        saveBtn: {
-            // ...button,
-            // backgroundColor: colors.SECONDARY,
-            // margin: spacing.MEDIUM,
         },
         top: {
             display: 'flex',
@@ -66,14 +61,6 @@ export const fetchJob = StyleSheet.create(
             borderBottomWidth: 0.3,
             borderBottomColor: '#b3b3cc',
             paddingBottom: 20
-        },
-        cancelBtn: {
-            // ...button,
-            // fontSize: fonts.SMALL,
-        },
-        scrollContainer: {
-            padding: '2%',
-            paddingLeft: 0,
         },
         listHead: {
             flexDirection: 'row',
@@ -109,11 +96,13 @@ export const fetchJob = StyleSheet.create(
         itemRowRange: {
             display: 'flex',
             flexDirection: 'column',
-            padding: 10,
-            paddingTop: 20,
+            paddingTop: spacing.MEDIUM,
+            paddingBottom: spacing.MEDIUM,
             justifyContent: 'space-evenly',
-            borderBottomWidth: 0.3,
-            borderBottomColor: colors.BORDER,
+            borderBottomWidth: 1,
+            borderTopWidth: 1,
+            borderColor: colors.BORDER,
+            marginBottom: spacing.MEDIUM
         },
         lbl: {
             fontSize: 16,
@@ -167,22 +156,11 @@ export const fetchJob = StyleSheet.create(
             flexDirection: 'row',
             justifyContent: 'space-evenly'
         },
-        searchView: {
-            flexDirection: 'row',
-            padding: spacing.LARGE,
-            paddingBottom: 0
-        },
         title: {
             ...inputLabel,
             fontWeight: fonts.WEIGHT_HEAVY,
             borderBottomWidth: 1,
             borderColor: colors.BORDER
-        },
-        searchInput: {
-            width: dimensions.fullWidth * 0.67,
-            borderColor: colors.BORDER,
-            borderBottomWidth: 2,
-            height: spacing.LARGE * 1.5,
         },
         listItem: {
             display: 'flex',
@@ -227,6 +205,152 @@ export const fetchJob = StyleSheet.create(
             display: 'flex',
             flexDirection: 'column',
         },
+        allContainer: {
+            ...container,
+            backgroundColor: 'transparent',
+        },
+        viewContainer: {
+            marginLeft: spacing.LARGE,
+            marginRight: spacing.LARGE,
+        },
+        scrollContainer: {
+            padding: spacing.LARGE,
+        },
+        fetchScroll: {
+            padding: spacing.SMALL,
+            paddingLeft: 0,
+        },
+        addContainer: {
+            ...formContainer,
+            borderRadius: 0,
+            marginTop: spacing.MEDIUM,
+            paddingLeft: 0,
+            width: dimensions.fullWidth * .9,
+            margin: 0,
+            padding: 0
+        },
+        searchView: {
+            flexDirection: 'row',
+            padding: spacing.LARGE,
+            paddingBottom: 0
+        },
+        detailsBox: {
+            flexDirection: 'row',
+            paddingTop: spacing.MEDIUM,
+            paddingBottom: spacing.MEDIUM,
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+            borderColor: colors.BORDER,
+            marginBottom: spacing.MEDIUM
+        },
+        inputBox: {
+            marginRight: spacing.LARGE
+        },
+        switchView: {
+            flexDirection: 'row',
+            paddingTop: spacing.MEDIUM,
+            borderBottomWidth: 1,
+            borderColor: colors.BORDER,
+        },
+        collabBox: {
+            maxHeight: dimensions.fullHeight * 0.2,
+            flexDirection: 'column',
+            borderBottomWidth: 1,
+            borderColor: colors.BORDER,
+            paddingBottom: spacing.MEDIUM,
+        },
+        listView: {
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        tab: {
+            textTransform: 'uppercase',
+            textAlign: 'center',
+            padding: spacing.MEDIUM,
+            color: colors.TERTIARY,
+            borderColor: colors.TERTIARY,
+            fontWeight: fonts.WEIGHT_MEDIUM
+        },
+        tabItem: {
+            justifyContent: 'center',
+            width: dimensions.fullWidth * 0.45,
+            borderBottomWidth: 1,
+            borderRightWidth: 1,
+            borderColor: colors.BORDER,
+        },
+        selectedTab: {
+            color: colors.WHITE,
+            textAlign: 'center',
+            padding: spacing.SMALL,
+            fontSize: fonts.SMALL,
+            textTransform: 'uppercase',
+            fontWeight: fonts.WEIGHT_MEDIUM
+        },
+        selectedTabItem: {
+            width: dimensions.fullWidth * 0.45,
+            justifyContent: 'center',
+            backgroundColor: colors.TERTIARY,
+        },
+        fetchJob: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            padding: spacing.SMALL,
+            borderBottomWidth: 0.5,
+            borderColor: colors.BORDER,
+        },
+        header: {
+            paddingTop: spacing.LARGE,
+            paddingLeft: 0,
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+        },
+        labelsCol: {
+
+        },
+        label: {
+            ...inputViewLabel
+        },
+        labelActive: {
+            ...inputViewLabel,
+            marginBottom: spacing.MEDIUM,
+
+        },
+        title: {
+            ...inputLabel,
+            fontWeight: fonts.WEIGHT_HEAVY,
+            borderBottomWidth: 1,
+            borderColor: colors.BORDER
+        },
+        text: {
+            ...inputViewLabel
+        },
+        cancelBtn: {
+            paddingRight: spacing.LARGE
+        },
+        buttonText: {
+            ...button.btnText,
+            fontSize: fonts.SMALL * 0.9,
+            fontWeight: fonts.WEIGHT_MEDIUM,
+            color: colors.TERTIARY
+
+        },
+        searchInput: {
+            width: dimensions.fullWidth * 0.67,
+            borderColor: colors.BORDER,
+            borderBottomWidth: 2,
+            height: spacing.LARGE * 1.5,
+        },
+        right: {
+            display: 'flex',
+            width: '10%'
+        },
+        saveBtn: {
+            ...button.btnContainer
+        },
+        noneMsg: {
+            padding: spacing.LARGE
+        }
     });
 
 
@@ -234,10 +358,15 @@ export const fetchJobForm = {
     ...form,
     textbox: {
         normal: {
-            ...input
+            ...inputView,
         },
         error: {
 
+        }
+    },
+    select: {
+        normal: {
+            ...inputView,
         }
     }
 }

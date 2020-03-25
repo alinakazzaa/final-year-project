@@ -81,7 +81,7 @@ class AllFetchJobs extends React.Component {
                     {!isLoading && index == 0 &&
                         <View>
                             <FetchJobList
-                                fetchJobs={isSearch ? [...searched.filter(fj => fj.details.status == COMPLETED)] : completed}
+                                fetchJobs={isSearch ? [...searched.filter(fj => fj.details.status == PENDING)] : pending_}
                                 goToFetchJob={this.goToFetchJob}
                                 addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                                 deleteFetchJob={this.deleteFetchJob} />
@@ -96,7 +96,7 @@ class AllFetchJobs extends React.Component {
                         </View>}
                     {!isLoading && index == 2 && <View>
                         <FetchJobList
-                            fetchJobs={isSearch ? [...searched.filter(fj => fj.details.status == PENDING)] : pending_}
+                            fetchJobs={isSearch ? [...searched.filter(fj => fj.details.status == COMPLETED)] : completed}
                             goToFetchJob={this.goToFetchJob}
                             addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                             deleteFetchJob={this.deleteFetchJob} />
