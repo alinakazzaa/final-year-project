@@ -1,19 +1,18 @@
-import * as React from 'react';
-import { View, Text, YellowBox, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { AppHeader } from '../../layouts/Header';
-import { TextButton } from '../../components/buttons/TextButton';
-import { ProjectList } from '../../components/list/ProjectList';
-import { Input, Icon, Divider } from 'react-native-elements';
+import * as React from 'react'
+import { View, Text, YellowBox } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import { ProjectList } from '../../components/list/ProjectList'
+import { Input, Icon } from 'react-native-elements'
 import { removeProject, setCurrentProject, getUserProjects, setUserProjectsPending } from '../../actions/project'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { activeProjects, archivedProjects, searchedProjects } from '../../reducers/projectReducer'
 import { project } from './styles/project.styles'
-import { colors, base } from '../../styles/base';
-import { LoadingScreen } from '../../components/loading/LoadingScreen';
-import TabView from '../../components/tabview/TabView';
+import { colors, base } from '../../styles/base'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import TabView from '../../components/tabview/TabView'
 
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
 
 class AllProjects extends React.Component {
 
@@ -22,7 +21,7 @@ class AllProjects extends React.Component {
     }
 
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             index: 0,
             searched: [],
@@ -31,19 +30,19 @@ class AllProjects extends React.Component {
     }
 
     componentDidMount() {
-        let { user, setUserProjectsPending, getUserProjects, projects } = this.props;
+        let { user, setUserProjectsPending, getUserProjects, projects } = this.props
         setUserProjectsPending()
         getUserProjects(user.id)
     }
 
     goToProject = proj => {
-        let { setCurrentProject } = this.props;
-        this.props.navigation.navigate('EditProject')
+        let { setCurrentProject } = this.props
+        this.props.navigation.navigate('ViewProject')
         setCurrentProject(proj)
     }
 
     deleteProject = project => {
-        let { user, removeProject } = this.props;
+        let { user, removeProject } = this.props
         removeProject(user.id, project)
     }
 
@@ -64,7 +63,7 @@ class AllProjects extends React.Component {
         return (
             <View>
                 {pending ?
-                    <LoadingScreen text="Wait, getting your projects" /> :
+                    <LoadingScreen text="Wait, getting your campaigns" /> :
                     <View>
                         <AppHeader
                             gradient={true} />
@@ -74,7 +73,7 @@ class AllProjects extends React.Component {
                                     onChangeText={text => this.searchProject(text)} inputStyle={base.inputStyle} inputContainerStyle={project.searchInput} />
                             </View>
                             <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
-                            {this.props.state.project.error && <View style={project.none}><Text style={project.noneTxt}>No projects</Text></View>}
+                            {this.props.state.project.error && <View style={project.none}><Text style={project.noneMsg}>No projects</Text></View>}
                             {!this.props.state.project.error && !this.props.state.project.pending &&
                                 index == 0 ?
                                 <View>
@@ -86,7 +85,7 @@ class AllProjects extends React.Component {
                             <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} />
                         </View></View>}
             </View>
-        );
+        )
     }
 }
 
@@ -98,13 +97,13 @@ const mapStateToProps = state => ({
     archived: archivedProjects(state),
     pending: state.project.pending,
     error: state.project.error
-});
+})
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentProject,
     getUserProjects: getUserProjects,
     setUserProjectsPending: setUserProjectsPending,
     removeProject: removeProject,
-}, dispatch);
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProjects)
