@@ -11,7 +11,6 @@ export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
     fetch(INSTAGRAM_GET_USER_BY_ID(id))
         .then(result => result.json())
         .then(resp => {
-            console.log(resp)
             if (resp.data.user !== null) {
                 influ_obj = { ...resp.data.user.reel.user, followers: 0, media_count: 0 }
 

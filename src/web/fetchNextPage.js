@@ -22,8 +22,8 @@ export const fetchNextPage = (fetch_job, pending, success, error) => {
                         end_cursor: edge_hashtag_to_media.page_info.end_cursor
                     }
 
-                    if (response.has_next_page)
-                        getInfluencers(response.media_ids, fetch_job, pending, success, error)
+                    // if (response.has_next_page)
+                    //     getInfluencers(response.media_ids, fetch_job, pending, success, error)
 
                     success(response)
 
