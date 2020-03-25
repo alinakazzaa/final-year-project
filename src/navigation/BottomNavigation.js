@@ -75,7 +75,7 @@ export const BottomNavigator = createBottomTabNavigator(
         },
     },
     {
-        initialRouteName: 'Projects',
+        initialRouteName: 'Collabs',
         tabBarOptions: {
             showLabel: false,
             style: { ...nav.tabBar },

@@ -86,8 +86,8 @@ export const updateCollab = (user_id, collab) => {
 
 }
 
-export const removeCollab = (user_id, collab) => {
-    db.ref(`/Users/${user_id}/Collabs`).child(collab.id).remove()
+export const removeCollab = collab => {
+    db.ref(`/Users/${collab.user_id}/Collabs`).child(collab.id).remove()
 
     return {
         type: REMOVE_COLLAB,

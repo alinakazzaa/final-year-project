@@ -5,6 +5,7 @@ import projectReducer from '../reducers/projectReducer';
 import fetchJobReducer from '../reducers/fetchJobReducer';
 import influencerReducer from '../reducers/influencerReducer';
 import fetchReducer from '../reducers/fetchReducer';
+import collabReducer from '../reducers/collabReducer';
 
 const middlewares = [thunk];
 
@@ -14,7 +15,8 @@ const rootReducer = combineReducers(
         project: projectReducer,
         fetch_job: fetchJobReducer,
         influencer: influencerReducer,
-        running_fetch: fetchReducer
+        running_fetch: fetchReducer,
+        collab: collabReducer
     },
 );
 

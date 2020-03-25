@@ -15,10 +15,6 @@ export const collab = StyleSheet.create(
         scrollContainer: {
             padding: spacing.LARGE,
         },
-        fetchScroll: {
-            padding: 5,
-            paddingLeft: 0,
-        },
         addContainer: {
             ...formContainer,
             borderRadius: 0,
@@ -41,23 +37,6 @@ export const collab = StyleSheet.create(
         },
         inputBox: {
             marginRight: spacing.LARGE
-        },
-        switchView: {
-            flexDirection: 'row',
-            paddingTop: spacing.MEDIUM,
-            borderBottomWidth: 1,
-            borderColor: colors.BORDER
-        },
-        collabBox: {
-            maxHeight: dimensions.fullHeight * 0.2,
-            flexDirection: 'column',
-            borderBottomWidth: 1,
-            borderColor: colors.BORDER,
-            paddingBottom: spacing.MEDIUM,
-        },
-        listView: {
-            alignItems: 'center',
-            justifyContent: 'center',
         },
         tab: {
             textTransform: 'uppercase',
@@ -156,12 +135,12 @@ export const collab = StyleSheet.create(
             width: '10%'
         },
         saveBtn: {
-            ...button.btnContainer,
-            alignSelf: 'flex-end'
+            ...button.btnContainer
         },
         noneMsg: {
             padding: spacing.LARGE
         }
+
     });
 
 export const projectForm = {
