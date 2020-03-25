@@ -53,8 +53,8 @@ class LogInScreen extends React.Component {
     }
 
     render() {
-        const { error, state, users } = this.props
-        console.log(users)
+        const { error, users } = this.props
+
         return (
             <View>
                 <Gradient horizontal={true}>
