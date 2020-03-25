@@ -1,7 +1,6 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import AllCollabs from '../screens/Collab/AllCollabs';
 import AddCollab from '../screens/Collab/AddCollab';
-import EditCollab from '../screens/Collab/EditCollab';
 import ViewCollab from '../screens/Collab/ViewCollab';
 import ViewFetchJob from '../screens/FetchJob/ViewFetchJob';
 import AllFetchJobs from '../screens/FetchJob/AllFetchJobs';
@@ -18,7 +17,6 @@ export const CollabStack = createStackNavigator({
     AllCollabs: { screen: AllCollabs },
     ViewCollab: { screen: ViewCollab },
     AddCollab: { screen: AddCollab },
-    EditCollab: { screen: EditCollab },
 },
     {
         initialRouteName: 'AllCollabs'
