@@ -5,10 +5,11 @@ import { Tag } from '../../components/tag/Tag'
 import { tag } from '../../styles/tag'
 
 
-export const TagList = ({ tags }) => {
+export const TagList = ({ tags, onPress }) => {
     const tagList = tag => {
+
         return (
-            <Tag title={tag} />
+            <Tag title={tag} onPress={onPress} />
         )
     }
 
@@ -28,6 +29,7 @@ export const TagList = ({ tags }) => {
 
 TagList.propTypes = {
     tags: PropTypes.array.isRequired,
+    onPress: PropTypes.func.isRequired
 }
 
 

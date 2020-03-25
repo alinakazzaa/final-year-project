@@ -7,7 +7,7 @@ import { Gradient } from '../../styles/Gradient';
 
 
 export const Tag = ({ title, onPress }) => {
-    return <TouchableOpacity activeOpacity={0.8} onPress={onPress} containerStyle={tag.container}>
+    return <TouchableOpacity activeOpacity={0.8} onPress={() => onPress(title)} containerStyle={tag.container}>
         <Text style={tag.title}># {title}</Text>
     </TouchableOpacity>
     // <Gradient horizontal={true} style={tag.container}>
@@ -16,11 +16,10 @@ export const Tag = ({ title, onPress }) => {
 
 Tag.propTypes = {
     title: PropTypes.string,
-    onPress: PropTypes.func
+    onPress: PropTypes.func.isRequired
 }
 
 Tag.defaultProps = {
     title: '',
-    onPress: null
 }
 

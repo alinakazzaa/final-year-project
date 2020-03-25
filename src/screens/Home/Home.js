@@ -11,7 +11,9 @@ import { logOutUser } from '../../actions/user';
 import { SET_PROJECTS_SUCCESS } from '../../constants/response/types';
 import { activeProjects } from '../../reducers/projectReducer';
 import { home } from './styles/home.styles';
-import { colors, base } from '../../styles/base';
+import { colors } from '../../styles/base';
+import { TagList } from '../../components/list/TagList'
+import { Divider } from 'react-native-elements';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -42,19 +44,21 @@ class HomeScreen extends React.Component {
         let project_id = active_projects[0].id // should be active_projects.length -1
         getProjectFetchJobs(user.id, project_id)
 
-        console.log(completed_fetch_jobs)
+        completed_fetch_jobs.forEach(job => {
+            tags = [...tags, ...job.related_tags]
+        });
 
-        // completed_fetch_jobs.array.forEach(job => {
-        //     tags = [...tags, job.related_tags]
-        // });
+        this.setState({ recent_tags: tags })
+    }
 
-        // this.setState({ recent_tags: tags })
+    onTagPress = tag => {
+        this.props.navigation.navigate('AddFetchJob', { tag })
     }
 
     render() {
-        const { user, logOutUser, completed_fetch_jobs } = this.props
-        // const { recent_tags } = this.state
-        console.log(this.props.user)
+        const { user, logOutUser, completed_fetch_jobs, } = this.props
+        const { recent_tags } = this.state
+        console.log(recent_tags)
         return (
             <View>
                 <AppHeader
@@ -70,16 +74,16 @@ class HomeScreen extends React.Component {
                         <Text style={home.title}>Based on your previous searches</Text>
                         <Text style={home.text}>Consider these hashtagtags</Text>
                         <View style={home.itemRow}>
-                            {/* {completed_fetch_jobs.length > 0 && 
-                            <TagList tags={recent_tags} />} */}
+                            {completed_fetch_jobs.length > 0 &&
+                                <TagList onPress={this.onTagPress} tags={recent_tags} />}
                         </View>
                     </View>
                     <View style={home.logInMsg}>
-                        <Text style={home.largeTitle}>Recent posts by influencers....</Text>
-                        <Text style={home.largeTitle}>{`Current user ${user.username}`}</Text>
+                        <Text style={home.largeTitle}>Recent collaborations....</Text>
                     </View>
+                    <Divider />
                     <View style={home.logInMsg}>
-                        <Text style={home.largeTitle}>Maybe recently openet projects....</Text>
+                        <Text style={home.largeTitle}>Influencers to do....</Text>
                     </View>
                 </View>
             </View>

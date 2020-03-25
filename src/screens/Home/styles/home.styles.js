@@ -5,10 +5,10 @@ export const home = StyleSheet.create(
     {
         container: {
             ...container,
+            paddingLeft: spacing.MEDIUM,
+            paddingRight: spacing.MEDIUM
         },
         top: {
-            borderBottomWidth: 1,
-            borderColor: colors.TERTIARY,
             marginTop: spacing.MEDIUM,
             paddingBottom: spacing.MEDIUM,
         },
@@ -29,10 +29,11 @@ export const home = StyleSheet.create(
             marginBottom: spacing.MEDIUM
         },
         itemRow: {
-            // display: 'flex',
-            // flexDirection: 'row',
-            // padding: 10,
-            // justifyContent: 'space-between',
+            borderBottomWidth: 1,
+            borderTopWidth: 1,
+            borderColor: colors.BORDER,
+            paddingTop: spacing.MEDIUM,
+            paddingBottom: spacing.MEDIUM
 
         },
         lbl: {
