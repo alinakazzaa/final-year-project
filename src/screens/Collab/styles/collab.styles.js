@@ -15,6 +15,10 @@ export const collab = StyleSheet.create(
         scrollContainer: {
             padding: spacing.LARGE,
         },
+        publicationsBox: {
+            flexDirection: 'row',
+            flexWrap: 'wrap'
+        },
         addContainer: {
             ...formContainer,
             borderRadius: 0,
@@ -28,6 +32,10 @@ export const collab = StyleSheet.create(
             flexDirection: 'row',
             padding: spacing.LARGE,
             paddingBottom: 0
+        },
+        listView: {
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         detailsBox: {
             flexDirection: 'row',

@@ -1,72 +1,30 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Switch, TextInput, Keyboard, Button } from 'react-native';
-import { IconButton } from '../../components/buttons/IconButton';
-import { TextButton } from '../../components/buttons/TextButton';
-import BasicInput from '../input/BasicInput';
+import { View, Keyboard } from 'react-native';
 import moment from 'moment'
 import t from 'tcomb-form-native';
-import { validate } from 'tcomb-form-native/lib';
 import { DATE_TODAY } from '../../constants/TodayDate';
+import { projectForm } from '../../screens/Project/styles/project.styles';
+import { collab } from '../../screens/Collab/styles/collab.styles';
 
 const Form = t.form.Form;
 
 const formStyles = {
     ...Form.stylesheet,
-    controlLabel: {
-        normal: {
-            // display: 'none',
-        },
-        error: {
-            color: 'Purple',
-            fontSize: 18,
-            marginBottom: 7,
-            fontWeight: '600'
-        }
-    },
-    textbox: {
-        normal: {
-            color: '#000000',
-            fontSize: 17,
-            // height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#cccccc', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        },
-        error: {
-            color: '#000000',
-            fontSize: 17,
-            // height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#a94442', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        }
-    },
-    checkbox: {
-        normal: {
-
-        },
-        error: {
-
-        },
-    },
-
-
+    ...projectForm
 }
 
 const Collab = t.struct({
     title: t.String,
-    description: t.maybe(t.String),
-    influencer: t.String,
+    date_created: t.String,
+    // date_start: t.Date,
     campaign: t.String,
-    date_start: t.Date,
-    compensation: t.maybe(t.String)
+    influencer: t.String,
+    compensation: t.maybe(t.String),
+    description: t.maybe(t.String)
 });
 
 const options = {
+    auto: 'none',
     fields: {
         title: {
             error: 'Collab requires a title!',
@@ -98,15 +56,11 @@ export default class CollabForm extends React.Component {
     }
 
     componentDidMount() {
-        let influencer = this.props.influencer
-        let collab = this.props.value
-        let current_project = this.props.current_project
-
+        const { collab } = this.props
+        console.log(collab)
         if (collab) {
-            this.setState({ value: collab })
+            this.setState({ value: collab.details })
         }
-        let value = { ...this.state.value, influencer: influencer.username, campaign: current_project.title }
-        this.setState({ value })
     }
 
     onChange = value => {
@@ -119,7 +73,7 @@ export default class CollabForm extends React.Component {
     render() {
 
         return (
-            <View style={styles.container}>
+            <View style={collab.inputBox}>
                 <Form
                     ref={c => this._form = c}
                     type={Collab}
@@ -132,20 +86,6 @@ export default class CollabForm extends React.Component {
         )
     }
 }
-
-const styles = StyleSheet.create(
-    {
-        container: {
-            justifyContent: 'center',
-            marginTop: 50,
-            padding: 20,
-            backgroundColor: '#ffffff',
-        },
-        textInput: {
-            borderWidth: 1,
-        },
-
-    });
 
 CollabForm.propTypes = {
 
