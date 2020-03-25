@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, YellowBox, StyleSheet, ActivityIndicator } from 'react-native';
 import { FetchJobList } from '../../components/list/FetchJobList'
 import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs } from '../../actions/fetchJob'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getPending, getError } from '../../reducers/fetchJobReducer';
 import { AppHeader } from '../../layouts/Header';
-import { IconButton } from '../../components/buttons/IconButton';
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants';
 import { BackButton } from '../../components/buttons/BackButton';
+import TabView from '../../components/tabview/TabView';
+import { colors } from '../../styles/base';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -16,7 +17,7 @@ class AllFetchJobs extends React.Component {
 
     state = {
         isLoading: true,
-        index: 2,
+        index: 0,
         selectedTabStyle: {
             color: 'white',
             textAlign: 'center',
@@ -34,7 +35,7 @@ class AllFetchJobs extends React.Component {
         },
         pending: [],
         completed: [],
-        in_progress: []
+        in_progress: [],
     }
 
     static navigationOptions = {
@@ -58,6 +59,10 @@ class AllFetchJobs extends React.Component {
         removeFetchJob(fj)
     }
 
+    setTab = index => {
+        this.setState({ index })
+    }
+
     render() {
         const { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
         const { pending_, completed, in_progress } = this.props
@@ -67,12 +72,7 @@ class AllFetchJobs extends React.Component {
                     gradient={true}
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                 />
-                <View style={styles.tabView}>
-                    <TouchableOpacity onPress={() => this.setState({ index: 2 })} style={index == 2 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 2 ? selectedTabStyle : styles.tab}>Pending</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ index: 1 })} style={index == 1 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 1 ? selectedTabStyle : styles.tab}>In Progress</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ index: 0 })} style={index == 0 ? selectedTabItemStyle : styles.tabItem}><Text style={index == 0 ? selectedTabStyle : styles.tab}>Completed</Text></TouchableOpacity>
-                </View>
-
+                <TabView titles={['Pending', 'In Progress', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='32%' index={index} three />
                 {isLoading &&
                     <View>
                         <ActivityIndicator size="large" color="#5d4d50" />

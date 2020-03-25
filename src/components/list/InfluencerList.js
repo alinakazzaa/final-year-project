@@ -168,7 +168,7 @@ const styles = StyleSheet.create(
         },
         scrollContainer: {
             padding: '3%',
-            marginBottom: 200
+            paddingBottom: 250
         },
         info: {
             justifyContent: 'space-between',

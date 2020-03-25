@@ -21,9 +21,6 @@ export const fetchJobStyle = StyleSheet.create(
         },
         bottomView: {
             display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
             margin: 0,
             padding: 0,
         },

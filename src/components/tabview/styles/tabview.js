@@ -6,7 +6,6 @@ export const container = {
     justifyContent: 'space-between',
     padding: spacing.MEDIUM,
     margin: spacing.MEDIUM,
-
 }
 
 export const tab = {
@@ -14,7 +13,8 @@ export const tab = {
     textAlign: 'center',
     color: colors.TERTIARY,
     borderColor: colors.TERTIARY,
-    fontWeight: fonts.WEIGHT_MEDIUM
+    fontWeight: fonts.WEIGHT_MEDIUM,
+    padding: spacing.SMALL,
 }
 
 
@@ -37,7 +37,7 @@ export const threeTabs = (color, size) => StyleSheet.create(
             color: colors.WHITE,
             textAlign: 'center',
             padding: spacing.SMALL,
-            fontSize: fonts.SMALL,
+            fontSize: fonts.SMALL * 0.9,
             textTransform: 'uppercase',
             fontWeight: fonts.WEIGHT_MEDIUM
         },

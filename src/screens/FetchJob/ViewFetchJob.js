@@ -86,7 +86,7 @@ class ViewFetchJob extends React.Component {
         const { have_influencers } = this.state
         const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
         let fetch_job = current_fetch_job.details.id == running_fetch.details.id ? running_fetch : current_fetch_job
-        console.log(fetch_job)
+
         return (
             <View>
                 <AppHeader
@@ -143,9 +143,10 @@ class ViewFetchJob extends React.Component {
                                         <TouchableOpacity style={fetchJobStyle.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
                                             <Text style={fetchJobStyle.title}>View All</Text>
                                         </TouchableOpacity>
-                                        {have_influencers ? <InfluencerListFjView influencers={influencers} /> :
-                                            <View style={fetchJobStyle.none}><Text style={fetchJobStyle.data}>None found</Text></View>}
                                     </View>
+                                    {have_influencers ? <InfluencerListFjView influencers={influencers} /> :
+                                        <View style={fetchJobStyle.none}><Text style={fetchJobStyle.data}>None found</Text></View>}
+
                                 </View>}
                             {fetch_job.details.status == PENDING && <View style={fetchJobStyle.button}><TextButton style={fetchJobStyle.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                         </View >
