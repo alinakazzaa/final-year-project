@@ -1,10 +1,13 @@
 import { SET_COLLABS_PENDING, SET_COLLABS_SUCCESS, SET_COLLABS_ERROR, SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB } from '../constants'
+import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR } from '../constants/response/types'
 
 const initialState = {
     collabs: [],
     current_collab: {},
     pending: null,
-    error: null
+    error: null,
+    publications: [],
+    response: {}
 }
 
 const collabReducer = (state = initialState, action) => {
@@ -71,6 +74,32 @@ const collabReducer = (state = initialState, action) => {
             return {
                 ...state,
                 collabs: [...state.collabs.filter(c => c.details.id !== action.collab.details.id)]
+            }
+
+
+        case GET_USER_MEDIA_PENDING:
+
+            return {
+                ...state,
+                pending: true
+            }
+
+        case GET_USER_MEDIA_SUCCESS:
+
+            return {
+                ...state,
+                response: { type: action.type, message: action.message },
+                publications: action.media,
+                pending: false
+            }
+
+        case GET_USER_MEDIA_ERROR:
+
+            return {
+                ...state,
+                response: { type: action.type, message: action.message },
+                pending: false,
+                error: true
             }
 
         default:

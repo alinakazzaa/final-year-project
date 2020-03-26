@@ -72,3 +72,16 @@ export const updateInfluencer = (hashtag, influencer) => {
 export const removeInfluencer = (hashtag, influencer_id) => {
     db.ref(`/Influencers/hashtags/${hashtag}`).child(influencer_id).remove()
 }
+
+export const getInfluByUsername = username => {
+    let influ_obj = {}
+    db.ref('/Influencers').on('value', (influ_snapshot) => {
+        influ_snapshot.forEach(influ_snap => {
+            if (influ_snap.val().username == username) {
+                influ_obj = { ...influ_snap.val() }
+            }
+        })
+    })
+
+    return influ_obj
+}

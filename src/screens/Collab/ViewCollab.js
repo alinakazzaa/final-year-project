@@ -10,6 +10,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { collab } from './styles/collab.styles';
 import CollabForm from '../../components/forms/CollabForm';
+import { TagList } from '../../components/list/TagList';
+import { getInfluByUsername } from '../../actions/influencer';
+import { fetchUserMedia } from '../../web/fetchUserMedia';
+import { fetchPending, fetchError, fetchSuccess } from '../../actions/fetch';
+import { PublicationList } from '../../components/list/PublicationList';
 
 
 class ViewCollab extends React.Component {
@@ -19,14 +24,12 @@ class ViewCollab extends React.Component {
     }
 
     componentDidMount() {
-        // const { user, current_project, getProjectFetchJobs, setProjectFetchJobsPending } = this.props
+        const { curerent_collab, pending, success, error } = this.props
+        let influ = getInfluByUsername('juanchoiregui')
 
-        // if (current_project.title) {
-        //     setProjectFetchJobsPending()
-        //     getProjectFetchJobs(user.id, current_project.id)
-        //     this.setState({ project_value: { ...current_project } })
-        // }
-
+        if (influ.id) {
+            fetchUserMedia(influ.id, ['berghain', 'mitte'], pending, success, error)
+        }
     }
 
     goToPublication = pub => {
@@ -51,7 +54,9 @@ class ViewCollab extends React.Component {
 
 
     render() {
-        const { current_collab } = this.props
+        const { current_collab, publications } = this.props
+
+
         return (
             <View>
                 <AppHeader
@@ -67,7 +72,7 @@ class ViewCollab extends React.Component {
                         <View style={collab.detailsBox}>
                             <View style={collab.labelsCol}>
                                 <Text style={collab.label}>Title</Text>
-                                <Text style={collab.label}>Date created</Text>
+                                {/* <Text style={collab.label}>Date created</Text> */}
                                 {/* <Text style={collab.label}>Date Start</Text> */}
                                 <Text style={collab.label}>Campaign</Text>
                                 <Text style={collab.label}>Influencer</Text>
@@ -77,12 +82,16 @@ class ViewCollab extends React.Component {
                             <CollabForm onChange={this.handleChange} collab={current_collab} />
                         </View>
                     </View>
-                    {current_collab.details.active && <View style={collab.publicationsBox}>
-                        <View style={collab.header}>
-                            <Text style={collab.title}>Publications</Text>
-                        </View>
-                        <View style={collab.listView}><Text style={collab.noneMsg}>No publications yet</Text></View>
-                    </View>}
+                    <View style={collab.tagsBox}>
+                        <Text style={collab.title}>Hashtags</Text>
+                        <TagList tags={['testing', 'stuff']} />
+                    </View>
+                    <View style={collab.header}>
+                        <Text style={collab.title}>Publications</Text>
+                    </View>
+                    {current_collab.details.active ?
+                        <PublicationList publications={publications} /> :
+                        <View style={collab.listView}><Text style={collab.noneMsg}>No publications yet</Text></View>}
                 </View>
             </View>
 
@@ -95,11 +104,14 @@ const mapStateToProps = state => ({
     user: state.user.current_user,
     pending: state.collab.pending,
     error: state.collab.error,
-    current_collab: state.collab.current_collab
+    current_collab: state.collab.current_collab,
+    publications: state.collab.publications
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-
+    pending: fetchPending,
+    error: fetchError,
+    success: fetchSuccess,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCollab)

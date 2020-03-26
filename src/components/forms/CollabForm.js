@@ -15,7 +15,7 @@ const formStyles = {
 
 const Collab = t.struct({
     title: t.String,
-    date_created: t.String,
+    // date_created: t.String,
     // date_start: t.Date,
     campaign: t.String,
     influencer: t.String,

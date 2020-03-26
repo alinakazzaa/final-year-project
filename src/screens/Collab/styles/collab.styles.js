@@ -17,7 +17,8 @@ export const collab = StyleSheet.create(
         },
         publicationsBox: {
             flexDirection: 'row',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+
         },
         addContainer: {
             ...formContainer,
@@ -40,11 +41,19 @@ export const collab = StyleSheet.create(
         detailsBox: {
             flexDirection: 'row',
             paddingTop: spacing.MEDIUM,
+            paddingBottom: spacing.MEDIUM,
             borderTopWidth: 1,
+            borderBottomWidth: 1,
             borderColor: colors.BORDER
         },
         inputBox: {
             marginRight: spacing.LARGE
+        },
+        tagsBox: {
+            paddingBottom: spacing.LARGE,
+            marginTop: spacing.LARGE,
+            borderBottomColor: colors.BORDER,
+            borderBottomWidth: 1
         },
         tab: {
             textTransform: 'uppercase',
@@ -75,19 +84,19 @@ export const collab = StyleSheet.create(
             backgroundColor: colors.TERTIARY,
         },
         listItem: {
-            display: 'flex',
-            flexDirection: 'row',
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderRadius: 5,
-            borderColor: colors.BORDER,
-            padding: spacing.LARGE,
-            fontFamily: fonts.PRIMARY,
-            justifyContent: 'space-between',
-            marginBottom: spacing.MEDIUM,
+            // display: 'flex',
+            // flexDirection: 'row',
+            // borderBottomWidth: 1,
+            // borderRightWidth: 1,
+            // borderRadius: 5,
+            // borderColor: colors.BORDER,
+            // padding: spacing.LARGE,
+            // fontFamily: fonts.PRIMARY,
+            // justifyContent: 'space-between',
+            // marginBottom: spacing.MEDIUM,
         },
         header: {
-            paddingTop: spacing.LARGE,
+            paddingTop: spacing.MEDIUM,
             paddingLeft: 0,
             flexDirection: 'row',
             justifyContent: 'space-between'
@@ -147,7 +156,13 @@ export const collab = StyleSheet.create(
         },
         noneMsg: {
             padding: spacing.LARGE
-        }
+        },
+        thumbnail: {
+            height: 100,
+            width: 100,
+            margin: spacing.MEDIUM,
+            marginBottom: 0
+        },
 
     });
 
