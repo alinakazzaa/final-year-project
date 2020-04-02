@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { View, YellowBox, StyleSheet } from 'react-native'
+import { View, YellowBox } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import ProjectForm from '../../components/forms/ProjectForm'
-import { IconButton } from '../../components/buttons/IconButton'
 import { TextButton } from '../../components/buttons/TextButton'
 import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
@@ -20,21 +19,29 @@ class AddProject extends React.Component {
     }
 
     state = {
-        project: {}
+        project_value: {
+            active: false
+        }
     }
 
-    handleChange = project => {
-        this.setState({ project })
+    handleChange = updated_project => {
+        this.setState({ project_value: updated_project })
     }
 
     handleSubmit = () => {
         const { user, addProject } = this.props
-        const { project } = this.state
-        addProject(user.id, project)
+        const { project_value } = this.state
+        addProject(user.id, project_value)
         this.props.navigation.navigate("AllProjects")
     }
 
+    toggleSwitch = value => {
+        const { project_value } = this.state
+        this.setState({ project_value: { ...project_value, active: value } })
+    }
+
     render() {
+        const { project_value } = this.state
         return (
             <View>
                 <AppHeader
@@ -43,7 +50,7 @@ class AddProject extends React.Component {
                     right={<TextButton containerStyle={project.saveBtn} onPress={this.handleSubmit} title="Save" />}
                 />
                 <View style={project.addContainer}>
-                    <ProjectForm onChange={this.handleChange} />
+                    <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
                 </View>
             </View>
         )

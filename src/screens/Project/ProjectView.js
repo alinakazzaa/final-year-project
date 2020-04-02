@@ -44,7 +44,6 @@ class ProjectView extends React.Component {
     }
 
     handleChange = updated_project => {
-        console.log(updated_project)
         this.setState({ project_value: updated_project })
     }
 

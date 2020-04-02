@@ -82,7 +82,7 @@ export default class ProjectForm extends React.Component {
                     </View>
                     <View style={project.switchView}>
                         <Text style={project.labelActive}>Active</Text>
-                        <SwitchItem value={project_value.active || false} onChange={value => toggleSwitch(value)} />
+                        <SwitchItem value={project_value.active} onChange={value => toggleSwitch(value)} />
                     </View>
                 </View>
 
