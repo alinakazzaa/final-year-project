@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
 import { getAllInfluencers } from '../../actions/influencer';
 import { TextButton } from '../../components/buttons/TextButton';
-import { clearCurrentFetchJob, updateStateFetchJob, updateFetchJob } from '../../actions/fetchJob';
+import { clearCurrentFetchJob, updateFetchJob } from '../../actions/fetchJob';
 import { fetchMedia } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress';
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants';
@@ -27,13 +27,19 @@ import Slider from '../../components/slider/Slider'
 import { criteria } from '../../constants/Criteria';
 import TabView from '../../components/tabview/TabView';
 
-class ViewFetchJob extends React.Component {
+class FetchJobView extends React.Component {
 
     state = {
         have_influencers: false,
-        fetch_job: {},
-        follower_min: criteria.micro.min,
-        follower_max: criteria.micro.max,
+        fetch_job: {
+            details: {
+                id: '',
+                title: '',
+                hashtag: '',
+                criteria: { follower_min: 0, follower_max: 0 },
+                status: ''
+            }
+        },
         index: 0,
         min: criteria.micro.min,
         max: criteria.micro.max
@@ -44,22 +50,24 @@ class ViewFetchJob extends React.Component {
     }
 
     componentDidMount() {
-        const { current_fetch_job, getAllInfluencers } = this.props
+        const { current_fetch_job, getAllInfluencers, running_fetch } = this.props
+
+        this.setState({ fetch_job: { ...current_fetch_job } })
 
         if (current_fetch_job.details.status == COMPLETED && current_fetch_job.influencers.success.length > 0) {
-            console.log(current_fetch_job)
             getAllInfluencers(current_fetch_job)
             this.setState({ have_influencers: true })
+        }
+
+        if (current_fetch_job.details.id == running_fetch.details.id) {
+            this.setState({ fetch_job: { ...running_fetch } })
         }
     }
 
     componentDidUpdate(prev) {
-        const { running_fetch, updateStateFetchJob, pending, success, error } = this.props
+        const { running_fetch, updateFetchJob, pending, success, error } = this.props
         if (running_fetch.pending !== null && prev.running_fetch.details.status !== running_fetch.details.status) {
-            updateStateFetchJob(running_fetch)
-            if (running_fetch.details.status == COMPLETED) {
-                updateFetchJob(running_fetch)
-            }
+            updateFetchJob(running_fetch)
         }
 
         if (running_fetch.response !== null)
@@ -91,15 +99,21 @@ class ViewFetchJob extends React.Component {
     }
 
     onChangeSlider = (min, max) => {
-        this.setState({ follower_min: min, follower_max: max })
+        const { fetch_job } = this.state
+        this.setState({ fetch_job: { criteria: { follower_min: min, follower_max: max }, ...fetch_job } })
+    }
+
+    handleChange = updated_fetch_job => {
+        const { fetch_job } = this.state
+        this.setState({ fetch_job: { ...fetch_job, details: updated_fetch_job } })
     }
 
 
     handleSubmit = () => {
-        const { handleSubmit } = this.props
-        const { value, follower_max, follower_min } = this.state
-        let fj = { ...value, criteria: { follower_min, follower_max } }
-        handleSubmit(fj)
+        const { fetch_job, follower_max, follower_min } = this.state
+        const { updateFetchJob } = this.props
+        updateFetchJob(fetch_job)
+        this.props.navigation.goBack()
     }
 
     changeTab = index => {
@@ -117,7 +131,6 @@ class ViewFetchJob extends React.Component {
         }
 
         this.setState({ index, follower_min: min, follower_max: max })
-
     }
 
 
@@ -126,9 +139,8 @@ class ViewFetchJob extends React.Component {
     }
 
     render() {
-        const { have_influencers, index, min, max, follower_max, follower_min } = this.state
-        const { current_fetch_job, influencers, progress_percent, running_fetch } = this.props
-        let fetch_job = current_fetch_job.details.id == running_fetch.details.id ? running_fetch : current_fetch_job
+        const { have_influencers, index, min, max, fetch_job } = this.state
+        const { influencers, progress_percent } = this.props
 
         return (
             <View>
@@ -138,27 +150,7 @@ class ViewFetchJob extends React.Component {
                     right={<TextButton containerStyle={fetchJob.saveBtn} onPress={this.handleSubmit} title="Save" />}
                 />
                 <View style={fetchJob.viewContainer}>
-                    <View>
-                        <View style={fetchJob.header}>
-                            <Text style={fetchJob.title}>Details</Text>
-                        </View>
-                        {/* <View style={fetchJob.info}>
-                            <Text style={fetchJob.text}>Search users by hashtag they recently used in their media</Text>
-                        </View>
-                        {!tag && <View style={fetchJob.info}>
-                            <Text style={fetchJob.text}>Avoid overly specific tags</Text></View>} */}
-                        {/* <View style={fetchJob.info}><Text style={fetchJob.text}>To consider: the more influencers you fetch, the longer it will take</Text></View> */}
-                        <View style={fetchJob.detailsBox}>
-                            <View style={fetchJob.labelsCol}>
-                                <Text style={fetchJob.label}>Hashtag</Text>
-                                <Text style={fetchJob.label}>Date created</Text>
-                                <Text style={fetchJob.label}>No. of Profiles</Text>
-                            </View>
-                            <FetchJobForm goBack={this.props.navigation.goBack} tag='' fetch_job={current_fetch_job}
-                            // handleSubmit={this.handleSubmit}
-                            />
-                        </View>
-                    </View>
+                    <FetchJobForm goBack={this.props.navigation.goBack} tag='' fetch_job={fetch_job} handleChange={this.handleChange} />
 
                     <View>
                         <Text style={fetchJob.title}>Follower range</Text>
@@ -171,10 +163,10 @@ class ViewFetchJob extends React.Component {
                                 <View style={fetchJob.rangeBox}>
                                     <Text
                                         // @ts-ignore
-                                        style={fetchJob.lblRange}>{this.formatNumber(follower_min)}</Text>
+                                        style={fetchJob.lblRange}>{this.formatNumber(fetch_job.details.criteria.follower_min)}</Text>
                                     <Text
                                         // @ts-ignore
-                                        style={fetchJob.lblRange}>{this.formatNumber(follower_max)}</Text>
+                                        style={fetchJob.lblRange}>{this.formatNumber(fetch_job.details.criteria.follower_max)}</Text>
                                 </View>
                                 <View style={fetchJob.rangeSlider}>
                                     {index == 0 && <Slider min={min} max={max} step={100} onChange={this.onChangeSlider} />}
@@ -215,9 +207,9 @@ class ViewFetchJob extends React.Component {
                                     <View style={fetchJob.none}><Text style={fetchJob.data}>None found</Text></View>}
 
                             </View>}
-                        {/* {fetch_job.details.status == PENDING && <View style={fetchJob.button}><TextButton style={fetchJob.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>} */}
+                        {fetch_job.details.status == PENDING && <View style={fetchJob.button}><TextButton style={fetchJob.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                     </View >
-                </View>
+                </View >
             </View>
         );
     }
@@ -249,8 +241,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     pending: fetchPending,
     error: fetchError,
     success: fetchSuccess,
-    updateStateFetchJob: updateStateFetchJob
+    updateFetchJob: updateFetchJob,
 }, dispatch);
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewFetchJob)
+export default connect(mapStateToProps, mapDispatchToProps)(FetchJobView)

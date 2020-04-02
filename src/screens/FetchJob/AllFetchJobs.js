@@ -41,7 +41,7 @@ class AllFetchJobs extends React.Component {
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
         setCurrentFetchJob(fj)
-        this.props.navigation.navigate('ViewFetchJob')
+        this.props.navigation.navigate('FetchJobView')
     }
 
     deleteFetchJob = fj => {

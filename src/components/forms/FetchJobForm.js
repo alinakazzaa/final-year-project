@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Keyboard } from 'react-native';
+import { View, Keyboard, Text } from 'react-native';
 import PropTypes from 'prop-types'
 // @ts-ignore
 import t from 'tcomb-form-native';
@@ -46,63 +46,46 @@ const options = {
 
 export default class FetchJobForm extends React.Component {
 
-    state = {
-        value: {}
-    }
-
-    componentDidMount() {
-        const { tag, fetch_job } = this.props
-        let { value } = this.state
-        let new_value
-
-        if (tag) {
-            new_value = { ...value, hashtag: tag }
-            this.setState({ value: new_value })
-        } else if (fetch_job) {
-            new_value = {
-                hashtag: fetch_job.details.hashtag,
-                no_profiles: fetch_job.details.no_profiles,
-                follower_min: fetch_job.details.criteria.follower_min,
-                follower_max: fetch_job.details.criteria.follower_max,
-                date_created: fetch_job.details.date_created
-
-            }
-            this.setState({ value: new_value })
-        }
-    }
-
-    onChange(val) {
-        let fj = val
-        if (fj.hashtag !== null && fj.hashtag != '')
-            fj.hashtag = fj.hashtag.toLowerCase()
-
-        this.setState({ value: { ...this.state.value, ...fj } })
-    }
-
     render() {
-        const { value } = this.state
-        const { tag } = this.props
+        const { tag, fetch_job, handleChange } = this.props
+        const fetch_job_details = { ...fetch_job.details }
         return (
-            <View style={fetchJob.inputBox}>
-                <Form
-                    ref={c => this._form = c}
-                    type={FetchJob}
-                    options={options}
-                    value={value}
-                    onChange={(value) => this.onChange(value)}
-                    onBlur={Keyboard.dismiss}
-                />
+            <View>
+                <View style={fetchJob.header}>
+                    <Text style={fetchJob.title}>Details</Text>
+                </View>
+                {/* <View style={fetchJob.info}>
+                            <Text style={fetchJob.text}>Search users by hashtag they recently used in their media</Text>
+                        </View>
+                        {!tag && <View style={fetchJob.info}>
+                            <Text style={fetchJob.text}>Avoid overly specific tags</Text></View>} */}
+                {/* <View style={fetchJob.info}><Text style={fetchJob.text}>To consider: the more influencers you fetch, the longer it will take</Text></View> */}
+                <View style={fetchJob.detailsBox}>
+                    <View style={fetchJob.labelsCol}>
+                        <Text style={fetchJob.label}>Hashtag</Text>
+                        <Text style={fetchJob.label}>Date created</Text>
+                        <Text style={fetchJob.label}>No. of Profiles</Text>
+                    </View>
+                    <View style={fetchJob.inputBox}>
+                        <Form
+                            ref={c => this._form = c}
+                            type={FetchJob}
+                            options={options}
+                            value={fetch_job_details}
+                            onChange={(value) => handleChange(value)}
+                            onBlur={Keyboard.dismiss}
+                        />
+                    </View>
+                </View>
             </View>
+
         )
     }
 }
 
 FetchJobForm.propTypes = {
-    fetch_job: PropTypes.object
-}
-
-FetchJobForm.defaultProps = {
-    fetch_job: null,
+    fetch_job: PropTypes.object.isRequired,
+    handleChange: PropTypes.func.isRequired
 }
 
 
