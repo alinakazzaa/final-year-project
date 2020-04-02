@@ -44,16 +44,6 @@ export default class ProjectForm extends React.Component {
         }
     }
 
-    componentDidMount() {
-        const { project_value } = this.props
-
-        if (project_value) {
-            this.setState({ value: { ...project_value } })
-        } else {
-
-        }
-    }
-
     render() {
         const { project_value, handleChange, toggleSwitch } = this.props
 
