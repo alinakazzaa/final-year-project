@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Keyboard } from 'react-native';
+import { View, Keyboard, Text } from 'react-native';
 import PropTypes from 'prop-types'
 // @ts-ignore
 import t from 'tcomb-form-native';
 import { project, projectForm } from '../../screens/Project/styles/project.styles';
+import { SwitchItem } from '../switch/Switch';
 
 const Form = t.form.Form;
 
@@ -27,7 +28,6 @@ const options = {
         },
         description: {
             multiline: true,
-            numberOfLines: 3
         },
     },
     stylesheet: formStyles,
@@ -35,38 +35,56 @@ const options = {
 
 
 export default class ProjectForm extends React.Component {
-
-    state = {
-        value: {}
+    constructor(props) {
+        super(props)
     }
 
     componentDidMount() {
-        const { project } = this.props
-        if (project) {
-            this.setState({ value: project })
+        const { project_value } = this.props
+
+        if (project_value) {
+            this.setState({ value: { ...project_value } })
         }
     }
 
-    onChange(value) {
-        let updated_project = { ...value }
-        this.setState({ value: updated_project });
-        this.props.onChange(updated_project)
+    toggleSwitch = () => {
+        const { active } = this.state
+        this.setState({ active: !active })
+
     }
 
-
-
     render() {
-        const { value } = this.state
+        const { project_value, handleChange } = this.props
+
         return (
-            <View style={project.inputBox}>
-                <Form
-                    ref={c => this._form = c}
-                    type={Project}
-                    options={options}
-                    value={value}
-                    onChange={(value) => this.onChange(value)}
-                    onBlur={Keyboard.dismiss}
-                />
+            <View>
+                <View>
+                    <View style={project.header}>
+                        <Text style={project.title}>Details</Text>
+                    </View>
+                    <View style={project.detailsBox}>
+                        <View style={project.labelsCol}>
+                            <Text style={project.label}>Title</Text>
+                            <Text style={project.label}>Date created</Text>
+                            <Text style={project.label}>Description</Text>
+                        </View>
+                        <View style={project.inputBox}>
+                            <Form
+                                ref={c => this._form = c}
+                                type={Project}
+                                options={options}
+                                value={project_value}
+                                onChange={(value) => handleChange(value)}
+                                onBlur={Keyboard.dismiss}
+                            />
+                        </View>
+                    </View>
+                    {/* <View style={project.switchView}>
+                        <Text style={project.labelActive}>Active</Text>
+                        <SwitchItem value={project_value.active} onChange={this.toggleSwitch} />
+                    </View> */}
+                </View>
+
             </View>
         )
     }

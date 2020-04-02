@@ -37,7 +37,7 @@ class AllProjects extends React.Component {
 
     goToProject = proj => {
         let { setCurrentProject } = this.props
-        this.props.navigation.navigate('ViewProject')
+        this.props.navigation.navigate('ProjectView')
         setCurrentProject(proj)
     }
 

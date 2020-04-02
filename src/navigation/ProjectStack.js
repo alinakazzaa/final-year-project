@@ -1,7 +1,7 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import AllProjects from '../screens/Project/AllProjects';
 import AddProject from '../screens/Project/AddProject';
-import ViewProject from '../screens/Project/ViewProject';
+import ProjectView from '../screens/Project/ProjectView';
 import AllCollabs from '../screens/Collab/AllCollabs';
 import AddCollab from '../screens/Collab/AddCollab';
 import ViewCollab from '../screens/Collab/ViewCollab';
@@ -13,7 +13,7 @@ import ViewInfluencer from '../screens/Influencer/ViewInfluencer';
 
 export const ProjectStack = createStackNavigator({
     AllProjects: { screen: AllProjects },
-    ViewProject: { screen: ViewProject },
+    ProjectView: { screen: ProjectView },
     AddProject: { screen: AddProject },
     AllFetchJobs: { screen: AllFetchJobs },
     ViewFetchJob: { screen: ViewFetchJob },
