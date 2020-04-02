@@ -81,7 +81,7 @@ export const input = {
     fontWeight: fonts.WEIGHT_LEIGHT,
     height: height.MEDIUM,
     width: width.LARGE,
-    borderColor: colors.TERTIARY,
+    borderColor: colors.BORDER,
     borderBottomWidth: 1,
 }
 
