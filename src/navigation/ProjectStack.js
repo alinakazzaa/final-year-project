@@ -5,7 +5,7 @@ import ProjectView from '../screens/Project/ProjectView';
 import AllCollabs from '../screens/Collab/AllCollabs';
 import AddCollab from '../screens/Collab/AddCollab';
 import ViewCollab from '../screens/Collab/ViewCollab';
-import ViewFetchJob from '../screens/FetchJob/ViewFetchJob';
+import FetchJobView from '../screens/FetchJob/FetchJobView';
 import AllFetchJobs from '../screens/FetchJob/AllFetchJobs';
 import AddFetchJob from '../screens/FetchJob/AddFetchJob';
 import AllInfluencers from '../screens/Influencer/AllInfluencers';
@@ -16,7 +16,7 @@ export const ProjectStack = createStackNavigator({
     ProjectView: { screen: ProjectView },
     AddProject: { screen: AddProject },
     AllFetchJobs: { screen: AllFetchJobs },
-    ViewFetchJob: { screen: ViewFetchJob },
+    FetchJobView: { screen: FetchJobView },
     AddFetchJob: { screen: AddFetchJob },
     AllInfluencers: { screen: AllInfluencers },
     ViewInfluencer: { screen: ViewInfluencer },
