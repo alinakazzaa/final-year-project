@@ -55,6 +55,11 @@ class ProjectView extends React.Component {
         navigation.goBack()
     }
 
+    toggleSwitch = value => {
+        const { project_value } = this.state
+        this.setState({ project_value: { ...project_value, active: value } })
+    }
+
     componentWillUnmount() {
         const { clearCurrentProject, clearFetchJobState } = this.props
         clearCurrentProject()
@@ -73,7 +78,7 @@ class ProjectView extends React.Component {
                     right={<TextButton containerStyle={project.saveBtn} onPress={this.handleSubmit} title="Save" />}
                 />
                 <View style={project.viewContainer}>
-                    <ProjectForm handleChange={this.handleChange} project_value={project_value} />
+                    <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
                     <View style={project.collabBox}>
                         <View style={project.header}>
                             <Text style={project.title}>Collaborations</Text>

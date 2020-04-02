@@ -37,6 +37,11 @@ const options = {
 export default class ProjectForm extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            value: {
+                active: false
+            }
+        }
     }
 
     componentDidMount() {
@@ -44,17 +49,13 @@ export default class ProjectForm extends React.Component {
 
         if (project_value) {
             this.setState({ value: { ...project_value } })
+        } else {
+
         }
     }
 
-    toggleSwitch = () => {
-        const { active } = this.state
-        this.setState({ active: !active })
-
-    }
-
     render() {
-        const { project_value, handleChange } = this.props
+        const { project_value, handleChange, toggleSwitch } = this.props
 
         return (
             <View>
@@ -79,10 +80,10 @@ export default class ProjectForm extends React.Component {
                             />
                         </View>
                     </View>
-                    {/* <View style={project.switchView}>
+                    <View style={project.switchView}>
                         <Text style={project.labelActive}>Active</Text>
-                        <SwitchItem value={project_value.active} onChange={this.toggleSwitch} />
-                    </View> */}
+                        <SwitchItem value={project_value.active || false} onChange={value => toggleSwitch(value)} />
+                    </View>
                 </View>
 
             </View>
