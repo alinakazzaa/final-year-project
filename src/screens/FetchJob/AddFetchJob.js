@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, YellowBox } from 'react-native';
+import { View, YellowBox, Text } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -8,7 +8,7 @@ import { AppHeader } from '../../layouts/Header';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DATE_TODAY } from '../../constants/TodayDate'
-import { addFetchJob } from '../../actions/fetchJob';
+import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob';
 import { fetchJob } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton';
 import { TextButton } from '../../components/buttons/TextButton';
@@ -16,23 +16,46 @@ import { TextButton } from '../../components/buttons/TextButton';
 
 class AddFetchJob extends React.Component {
 
+    state = {
+        fetch_job: {
+            id: '',
+            title: '',
+            hashtag: '',
+            criteria: { follower_min: 0, follower_max: 0 },
+            status: ''
+        },
+    }
+
     static navigationOptions = {
         headerShown: false
     }
 
-    handleSubmit = fetch_job => {
-        const { user, current_project, addFetchJob } = this.props
+    componentDidMount() {
+        if (this.props.navigation.state.params)
+            this.setState({ fetch_job: { hashtag: this.props.navigation.state.params.tag } })
 
-        fetch_job.date_created = DATE_TODAY
-        fetch_job.title = 'Fetch: ' + fetch_job.hashtag
+    }
 
+    handleChange = updated_fetch_job => {
+        this.setState({ fetch_job: updated_fetch_job })
+    }
+
+    handleSubmit = () => {
+        const { fetch_job } = this.state
+        const { user, current_project, addFetchJob, setCurrentFetchJob } = this.props
+        fetch_job.title = 'Hashtag search: ' + fetch_job.hashtag
         addFetchJob(user.id, current_project.id, fetch_job)
+        setCurrentFetchJob({ details: fetch_job })
         this.props.navigation.goBack()
+        this.props.navigation.navigate('FetchJobView')
+    }
+
+    componentWillUnmount() {
+        this.setState({ fetch_job: {} })
     }
 
     render() {
-
-        const { tag } = this.props.navigation.state.params || null
+        const { fetch_job } = this.state
 
         return (
             <View>
@@ -41,8 +64,14 @@ class AddFetchJob extends React.Component {
                     right={<TextButton containerStyle={fetchJob.saveBtn} onPress={this.handleSubmit} title="Save" />}
                     gradient={true}
                 />
-                <View style={fetchJob.container}>
-                    <FetchJobForm goBack={this.props.navigation.goBack} tag={tag} handleSubmit={this.handleSubmit} />
+                <View style={fetchJob.addContainer}>
+                    <View style={fetchJob.info}>
+                        <Text style={fetchJob.text}>Search users by hashtag</Text>
+                    </View>
+                    {/* {!hash_tag && <View style={fetchJob.info}>
+                        <Text style={fetchJob.text}>Avoid overly specific tags</Text></View>} */}
+                    <FetchJobForm fetch_job={fetch_job} handleChange={this.handleChange} />
+                    <View style={fetchJob.info}><Text style={fetchJob.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         );
@@ -56,7 +85,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    addFetchJob: addFetchJob
+    addFetchJob: addFetchJob,
+    setCurrentFetchJob: setCurrentFetchJob
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)

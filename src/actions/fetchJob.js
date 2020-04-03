@@ -1,6 +1,7 @@
 import { db } from '../database/config/db';
 import { DB_PROJECT_FETCH_JOBS_REF, SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, CLEAR_CURRENT_FETCH_JOB, CLEAR_FETCH_JOB_STATE } from '../constants';
 import { SET_FETCH_JOBS_ERROR, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING } from '../constants/response/types';
+import { DATE_TODAY } from '../constants/TodayDate';
 
 
 export const getProjectFetchJobs = (user_id, project_id) => {
@@ -59,14 +60,11 @@ export const clearFetchJobState = () => {
 
 //DB
 export const addFetchJob = (user_id, project_id, fetch_job) => {
-    console.log(project_id)
     let fj_obj = {
         details: {
             ...fetch_job,
-            hashtag: fetch_job.hashtag,
-            criteria: { ...fetch_job.criteria },
+            date_created: DATE_TODAY,
             status: PENDING,
-            response: {},
             user_id: user_id,
             project_id: project_id,
             id: ''
@@ -110,6 +108,10 @@ export const removeFetchJob = fetch_job => {
         type: REMOVE_FETCH_JOB,
         fetch_job: fetch_job
     }
+}
+
+export const formatNumber = num => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 

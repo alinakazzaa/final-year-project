@@ -18,14 +18,8 @@ import { fetchPending, fetchError, fetchSuccess, clearRunningFetchJob } from '..
 import { fetchNextPage } from '../../web/fetchNextPage';
 import { GET_MEDIA_NEXT_PAGE_COMPLETED, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_BY_HASHTAG_SUCCESS, COMPLETED_GET_ALL_USERS } from '../../constants/response/types';
 import { fetchJob } from './styles/fetchJob.styles'
-import { Input } from 'react-native-elements';
-import { base, colors } from '../../styles/base';
 import { BackButton } from '../../components/buttons/BackButton';
 import FetchJobForm from '../../components/forms/FetchJobForm';
-import ProjectForm from '../../components/forms/ProjectForm';
-import Slider from '../../components/slider/Slider'
-import { criteria } from '../../constants/Criteria';
-import TabView from '../../components/tabview/TabView';
 
 class FetchJobView extends React.Component {
 
@@ -40,9 +34,6 @@ class FetchJobView extends React.Component {
                 status: ''
             }
         },
-        index: 0,
-        min: criteria.micro.min,
-        max: criteria.micro.max
     }
 
     static navigationOptions = {
@@ -54,14 +45,14 @@ class FetchJobView extends React.Component {
 
         this.setState({ fetch_job: { ...current_fetch_job } })
 
-        if (current_fetch_job.details.status == COMPLETED && current_fetch_job.influencers.success.length > 0) {
-            getAllInfluencers(current_fetch_job)
-            this.setState({ have_influencers: true })
-        }
+        // if (current_fetch_job.details.status == COMPLETED && current_fetch_job.influencers.success.length > 0) {
+        //     getAllInfluencers(current_fetch_job)
+        //     this.setState({ have_influencers: true })
+        // }
 
-        if (current_fetch_job.details.id == running_fetch.details.id) {
-            this.setState({ fetch_job: { ...running_fetch } })
-        }
+        // if (current_fetch_job.details.id == running_fetch.details.id) {
+        //     this.setState({ fetch_job: { ...running_fetch } })
+        // }
     }
 
     componentDidUpdate(prev) {
@@ -98,50 +89,23 @@ class FetchJobView extends React.Component {
         this.props.navigation.goBack()
     }
 
-    onChangeSlider = (min, max) => {
-        const { fetch_job } = this.state
-        this.setState({ fetch_job: { criteria: { follower_min: min, follower_max: max }, ...fetch_job } })
-    }
-
     handleChange = updated_fetch_job => {
         const { fetch_job } = this.state
-        this.setState({ fetch_job: { ...fetch_job, details: updated_fetch_job } })
+        this.setState({ fetch_job: { ...fetch_job, details: { ...fetch_job.details, ...updated_fetch_job } } })
     }
 
 
     handleSubmit = () => {
-        const { fetch_job, follower_max, follower_min } = this.state
+        const { fetch_job } = this.state
         const { updateFetchJob } = this.props
         updateFetchJob(fetch_job)
         this.props.navigation.goBack()
     }
 
-    changeTab = index => {
-        let min, max
-
-        if (index == 0) {
-            min = criteria.micro.min
-            max = criteria.micro.max
-        } else if (index == 1) {
-            min = criteria.midi.min
-            max = criteria.midi.max
-        } else if (index == 2) {
-            min = criteria.macro.min
-            max = criteria.macro.max
-        }
-
-        this.setState({ index, follower_min: min, follower_max: max })
-    }
-
-
-    formatNumber = num => {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
     render() {
-        const { have_influencers, index, min, max, fetch_job } = this.state
+        const { have_influencers, fetch_job } = this.state
         const { influencers, progress_percent } = this.props
-
+        console.log(fetch_job)
         return (
             <View>
                 <AppHeader
@@ -150,67 +114,36 @@ class FetchJobView extends React.Component {
                     right={<TextButton containerStyle={fetchJob.saveBtn} onPress={this.handleSubmit} title="Save" />}
                 />
                 <View style={fetchJob.viewContainer}>
-                    <FetchJobForm goBack={this.props.navigation.goBack} tag='' fetch_job={fetch_job} handleChange={this.handleChange} />
-
-                    <View>
-                        <Text style={fetchJob.title}>Follower range</Text>
-                        <View style={fetchJob.itemRowRange}>
-                            {fetch_job.details.status == PENDING && <Text
-                                // @ts-ignore
-                                style={fetchJob.title}>Choose influencer audience range</Text>}
-                            {fetch_job.details.status == PENDING && <View>
-                                <TabView index={index} color={colors.SECONDARY} width='30%' titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
-                                <View style={fetchJob.rangeBox}>
-                                    <Text
-                                        // @ts-ignore
-                                        style={fetchJob.lblRange}>{this.formatNumber(fetch_job.details.criteria.follower_min)}</Text>
-                                    <Text
-                                        // @ts-ignore
-                                        style={fetchJob.lblRange}>{this.formatNumber(fetch_job.details.criteria.follower_max)}</Text>
-                                </View>
-                                <View style={fetchJob.rangeSlider}>
-                                    {index == 0 && <Slider min={min} max={max} step={100} onChange={this.onChangeSlider} />}
-                                    {index == 1 && <Slider min={min} max={max} step={1000} onChange={this.onChangeSlider} />}
-                                    {index == 2 && <Slider min={min} max={max} step={10000} onChange={this.onChangeSlider} />}
-                                </View>
-                            </View>}
-                            {fetch_job.details.status == IN_PROGRESS || fetch_job.details.status == COMPLETED &&
-                                <View style={fetchJob.rangeBox}>
-                                    <Text style={fetchJob.title}>{this.formatNumber(fetch_job.details.criteria.follower_min)}</Text>
-                                    <Text style={fetchJob.title}>{this.formatNumber(fetch_job.details.criteria.follower_max)}</Text>
-                                </View>
-                            }
-                        </View>
-                        <View style={fetchJob.middle}>
-                            <View style={fetchJob.itemRow}>
-                                <Text style={fetchJob.lbl}>Status</Text>
-                                <View style={fetchJob.statusView}>
-                                    {fetch_job.details.status == IN_PROGRESS &&
-                                        <View style={fetchJob.progress}>
-                                            <Bar progress={progress_percent} width={150} height={15} color="#5d4d50" />
-                                        </View>
-                                    }
-                                </View>
-                                <Text style={fetchJob.statusData}>{fetch_job.details.status}</Text>
+                    <FetchJobForm goBack={this.props.navigation.goBack} fetch_job={{ ...fetch_job.details }} handleChange={this.handleChange} />
+                    <View style={fetchJob.middle}>
+                        <View style={fetchJob.itemRow}>
+                            <Text style={fetchJob.lbl}>Status</Text>
+                            <View style={fetchJob.statusView}>
+                                {fetch_job.details !== null && fetch_job.details.status == IN_PROGRESS &&
+                                    <View style={fetchJob.progress}>
+                                        <Bar progress={progress_percent} width={150} height={15} color="#5d4d50" />
+                                    </View>
+                                }
                             </View>
+                            <Text style={fetchJob.statusData}>{fetch_job.details.status}</Text>
                         </View>
-                        {fetch_job.details.status == COMPLETED &&
-                            fetch_job.response.type == COMPLETED_GET_ALL_USERS &&
-                            <View style={fetchJob.bottomView}>
-                                <View style={fetchJob.influencers}>
-                                    <Text style={fetchJob.title}>Influencers</Text>
-                                    <TouchableOpacity style={fetchJob.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
-                                        <Text style={fetchJob.title}>View All</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                {have_influencers ? <InfluencerListFjView influencers={influencers} /> :
-                                    <View style={fetchJob.none}><Text style={fetchJob.data}>None found</Text></View>}
+                    </View>
+                    {fetch_job.details !== null && fetch_job.details.status == COMPLETED &&
+                        fetch_job.response.type == COMPLETED_GET_ALL_USERS &&
+                        <View style={fetchJob.bottomView}>
+                            <View style={fetchJob.influencers}>
+                                <Text style={fetchJob.title}>Influencers</Text>
+                                <TouchableOpacity style={fetchJob.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
+                                    <Text style={fetchJob.title}>View All</Text>
+                                </TouchableOpacity>
+                            </View>
+                            {have_influencers ? <InfluencerListFjView influencers={influencers} /> :
+                                <View style={fetchJob.none}><Text style={fetchJob.data}>None found</Text></View>}
 
-                            </View>}
-                        {fetch_job.details.status == PENDING && <View style={fetchJob.button}><TextButton style={fetchJob.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
-                    </View >
+                        </View>}
+                    {fetch_job.details !== null && fetch_job.details.status == PENDING && <View style={fetchJob.button}><TextButton style={fetchJob.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
                 </View >
-            </View>
+            </View >
         );
     }
 }

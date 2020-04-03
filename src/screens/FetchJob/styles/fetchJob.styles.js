@@ -10,12 +10,6 @@ export const fetchJob = StyleSheet.create(
             paddingLeft: spacing.MEDIUM,
             backgroundColor: 'transparent',
         },
-        formContainer: {
-            alignSelf: 'center',
-            ...formContainer,
-            marginTop: '5%',
-            backgroundColor: colors.WHITE,
-        },
         info: {
             marginTop: spacing.SMALL,
             marginBottom: spacing.LARGE
@@ -55,12 +49,10 @@ export const fetchJob = StyleSheet.create(
             borderBottomColor: '#b3b3cc',
         },
         middle: {
-            paddingTop: 10,
+            // paddingTop: spacing.MEDIUM,
+            paddingBottom: spacing.SMALL,
             display: 'flex',
             justifyContent: 'space-between',
-            borderBottomWidth: 0.3,
-            borderBottomColor: '#b3b3cc',
-            paddingBottom: 20
         },
         listHead: {
             flexDirection: 'row',
@@ -75,6 +67,8 @@ export const fetchJob = StyleSheet.create(
         },
         infoContainer: {
             ...infoContainer,
+            flexWrap: 'wrap',
+            width: dimensions.fullWidth * 0.7
         },
         progress: {
 
@@ -160,7 +154,7 @@ export const fetchJob = StyleSheet.create(
             ...inputLabel,
             fontWeight: fonts.WEIGHT_HEAVY,
             borderBottomWidth: 1,
-            borderColor: colors.BORDER
+            borderColor: colors.BORDER,
         },
         listItem: {
             display: 'flex',
@@ -239,9 +233,8 @@ export const fetchJob = StyleSheet.create(
             paddingTop: spacing.MEDIUM,
             paddingBottom: spacing.MEDIUM,
             borderTopWidth: 1,
-            borderBottomWidth: 1,
             borderColor: colors.BORDER,
-            marginBottom: spacing.MEDIUM
+            // marginBottom: spacing.MEDIUM
         },
         inputBox: {
             marginRight: spacing.LARGE
@@ -306,7 +299,7 @@ export const fetchJob = StyleSheet.create(
             justifyContent: 'space-between'
         },
         labelsCol: {
-
+            marginTop: spacing.SMALL
         },
         label: {
             ...inputViewLabel
@@ -315,15 +308,6 @@ export const fetchJob = StyleSheet.create(
             ...inputViewLabel,
             marginBottom: spacing.MEDIUM,
 
-        },
-        title: {
-            ...inputLabel,
-            fontWeight: fonts.WEIGHT_HEAVY,
-            borderBottomWidth: 1,
-            borderColor: colors.BORDER
-        },
-        text: {
-            ...inputViewLabel
         },
         cancelBtn: {
             paddingRight: spacing.LARGE

@@ -4,6 +4,12 @@ import PropTypes from 'prop-types'
 // @ts-ignore
 import t from 'tcomb-form-native';
 import { fetchJob, fetchJobForm } from '../../screens/FetchJob/styles/fetchJob.styles';
+import { formatNumber } from '../../actions/fetchJob'
+import TabView from '../tabview/TabView';
+import { colors } from '../../styles/base';
+import Slider from '../slider/Slider';
+import { criteria } from '../../constants/Criteria';
+import { IN_PROGRESS, COMPLETED } from '../../constants';
 
 const Form = t.form.Form;
 
@@ -45,21 +51,44 @@ const options = {
 
 
 export default class FetchJobForm extends React.Component {
+    state = {
+        index: 0,
+        min: criteria.micro.min,
+        max: criteria.micro.max
+    }
+
+    onChangeSlider = (min, max) => {
+        const { handleChange, fetch_job } = this.props
+        const updated_fetch_job = { ...fetch_job, criteria: { follower_min: min, follower_max: max } }
+        handleChange(updated_fetch_job)
+    }
+
+    changeTab = index => {
+        let min, max
+
+        if (index == 0) {
+            min = criteria.micro.min
+            max = criteria.micro.max
+        } else if (index == 1) {
+            min = criteria.midi.min
+            max = criteria.midi.max
+        } else if (index == 2) {
+            min = criteria.macro.min
+            max = criteria.macro.max
+        }
+
+        this.setState({ index, follower_min: min, follower_max: max })
+    }
 
     render() {
-        const { tag, fetch_job, handleChange } = this.props
-        const fetch_job_details = { ...fetch_job.details }
+        const { fetch_job, handleChange } = this.props
+        const { index, min, max } = this.state
+
         return (
             <View>
                 <View style={fetchJob.header}>
                     <Text style={fetchJob.title}>Details</Text>
                 </View>
-                {/* <View style={fetchJob.info}>
-                            <Text style={fetchJob.text}>Search users by hashtag they recently used in their media</Text>
-                        </View>
-                        {!tag && <View style={fetchJob.info}>
-                            <Text style={fetchJob.text}>Avoid overly specific tags</Text></View>} */}
-                {/* <View style={fetchJob.info}><Text style={fetchJob.text}>To consider: the more influencers you fetch, the longer it will take</Text></View> */}
                 <View style={fetchJob.detailsBox}>
                     <View style={fetchJob.labelsCol}>
                         <Text style={fetchJob.label}>Hashtag</Text>
@@ -71,14 +100,32 @@ export default class FetchJobForm extends React.Component {
                             ref={c => this._form = c}
                             type={FetchJob}
                             options={options}
-                            value={fetch_job_details}
+                            value={fetch_job}
                             onChange={(value) => handleChange(value)}
                             onBlur={Keyboard.dismiss}
                         />
                     </View>
                 </View>
+                <View style={fetchJob.middle}>
+                    <Text style={fetchJob.title}>Follower range</Text>
+                    {fetch_job.status != COMPLETED && <View style={fetchJob.itemRowRange}>
+                        <TabView index={index} color={colors.SECONDARY} width='30%' titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
+                        <View style={fetchJob.rangeBox}>
+                            <Text
+                                // @ts-ignore
+                                style={fetchJob.lblRange}>{formatNumber(fetch_job.criteria.follower_min)}</Text>
+                            <Text
+                                // @ts-ignore
+                                style={fetchJob.lblRange}>{formatNumber(fetch_job.criteria.follower_max)}</Text>
+                        </View>
+                        <View style={fetchJob.rangeSlider}>
+                            {index == 0 && <Slider min={min} max={max} step={100} onChange={this.onChangeSlider} />}
+                            {index == 1 && <Slider min={min} max={max} step={1000} onChange={this.onChangeSlider} />}
+                            {index == 2 && <Slider min={min} max={max} step={10000} onChange={this.onChangeSlider} />}
+                        </View>
+                    </View>}
+                </View>
             </View>
-
         )
     }
 }
