@@ -65,6 +65,7 @@ export default class FetchJobForm extends React.Component {
 
     changeTab = index => {
         let min, max
+        const { handleChange, fetch_job } = this.props
 
         if (index == 0) {
             min = criteria.micro.min
@@ -77,7 +78,10 @@ export default class FetchJobForm extends React.Component {
             max = criteria.macro.max
         }
 
-        this.setState({ index, follower_min: min, follower_max: max })
+        const updated_fetch_job = { ...fetch_job, criteria: { follower_min: min, follower_max: max } }
+
+        handleChange(updated_fetch_job)
+        this.setState({ index, min: min, max: max })
     }
 
     render() {
@@ -119,9 +123,27 @@ export default class FetchJobForm extends React.Component {
                                 style={fetchJob.lblRange}>{formatNumber(fetch_job.criteria.follower_max)}</Text>
                         </View>
                         <View style={fetchJob.rangeSlider}>
-                            {index == 0 && <Slider min={min} max={max} step={100} onChange={this.onChangeSlider} />}
-                            {index == 1 && <Slider min={min} max={max} step={1000} onChange={this.onChangeSlider} />}
-                            {index == 2 && <Slider min={min} max={max} step={10000} onChange={this.onChangeSlider} />}
+                            {index == 0 && <Slider
+                                min={min}
+                                max={max}
+                                initial_min={fetch_job.criteria.follower_min}
+                                initial_max={fetch_job.criteria.follower_max}
+                                step={100}
+                                onChange={this.onChangeSlider} />}
+                            {index == 1 && <Slider
+                                min={min}
+                                max={max}
+                                initial_min={fetch_job.criteria.follower_min}
+                                initial_max={fetch_job.criteria.follower_max}
+                                step={1000}
+                                onChange={this.onChangeSlider} />}
+                            {index == 2 && <Slider
+                                min={min}
+                                max={max}
+                                initial_min={fetch_job.criteria.follower_min}
+                                initial_max={fetch_job.criteria.follower_max}
+                                step={10000}
+                                onChange={this.onChangeSlider} />}
                         </View>
                     </View>}
                 </View>
