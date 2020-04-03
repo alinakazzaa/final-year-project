@@ -21,7 +21,7 @@ class AddFetchJob extends React.Component {
             id: '',
             title: '',
             hashtag: '',
-            criteria: { follower_min: 0, follower_max: 0 },
+            criteria: { follower_min: 0, follower_max: 100000 },
             status: ''
         },
     }
