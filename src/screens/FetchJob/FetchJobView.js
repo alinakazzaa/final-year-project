@@ -105,7 +105,7 @@ class FetchJobView extends React.Component {
     render() {
         const { have_influencers, fetch_job } = this.state
         const { influencers, progress_percent } = this.props
-        console.log(fetch_job)
+
         return (
             <View>
                 <AppHeader
