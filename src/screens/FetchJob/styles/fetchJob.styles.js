@@ -53,6 +53,9 @@ export const fetchJob = StyleSheet.create(
             paddingBottom: spacing.SMALL,
             display: 'flex',
             justifyContent: 'space-between',
+            borderBottomColor: colors.BORDER,
+            borderBottomWidth: 1,
+            marginBottom: spacing.MEDIUM
         },
         listHead: {
             flexDirection: 'row',
@@ -125,17 +128,6 @@ export const fetchJob = StyleSheet.create(
             alignSelf: 'center',
             flexWrap: 'wrap'
         },
-        startBtn: {
-            fontSize: 24,
-            color: '#493649',
-            borderWidth: 3,
-            borderColor: '#493649',
-            borderRadius: 10,
-            width: 140,
-            height: 40,
-            textAlign: 'center',
-            marginTop: 50
-        },
         none: {
             justifyContent: 'center',
             alignItems: 'center',
@@ -148,7 +140,7 @@ export const fetchJob = StyleSheet.create(
         },
         statusView: {
             flexDirection: 'row',
-            justifyContent: 'space-evenly'
+            justifyContent: 'space-evenly',
         },
         title: {
             ...inputLabel,
@@ -309,9 +301,6 @@ export const fetchJob = StyleSheet.create(
             marginBottom: spacing.MEDIUM,
 
         },
-        cancelBtn: {
-            paddingRight: spacing.LARGE
-        },
         buttonText: {
             ...button.btnText,
             fontSize: fonts.SMALL * 0.9,
@@ -329,8 +318,17 @@ export const fetchJob = StyleSheet.create(
             display: 'flex',
             width: '10%'
         },
+        btnView: {
+            alignItems: 'center',
+            marginTop: spacing.LARGE
+        },
         saveBtn: {
             ...button.btnContainer
+        },
+        startBtn: {
+            ...button.borderBtn,
+            backgroundColor: colors.PRIMARY,
+            margin: spacing.MEDIUM,
         },
         noneMsg: {
             padding: spacing.LARGE
