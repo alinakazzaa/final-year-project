@@ -90,15 +90,18 @@ export const addFetchJob = (user_id, project_id, fetch_job) => {
     }
 }
 
-export const updateFetchJob = fetch_job => {
-    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
-        ...fetch_job
-    });
+export const updateStateFetchJob = fetch_job => {
 
     return {
         type: UPDATE_FETCH_JOB,
         fetch_job: fetch_job
     }
+}
+
+export const updateFetchJob = fetch_job => {
+    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
+        ...fetch_job
+    });
 }
 
 export const removeFetchJob = fetch_job => {
