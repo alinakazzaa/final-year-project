@@ -1,4 +1,4 @@
-import { GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_USER_SUCCESS, GET_USER_ERROR, GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS } from "../constants/response/types"
+import { GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_USER_SUCCESS, GET_USER_ERROR, GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, COMPLETED_GET_ALL_USERS } from "../constants/response/types"
 import { SET_RUNNING_FETCH, CLEAR_RUNNING_FETCH } from "../constants"
 
 export const fetchPending = (action_type, fetch_job) => {
@@ -46,6 +46,13 @@ export const fetchSuccess = response => {
         return {
             ...running,
             id: response.id
+        }
+    } else if (response.type == COMPLETED_GET_ALL_USERS) {
+
+        return {
+            ...running,
+            end_cursor: response.end_cursor,
+            has_next_page: response.has_next_page,
         }
     } else if (response.type == GET_USER_MEDIA_SUCCESS) {
         console.log(response.media)
