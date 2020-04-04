@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView';
 import { getAllInfluencers } from '../../actions/influencer';
 import { TextButton } from '../../components/buttons/TextButton';
-import { clearCurrentFetchJob, updateFetchJob } from '../../actions/fetchJob';
+import { clearCurrentFetchJob, updateFetchJob, updateStateFetchJob } from '../../actions/fetchJob';
 import { fetchMedia } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress';
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants';
@@ -20,6 +20,7 @@ import { GET_MEDIA_NEXT_PAGE_COMPLETED, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_B
 import { fetchJob } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton';
 import FetchJobForm from '../../components/forms/FetchJobForm';
+import { base } from '../../styles/base';
 
 class FetchJobView extends React.Component {
 
@@ -56,9 +57,9 @@ class FetchJobView extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { running_fetch, updateFetchJob, pending, success, error } = this.props
+        const { running_fetch, updateStateFetchJob, pending, success, error } = this.props
         if (running_fetch.pending !== null && prev.running_fetch.details.status !== running_fetch.details.status) {
-            updateFetchJob(running_fetch)
+            updateStateFetchJob(running_fetch)
         }
 
         if (running_fetch.response !== null)
@@ -97,14 +98,13 @@ class FetchJobView extends React.Component {
 
     handleSubmit = () => {
         const { fetch_job } = this.state
-        const { updateFetchJob } = this.props
         updateFetchJob(fetch_job)
         this.props.navigation.goBack()
     }
 
     render() {
         const { have_influencers, fetch_job } = this.state
-        const { influencers, progress_percent } = this.props
+        const { running_fetch, influencers, progress_percent, pending_fetch } = this.props
 
         return (
             <View>
@@ -128,7 +128,7 @@ class FetchJobView extends React.Component {
                             <Text style={fetchJob.statusData}>{fetch_job.details.status}</Text>
                         </View>
                     </View>
-                    {fetch_job.details !== null && fetch_job.details.status == COMPLETED &&
+                    {pending_fetch !== null && fetch_job.details.status == COMPLETED &&
                         fetch_job.response.type == COMPLETED_GET_ALL_USERS &&
                         <View style={fetchJob.bottomView}>
                             <View style={fetchJob.influencers}>
@@ -141,7 +141,10 @@ class FetchJobView extends React.Component {
                                 <View style={fetchJob.none}><Text style={fetchJob.data}>None found</Text></View>}
 
                         </View>}
-                    {fetch_job.details !== null && fetch_job.details.status == PENDING && <View style={fetchJob.button}><TextButton style={fetchJob.startBtn} title="Start" onPress={() => this.startFetchJob()} /></View>}
+                    {pending_fetch === null &&
+                        <View style={fetchJob.btnView}>
+                            <TextButton title="Start" containerStyle={fetchJob.startBtn} buttonText={base.defaultTxt} onPress={() => this.startFetchJob()} />
+                        </View>}
                 </View >
             </View >
         );
@@ -158,6 +161,7 @@ const mapStateToProps = state => ({
     current_fetch_job: state.fetch_job.current_fetch_job,
     influencers: state.influencer.influencers,
     running_fetch: state.running_fetch,
+    pending_fetch: state.running_fetch.pending,
     pending_fj: state.fetch_job.pending,
     error_fj: state.fetch_job.error,
     success: state.running_fetch.success,
@@ -174,7 +178,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     pending: fetchPending,
     error: fetchError,
     success: fetchSuccess,
-    updateFetchJob: updateFetchJob,
+    updateStateFetchJob: updateStateFetchJob
 }, dispatch);
 
 
