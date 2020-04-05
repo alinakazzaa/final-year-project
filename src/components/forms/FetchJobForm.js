@@ -6,10 +6,11 @@ import t from 'tcomb-form-native';
 import { fetchJob, fetchJobForm } from '../../screens/FetchJob/styles/fetchJob.styles';
 import { formatNumber } from '../../actions/fetchJob'
 import TabView from '../tabview/TabView';
-import { colors } from '../../styles/base';
+import { colors, inputView } from '../../styles/base';
 import Slider from '../slider/Slider';
 import { criteria } from '../../constants/Criteria';
 import { IN_PROGRESS, COMPLETED } from '../../constants';
+import bootstrap from 'tcomb-form-native/lib/stylesheets/bootstrap.js';
 
 const Form = t.form.Form;
 
@@ -18,7 +19,12 @@ const formStyles = {
     ...fetchJobForm
 }
 
-const no_profiles = t.enums.of(['0 - 20', '20 - 50', '50 - 100', '100 - 200', '200 - 300'])
+var no_profiles = t.enums({
+    ten: '0 - 10',
+    twenty: '10 - 20',
+    fifty: '20 - 50',
+    hundred: '50 - 100',
+});
 
 const FetchJob = t.struct({
     hashtag: t.String,
@@ -28,12 +34,13 @@ const FetchJob = t.struct({
 });
 
 const options = {
+    stylesheet: bootstrap,
     auto: 'none',
     fields: {
         hashtag: {
         },
         date_created: {
-            disabled: true
+            editable: false,
         },
         no_profiles: {
             nullOption: { value: '', text: 'Choose amount' },
@@ -43,11 +50,15 @@ const options = {
                 { value: '100', text: '50 - 100' },
                 { value: '200', text: '100 - 200' },
                 { value: '300', text: '200 - 300' },
-            ]
+            ],
+            itemStyle: { ...inputView }
         },
     },
-    stylesheet: formStyles,
-};
+}
+
+options.stylesheet.textbox.normal = { ...inputView }
+options.stylesheet.textbox.disabled = { ...inputView }
+options.stylesheet.select.normal = { ...inputView }
 
 
 export default class FetchJobForm extends React.Component {

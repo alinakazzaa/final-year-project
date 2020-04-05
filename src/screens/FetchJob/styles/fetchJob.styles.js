@@ -344,11 +344,15 @@ export const fetchJobForm = {
         },
         error: {
 
+        },
+        disabled: {
+            ...inputView,
+            fontSize: 30
         }
     },
     select: {
         normal: {
             ...inputView,
-        }
+        },
     }
 }
