@@ -1,21 +1,14 @@
 import {
-    SET_CURRENT_FETCH_JOB,
-    SET_FETCH_JOBS_SUCCESS,
-    SET_FETCH_JOBS_PENDING,
-    SET_FETCH_JOBS_ERROR,
-    CLEAR_CURRENT_FETCH_JOB,
-    ADD_FETCH_JOB,
-    REMOVE_FETCH_JOB,
-    UPDATE_FETCH_JOB,
-} from '../constants';
-import { State } from 'react-native-gesture-handler';
+    SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, UPDATE_FETCH_JOB, CLEAR_CURRENT_FETCH_JOB, CLEAR_FETCH_JOB_STATE
+} from '../constants'
+import { SET_FETCH_JOBS_PENDING, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_ERROR } from '../constants/response/types'
 
 const initialState = {
     fetch_jobs: [],
     current_fetch_job: {},
     pending: null,
     error: null
-};
+}
 
 const fetchJobReducer = (state = initialState, action) => {
     let job
@@ -38,7 +31,7 @@ const fetchJobReducer = (state = initialState, action) => {
             return {
                 ...state,
                 fetch_jobs: [...state.fetch_jobs.filter(fj => fj.details.id !== action.fetch_job.details.id)]
-            };
+            }
 
 
         // get fetch jobs for current project
@@ -47,7 +40,7 @@ const fetchJobReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: true
-            };
+            }
 
         case SET_FETCH_JOBS_SUCCESS:
 
@@ -55,7 +48,7 @@ const fetchJobReducer = (state = initialState, action) => {
                 ...state,
                 fetch_jobs: [...action.fetch_jobs],
                 pending: false
-            };
+            }
 
         case SET_FETCH_JOBS_ERROR:
 
@@ -63,14 +56,14 @@ const fetchJobReducer = (state = initialState, action) => {
                 ...state,
                 pending: false,
                 error: action.error
-            };
+            }
 
         // set current fetch job
         case SET_CURRENT_FETCH_JOB:
             return {
                 ...state,
                 current_fetch_job: action.fetch_job
-            };
+            }
 
         case UPDATE_FETCH_JOB:
             fetch_jobs.splice(getIndex(fetch_jobs, action.fetch_job), 1, action.fetch_job)
@@ -78,19 +71,31 @@ const fetchJobReducer = (state = initialState, action) => {
             return {
                 ...state,
                 fetch_jobs: fetch_jobs
-            };
+            }
 
+        case CLEAR_CURRENT_FETCH_JOB:
+
+            return {
+                ...state,
+                current_fetch_job: {}
+            }
+        case CLEAR_FETCH_JOB_STATE:
+
+            return {
+                ...initialState
+            }
 
 
         default:
-            return state;
+            return state
     }
 }
 
-export const getPending = state => state.fetch_job.pending;
-export const getError = state => state.fetch_job.error;
-export const getFetchJobs = state => state.fetch_job.fetch_jobs;
-export const getCurrentFetchJob = state => state.fetch_job.current_fetch_job;
-export const getIndex = (fetch_jobs, job) => fetch_jobs.map(fj => { return fj }).indexOf(job.details.id);
+export const getPending = state => state.fetch_job.pending
+export const getError = state => state.fetch_job.error
+export const getFetchJobs = state => state.fetch_job.fetch_jobs
+export const getCurrentFetchJob = state => state.fetch_job.current_fetch_job
+export const getIndex = (fetch_jobs, job) => fetch_jobs.map(fj => { return fj }).indexOf(job.details.id)
+export const searchedFetchJobs = (state, text) => [...state.fetch_jobs.filter(fj => fj.details.title.toLowerCase().includes(text.toLowerCase()))]
 
-export default fetchJobReducer;
+export default fetchJobReducer

@@ -1,6 +1,7 @@
 import { db } from '../database/config/db';
 import { DATE_TODAY } from '../constants/TodayDate'
-import { SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_ERROR, SET_CURRENT_INFLUENCER } from '../constants';
+import { SET_CURRENT_INFLUENCER } from '../constants';
+import { SET_INFLUENCERS_ERROR, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS } from '../constants/response/types';
 
 export const getAllInfluencers = fetch_job => {
 
@@ -17,6 +18,7 @@ export const getAllInfluencers = fetch_job => {
     influencers.forEach(id => {
         db.ref('Influencers/').on('value', (influ_snapshot) => {
             influ_snapshot.forEach(influ_snap => {
+
                 if (influ_snap.key == id)
                     influencers_success.push(influ_snap.val())
             })
@@ -69,4 +71,17 @@ export const updateInfluencer = (hashtag, influencer) => {
 
 export const removeInfluencer = (hashtag, influencer_id) => {
     db.ref(`/Influencers/hashtags/${hashtag}`).child(influencer_id).remove()
+}
+
+export const getInfluByUsername = username => {
+    let influ_obj = {}
+    db.ref('/Influencers').on('value', (influ_snapshot) => {
+        influ_snapshot.forEach(influ_snap => {
+            if (influ_snap.val().username == username) {
+                influ_obj = { ...influ_snap.val() }
+            }
+        })
+    })
+
+    return influ_obj
 }

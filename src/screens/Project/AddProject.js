@@ -1,17 +1,16 @@
-import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
-import { AppHeader } from '../../layouts/Header';
-import ProjectForm from '../../components/forms/ProjectForm';
-import { IconButton } from '../../components/buttons/IconButton';
-import { TextButton } from '../../components/buttons/TextButton';
+import * as React from 'react'
+import { View, YellowBox } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import ProjectForm from '../../components/forms/ProjectForm'
+import { TextButton } from '../../components/buttons/TextButton'
 import { addProject } from '../../actions/project'
-import * as userActions from '../../actions/user';
-import * as projectActions from '../../actions/project';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { BackButton } from '../../components/buttons/BackButton'
+import { project } from './styles/project.styles'
 
 
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
 
 class AddProject extends React.Component {
 
@@ -20,66 +19,52 @@ class AddProject extends React.Component {
     }
 
     state = {
-        project: {}
+        project_value: {
+            active: false
+        }
     }
 
-    handleChange = project => {
-        this.setState({ project });
+    handleChange = updated_project => {
+        this.setState({ project_value: updated_project })
     }
 
     handleSubmit = () => {
         const { user, addProject } = this.props
-        const { project } = this.state
-        addProject(user.id, project);
+        const { project_value } = this.state
+        addProject(user.id, project_value)
         this.props.navigation.navigate("AllProjects")
     }
 
+    toggleSwitch = value => {
+        const { project_value } = this.state
+        this.setState({ project_value: { ...project_value, active: value } })
+    }
+
     render() {
+        const { project_value } = this.state
         return (
-            <View style={styles.container}>
+            <View>
                 <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
-                    right={
-                        <View style={styles.saveBtn}>
-                            <TextButton onPress={this.handleSubmit} title="Save" />
-                        </View>}
+                    gradient={true}
+                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
+                    right={<TextButton containerStyle={project.saveBtn} onPress={this.handleSubmit} title="Save" />}
                 />
-                <ProjectForm onChange={this.handleChange} />
+                <View style={project.addContainer}>
+                    <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
+                </View>
             </View>
-        );
+        )
     }
 }
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-        },
-        saveBtn: {
-            marginRight: 10,
-            fontWeight: '700'
-        },
-    });
-
 const mapStateToProps = state => ({
     state: state,
-    user: state.user,
+    user: state.user.current_user,
     current_project: state.project.current_project
-});
-
-const ActionCreators = Object.assign(
-    {},
-    userActions,
-    projectActions
-);
+})
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     addProject: addProject
-}, dispatch);
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddProject)

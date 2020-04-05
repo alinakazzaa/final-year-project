@@ -1,4 +1,5 @@
-import { SET_CURRENT_FETCH_JOB, DB_USER_REF, SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_ERROR, SET_CURRENT_INFLUENCER } from '../constants';
+import { SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_ERROR } from "../constants/response/types";
+import { SET_CURRENT_INFLUENCER } from "../constants";
 
 const initialState = {
     influencers: [],

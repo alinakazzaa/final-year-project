@@ -1,73 +1,33 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Switch, TextInput, Keyboard, Button } from 'react-native';
-import { IconButton } from '../../components/buttons/IconButton';
-import { TextButton } from '../../components/buttons/TextButton';
-import BasicInput from '../input/BasicInput';
+import { View, Keyboard, Text } from 'react-native';
+import PropTypes from 'prop-types'
+// @ts-ignore
 import t from 'tcomb-form-native';
-import { validate } from 'tcomb-form-native/lib';
+import { project, projectForm } from '../../screens/Project/styles/project.styles';
+import { SwitchItem } from '../switch/Switch';
 
 const Form = t.form.Form;
 
 const formStyles = {
     ...Form.stylesheet,
-    controlLabel: {
-        normal: {
-            // display: 'none',
-        },
-        error: {
-            color: 'Purple',
-            fontSize: 18,
-            marginBottom: 7,
-            fontWeight: '600'
-        }
-    },
-    textbox: {
-        normal: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#cccccc', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        },
-        error: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#a94442', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        }
-    },
-    checkbox: {
-        normal: {
-
-        },
-        error: {
-
-        },
-    },
-
-
+    ...projectForm
 }
 
 const Project = t.struct({
     title: t.String,
+    date_created: t.String,
     description: t.maybe(t.String),
-    active: t.Boolean
 });
 
 const options = {
+    auto: 'none',
     fields: {
         title: {
             error: 'Project requires a title!',
+
         },
-        active: {
-            label: 'Active Project',
+        description: {
+            multiline: true,
         },
     },
     stylesheet: formStyles,
@@ -75,60 +35,58 @@ const options = {
 
 
 export default class ProjectForm extends React.Component {
-
-    state = {
-        value: {}
-    }
-
-    componentDidMount() {
-        let project = this.props.project
-        if (project) {
-            this.setState({ value: project })
+    constructor(props) {
+        super(props)
+        this.state = {
+            value: {
+                active: false
+            }
         }
     }
 
-    onChange(value) {
-        let updated_project = { ...value }
-        this.setState({ value: updated_project });
-        this.props.onChange(updated_project)
-    }
-
     render() {
+        const { project_value, handleChange, toggleSwitch } = this.props
+
         return (
-            <View style={styles.container}>
-                <Form
-                    ref={c => this._form = c}
-                    type={Project}
-                    options={options}
-                    value={this.state.value}
-                    onChange={(value) => this.onChange(value)}
-                    onBlur={Keyboard.dismiss}
-                />
+            <View>
+                <View>
+                    <View style={project.header}>
+                        <Text style={project.title}>Details</Text>
+                    </View>
+                    <View style={project.detailsBox}>
+                        <View style={project.labelsCol}>
+                            <Text style={project.label}>Title</Text>
+                            <Text style={project.label}>Date created</Text>
+                            <Text style={project.label}>Description</Text>
+                        </View>
+                        <View style={project.inputBox}>
+                            <Form
+                                ref={c => this._form = c}
+                                type={Project}
+                                options={options}
+                                value={project_value}
+                                onChange={(value) => handleChange(value)}
+                                onBlur={Keyboard.dismiss}
+                            />
+                        </View>
+                    </View>
+                    <View style={project.switchView}>
+                        <Text style={project.labelActive}>Active</Text>
+                        <SwitchItem value={project_value.active} onChange={value => toggleSwitch(value)} />
+                    </View>
+                </View>
+
             </View>
         )
     }
 }
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            justifyContent: 'center',
-            marginTop: 50,
-            padding: 20,
-            backgroundColor: '#ffffff',
-        },
-        textInput: {
-            borderWidth: 1,
-        },
-
-    });
-
 ProjectForm.propTypes = {
-
+    project: PropTypes.object
 }
 
 ProjectForm.defaultProps = {
-
+    project: null,
 }
 
 

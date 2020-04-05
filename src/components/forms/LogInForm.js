@@ -1,58 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Switch, TextInput, Keyboard, Button } from 'react-native';
-import { IconButton } from '../../components/buttons/IconButton';
+import { Text, View, Keyboard } from 'react-native';
 import { TextButton } from '../../components/buttons/TextButton';
-import BasicInput from '../input/BasicInput';
+// @ts-ignore
 import t from 'tcomb-form-native';
-import { validate } from 'tcomb-form-native/lib';
+import { auth } from '../../screens/Auth/styles/auth.styles'
+import { base, form } from '../../styles/base'
+
+const v = require('tcomb-validation');
 
 const Form = t.form.Form;
 
 const formStyles = {
     ...Form.stylesheet,
-    controlLabel: {
-        normal: {
-            // display: 'none',
-        },
-        error: {
-            color: 'Purple',
-            fontSize: 18,
-            marginBottom: 7,
-            fontWeight: '600'
-        }
-    },
-    textbox: {
-        normal: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#cccccc', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        },
-        error: {
-            color: '#000000',
-            fontSize: 17,
-            height: 36,
-            padding: 7,
-            borderRadius: 4,
-            borderColor: '#a94442', // <= relevant style here
-            borderWidth: 1,
-            marginBottom: 5
-        }
-    },
-    checkbox: {
-        normal: {
-
-        },
-        error: {
-
-        },
-    },
-
-
+    ...form
 }
 
 const User = t.struct({
@@ -67,6 +27,7 @@ const options = {
         },
         password: {
             error: 'Password is required',
+
         },
     },
     stylesheet: formStyles,
@@ -81,6 +42,7 @@ export default class LogInForm extends React.Component {
 
     onChange(value) {
         this.setState({ value });
+
     }
 
     render() {
@@ -89,7 +51,8 @@ export default class LogInForm extends React.Component {
         const { value } = this.state
 
         return (
-            <View style={styles.container}>
+            <View style={auth.formContainer}>
+                <Text style={auth.text}>Please log in</Text>
                 <Form
                     ref={c => this._form = c}
                     type={User}
@@ -98,44 +61,13 @@ export default class LogInForm extends React.Component {
                     onChange={(value) => this.onChange(value)}
                     onBlur={Keyboard.dismiss}
                 />
-                {error && <Text>{error.type}</Text>}
-                <TextButton title="Log In" onPress={() => logIn(value)} style={styles.logInBtn} />
-                <TextButton title="Registration" style={styles.logInBtn} onPress={goToRegister} />
+                {error && <Text>{error.message}</Text>}
+                <View style={auth.btnView}><TextButton title="Log In" onPress={() => logIn(value)} buttonText={base.defaultTxt} containerStyle={auth.logInButton} />
+                    <TextButton title="Registration" style={auth.regButton} buttonText={base.defaultTxt} containerStyle={auth.regButton} onPress={goToRegister} />
+                </View>
             </View>
         )
     }
-}
-
-const styles = StyleSheet.create(
-    {
-        container: {
-            display: 'flex',
-            backgroundColor: '#ffffff',
-            padding: 50
-        },
-        textInput: {
-            borderWidth: 1,
-            padding: 10
-        },
-        logInBtn: {
-            padding: 6,
-            fontSize: 18,
-            fontWeight: '400',
-            display: 'flex',
-            marginRight: 10,
-            borderWidth: 1.5,
-            borderColor: '#493649',
-            borderRadius: 5,
-            margin: 10
-        }
-    });
-
-LogInForm.propTypes = {
-
-}
-
-LogInForm.defaultProps = {
-
 }
 
 

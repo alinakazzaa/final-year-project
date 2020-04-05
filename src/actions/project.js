@@ -1,10 +1,11 @@
 import { db } from '../database/config/db';
-import { DB_USER_PROJECTS_REF, SET_PROJECTS_PENDING, SET_CURRENT_PROJECT, UPDATE_STATE_PROJECTS, SET_PROJECTS_SUCCESS, SET_PROJECTS_ERROR, CLEAR_CURRENT_PROJECT, ADD_PROJECT, UPDATE_PROJECT, REMOVE_PROJECT } from '../constants';
+import { DB_USER_PROJECTS_REF, SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, UPDATE_PROJECT, REMOVE_PROJECT } from '../constants';
 import { DATE_TODAY } from '../constants/TodayDate'
+import { SET_PROJECTS_ERROR, SET_PROJECTS_SUCCESS, SET_PROJECTS_PENDING } from '../constants/response/types';
+import { NO_PROJECTS } from '../constants/response/messages';
 
 export const getUserProjects = user_id => {
-    const active = []
-    const archived = []
+    const projects = []
 
     DB_USER_PROJECTS_REF(user_id).on('value', proj_snapshot => {
         proj_snapshot.forEach(proj_snap => {
@@ -16,25 +17,20 @@ export const getUserProjects = user_id => {
                 id: proj_snap.val().details.id,
                 user_id: user_id
             }
-            if (proj_snap.val().details.active == true) {
-                active.push(proj)
-            } else {
-                archived.push(proj)
-            }
+
+            projects.push(proj)
         })
     })
 
-    if (active.length == 0 && archived.length == 0) {
-        let error = { type: 'no projects' }
+    if (projects.length == 0) {
         return {
             type: SET_PROJECTS_ERROR,
-            error: error
+            message: NO_PROJECTS
         }
     } else {
         return {
             type: SET_PROJECTS_SUCCESS,
-            active: active,
-            archived: archived
+            projects: projects
         }
     }
 }
@@ -80,7 +76,7 @@ export const addProject = (user_id, project) => {
 
     return {
         type: ADD_PROJECT,
-        payload: project_obj
+        project: project_obj
     }
 }
 

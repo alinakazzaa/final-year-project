@@ -1,26 +1,55 @@
-import { USER_LOGIN_SUCCESS, USER_LOGOUT, USER_LOGIN_ERROR } from '../constants';
+import { USER_LOGOUT } from '../constants';
+import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR, SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types';
 
 const initialState = {
-    pending: true,
-    error: null
+    pending: null,
+    error: null,
+    users: [],
+    current_user: {}
 };
 
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
+
         case USER_LOGIN_SUCCESS:
             return {
-                ...action.payload,
-                pending: false
+                ...state,
+                current_user: action.user,
+                pending: false,
+                error: null
             };
         case USER_LOGIN_ERROR:
             return {
                 pending: false,
-                error: action.error,
+                error: { type: action.type, message: action.message },
             };
         case USER_LOGOUT:
             return {
                 ...initialState
             };
+
+        case SET_USERS_PENDING:
+
+            return {
+                ...state,
+                pending: true
+            }
+
+        case SET_USERS_SUCCESS:
+
+            return {
+                ...state,
+                users: action.users,
+                pending: false
+            }
+
+        case SET_USERS_ERROR:
+
+            return {
+                ...state,
+                pending: false,
+                error: action.error
+            }
         default:
             return state;
     }

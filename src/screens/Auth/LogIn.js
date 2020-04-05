@@ -1,74 +1,77 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TextInput, Button } from 'react-native';
+import { View, YellowBox } from 'react-native';
 import LogInForm from '../../components/forms/LogInForm';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUserByUsername, setLoggedInUserError, setLoggedInUserSuccess } from '../../actions/user';
-// import { getAllUsers } from '../../actions/user';
+import { setLoggedInUserError, setLoggedInUserSuccess, setUsersPending, getAllUsers } from '../../actions/user';
+import { auth } from './styles/auth.styles'
+import { Gradient } from '../../styles/Gradient';
+import { INCORRECT_PASSWORD, NO_USER } from '../../constants/response/messages';
+import { AppLogo } from '../../components/logo/AppLogo'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class LogInScreen extends React.Component {
 
+    static navigationOptions = {
+        headerShown: false,
+    }
+
     componentDidMount() {
-        const { setLoggedInUserSuccess } = this.props;
-        const user_obj = getUserByUsername("A")
-        if (user_obj.username) {
+        const { getAllUsers, setUsersPending } = this.props;
+        setUsersPending
+        getAllUsers()
+    }
+
+    componentDidUpdate(prev) {
+        const { setLoggedInUserSuccess, users } = this.props
+
+        if (prev.users != users) {
+            let user_obj = users.find(u => u.username == "A") || {}
             setLoggedInUserSuccess(user_obj)
         }
 
     }
-
 
     goToRegister = () => {
         this.props.navigation.navigate("Registration")
     }
 
     logIn = user => {
-        let error
-        const { setLoggedInUserSuccess, setLoggedInUserError } = this.props;
-        const user_obj = getUserByUsername(user.username)
+        const { setLoggedInUserSuccess, setLoggedInUserError, users } = this.props;
+        let user_obj
 
-        if (user_obj) {
-            if (user.username == user_obj.username) {
-                if (user.password == user_obj.password) {
-                    setLoggedInUserSuccess(user_obj)
-                } else {
-                    error = { type: 'incorrect password' }
-                    setLoggedInUserError(error)
-                }
+        if (user.username == null || user.username == '') {
+            setLoggedInUserError(NO_USER)
+        } else {
+            user_obj = users.find(u => u.username == user.username) || {}
+            if (user.password == null || user.password == '' || user.password != user_obj.password) {
+                setLoggedInUserError(INCORRECT_PASSWORD)
             } else {
-                error = { type: 'no user' }
-                setLoggedInUserError(error)
+                setLoggedInUserSuccess(user_obj)
             }
         }
-
-
-
     }
 
     render() {
         const { error } = this.props
+
         return (
-            <View style={styles.container}>
-                <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={error} />
+            <View>
+                <Gradient horizontal={true}>
+                    <View style={auth.logInContainer}>
+                        <AppLogo large={true} />
+                        <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={error} />
+                    </View>
+                </Gradient>
             </View>
         );
     }
 }
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-            justifyContent: 'center',
-            // alignContent: 'center',
-            alignItems: 'center'
-        },
-    });
-
 const mapStateToProps = state => ({
-    user: state.user,
+    state: state.user,
+    users: state.user.users,
     error: state.user.error,
     pending: state.user.pending
 });
@@ -76,7 +79,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setLoggedInUserError: setLoggedInUserError,
-    setLoggedInUserSuccess: setLoggedInUserSuccess
+    setLoggedInUserSuccess: setLoggedInUserSuccess,
+    setUsersPending: setUsersPending,
+    getAllUsers: getAllUsers,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogInScreen)

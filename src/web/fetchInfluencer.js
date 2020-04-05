@@ -1,88 +1,92 @@
-import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME } from "../constants/endpoints"
-import { GET_USER_SUCCESS, GET_USER_ERROR } from "../constants"
+import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME, INSTAGRAM_GET_USER_FOLLOWED_BY, INSTAGRAM_GET_USER_MEDIA_COUNT } from "../constants/endpoints"
 import { addInfluencer } from "../actions/influencer"
-import { criteria } from "../constants/Criteria"
+import { GET_USER_SUCCESS, GET_USER_ERROR, GET_USER_PENDING } from "../constants/response/types"
 
-export const fetchInfluencer = (id, fetch_job, fetchSuccess, fetchError) => {
+export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
     let influ_obj
     let response
-    let active = fetch_job.details.criteria.split(',')
-    let pass = false
+
+    pending(GET_USER_PENDING)
 
     fetch(INSTAGRAM_GET_USER_BY_ID(id))
         .then(result => result.json())
         .then(resp => {
             if (resp.data.user !== null) {
-                // fetch by username
-                fetch(INSTAGRAM_GET_USER_BY_USERNAME(resp.data.user.reel.user.username))
+                influ_obj = { ...resp.data.user.reel.user, followers: 0, media_count: 0 }
+
+                fetch(INSTAGRAM_GET_USER_FOLLOWED_BY(id))
                     .then(result => result.json())
-                    .then(res => {
-                        if (res.graphql.user !== null && res.graphql.user) {
+                    .then(resp => {
+                        if (resp.status == 'ok') {
+                            influ_obj.followers = resp.data.user.edge_followed_by.count
 
-                            let influ = { ...res.graphql.user }
-                            influ_obj = {
-                                biography: influ.biography,
-                                followers: influ.edge_followed_by.count,
-                                following: influ.edge_follow.count,
-                                full_name: influ.full_name,
-                                id: influ.id,
-                                is_business_account: influ.is_business_account,
-                                is_private: influ.is_private,
-                                profile_pic_url: influ.profile_pic_url,
-                                username: influ.username,
-                                media_count: influ.edge_owner_to_timeline_media.count
-                            }
+                            fetch(INSTAGRAM_GET_USER_MEDIA_COUNT(id))
+                                .then(result => result.json())
+                                .then(resp => {
+                                    if (resp.status == 'ok') {
+                                        influ_obj.media_count = resp.data.user.edge_owner_to_timeline_media.count
 
-                            pass = checkCriteria(active, influ_obj.followers)
+                                        if (checkCriteria(fetch_job.details.criteria, influ_obj.followers)) {
+                                            response = { type: GET_USER_SUCCESS, message: 'success: user within range', id: id }
+                                            addInfluencer(influ_obj)
+                                            success(response)
 
-                            if (pass) {
-                                response = { type: GET_USER_SUCCESS, message: 'success: user within range', id: id }
-                                fetchSuccess(response)
-                                addInfluencer(influ_obj)
-                                fetchSuccess(response)
-
-                            } else {
-                                response = { type: GET_USER_ERROR, message: 'fail: user not within range', id: id }
-                                fetchError(response)
-                            }
-                        }
-                        else {
-                            response = { type: GET_USER_ERROR, message: 'fail:username', id: id }
-                            fetchError(response)
+                                        } else {
+                                            response = { type: GET_USER_ERROR, message: 'fail: user not within range', id: id }
+                                            error(response)
+                                        }
+                                    }
+                                })
                         }
                     })
-                    .catch(error => {
-                        response = { type: GET_USER_ERROR, message: String(error), id: id }
-                        fetchError(response)
+                    .catch(err => {
+                        response = { type: GET_USER_ERROR, message: String(err), id: id }
+                        error(response)
                     })
+            } else {
+                response = { type: GET_USER_ERROR, message: 'fail: user by ID', id: id }
+                error(response)
+            }
+        })
+}
+
+export const getFollowedBy = id => {
+    fetch(INSTAGRAM_GET_USER_FOLLOWED_BY(id))
+        .then(result => result.json())
+        .then(resp => {
+            if (resp.status == 'ok') {
+                const followers = { ...resp.data.user.edge_followed_by }
+                return followers
+            } else {
+                return 0
+            }
+
+        })
+}
+
+export const getMediaCount = id => {
+    fetch(INSTAGRAM_GET_USER_MEDIA_COUNT(id))
+        .then(result => result.json())
+        .then(resp => {
+            if (resp.status == 'ok') {
+                const media = { ...resp.data.user.edge_owner_to_timeline_media }
+                return media
+            } else {
+                return 0
             }
         })
 }
 
 
-export const checkCriteria = (active, followers) => {
-    let min = criteria.find(crit => crit.key == active[0])
-    let max = criteria.find(crit => crit.key == active[active.length - 1])
+
+
+
+
+export const checkCriteria = (criteria, followers) => {
     let isValid = false
 
-    if (max.key == 'two_hundred') {
-        if (min.key == max.key) {
-            // only 500000+
-            if (followers >= max.value.min) {
-                isValid = true
-            }
-        } else {
-            // not only 500000
-            if (followers <= max.value.min && followers >= min.value.min) {
-                isValid = true
-            }
-        }
-
-    } else {
-        if (followers <= max.value.max && followers >= min.value.min) {
-            isValid = true
-        }
-    }
+    if (followers >= criteria.follower_min && followers <= criteria.follower_max)
+        isValid = true
 
     return isValid
 }

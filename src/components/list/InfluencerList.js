@@ -32,8 +32,8 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                         <View style={styles.info}>
                             <Text style={styles.title}>Followers</Text>
                             <Text style={styles.infoText}>{formatNumber(influ.followers)}</Text>
-                            <Text style={styles.title}>Following</Text>
-                            <Text style={styles.infoText}>{formatNumber(influ.following)}</Text>
+                            {/* <Text style={styles.title}>Following</Text>
+                            <Text style={styles.infoText}>{formatNumber(influ.following)}</Text> */}
                             <Text style={styles.title}>No of media</Text>
                             <Text style={styles.infoText}>{formatNumber(influ.media_count)}</Text>
                         </View>
@@ -60,16 +60,16 @@ export const InfluencerList = ({ influencers, current_project, current_fetch_job
                     </View>
                 </View>
                 <View style={styles.business}>
-                    {influ.is_business_account && <IconButton
+                    {/* {influ.is_business_account && <IconButton
                         name='briefcase'
                         size={20}
                         color="#493649"
                         style={styles.icon}
-                    />}
+                    />} */}
                 </View>
                 <View style={styles.bottom}>
-                    <Text style={styles.title}>Biography</Text>
-                    <Text style={styles.bio}>{influ.biography}</Text>
+                    {/* <Text style={styles.title}>Biography</Text>
+                    <Text style={styles.bio}>{influ.biography}</Text> */}
                 </View>
                 <View style={styles.footer}>
                     <TouchableOpacity style={styles.footerYes}>
@@ -168,7 +168,7 @@ const styles = StyleSheet.create(
         },
         scrollContainer: {
             padding: '3%',
-            marginBottom: 200
+            paddingBottom: 250
         },
         info: {
             justifyContent: 'space-between',

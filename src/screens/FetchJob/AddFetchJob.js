@@ -1,115 +1,92 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
+import { View, YellowBox, Text } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-import { createStackNavigator } from 'react-navigation-stack';
 import FetchJobForm from '../../components/forms/FetchJobForm';
 import { AppHeader } from '../../layouts/Header';
-import { TextButton } from '../../components/buttons/TextButton';
-import { IconButton } from '../../components/buttons/IconButton';
-import { criteria } from '../../constants/Criteria';
-import * as projectActions from '../../actions/project';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DATE_TODAY } from '../../constants/TodayDate'
-import { addFetchJob } from '../../actions/fetchJob';
+import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob';
+import { fetchJob } from './styles/fetchJob.styles'
+import { BackButton } from '../../components/buttons/BackButton';
+import { TextButton } from '../../components/buttons/TextButton';
 
 
 class AddFetchJob extends React.Component {
 
+    state = {
+        fetch_job: {
+            id: '',
+            title: '',
+            hashtag: '',
+            criteria: { follower_min: 0, follower_max: 100000 },
+            status: ''
+        },
+    }
+
     static navigationOptions = {
         headerShown: false
     }
-    s
-    state = {
-        fetch_job: {}
+
+    componentDidMount() {
+        if (this.props.navigation.state.params)
+            this.setState({ fetch_job: { hashtag: this.props.navigation.state.params.tag } })
+
+    }
+
+    handleChange = updated_fetch_job => {
+        this.setState({ fetch_job: updated_fetch_job })
     }
 
     handleSubmit = () => {
-        const { user, current_project, addFetchJob } = this.props
-        let { fetch_job } = this.state
-
-        fetch_job.value.date_created = DATE_TODAY
-        fetch_job.value.title = 'Fetch: ' + fetch_job.value.hashtag && fetch_job.value.location ?
-            `hashtag: ${fetch_job.value.hashtag} & location: ${fetch_job.value.location} ` :
-            fetch_job.value.location ? 'location:' + fetch_job.value.location : 'hashtag:' + fetch_job.value.hashtag
-
-        // filter active criteria
-        let criteria = Object.entries(fetch_job.criteria);
-        let active_criteria = []
-
-        criteria.forEach(element => {
-            if (element[1] == true)
-                active_criteria.push(element[0])
-        })
-        fetch_job.criteria = [...active_criteria]
-        addFetchJob(user.id, current_project.id, { ...this.state.fetch_job })
+        const { fetch_job } = this.state
+        const { user, current_project, addFetchJob, setCurrentFetchJob } = this.props
+        fetch_job.title = 'Hashtag search: ' + fetch_job.hashtag
+        addFetchJob(user.id, current_project.id, fetch_job)
+        setCurrentFetchJob({ details: fetch_job })
         this.props.navigation.goBack()
+        this.props.navigation.navigate('FetchJobView')
     }
 
-    handleChange = fj => {
-        this.setState({ fetch_job: fj });
+    componentWillUnmount() {
+        this.setState({ fetch_job: {} })
     }
 
     render() {
-
-        const { current_project, user } = this.props
+        const { fetch_job } = this.state
 
         return (
-            <View style={styles.container}>
+            <View>
                 <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
+                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
+                    right={<TextButton containerStyle={fetchJob.saveBtn} onPress={this.handleSubmit} title="Save" />}
+                    gradient={true}
                 />
-                <FetchJobForm goBack={this.props.navigation.goBack} onChange={this.handleChange} />
-                <View style={styles.bottomView}>
-                    <TextButton style={styles.saveBtn} onPress={this.handleSubmit} title="Save" />
+                <View style={fetchJob.addContainer}>
+                    <View style={fetchJob.info}>
+                        <Text style={fetchJob.text}>Search users by hashtag</Text>
+                    </View>
+                    {/* {!hash_tag && <View style={fetchJob.info}>
+                        <Text style={fetchJob.text}>Avoid overly specific tags</Text></View>} */}
+                    <FetchJobForm fetch_job={fetch_job} handleChange={this.handleChange} />
+                    <View style={fetchJob.info}><Text style={fetchJob.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         );
     }
 }
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-        },
-        saveBtn: {
-            padding: 6,
-            fontSize: 18,
-            fontWeight: '400',
-            display: 'flex',
-            marginRight: 10,
-            borderWidth: 1.5,
-            borderColor: '#493649',
-            borderRadius: 5,
-        },
-        bottomView: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
-        },
-        text: {
-            textAlign: 'center',
-            color: 'black'
-        }
-    });
-
 const mapStateToProps = state => ({
     state: state,
-    user: state.user,
+    user: state.user.current_user,
     current_project: state.project.current_project
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    addFetchJob: addFetchJob
+    addFetchJob: addFetchJob,
+    setCurrentFetchJob: setCurrentFetchJob
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)

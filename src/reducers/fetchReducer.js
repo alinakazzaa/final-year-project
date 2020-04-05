@@ -1,10 +1,5 @@
-import {
-    GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_USER_ERROR,
-    GET_USER_SUCCESS, MEDIA_FETCH, IN_PROGRESS, COMPLETED, GET_USER_PENDING, USER_FETCH, COMPLETED_GET_ALL_USERS, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_ERROR, MEDIA_NEXT_PAGE, GET_MEDIA_NEXT_PAGE_COMPLETED
-} from '../constants';
-
-import { criteria } from '../constants/Criteria'
-import { updateFetchJob, updateStateFetchJob } from '../actions/fetchJob';
+import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_ERROR, GET_MEDIA_NEXT_PAGE_COMPLETED, GET_USER_PENDING, GET_USER_SUCCESS, COMPLETED_GET_ALL_USERS, GET_USER_ERROR } from '../constants/response/types';
+import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, MEDIA_NEXT_PAGE, USER_FETCH } from '../constants';
 
 const initialState = {
     pending: null,
@@ -120,6 +115,7 @@ const fetchReducer = (state = initialState, action) => {
             running = {
                 ...state,
                 response: { type: action.type, message: action.message },
+                details: { ...state.details, status: COMPLETED }
             }
 
             return {
@@ -140,7 +136,10 @@ const fetchReducer = (state = initialState, action) => {
 
         case GET_USER_SUCCESS:
             let success = [...state.influencers.success]
-            success.splice(success.length, 0, action.id)
+
+            if (!success.find(id => id == action.id)) {
+                success.splice(success.length, 0, action.id)
+            }
 
             running = {
                 ...state,
@@ -151,7 +150,7 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type, message: action.message },
                 influencers: {
                     ...state.influencers,
-                    pending: [...state.influencers.success.filter(id => id != action.id)],
+                    pending: [...state.influencers.pending.filter(id => id == action.id)],
                     success: success
                 }
             }
@@ -159,7 +158,7 @@ const fetchReducer = (state = initialState, action) => {
             if (running.progress.total == running.progress.done) {
                 running = {
                     ...running,
-                    details: { ...state.details, status: COMPLETED },
+                    details: { ...state.details },
                     pending: false,
                     response: {
                         type: COMPLETED_GET_ALL_USERS,
@@ -183,7 +182,7 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type, message: action.message },
                 influencers: {
                     ...state.influencers,
-                    pending: [...state.influencers.success.filter(id => id != action.id)],
+                    pending: [...state.influencers.pending.filter(id => id == action.id)],
                     fail: [...state.influencers.fail, action.id]
                 }
             }
@@ -191,13 +190,12 @@ const fetchReducer = (state = initialState, action) => {
             if (running.progress.total == running.progress.done) {
                 running = {
                     ...running,
-                    details: { ...state.details, status: COMPLETED },
+                    details: { ...state.details },
                     pending: false,
                     response: {
                         type: COMPLETED_GET_ALL_USERS,
                         message: 'finished getting influencers'
                     },
-                    stage: COMPLETED
                 }
             }
 

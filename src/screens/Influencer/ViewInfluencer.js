@@ -44,10 +44,10 @@ class ViewInfluencer extends React.Component {
                                 <Text style={styles.lbl}>Followers</Text>
                                 <Text style={styles.data}>{this.formatNumber(current_influencer.followers)}</Text>
                             </View>
-                            <View style={styles.itemRow}>
+                            {/* <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Following</Text>
                                 <Text style={styles.data}>{this.formatNumber(current_influencer.following)}</Text>
-                            </View>
+                            </View> */}
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Media Count</Text>
                                 <Text style={styles.data}>{this.formatNumber(current_influencer.media_count)}</Text>
@@ -63,8 +63,8 @@ class ViewInfluencer extends React.Component {
                     </View>
                     <View style={styles.middle}>
                         <View style={styles.itemRow}>
-                            {current_influencer.is_business_account && <Text style={styles.lbl}>Business Account</Text>}
-                            {current_influencer.is_private && <Text style={styles.lbl}>Private</Text>}
+                            {/* {current_influencer.is_business_account && <Text style={styles.lbl}>Business Account</Text>}
+                            {current_influencer.is_private && <Text style={styles.lbl}>Private</Text>} */}
                         </View>
                     </View>
                     <View style={styles.bottomView}>
@@ -72,14 +72,14 @@ class ViewInfluencer extends React.Component {
                             <Text style={styles.lbl}>Username</Text>
                             <Text style={styles.data}>{current_influencer.username}</Text>
                         </View>
-                        <View style={styles.itemRow}>
+                        {/* <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Full Name</Text>
                             <Text style={styles.data}>{current_influencer.full_name}</Text>
-                        </View>
-                        <View style={styles.itemCol}>
+                        </View> */}
+                        {/* <View style={styles.itemCol}>
                             <Text style={styles.lbl}>Biography</Text>
                             <Text style={styles.biography}>{current_influencer.biography}</Text>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
             </View >
@@ -189,7 +189,7 @@ const styles = StyleSheet.create(
 
 const mapStateToProps = state => ({
     state: state,
-    user: state.user,
+    user: state.user.current_user,
     current_project: state.project.current_project,
     current_fetch_job: state.fetch_job.current_fetch_job,
     current_influencer: state.influencer.current_influencer
