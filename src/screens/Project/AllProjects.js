@@ -30,7 +30,7 @@ class AllProjects extends React.Component {
     }
 
     componentDidMount() {
-        let { user, setUserProjectsPending, getUserProjects, projects } = this.props
+        let { user, setUserProjectsPending, getUserProjects } = this.props
         setUserProjectsPending()
         getUserProjects(user.id)
     }
