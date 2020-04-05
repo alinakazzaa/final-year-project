@@ -55,7 +55,7 @@ export const fetchSuccess = response => {
             has_next_page: response.has_next_page,
         }
     } else if (response.type == GET_USER_MEDIA_SUCCESS) {
-        console.log(response.media)
+
         return {
             ...running,
             media: response.media
