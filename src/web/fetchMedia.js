@@ -1,7 +1,7 @@
 import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from "../constants/endpoints"
 import { fetchInfluencer } from "./fetchInfluencer"
-import { criteria } from "../constants/Criteria"
-import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_BY_HASHTAG_SUCCESS } from "../constants/response/types"
+import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_BY_HASHTAG_SUCCESS, COMPLETED_GET_ALL_USERS } from "../constants/response/types"
+import { GET_HASHTAG_MEDIA_NO_MATCH, GET_HASHTAG_MEDIA_SUCCESS } from "../constants/response/messages"
 
 export const fetchMedia = (fetch_job, pending, success, error) => {
     let response
@@ -25,18 +25,30 @@ export const fetchMedia = (fetch_job, pending, success, error) => {
 
                     response = {
                         type: GET_MEDIA_BY_HASHTAG_SUCCESS,
-                        media_ids: extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria),
-                        message: 'success: hashtag media',
-                        has_next_page: edge_hashtag_to_media.page_info.has_next_page,
+                        media_ids: [...extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria)],
+                        message: GET_HASHTAG_MEDIA_SUCCESS,
                         related_tags: extractTags(related_tags.edges),
-                        end_cursor: edge_hashtag_to_media.page_info.end_cursor
+                        has_next_page: edge_hashtag_to_media.page_info.has_next_page,
                     }
 
-                    // if (response.has_next_page)
-                    //     getInfluencers(response.media_ids, fetch_job, pending, success, error)
+                    if (response.media_ids.length > 0) {
+                        getInfluencers(response.media_ids, fetch_job, pending, success, error)
+                    } else {
+                        response = {
+                            type: COMPLETED_GET_ALL_USERS,
+                            message: GET_HASHTAG_MEDIA_NO_MATCH,
+                            has_next_page: edge_hashtag_to_media.page_info.has_next_page,
+                        }
+                    }
+
+                    if (response.has_next_page) {
+                        response = {
+                            ...response,
+                            end_cursor: edge_hashtag_to_media.page_info.end_cursor
+                        }
+                    }
 
                     success(response)
-
                 })
             }
 
@@ -65,10 +77,9 @@ export const extractIds = (edges, criteria) => {
 
     if (edges.length > 0) {
         edges.forEach(edge => {
-            if (edge.node.edge_liked_by.count > likesMin(criteria)) {
-                if (media_ids.find(id => id == edge.node.owner.id) == null)
-                    media_ids.push(edge.node.owner.id)
-            }
+            console.log(criteria)
+            if (media_ids.find(id => id == edge.node.owner.id) == null)
+                media_ids.push(edge.node.owner.id)
         })
     }
 
