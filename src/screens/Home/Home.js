@@ -58,7 +58,7 @@ class HomeScreen extends React.Component {
     render() {
         const { user, logOutUser, completed_fetch_jobs, } = this.props
         const { recent_tags } = this.state
-        console.log(recent_tags)
+
         return (
             <View>
                 <AppHeader
