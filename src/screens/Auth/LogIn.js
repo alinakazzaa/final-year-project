@@ -18,18 +18,19 @@ class LogInScreen extends React.Component {
     }
 
     componentDidMount() {
-        const { getAllUsers, setUsersPending, users } = this.props;
-        setUsersPending()
+        const { getAllUsers, setUsersPending } = this.props;
+        setUsersPending
         getAllUsers()
-        // let user_obj = users.find(u => u.username == "A") || {}
-        // setLoggedInUserSuccess(user_obj)
     }
 
     componentDidUpdate(prev) {
-        const { getAllUsers, setUsersPending, users, pending } = this.props
-        if (prev.state !== this.props.state && pending) {
-            getAllUsers()
+        const { setLoggedInUserSuccess, users } = this.props
+
+        if (prev.users != users) {
+            let user_obj = users.find(u => u.username == "A") || {}
+            setLoggedInUserSuccess(user_obj)
         }
+
     }
 
     goToRegister = () => {
@@ -53,7 +54,7 @@ class LogInScreen extends React.Component {
     }
 
     render() {
-        const { error, users } = this.props
+        const { error } = this.props
 
         return (
             <View>
