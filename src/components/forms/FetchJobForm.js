@@ -20,10 +20,10 @@ const formStyles = {
 }
 
 var no_profiles = t.enums({
-    ten: '0 - 10',
-    twenty: '10 - 20',
-    fifty: '20 - 50',
-    hundred: '50 - 100',
+    10: '0 - 10',
+    20: '10 - 20',
+    50: '20 - 50',
+    100: '50 - 100',
 });
 
 const FetchJob = t.struct({
@@ -45,13 +45,6 @@ const options = {
         },
         no_profiles: {
             nullOption: { value: '', text: 'Choose amount' },
-            options: [
-                { value: '20', text: '0 - 20' },
-                { value: '50', text: '20 - 50' },
-                { value: '100', text: '50 - 100' },
-                { value: '200', text: '100 - 200' },
-                { value: '300', text: '200 - 300' },
-            ],
             itemStyle: { ...inputView }
         },
     },
