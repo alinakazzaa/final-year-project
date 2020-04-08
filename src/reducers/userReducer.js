@@ -14,7 +14,7 @@ const userReducer = (state = initialState, action) => {
         case USER_LOGIN_SUCCESS:
             return {
                 ...state,
-                current_user: action.user,
+                current_user: { ...action.user },
                 pending: false,
                 error: null
             };
@@ -39,7 +39,7 @@ const userReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                users: action.users,
+                users: [...action.users],
                 pending: false
             }
 
@@ -48,7 +48,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: false,
-                error: action.error
+                error: action.message
             }
         default:
             return state;
