@@ -19,33 +19,34 @@ class LogInScreen extends React.Component {
 
     componentDidMount() {
         const { getAllUsers, setUsersPending } = this.props;
-        setUsersPending
+        console.log('in component did mount login')
+        setUsersPending()
         getAllUsers()
     }
 
-    componentDidUpdate(prev) {
-        const { setLoggedInUserSuccess, users } = this.props
+    // componentDidUpdate(prev) {
+    //     const { setLoggedInUserSuccess, users } = this.props
 
-        if (prev.users != users) {
-            let user_obj = users.find(u => u.username == "A") || {}
-            setLoggedInUserSuccess(user_obj)
-        }
+    //     if (prev.users != users) {
+    //         let user_obj = users.find(u => u.username == "A") || {}
+    //         setLoggedInUserSuccess(user_obj)
+    //     }
 
-    }
+    // }
 
     goToRegister = () => {
         this.props.navigation.navigate("Registration")
     }
 
-    logIn = user => {
-        const { setLoggedInUserSuccess, setLoggedInUserError, users } = this.props;
+    logIn = login_user => {
+        const { setLoggedInUserSuccess, setLoggedInUserError, user } = this.props;
         let user_obj
 
-        if (user.username == null || user.username == '') {
+        if (login_user.username == null || login_user.username == '') {
             setLoggedInUserError(NO_USER)
         } else {
-            user_obj = users.find(u => u.username == user.username) || {}
-            if (user.password == null || user.password == '' || user.password != user_obj.password) {
+            user_obj = user.users.find(u => u.username == login_user.username) || {}
+            if (login_user.password == null || login_user.password == '' || login_user.password != user_obj.password) {
                 setLoggedInUserError(INCORRECT_PASSWORD)
             } else {
                 setLoggedInUserSuccess(user_obj)
@@ -54,14 +55,14 @@ class LogInScreen extends React.Component {
     }
 
     render() {
-        const { error } = this.props
+        const { user } = this.props
 
         return (
             <View>
                 <Gradient horizontal={true}>
                     <View style={auth.logInContainer}>
                         <AppLogo large={true} />
-                        <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={error} />
+                        <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={user.error} />
                     </View>
                 </Gradient>
             </View>
@@ -70,10 +71,7 @@ class LogInScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    state: state.user,
-    users: state.user.users,
-    error: state.user.error,
-    pending: state.user.pending
+    user: state.user
 });
 
 
