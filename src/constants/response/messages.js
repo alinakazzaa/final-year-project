@@ -7,8 +7,7 @@ export const MSG_INCORRECT_PASSWORD = 'Incorrect password. Please try again'
 
 
 // PROJECT
-
-export const NO_PROJECTS = 'There are no projects yet.'
+export const MSG_NO_PROJECTS = 'There are no projects.'
 
 // FETCH
 export const GET_HASHTAG_MEDIA_SUCCESS = 'completed: hashtag media match'
