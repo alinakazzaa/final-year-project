@@ -1,14 +1,11 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { InfluencerList } from '../../components/list/InfluencerList'
 import { getAllInfluencers, setCurrentInfluencer } from '../../actions/influencer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
 
 class AllInfluencers extends React.Component {
 
@@ -38,24 +35,24 @@ class AllInfluencers extends React.Component {
     }
 
     componentDidMount() {
-        const { getAllInfluencers, current_fetch_job } = this.props
-        getAllInfluencers(current_fetch_job)
+        const { getAllInfluencers, fetch_job } = this.props
+        getAllInfluencers(fetch_job.current_fetch_job)
     }
 
     goToInfluencer = influ => {
-        const { setCurrentInfluencer } = this.props
+        const { setCurrentInfluencer, navigation } = this.props
         setCurrentInfluencer(influ)
-        this.props.navigation.navigate('ViewInfluencer')
+        navigation.navigate('ViewInfluencer')
     }
 
     createCollab = influencer => {
-        const { current_project } = this.props
-        this.props.navigation.navigate('AddCollab', { influencer, current_project })
+        const { project, navigation } = this.props
+        navigation.navigate('AddCollab', { influencer, project.current_project })
     }
 
 
     render() {
-        const { influencers, current_project, current_fetch_job } = this.props
+        const { influencer, project, fetch_job } = this.props
         let { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
 
         return (
@@ -74,21 +71,21 @@ class AllInfluencers extends React.Component {
                 </View>
                 {index == 0 ?
                     <View>
-                        {this.props.state.influencer.pending ?
+                        {influencer.pending ?
                             <View>
                                 <ActivityIndicator size="large" color="#5d4d50" />
                                 <Text style={styles.loadingTxt}>Wait, getting your influencers</Text>
                             </View> :
-                            <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} createCollab={this.createCollab} />
+                            <InfluencerList influencers={influencer.all_influencers} current_project={project.current_project} current_fetch_job={fetch_job.current_fetch_job} goToInfluencer={this.goToInfluencer} createCollab={this.createCollab} />
                         }
                     </View> :
                     <View>
-                        {this.props.state.influencer.pending ?
+                        {influencer.pending ?
                             <View>
                                 <ActivityIndicator size="large" color="#5d4d50" />
                                 <Text style={styles.loadingTxt}>Wait, getting your influencers</Text>
                             </View> :
-                            <InfluencerList influencers={influencers} current_project={current_project} current_fetch_job={current_fetch_job} goToInfluencer={this.goToInfluencer} createCollab={this.createCollab} />
+                            <InfluencerList influencers={influencer.all_influencers} current_project={project.current_project} current_fetch_job={fetch_job.current_fetch_job} goToInfluencer={this.goToInfluencer} createCollab={this.createCollab} />
                         }
                     </View>}
             </View>
@@ -129,11 +126,9 @@ const styles = StyleSheet.create(
     });
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    current_project: state.project.current_project,
-    current_fetch_job: state.fetch_job.current_fetch_job,
-    influencers: state.influencer.influencers
+    project: state.project,
+    fetch_job: state.fetch_job,
+    influencer: state.influencer
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

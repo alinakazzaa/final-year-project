@@ -15,7 +15,7 @@ class ViewInfluencer extends React.Component {
     }
 
     render() {
-        const { current_influencer } = this.props
+        const { influencer } = this.props
 
         return (
             <View style={styles.main}>
@@ -35,7 +35,7 @@ class ViewInfluencer extends React.Component {
                             </View>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Followers</Text>
-                                <Text style={styles.data}>{formatNumber(current_influencer.followers)}</Text>
+                                <Text style={styles.data}>{formatNumber(influencer.current_influencer.followers)}</Text>
                             </View>
                             {/* <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Following</Text>
@@ -43,7 +43,7 @@ class ViewInfluencer extends React.Component {
                             </View> */}
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Media Count</Text>
-                                <Text style={styles.data}>{formatNumber(current_influencer.media_count)}</Text>
+                                <Text style={styles.data}>{formatNumber(influencer.current_influencer.media_count)}</Text>
                             </View>
                         </View>
                         <Avatar
@@ -51,7 +51,7 @@ class ViewInfluencer extends React.Component {
                             rounded
                             containerStyle={styles.avatar}
                             source={{
-                                uri: current_influencer.profile_pic_url,
+                                uri: influencer.current_influencer.profile_pic_url,
                             }} />
                     </View>
                     <View style={styles.middle}>
@@ -63,7 +63,7 @@ class ViewInfluencer extends React.Component {
                     <View style={styles.bottomView}>
                         <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Username</Text>
-                            <Text style={styles.data}>{current_influencer.username}</Text>
+                            <Text style={styles.data}>{influencer.current_influencer.username}</Text>
                         </View>
                         {/* <View style={styles.itemRow}>
                             <Text style={styles.lbl}>Full Name</Text>
@@ -181,11 +181,7 @@ const styles = StyleSheet.create(
     });
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    current_project: state.project.current_project,
-    current_fetch_job: state.fetch_job.current_fetch_job,
-    current_influencer: state.influencer.current_influencer
+    influencer: state.influencer
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
