@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, YellowBox } from 'react-native';
+import { View } from 'react-native';
 import LogInForm from '../../components/forms/LogInForm';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,8 +8,6 @@ import { auth } from './styles/auth.styles'
 import { Gradient } from '../../styles/Gradient';
 import { MSG_INCORRECT_PASSWORD, MSG_NO_USER } from '../../constants/response/messages';
 import { AppLogo } from '../../components/logo/AppLogo'
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 class LogInScreen extends React.Component {
 
