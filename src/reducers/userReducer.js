@@ -39,7 +39,7 @@ const userReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                users: [...action.users],
+                all_users: [...action.users],
                 pending: false,
                 error: null
             }
