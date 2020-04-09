@@ -96,8 +96,8 @@ class ProjectView extends React.Component {
                         {fetch_job.error && <View style={project_style.listView}><Text style={project_style.noneMsg}>No searches</Text></View>}
                         {!fetch_job.error && !fetch_job.pending && <ScrollView
                             contentContainerStyle={project_style.fetchScroll}>
-                            {fetch_job.fetch_jobs.length > 0 && <View>
-                                <FetchJobListProjectView fetch_jobs={fetch_job.fetch_jobs} goToFetchJob={this.goToFetchJob} />
+                            {fetch_job.all_fetch_jobs.length > 0 && <View>
+                                <FetchJobListProjectView fetch_jobs={fetch_job.all_fetch_jobs} goToFetchJob={this.goToFetchJob} />
                             </View>}
                         </ScrollView>}
                     </View>
