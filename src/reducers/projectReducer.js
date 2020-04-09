@@ -9,7 +9,8 @@ const initialState = {
 }
 
 const projectReducer = (state = initialState, action) => {
-    let all_projects
+    let all_projects = [...state.all_projects]
+
     switch (action.type) {
 
         case SET_PROJECTS_PENDING:
@@ -52,7 +53,6 @@ const projectReducer = (state = initialState, action) => {
             }
 
         case ADD_PROJECT:
-            all_projects = [...state.projects]
             all_projects.splice(all_projects.length, 1, action.project)
 
             return {
@@ -60,7 +60,6 @@ const projectReducer = (state = initialState, action) => {
                 all_projects
             }
         case UPDATE_PROJECT:
-            all_projects = [...state.projects]
             let index = all_projects.findIndex(proj => proj.id == action.payload.id)
             all_projects.splice(index, 1, action.payload)
 
