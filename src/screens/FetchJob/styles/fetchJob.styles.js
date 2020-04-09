@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { colors, fonts, spacing, formContainer, container, dimensions, inputLabel, infoContainer, form, inputViewLabel, inputView } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
-export const fetchJob = StyleSheet.create(
+export const fetch_job_style = StyleSheet.create(
     {
         container: {
             ...container,
@@ -45,16 +45,11 @@ export const fetchJob = StyleSheet.create(
         top: {
             display: 'flex',
             justifyContent: 'space-between',
-            borderBottomWidth: 0.3,
-            borderBottomColor: '#b3b3cc',
         },
         middle: {
-            // paddingTop: spacing.MEDIUM,
             paddingBottom: spacing.SMALL,
             display: 'flex',
             justifyContent: 'space-between',
-            borderBottomColor: colors.BORDER,
-            borderBottomWidth: 1,
             marginBottom: spacing.MEDIUM
         },
         listHead: {
@@ -96,7 +91,6 @@ export const fetchJob = StyleSheet.create(
             paddingTop: spacing.MEDIUM,
             paddingBottom: spacing.MEDIUM,
             justifyContent: 'space-evenly',
-            borderBottomWidth: 1,
             borderTopWidth: 1,
             borderColor: colors.BORDER,
             marginBottom: spacing.MEDIUM
@@ -141,6 +135,9 @@ export const fetchJob = StyleSheet.create(
         statusView: {
             flexDirection: 'row',
             justifyContent: 'space-evenly',
+            borderTopWidth: 0.7,
+            borderColor: colors.BORDER,
+            paddingTop: spacing.LARGE
         },
         title: {
             ...inputLabel,
@@ -226,7 +223,6 @@ export const fetchJob = StyleSheet.create(
             paddingBottom: spacing.MEDIUM,
             borderTopWidth: 1,
             borderColor: colors.BORDER,
-            // marginBottom: spacing.MEDIUM
         },
         inputBox: {
             marginRight: spacing.LARGE
@@ -332,6 +328,10 @@ export const fetchJob = StyleSheet.create(
         },
         noneMsg: {
             padding: spacing.LARGE
+        },
+        progressBar: {
+            borderRadius: 10,
+            borderWidth: 0,
         }
     });
 

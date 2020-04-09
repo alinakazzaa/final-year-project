@@ -3,21 +3,16 @@ import { View, Keyboard, Text } from 'react-native';
 import PropTypes from 'prop-types'
 // @ts-ignore
 import t from 'tcomb-form-native';
-import { fetchJob, fetchJobForm } from '../../screens/FetchJob/styles/fetchJob.styles';
-import { formatNumber } from '../../actions/fetchJob'
+import { fetch_job_style } from '../../screens/FetchJob/styles/fetchJob.styles';
+import { formatNumber } from '../../actions/base'
 import TabView from '../tabview/TabView';
 import { colors, inputView } from '../../styles/base';
 import Slider from '../slider/Slider';
 import { criteria } from '../../constants/Criteria';
-import { IN_PROGRESS, COMPLETED } from '../../constants';
+import { COMPLETED } from '../../constants';
 import bootstrap from 'tcomb-form-native/lib/stylesheets/bootstrap.js';
 
 const Form = t.form.Form;
-
-const formStyles = {
-    ...Form.stylesheet,
-    ...fetchJobForm
-}
 
 var no_profiles = t.enums({
     10: '0 - 10',
@@ -95,16 +90,16 @@ export default class FetchJobForm extends React.Component {
 
         return (
             <View>
-                <View style={fetchJob.header}>
-                    <Text style={fetchJob.title}>Details</Text>
+                <View style={fetch_job_style.header}>
+                    <Text style={fetch_job_style.title}>Details</Text>
                 </View>
-                <View style={fetchJob.detailsBox}>
-                    <View style={fetchJob.labelsCol}>
-                        <Text style={fetchJob.label}>Hashtag</Text>
-                        <Text style={fetchJob.label}>Date created</Text>
-                        <Text style={fetchJob.label}>No. of Profiles</Text>
+                <View style={fetch_job_style.detailsBox}>
+                    <View style={fetch_job_style.labelsCol}>
+                        <Text style={fetch_job_style.label}>Hashtag</Text>
+                        <Text style={fetch_job_style.label}>Date created</Text>
+                        <Text style={fetch_job_style.label}>No. of Profiles</Text>
                     </View>
-                    <View style={fetchJob.inputBox}>
+                    <View style={fetch_job_style.inputBox}>
                         <Form
                             ref={c => this._form = c}
                             type={FetchJob}
@@ -115,19 +110,19 @@ export default class FetchJobForm extends React.Component {
                         />
                     </View>
                 </View>
-                <View style={fetchJob.middle}>
-                    <Text style={fetchJob.title}>Follower range</Text>
-                    {fetch_job.status != COMPLETED && <View style={fetchJob.itemRowRange}>
+                {fetch_job.status != COMPLETED && <View style={fetch_job_style.middle}>
+                    <Text style={fetch_job_style.title}>Follower range</Text>
+                    <View style={fetch_job_style.itemRowRange}>
                         <TabView index={index} color={colors.SECONDARY} width='30%' titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
-                        <View style={fetchJob.rangeBox}>
+                        <View style={fetch_job_style.rangeBox}>
                             <Text
                                 // @ts-ignore
-                                style={fetchJob.lblRange}>{formatNumber(fetch_job.criteria.follower_min)}</Text>
+                                style={fetch_job_style.lblRange}>{formatNumber(fetch_job.criteria.follower_min)}</Text>
                             <Text
                                 // @ts-ignore
-                                style={fetchJob.lblRange}>{formatNumber(fetch_job.criteria.follower_max)}</Text>
+                                style={fetch_job_style.lblRange}>{formatNumber(fetch_job.criteria.follower_max)}</Text>
                         </View>
-                        <View style={fetchJob.rangeSlider}>
+                        <View style={fetch_job_style.rangeSlider}>
                             {index == 0 && <Slider
                                 min={min}
                                 max={max}
@@ -150,8 +145,8 @@ export default class FetchJobForm extends React.Component {
                                 step={10000}
                                 onChange={this.onChangeSlider} />}
                         </View>
-                    </View>}
-                </View>
+                    </View>
+                </View>}
             </View>
         )
     }
