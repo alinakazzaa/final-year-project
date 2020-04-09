@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { colors, fonts, spacing, container, inputLabel, dimensions, formContainer, form, inputView, boolSelect, width, inputViewLabel } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
-export const project = StyleSheet.create(
+export const project_style = StyleSheet.create(
     {
         allContainer: {
             ...container,
@@ -162,6 +162,10 @@ export const project = StyleSheet.create(
         },
         saveBtn: {
             ...button.btnContainer
+        },
+        none: {
+            alignItems: 'center',
+            textAlign: 'center'
         },
         noneMsg: {
             padding: spacing.LARGE

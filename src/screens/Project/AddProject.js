@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, YellowBox } from 'react-native'
+import { View } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import ProjectForm from '../../components/forms/ProjectForm'
 import { TextButton } from '../../components/buttons/TextButton'
@@ -7,10 +7,7 @@ import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { BackButton } from '../../components/buttons/BackButton'
-import { project } from './styles/project.styles'
-
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
+import { project_style } from './styles/project.styles'
 
 class AddProject extends React.Component {
 
@@ -31,7 +28,7 @@ class AddProject extends React.Component {
     handleSubmit = () => {
         const { user, addProject } = this.props
         const { project_value } = this.state
-        addProject(user.id, project_value)
+        addProject(user.current_user.id, project_value)
         this.props.navigation.navigate("AllProjects")
     }
 
@@ -47,9 +44,9 @@ class AddProject extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                    right={<TextButton containerStyle={project.saveBtn} onPress={this.handleSubmit} title="Save" />}
+                    right={<TextButton containerStyle={project_style.saveBtn} onPress={this.handleSubmit} title="Save" />}
                 />
-                <View style={project.addContainer}>
+                <View style={project_style.addContainer}>
                     <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
                 </View>
             </View>
@@ -58,9 +55,7 @@ class AddProject extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    current_project: state.project.current_project
+    user: state.user
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({

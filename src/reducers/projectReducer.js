@@ -16,6 +16,7 @@ const projectReducer = (state = initialState, action) => {
 
             return {
                 ...state,
+                error: null,
                 pending: true
             }
 
@@ -24,8 +25,7 @@ const projectReducer = (state = initialState, action) => {
             return {
                 ...state,
                 all_projects: [...action.projects],
-                pending: false,
-                error: null
+                pending: false
             }
 
         case SET_PROJECTS_ERROR:
@@ -81,8 +81,7 @@ const projectReducer = (state = initialState, action) => {
     }
 }
 
-export const activeProjects = state => [...state.project.projects.filter(proj => proj.active == true)]
-export const archivedProjects = state => [...state.project.projects.filter(proj => proj.active == false)]
-export const searchedProjects = (state, text) => [...state.project.projects.filter(proj => proj.title.toLowerCase().includes(text.toLowerCase()))]
+export const activeProjects = state => [...state.all_projects.filter(proj => proj.active == true)]
+export const archivedProjects = state => [...state.all_projects.filter(proj => proj.active == false)]
 
 export default projectReducer
