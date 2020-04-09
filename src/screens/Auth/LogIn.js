@@ -41,7 +41,7 @@ class LogInScreen extends React.Component {
         if (login_user.username == null || login_user.username == '') {
             setLoggedInUserError(MSG_NO_USER)
         } else {
-            user_obj = user.users.find(u => u.username == login_user.username) || {}
+            user_obj = user.all_users.find(u => u.username == login_user.username) || {}
             if (login_user.password == null || login_user.password == '' || login_user.password != user_obj.password) {
                 setLoggedInUserError(MSG_INCORRECT_PASSWORD)
             } else {
