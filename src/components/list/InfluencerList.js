@@ -1,17 +1,12 @@
 import React from 'react'
 import { Icon, Avatar } from 'react-native-elements'
-import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
-import { TextButton } from '../buttons/TextButton'
 import { removeInfluencer } from '../../actions/influencer'
+import { formatNumber } from '../../actions/base'
 
 export const InfluencerList = ({ influencers, current_project, current_fetch_job, goToInfluencer, createCollab, addInfluencerByUsername, addToPotential }) => {
-    const formatNumber = num => {
-        let parsed
-        { num ? parsed = num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : 'loading...' }
-        return parsed
-    }
 
     const influList = (influ, index) => {
         return (

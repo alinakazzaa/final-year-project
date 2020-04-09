@@ -1,24 +1,17 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getCurrentInfluencer } from '../../reducers/influencerReducer'
-import { Avatar, Icon } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import { IconButton } from '../../components/buttons/IconButton';
 import { AppHeader } from '../../layouts/Header';
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+import { formatNumber } from '../../actions/base';
 
 class ViewInfluencer extends React.Component {
 
     static navigationOptions = {
         headerShown: false
-    }
-
-    formatNumber = num => {
-        let parsed
-        { num ? parsed = num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : 'loading...' }
-        return parsed
     }
 
     render() {
@@ -42,7 +35,7 @@ class ViewInfluencer extends React.Component {
                             </View>
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Followers</Text>
-                                <Text style={styles.data}>{this.formatNumber(current_influencer.followers)}</Text>
+                                <Text style={styles.data}>{formatNumber(current_influencer.followers)}</Text>
                             </View>
                             {/* <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Following</Text>
@@ -50,7 +43,7 @@ class ViewInfluencer extends React.Component {
                             </View> */}
                             <View style={styles.itemRow}>
                                 <Text style={styles.lbl}>Media Count</Text>
-                                <Text style={styles.data}>{this.formatNumber(current_influencer.media_count)}</Text>
+                                <Text style={styles.data}>{formatNumber(current_influencer.media_count)}</Text>
                             </View>
                         </View>
                         <Avatar
