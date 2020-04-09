@@ -4,7 +4,7 @@ import moment from 'moment'
 import t from 'tcomb-form-native';
 import { DATE_TODAY } from '../../constants/TodayDate';
 import { projectForm } from '../../screens/Project/styles/project.styles';
-import { collab } from '../../screens/Collab/styles/collab.styles';
+import { collab_style } from '../../screens/Collab/styles/collab.styles';
 
 const Form = t.form.Form;
 
@@ -57,7 +57,6 @@ export default class CollabForm extends React.Component {
 
     componentDidMount() {
         const { collab } = this.props
-        console.log(collab)
         if (collab) {
             this.setState({ value: collab.details })
         }
@@ -73,7 +72,7 @@ export default class CollabForm extends React.Component {
     render() {
 
         return (
-            <View style={collab.inputBox}>
+            <View style={collab_style.inputBox}>
                 <Form
                     ref={c => this._form = c}
                     type={Collab}

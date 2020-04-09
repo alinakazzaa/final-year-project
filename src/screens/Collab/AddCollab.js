@@ -1,8 +1,5 @@
 import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
+import { View, StyleSheet } from 'react-native';
 import { AppHeader } from '../../layouts/Header';
 import { IconButton } from '../../components/buttons/IconButton';
 import CollabForm from '../../components/forms/CollabForm';
@@ -19,9 +16,9 @@ class AddCollab extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user, current_project, addCollab } = this.props
-        addCollab(user.id, current_project.id, { ...this.state.collab })
-        this.props.navigation.goBack()
+        const { user, project, addCollab, navigation } = this.props
+        addCollab(user.current_user.id, project.current_project.id, { ...this.state.collab })
+        navigation.goBack()
     }
 
     handleChange = collab => {
@@ -29,7 +26,8 @@ class AddCollab extends React.Component {
     }
 
     render() {
-        const { influencer, current_project } = this.props.navigation.state.params
+        const { project, navigation } = this.props
+        const { influencer } = navigation.state.params
 
         return (
             <View style={styles.container}>
@@ -45,7 +43,7 @@ class AddCollab extends React.Component {
                             <TextButton onPress={this.handleSubmit} title="Save" />
                         </View>}
                 />
-                <CollabForm influencer={influencer} current_project={current_project} goBack={this.props.navigation.goBack} onChange={this.handleChange} />
+                <CollabForm influencer={influencer} current_project={project.current_project} goBack={navigation.goBack} onChange={this.handleChange} />
                 <View style={styles.bottomView}>
                     <TextButton style={styles.saveBtn}
                         // onPress={this.handleSubmit}
@@ -59,9 +57,7 @@ class AddCollab extends React.Component {
 const styles = StyleSheet.create(
     {
         container: {
-            flex: 1,
-            // justifyContent: 'center',
-            // alignItems: 'center',
+            flex: 1
         },
         text: {
             textAlign: 'center',
@@ -86,9 +82,9 @@ const styles = StyleSheet.create(
     });
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    current_project: state.project.current_project
+    user: state.user,
+    collab: state.collab,
+    project: state.project
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

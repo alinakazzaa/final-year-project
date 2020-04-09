@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { colors, fonts, spacing, container, inputLabel, dimensions, input, formContainer, form, select, height, inputView, boolSelect, width, inputViewLabel } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
-export const collab = StyleSheet.create(
+export const collab_style = StyleSheet.create(
     {
         allContainer: {
             ...container,

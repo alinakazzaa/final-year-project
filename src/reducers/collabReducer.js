@@ -2,16 +2,15 @@ import { SET_COLLABS_PENDING, SET_COLLABS_SUCCESS, SET_COLLABS_ERROR, SET_CURREN
 import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR } from '../constants/response/types'
 
 const initialState = {
-    collabs: [],
+    all_collabs: [],
     current_collab: {},
     pending: null,
     error: null,
-    publications: [],
-    response: {}
+    publications: []
 }
 
 const collabReducer = (state = initialState, action) => {
-    let collabs = [...state.collabs]
+    let collabs = [...state.all_collabs]
     switch (action.type) {
 
         case SET_COLLABS_PENDING:
@@ -19,6 +18,7 @@ const collabReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: true,
+                error: null
             }
 
         case SET_COLLABS_SUCCESS:
@@ -26,7 +26,7 @@ const collabReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: false,
-                collabs: action.collabs
+                all_collabs: [...action.collabs]
             }
 
         case SET_COLLABS_ERROR:
@@ -34,7 +34,7 @@ const collabReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: false,
-                error: action.message
+                error: { type: action.type, message: action.message }
             }
 
         case SET_CURRENT_COLLAB:
@@ -57,7 +57,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                collabs: [...state.collabs, action.collab]
+                all_collabs: [...collabs, action.collab]
             }
 
         case UPDATE_COLLAB:
@@ -65,7 +65,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                collabs: collabs
+                all_collabs: [...collabs]
 
             }
 
@@ -73,7 +73,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                collabs: [...state.collabs.filter(c => c.details.id !== action.collab.details.id)]
+                all_collabs: [...collabs.filter(c => c.details.id !== action.collab.details.id)]
             }
 
 
@@ -81,15 +81,15 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                pending: true
+                pending: true,
+                error: null
             }
 
         case GET_USER_MEDIA_SUCCESS:
 
             return {
                 ...state,
-                response: { type: action.type, message: action.message },
-                publications: action.media,
+                publications: [...action.media],
                 pending: false
             }
 
@@ -108,8 +108,6 @@ const collabReducer = (state = initialState, action) => {
 }
 
 export const getIndex = (collabs, collab) => collabs.map(c => { return c }).indexOf(collab.details.id)
-export const activeCollabs = state => [...state.collab.collabs.filter(collab => collab.details.active == true)]
-export const completedCollabs = state => [...state.collab.collabs.filter(collab => collab.details.active == false)]
-export const searchedCollabs = (state, text) => [...state.collab.collabs.filter(collab => collab.details.title.toLowerCase().includes(text.toLowerCase()))]
+export const searchedCollabs = (state, text) => [...state.collabs.filter(collab => collab.details.title.toLowerCase().includes(text.toLowerCase()))]
 
 export default collabReducer

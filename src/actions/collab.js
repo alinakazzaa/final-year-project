@@ -1,6 +1,7 @@
 import { db } from '../database/config/db';
-import { DB_USER_COLLABS_REF, CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, SET_COLLABS_PENDING, SET_COLLABS_ERROR, SET_COLLABS_SUCCESS } from '../constants';
+import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, SET_COLLABS_PENDING, SET_COLLABS_ERROR, SET_COLLABS_SUCCESS } from '../constants';
 import { DATE_TODAY } from '../constants/TodayDate'
+import { DB_USER_COLLABS_REF } from '../constants/database';
 
 export const getUserCollabs = user_id => {
     const collabs = []
@@ -93,5 +94,9 @@ export const removeCollab = collab => {
         type: REMOVE_COLLAB,
         collab: collab
     }
+}
+
+export const filterCollabs = (collabs, active) => {
+    return [...collabs.filter(collab => collab.details.active == active)]
 }
 
