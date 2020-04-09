@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { setLoggedInUserError, setLoggedInUserSuccess, setUsersPending, getAllUsers } from '../../actions/user';
 import { auth } from './styles/auth.styles'
 import { Gradient } from '../../styles/Gradient';
-import { INCORRECT_PASSWORD, NO_USER } from '../../constants/response/messages';
+import { MSG_INCORRECT_PASSWORD, MSG_NO_USER } from '../../constants/response/messages';
 import { AppLogo } from '../../components/logo/AppLogo'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -19,20 +19,16 @@ class LogInScreen extends React.Component {
 
     componentDidMount() {
         const { getAllUsers, setUsersPending } = this.props;
-        console.log('in component did mount login')
         setUsersPending()
         getAllUsers()
     }
 
-    // componentDidUpdate(prev) {
-    //     const { setLoggedInUserSuccess, users } = this.props
-
-    //     if (prev.users != users) {
-    //         let user_obj = users.find(u => u.username == "A") || {}
-    //         setLoggedInUserSuccess(user_obj)
-    //     }
-
-    // }
+    componentDidUpdate(prev) {
+        // if (prev.users != users) {
+        //     let user_obj = users.find(u => u.username == "A") || {}
+        //     setLoggedInUserSuccess(user_obj)
+        // }
+    }
 
     goToRegister = () => {
         this.props.navigation.navigate("Registration")
@@ -43,11 +39,11 @@ class LogInScreen extends React.Component {
         let user_obj
 
         if (login_user.username == null || login_user.username == '') {
-            setLoggedInUserError(NO_USER)
+            setLoggedInUserError(MSG_NO_USER)
         } else {
             user_obj = user.users.find(u => u.username == login_user.username) || {}
             if (login_user.password == null || login_user.password == '' || login_user.password != user_obj.password) {
-                setLoggedInUserError(INCORRECT_PASSWORD)
+                setLoggedInUserError(MSG_INCORRECT_PASSWORD)
             } else {
                 setLoggedInUserSuccess(user_obj)
             }
