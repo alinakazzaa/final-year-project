@@ -74,10 +74,10 @@ class AllCollabs extends React.Component {
                             {!collab.error && !collab.pending &&
                                 index == 0 ?
                                 <View>
-                                    <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, true) : filterCollabs(collab.collabs, true)} />
+                                    <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, true) : filterCollabs(collab.all_collabs, true)} />
                                 </View> :
                                 <View>
-                                    <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, false) : filterCollabs(collab.collabs, false)} />
+                                    <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, false) : filterCollabs(collab.all_collabs, false)} />
                                 </View>}
                             {/* <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} /> */}
                         </View></View>}

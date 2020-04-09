@@ -3,10 +3,12 @@ import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR } 
 
 const initialState = {
     all_collabs: [],
-    current_collab: {},
+    current_collab: {
+        publications: []
+    },
     pending: null,
     error: null,
-    publications: []
+
 }
 
 const collabReducer = (state = initialState, action) => {
@@ -89,7 +91,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                publications: [...action.media],
+                current_collab: { ...state.current_collab, publications: [...action.media] },
                 pending: false
             }
 
@@ -108,6 +110,6 @@ const collabReducer = (state = initialState, action) => {
 }
 
 export const getIndex = (collabs, collab) => collabs.map(c => { return c }).indexOf(collab.details.id)
-export const searchedCollabs = (state, text) => [...state.collabs.filter(collab => collab.details.title.toLowerCase().includes(text.toLowerCase()))]
+export const searchedCollabs = (state, text) => [...state.all_collabs.filter(collab => collab.details.title.toLowerCase().includes(text.toLowerCase()))]
 
 export default collabReducer
