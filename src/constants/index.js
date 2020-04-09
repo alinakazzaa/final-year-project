@@ -1,5 +1,3 @@
-import { db } from '../database/config/db';
-
 export const USER_LOGOUT = 'USER_LOGOUT'
 
 export const UPDATE_STATE_PROJECTS = 'UPDATE_STATE_PROJECTS'
@@ -23,11 +21,6 @@ export const UPDATE_FETCH_JOB = 'UPDATE_FETCH_JOB'
 export const CLEAR_CURRENT_FETCH_JOB = 'CLEAR_CURRENT_FETCH_JOB'
 
 export const SET_CURRENT_INFLUENCER = 'SET_CURRENT_INFLUENCER'
-
-export const DB_USER_REF = db.ref('Users/');
-export const DB_USER_PROJECTS_REF = user_id => db.ref(`Users/${user_id}/Projects`);
-export const DB_PROJECT_FETCH_JOBS_REF = (user_id, project_id) => db.ref(`Users/${user_id}/Projects/${project_id}/FetchJobs`);
-export const DB_USER_COLLABS_REF = user_id => db.ref(`Users//${user_id}/Collabs`);
 
 export const DB_FETCH_JOBS_REF = 'FETCHJOBS'
 export const DB_INFLUENCERS_REF = 'INFLUENCERS'
