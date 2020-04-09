@@ -2,14 +2,14 @@ import { SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, REMOVE_PROJECT
 import { SET_PROJECTS_PENDING, SET_PROJECTS_SUCCESS, SET_PROJECTS_ERROR } from '../constants/response/types'
 
 const initialState = {
-    projects: [],
+    all_projects: [],
     current_project: {},
     pending: null,
     error: null
 }
 
 const projectReducer = (state = initialState, action) => {
-    let projects
+    let all_projects
     switch (action.type) {
 
         case SET_PROJECTS_PENDING:
@@ -23,8 +23,9 @@ const projectReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                projects: action.projects,
-                pending: false
+                all_projects: [...action.projects],
+                pending: false,
+                error: null
             }
 
         case SET_PROJECTS_ERROR:
@@ -32,14 +33,14 @@ const projectReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: false,
-                error: action.error
+                error: { type: action.type, message: action.message }
             }
 
         case SET_CURRENT_PROJECT:
 
             return {
                 ...state,
-                current_project: action.payload,
+                current_project: { ...action.payload },
                 pending: false
             }
 
@@ -51,29 +52,28 @@ const projectReducer = (state = initialState, action) => {
             }
 
         case ADD_PROJECT:
-            projects = [...state.projects]
-            projects.splice(projects.length, 1, action.project)
+            all_projects = [...state.projects]
+            all_projects.splice(all_projects.length, 1, action.project)
 
             return {
                 ...state,
-                projects
+                all_projects
             }
         case UPDATE_PROJECT:
-            projects = [...state.projects]
-            let index = projects.findIndex(proj => proj.id == action.payload.id)
-            projects.splice(index, 1, action.payload)
+            all_projects = [...state.projects]
+            let index = all_projects.findIndex(proj => proj.id == action.payload.id)
+            all_projects.splice(index, 1, action.payload)
 
             return {
                 ...state,
-                projects: projects
-
+                all_projects
             }
 
         case REMOVE_PROJECT:
 
             return {
                 ...state,
-                projects: [...state.projects.filter(project => project.id !== action.payload.id)]
+                all_projects: [...state.all_projects.filter(project => project.id !== action.payload.id)]
             }
 
         default:

@@ -1,8 +1,9 @@
 import { db } from '../database/config/db';
-import { DB_USER_PROJECTS_REF, SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, UPDATE_PROJECT, REMOVE_PROJECT } from '../constants';
+import { SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, UPDATE_PROJECT, REMOVE_PROJECT } from '../constants';
 import { DATE_TODAY } from '../constants/TodayDate'
 import { SET_PROJECTS_ERROR, SET_PROJECTS_SUCCESS, SET_PROJECTS_PENDING } from '../constants/response/types';
-import { NO_PROJECTS } from '../constants/response/messages';
+import { MSG_NO_PROJECTS } from '../constants/response/messages';
+import { DB_USER_PROJECTS_REF } from '../constants/database';
 
 export const getUserProjects = user_id => {
     const projects = []
@@ -10,14 +11,9 @@ export const getUserProjects = user_id => {
     DB_USER_PROJECTS_REF(user_id).on('value', proj_snapshot => {
         proj_snapshot.forEach(proj_snap => {
             const proj = {
-                title: proj_snap.val().details.title,
-                active: proj_snap.val().details.active,
-                date_created: proj_snap.val().details.date_created,
-                description: proj_snap.val().details.description,
-                id: proj_snap.val().details.id,
+                ...proj_snap.val().details,
                 user_id: user_id
             }
-
             projects.push(proj)
         })
     })
@@ -25,7 +21,7 @@ export const getUserProjects = user_id => {
     if (projects.length == 0) {
         return {
             type: SET_PROJECTS_ERROR,
-            message: NO_PROJECTS
+            message: MSG_NO_PROJECTS
         }
     } else {
         return {
@@ -38,13 +34,13 @@ export const getUserProjects = user_id => {
 export const setUserProjectsPending = () => {
 
     return {
-        type: SET_PROJECTS_PENDING,
+        type: SET_PROJECTS_PENDING
     }
 }
 
 export const clearCurrentProject = () => {
     return {
-        type: CLEAR_CURRENT_PROJECT,
+        type: CLEAR_CURRENT_PROJECT
     }
 }
 
