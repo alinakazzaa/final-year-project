@@ -1,18 +1,13 @@
 import * as React from 'react';
-import { View, YellowBox, Text } from 'react-native';
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
+import { View, Text } from 'react-native';
 import FetchJobForm from '../../components/forms/FetchJobForm';
 import { AppHeader } from '../../layouts/Header';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DATE_TODAY } from '../../constants/TodayDate'
 import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob';
-import { fetchJob } from './styles/fetchJob.styles'
+import { fetch_job_style } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton';
 import { TextButton } from '../../components/buttons/TextButton';
-
 
 class AddFetchJob extends React.Component {
 
@@ -61,32 +56,26 @@ class AddFetchJob extends React.Component {
             <View>
                 <AppHeader
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                    right={<TextButton containerStyle={fetchJob.saveBtn} onPress={this.handleSubmit} title="Save" />}
+                    right={<TextButton containerStyle={fetch_job_style.saveBtn} onPress={this.handleSubmit} title="Save" />}
                     gradient={true}
                 />
-                <View style={fetchJob.addContainer}>
-                    <View style={fetchJob.info}>
-                        <Text style={fetchJob.text}>Search users by hashtag</Text>
+                <View style={fetch_job_style.addContainer}>
+                    <View style={fetch_job_style.info}>
+                        <Text style={fetch_job_style.text}>Search users by hashtag</Text>
                     </View>
-                    {/* {!hash_tag && <View style={fetchJob.info}>
-                        <Text style={fetchJob.text}>Avoid overly specific tags</Text></View>} */}
+                    {fetch_job.hashtag == null && <View style={fetch_job_style.info}>
+                        <Text style={fetch_job_style.text}>Avoid overly specific tags</Text></View>}
                     <FetchJobForm fetch_job={fetch_job} handleChange={this.handleChange} />
-                    <View style={fetchJob.info}><Text style={fetchJob.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
+                    <View style={fetch_job_style.info}><Text style={fetch_job_style.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         );
     }
 }
 
-const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    current_project: state.project.current_project
-});
-
 const mapDispatchToProps = dispatch => bindActionCreators({
     addFetchJob: addFetchJob,
     setCurrentFetchJob: setCurrentFetchJob
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)
+export default connect(null, mapDispatchToProps)(AddFetchJob)

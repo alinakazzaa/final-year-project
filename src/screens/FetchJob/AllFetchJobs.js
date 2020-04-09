@@ -1,20 +1,17 @@
-import * as React from 'react';
-import { View, Text, YellowBox } from 'react-native';
+import * as React from 'react'
+import { View, Text, YellowBox } from 'react-native'
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs } from '../../actions/fetchJob'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { getPending, getError, searchedFetchJobs } from '../../reducers/fetchJobReducer';
-import { AppHeader } from '../../layouts/Header';
-import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants';
-import { BackButton } from '../../components/buttons/BackButton';
-import TabView from '../../components/tabview/TabView';
-import { colors, base } from '../../styles/base';
-import { Input, Icon } from 'react-native-elements';
-import { fetchJob } from './styles/fetchJob.styles';
-import { LoadingScreen } from '../../components/loading/LoadingScreen';
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs, filterFetchJobs } from '../../actions/fetchJob'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { AppHeader } from '../../layouts/Header'
+import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
+import { BackButton } from '../../components/buttons/BackButton'
+import TabView from '../../components/tabview/TabView'
+import { colors, base } from '../../styles/base'
+import { Input, Icon } from 'react-native-elements'
+import { fetch_job_style } from './styles/fetchJob.styles'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
 
 class AllFetchJobs extends React.Component {
 
@@ -33,8 +30,8 @@ class AllFetchJobs extends React.Component {
     }
 
     componentDidMount() {
-        const { getProjectFetchJobs, user, current_project } = this.props
-        getProjectFetchJobs(user.id, current_project.id)
+        const { getProjectFetchJobs, user, project } = this.props
+        getProjectFetchJobs(user.current_user.id, project.current_project.id)
         this.setState({ isLoading: false })
     }
 
@@ -45,13 +42,13 @@ class AllFetchJobs extends React.Component {
     }
 
     deleteFetchJob = fj => {
-        const { removeFetchJob } = this.props;
+        const { removeFetchJob } = this.props
         removeFetchJob(fj)
     }
 
     searchFetchJob = text => {
-        const { state } = this.props
-        let filtered_fetch_jobs = searchedFetchJobs(state, text)
+        const { fetch_job } = this.props
+        let filtered_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.title.toLowerCase().includes(text.toLowerCase()))]
         this.setState({ searched: filtered_fetch_jobs, isSearch: true })
     }
 
@@ -61,18 +58,18 @@ class AllFetchJobs extends React.Component {
 
     render() {
         const { index, isLoading, isSearch, searched } = this.state
-        const { pending_, completed, in_progress, } = this.props
+        const { fetch_job, navigation } = this.props
 
         return (
             <View>
                 <AppHeader
                     gradient={true}
-                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
+                    left={<BackButton onPress={() => navigation.goBack()} />}
                 />
-                <View style={fetchJob.container}>
-                    <View style={fetchJob.searchView}>
-                        <Text style={fetchJob.title}>Search</Text>
-                        <Input onChangeText={text => this.searchFetchJob(text)} inputStyle={base.inputStyle} inputContainerStyle={fetchJob.searchInput} />
+                <View style={fetch_job_style.container}>
+                    <View style={fetch_job_style.searchView}>
+                        <Text style={fetch_job_style.title}>Search</Text>
+                        <Input onChangeText={text => this.searchFetchJob(text)} inputStyle={base.inputStyle} inputContainerStyle={fetch_job_style.searchInput} />
                     </View>
                     <TabView titles={['Pending', 'In Progress', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='32%' index={index} three />
                     {isLoading &&
@@ -81,50 +78,41 @@ class AllFetchJobs extends React.Component {
                     {!isLoading && index == 0 &&
                         <View>
                             <FetchJobList
-                                fetchJobs={isSearch ? [...searched.filter(fj => fj.details.status == PENDING)] : pending_}
+                                fetch_jobs={isSearch ? filterFetchJobs(searched, PENDING) : filterFetchJobs(fetch_job.all_fetch_jobs, PENDING)}
                                 goToFetchJob={this.goToFetchJob}
-                                addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                                 deleteFetchJob={this.deleteFetchJob} />
                         </View>}
                     {!isLoading && index == 1 &&
                         <View>
                             <FetchJobList
-                                fetchJobs={isSearch ? [...searched.filter(fj => fj.details.status == IN_PROGRESS)] : in_progress}
+                                fetch_jobs={isSearch ? filterFetchJobs(searched, IN_PROGRESS) : filterFetchJobs(fetch_job.all_fetch_jobs, IN_PROGRESS)}
                                 goToFetchJob={this.goToFetchJob}
-                                addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                                 deleteFetchJob={this.deleteFetchJob} />
                         </View>}
                     {!isLoading && index == 2 && <View>
                         <FetchJobList
-                            fetchJobs={isSearch ? [...searched.filter(fj => fj.details.status == COMPLETED)] : completed}
+                            fetch_jobs={isSearch ? filterFetchJobs(searched, COMPLETED) : filterFetchJobs(fetch_job.all_fetch_jobs, COMPLETED)}
                             goToFetchJob={this.goToFetchJob}
-                            addFetchJob={() => this.props.navigation.navigate('AddFetchJob')}
                             deleteFetchJob={this.deleteFetchJob} />
                     </View>}
-                    <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddFetchJob')} />
+                    <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => navigation.navigate('AddFetchJob')} />
                 </View>
             </View>
-        );
+        )
     }
 }
 
 const mapStateToProps = state => ({
-    state: state.fetch_job,
-    user: state.user.current_user,
-    current_project: state.project.current_project,
-    fetch_jobs: state.fetch_job.fetch_jobs,
-    pending_: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == PENDING) : [],
-    in_progress: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == IN_PROGRESS) : [],
-    completed: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == COMPLETED) : [],
-    pending: getPending(state),
-    error: getError(state),
+    user: state.user,
+    project: state.project,
+    fetch_job: state.fetch_job,
     running_fetch: state.running_fetch,
-});
+})
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     setCurrentFetchJob: setCurrentFetchJob,
     removeFetchJob: removeFetchJob,
     getProjectFetchJobs: getProjectFetchJobs,
-}, dispatch);
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)
