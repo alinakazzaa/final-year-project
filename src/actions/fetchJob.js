@@ -1,7 +1,9 @@
 import { db } from '../database/config/db';
-import { DB_PROJECT_FETCH_JOBS_REF, SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, CLEAR_CURRENT_FETCH_JOB, CLEAR_FETCH_JOB_STATE } from '../constants';
+import { SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, CLEAR_CURRENT_FETCH_JOB, CLEAR_FETCH_JOB_STATE } from '../constants';
 import { SET_FETCH_JOBS_ERROR, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING } from '../constants/response/types';
 import { DATE_TODAY } from '../constants/TodayDate';
+import { DB_PROJECT_FETCH_JOBS_REF } from '../constants/database';
+import { MSG_NO_FETCH_JOBS } from '../constants/response/messages';
 
 
 export const getProjectFetchJobs = (user_id, project_id) => {
@@ -19,10 +21,10 @@ export const getProjectFetchJobs = (user_id, project_id) => {
     })
 
     if (fetch_jobs.length == 0) {
-        const error = { type: 'no fetch jobs' }
+
         return {
             type: SET_FETCH_JOBS_ERROR,
-            error: error
+            message: MSG_NO_FETCH_JOBS
         }
     } else {
         return {
@@ -113,9 +115,6 @@ export const removeFetchJob = fetch_job => {
     }
 }
 
-export const formatNumber = num => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+export const filterFetchJobs = (fetch_jobs, status) => {
+    return [...fetch_jobs.filter(fj => fj.details.status == status)]
 }
-
-
-
