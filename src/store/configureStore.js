@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import userReducer from '../reducers/userReducer';
 import projectReducer from '../reducers/projectReducer';
@@ -8,6 +8,7 @@ import fetchReducer from '../reducers/fetchReducer';
 import collabReducer from '../reducers/collabReducer';
 
 const middlewares = [thunk];
+
 
 const rootReducer = combineReducers(
     {
@@ -21,7 +22,7 @@ const rootReducer = combineReducers(
 );
 
 const configureStore = () => {
-    return createStore(rootReducer, applyMiddleware(...middlewares));
+    return createStore(rootReducer, compose(applyMiddleware(...middlewares), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
 }
 
 export default configureStore;
