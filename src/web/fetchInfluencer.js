@@ -1,4 +1,4 @@
-import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME, INSTAGRAM_GET_USER_FOLLOWED_BY, INSTAGRAM_GET_USER_MEDIA_COUNT } from "../constants/endpoints"
+import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_FOLLOWED_BY, INSTAGRAM_GET_USER_MEDIA_COUNT } from "../constants/insta_endpoints"
 import { addInfluencer } from "../actions/influencer"
 import { GET_USER_SUCCESS, GET_USER_ERROR, GET_USER_PENDING } from "../constants/response/types"
 

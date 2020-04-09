@@ -1,7 +1,7 @@
-import { INSTAGRAM_GET_NEXT_PAGE_MEDIA } from "../constants/endpoints"
+import { INSTAGRAM_GET_NEXT_PAGE_MEDIA } from "../constants/insta_endpoints"
 import { extractIds, getInfluencers } from './fetchMedia'
 import { GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_ERROR, COMPLETED_GET_ALL_USERS } from "../constants/response/types"
-import { GET_HASHTAG_MEDIA_SUCCESS, GET_HASHTAG_MEDIA_NO_MATCH } from "../constants/response/messages"
+import { GET_HASHTAG_MEDIA_SUCCESS, GET_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
 
 export const fetchNextPage = (fetch_job, pending, success, error) => {
     pending(GET_MEDIA_NEXT_PAGE_PENDING)
@@ -28,7 +28,7 @@ export const fetchNextPage = (fetch_job, pending, success, error) => {
                     } else {
                         response = {
                             type: COMPLETED_GET_ALL_USERS,
-                            message: GET_HASHTAG_MEDIA_NO_MATCH,
+                            message: GET_HASHTAG_MEDIA_ERROR,
                             has_next_page: edge_hashtag_to_media.page_info.has_next_page,
                         }
                     }

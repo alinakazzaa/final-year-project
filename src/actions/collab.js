@@ -1,7 +1,8 @@
 import { db } from '../database/config/db';
-import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, SET_COLLABS_PENDING, SET_COLLABS_ERROR, SET_COLLABS_SUCCESS } from '../constants';
+import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB } from '../constants';
 import { DATE_TODAY } from '../constants/TodayDate'
 import { DB_USER_COLLABS_REF } from '../constants/database';
+import { SET_COLLABS_ERROR, SET_COLLABS_SUCCESS, SET_COLLABS_PENDING } from '../constants/response/types';
 
 export const getUserCollabs = user_id => {
     const collabs = []

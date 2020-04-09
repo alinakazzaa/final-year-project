@@ -8,7 +8,7 @@ import { formatNumber } from '../../actions/base'
 import TabView from '../tabview/TabView';
 import { colors, inputView } from '../../styles/base';
 import Slider from '../slider/Slider';
-import { criteria } from '../../constants/Criteria';
+import { criteria } from '../../constants/criteria';
 import { COMPLETED } from '../../constants';
 import bootstrap from 'tcomb-form-native/lib/stylesheets/bootstrap.js';
 

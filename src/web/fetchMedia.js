@@ -1,7 +1,7 @@
-import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from "../constants/endpoints"
+import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from "../constants/insta_endpoints"
 import { fetchInfluencer } from "./fetchInfluencer"
 import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_BY_HASHTAG_SUCCESS, COMPLETED_GET_ALL_USERS } from "../constants/response/types"
-import { GET_HASHTAG_MEDIA_NO_MATCH, GET_HASHTAG_MEDIA_SUCCESS } from "../constants/response/messages"
+import { GET_HASHTAG_MEDIA_ERROR, GET_HASHTAG_MEDIA_SUCCESS } from "../constants/response/messages"
 
 export const fetchMedia = (fetch_job, pending, success, error) => {
     let response
@@ -36,7 +36,7 @@ export const fetchMedia = (fetch_job, pending, success, error) => {
                     } else {
                         response = {
                             type: COMPLETED_GET_ALL_USERS,
-                            message: GET_HASHTAG_MEDIA_NO_MATCH,
+                            message: GET_HASHTAG_MEDIA_ERROR,
                             has_next_page: edge_hashtag_to_media.page_info.has_next_page,
                         }
                     }

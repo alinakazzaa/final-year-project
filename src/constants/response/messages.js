@@ -12,9 +12,15 @@ export const MSG_NO_PROJECTS = 'There are no projects'
 // FETCH JOB
 export const MSG_NO_FETCH_JOBS = 'There are no fetch jobs'
 
+// COLLAB
+export const MSG_NO_COLLABS = 'There are no collaborations'
+
+// INFLUENCER
+export const MSG_NO_INFLUENCERS = 'There are no influencers'
+
 // FETCH
-export const GET_HASHTAG_MEDIA_SUCCESS = 'completed: hashtag media match'
-export const GET_HASHTAG_MEDIA_NO_MATCH = 'completed: no hashtag media match'
+export const GET_HASHTAG_MEDIA_SUCCESS = 'success: got users by hashtag'
+export const GET_HASHTAG_MEDIA_ERROR = 'error: didn\'t get users by hashtag'
 
 
 // NEXT PAGE FETCH
