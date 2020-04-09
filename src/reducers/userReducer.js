@@ -4,7 +4,7 @@ import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR, SET_USERS_PENDING, SET_USERS_SUCC
 const initialState = {
     pending: null,
     error: null,
-    users: [],
+    all_users: [],
     current_user: {}
 };
 
@@ -40,7 +40,8 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 users: [...action.users],
-                pending: false
+                pending: false,
+                error: null
             }
 
         case SET_USERS_ERROR:
@@ -48,7 +49,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: false,
-                error: action.message
+                error: { type: action.type, message: action.message }
             }
         default:
             return state;

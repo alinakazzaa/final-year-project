@@ -1,8 +1,9 @@
-import { DB_USER_REF, USER_LOGOUT } from '../constants';
+import { USER_LOGOUT } from '../constants';
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
 import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR, SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types';
-import { NO_USERS } from '../constants/response/messages';
+import { DB_USER_REF } from '../constants/database';
+import { MSG_NO_USERS } from '../constants/response/messages';
 
 
 export const getAllUsers = () => {
@@ -21,7 +22,7 @@ export const getAllUsers = () => {
     if (users.length == 0) {
         return {
             type: SET_USERS_ERROR,
-            message: NO_USERS
+            message: MSG_NO_USERS
         }
     } else {
         return {
@@ -72,7 +73,7 @@ export const addUser = user => {
 export const updateUser = (user, user_id) => {
     db.ref(`/Users/${user_id}`).update({
         details: {
-
+            ...user
         }
     });
 }
