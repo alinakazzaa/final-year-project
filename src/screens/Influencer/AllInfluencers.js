@@ -57,7 +57,7 @@ class AllInfluencers extends React.Component {
     render() {
         const { influencers, current_project, current_fetch_job } = this.props
         let { index, isLoading, selectedTabStyle, selectedTabItemStyle } = this.state
-        console.log(this.props.state.influencer)
+
         return (
             <View style={styles.container}>
                 <AppHeader
