@@ -8,6 +8,7 @@ import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob';
 import { fetch_job_style } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton';
 import { TextButton } from '../../components/buttons/TextButton';
+import { DATE_TODAY } from '../../constants/TodayDate';
 
 class AddFetchJob extends React.Component {
 
@@ -26,9 +27,12 @@ class AddFetchJob extends React.Component {
     }
 
     componentDidMount() {
+        const { fetch_job } = this.state
+
         if (this.props.navigation.state.params)
             this.setState({ fetch_job: { hashtag: this.props.navigation.state.params.tag } })
 
+        this.setState({ fetch_job: { ...fetch_job, date_created: DATE_TODAY, } })
     }
 
     handleChange = updated_fetch_job => {
@@ -37,12 +41,12 @@ class AddFetchJob extends React.Component {
 
     handleSubmit = () => {
         const { fetch_job } = this.state
-        const { user, current_project, addFetchJob, setCurrentFetchJob } = this.props
+        const { user, project, addFetchJob, setCurrentFetchJob } = this.props
         fetch_job.title = 'Hashtag search: ' + fetch_job.hashtag
-        addFetchJob(user.id, current_project.id, fetch_job)
+        addFetchJob(user.current_user.id, project.current_project.id, fetch_job)
         setCurrentFetchJob({ details: fetch_job })
         this.props.navigation.goBack()
-        this.props.navigation.navigate('FetchJobView')
+        this.props.navigation.navigate('AllFetchJobs')
     }
 
     componentWillUnmount() {
@@ -51,7 +55,7 @@ class AddFetchJob extends React.Component {
 
     render() {
         const { fetch_job } = this.state
-
+        console.log(this.props.project)
         return (
             <View>
                 <AppHeader
@@ -73,9 +77,14 @@ class AddFetchJob extends React.Component {
     }
 }
 
+const mapStateToProps = state => ({
+    user: state.user,
+    project: state.project
+});
+
 const mapDispatchToProps = dispatch => bindActionCreators({
     addFetchJob: addFetchJob,
     setCurrentFetchJob: setCurrentFetchJob
 }, dispatch);
 
-export default connect(null, mapDispatchToProps)(AddFetchJob)
+export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)
