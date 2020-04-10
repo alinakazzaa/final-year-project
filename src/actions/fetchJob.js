@@ -1,7 +1,6 @@
 import { db } from '../database/config/db';
 import { SET_CURRENT_FETCH_JOB, ADD_FETCH_JOB, REMOVE_FETCH_JOB, PENDING, UPDATE_FETCH_JOB, CLEAR_CURRENT_FETCH_JOB, CLEAR_FETCH_JOB_STATE } from '../constants';
 import { SET_FETCH_JOBS_ERROR, SET_FETCH_JOBS_SUCCESS, SET_FETCH_JOBS_PENDING } from '../constants/response/types';
-import { DATE_TODAY } from '../constants/TodayDate';
 import { DB_PROJECT_FETCH_JOBS_REF } from '../constants/database';
 import { MSG_NO_FETCH_JOBS } from '../constants/response/messages';
 
@@ -65,7 +64,6 @@ export const addFetchJob = (user_id, project_id, fetch_job) => {
     let fj_obj = {
         details: {
             ...fetch_job,
-            date_created: DATE_TODAY,
             status: PENDING,
             user_id: user_id,
             project_id: project_id,
