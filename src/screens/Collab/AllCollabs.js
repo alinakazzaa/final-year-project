@@ -1,16 +1,15 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
-import { AppHeader } from '../../layouts/Header';
-import { collab_style } from './styles/collab.styles';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { LoadingScreen } from '../../components/loading/LoadingScreen';
-import { colors, base } from '../../styles/base';
-import TabView from '../../components/tabview/TabView';
-import { Input } from 'react-native-elements';
-import { getUserCollabs, setCollabsPending, setCurrentCollab, removeCollab, filterCollabs } from '../../actions/collab';
-import { searchedCollabs } from '../../reducers/collabReducer';
-import { CollabList } from '../../components/list/CollabList';
+import * as React from 'react'
+import { View, Text } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import { collab_style } from './styles/collab.styles'
+import { connect } from 'react-redux'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { colors, base } from '../../styles/base'
+import { TabView } from '../../components/tabview/TabView'
+import { Input } from 'react-native-elements'
+import { getUserCollabs, setCollabsPending, setCurrentCollab, removeCollab, filterCollabs } from '../../actions/collab'
+import { searchedCollabs } from '../../reducers/collabReducer'
+import { CollabList } from '../../components/list/CollabList'
 
 class AllCollabs extends React.Component {
 
@@ -91,12 +90,11 @@ const mapStateToProps = state => ({
     collab: state.collab
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    getUserCollabs: getUserCollabs,
-    setCollabsPending: setCollabsPending,
-    setCurrentCollab: setCurrentCollab,
-    removeCollab: removeCollab
-
-}, dispatch)
+const mapDispatchToProps = {
+    getUserCollabs,
+    setCollabsPending,
+    setCurrentCollab,
+    removeCollab
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllCollabs)
