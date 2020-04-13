@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, YellowBox } from 'react-native'
+import { View, Text } from 'react-native'
 import { FetchJobList } from '../../components/list/FetchJobList'
 import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs, filterFetchJobs } from '../../actions/fetchJob'
 import { connect } from 'react-redux'
