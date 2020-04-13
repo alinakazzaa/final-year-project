@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux'
 import { AppHeader } from '../../layouts/Header'
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
 import { BackButton } from '../../components/buttons/BackButton'
-import TabView from '../../components/tabview/TabView'
+import { TabView } from '../../components/tabview/TabView'
 import { colors, base } from '../../styles/base'
 import { Input, Icon } from 'react-native-elements'
 import { fetch_job_style } from './styles/fetchJob.styles'
@@ -65,12 +65,12 @@ class AllFetchJobs extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => navigation.goBack()} />}
-                />
-                <View style={fetch_job_style.container}>
-                    <View style={fetch_job_style.searchView}>
+                    center={<View style={fetch_job_style.searchView}>
                         <Text style={fetch_job_style.title}>Search</Text>
                         <Input onChangeText={text => this.searchFetchJob(text)} inputStyle={base.inputStyle} inputContainerStyle={fetch_job_style.searchInput} />
-                    </View>
+                    </View>}
+                />
+                <View style={fetch_job_style.container}>
                     <TabView titles={['Pending', 'In Progress', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='32%' index={index} three />
                     {isLoading &&
                         <LoadingScreen text="Wait, getting your searches" />
