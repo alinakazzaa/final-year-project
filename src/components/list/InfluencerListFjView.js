@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from '
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { TextButton } from '../buttons/TextButton'
+import { spacing } from '../../styles/base'
 
 export const InfluencerListFjView = ({ influencers, goToInfluencer, addInfluencerByUsername, addToPotential, removeInfluencer }) => {
     let COUNT = 0
@@ -49,8 +50,9 @@ const styles = StyleSheet.create(
             // justifyContent: 'space-around',
         },
         scrollContainer: {
-            padding: '2%',
-            paddingLeft: 0,
+            paddingTop: spacing.LARGE,
+            paddingBottom: spacing.LARGE
+
         },
         listItem: {
             display: 'flex',
