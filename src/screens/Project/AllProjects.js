@@ -3,14 +3,13 @@ import { View, Text } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { ProjectList } from '../../components/list/ProjectList'
 import { Input, Icon } from 'react-native-elements'
-import { removeProject, setCurrentProject, getUserProjects, setUserProjectsPending } from '../../actions/project'
+import { removeProject, setCurrentProject, getUserProjects } from '../../actions/project'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { activeProjects, archivedProjects } from '../../reducers/projectReducer'
 import { project_style } from './styles/project.styles'
 import { colors, base } from '../../styles/base'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
-import TabView from '../../components/tabview/TabView'
+import { TabView } from '../../components/tabview/TabView'
 
 class AllProjects extends React.Component {
 
@@ -18,20 +17,16 @@ class AllProjects extends React.Component {
         headerShown: false,
     }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            index: 0,
-            searched: [],
-            isSearch: false,
-            active: [],
-            archived: []
-        }
+    state = {
+        index: 0,
+        searched: [],
+        isSearch: false,
+        active: [],
+        archived: []
     }
 
     componentDidMount() {
-        let { user, setUserProjectsPending, getUserProjects } = this.props
-        setUserProjectsPending()
+        let { user, getUserProjects } = this.props
         getUserProjects(user.current_user.id)
     }
 
@@ -42,8 +37,8 @@ class AllProjects extends React.Component {
     }
 
     deleteProject = project => {
-        let { user, removeProject } = this.props
-        removeProject(user.current_user.id, project)
+        let { removeProject } = this.props
+        removeProject(project)
     }
 
     searchProject = text => {
@@ -66,12 +61,14 @@ class AllProjects extends React.Component {
                     <LoadingScreen text="Wait, getting your campaigns" /> :
                     <View>
                         <AppHeader
-                            gradient={true} />
-                        <View style={project_style.allContainer}>
-                            <View style={project_style.searchView}>
-                                <Text style={project_style.title}>Search</Text><Input
+                            gradient={true}
+                            left={<View style={project_style.searchTxt}><Text style={project_style.title}>Search</Text></View>}
+                            center={<View style={project_style.searchView}>
+                                <Input
                                     onChangeText={text => this.searchProject(text)} inputStyle={base.inputStyle} inputContainerStyle={project_style.searchInput} />
-                            </View>
+                            </View>} />
+                        <View style={project_style.allContainer}>
+
                             <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
                             {project.error && <View style={project_style.none}><Text style={project_style.noneMsg}>{project.error.message}</Text></View>}
                             {!project.error && !project.pending &&
@@ -94,11 +91,10 @@ const mapStateToProps = state => ({
     project: state.project
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({
+const mapDispatchToProps = {
     setCurrentProject,
-    getUserProjects: getUserProjects,
-    setUserProjectsPending: setUserProjectsPending,
-    removeProject: removeProject,
-}, dispatch)
+    getUserProjects,
+    removeProject
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProjects)
