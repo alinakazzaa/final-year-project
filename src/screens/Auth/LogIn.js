@@ -1,21 +1,26 @@
-import * as React from 'react';
-import { View } from 'react-native';
-import LogInForm from '../../components/forms/LogInForm';
-import { connect } from 'react-redux';
-import { setCurrentUserPending, setCurrentUserError, setCurrentUserSuccess, setUsersPending, getAllUsers } from '../../actions/user';
+import * as React from 'react'
+import { View } from 'react-native'
+import LogInForm from '../../components/forms/LogInForm'
+import { connect } from 'react-redux'
+import { setCurrentUserError, setCurrentUserSuccess, setUsersPending, getAllUsers } from '../../actions/user'
 import { auth } from './styles/auth.styles'
-import { Gradient } from '../../styles/Gradient';
-import { MSG_INCORRECT_PASSWORD, MSG_NO_USER, MSG_EMPTY_FIELDS } from '../../constants/response/messages';
+import { Gradient } from '../../styles/Gradient'
 import { AppLogo } from '../../components/logo/AppLogo'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { MSG_EMPTY_FIELDS, MSG_INCORRECT_PASSWORD, MSG_NO_USER } from '../../constants/response/messages'
 
 class LogInScreen extends React.Component {
+
+    state = {
+        isLoading: false
+    }
 
     static navigationOptions = {
         headerShown: false,
     }
 
     componentDidMount() {
-        const { getAllUsers, setUsersPending } = this.props;
+        const { getAllUsers, setUsersPending } = this.props
         setUsersPending()
         getAllUsers()
     }
@@ -24,17 +29,16 @@ class LogInScreen extends React.Component {
         this.props.navigation.navigate("Registration")
     }
 
-    logIn = loginUser => {
-        const { setCurrentUserPending, setCurrentUserSuccess, setCurrentUserError, user } = this.props
-        setCurrentUserPending()
+    logIn = userValue => {
+        const { user } = this.props
 
-        if (loginUser.username == null || loginUser.password == null) {
+        if (userValue.username == null || userValue.password == null) {
             setCurrentUserError(MSG_EMPTY_FIELDS)
         } else {
-            let found_user = user.all_users.find(u => u.username == loginUser.username)
+            let found_user = user.all_users.find(u => u.username == userValue.username)
 
             if (found_user) {
-                if (loginUser.password == found_user.password)
+                if (userValue.password == found_user.password)
                     setCurrentUserSuccess(found_user)
                 else
                     setCurrentUserError(MSG_INCORRECT_PASSWORD)
@@ -49,24 +53,24 @@ class LogInScreen extends React.Component {
 
         return (
             <View>
-                <Gradient horizontal={true}>
+                {user.pending ? <LoadingScreen text="Wait, logging you in" /> : <Gradient horizontal={true}>
                     <View style={auth.logInContainer}>
                         <AppLogo large={true} />
                         <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={user.error} />
                     </View>
-                </Gradient>
+                </Gradient>}
+
             </View>
-        );
+        )
     }
 }
 
 const mapStateToProps = state => ({
     user: state.user
-});
+})
 
 
 const mapDispatchToProps = {
-    setCurrentUserPending,
     setCurrentUserError,
     setCurrentUserSuccess,
     setUsersPending,
