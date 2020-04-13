@@ -53,7 +53,7 @@ class LogInScreen extends React.Component {
 
         return (
             <View>
-                {user.pending ? <LoadingScreen text="Wait, logging you in" /> : <Gradient horizontal={true}>
+                {user.pending ? <LoadingScreen size='large' text="Welcome message or screen with animation" /> : <Gradient horizontal={true}>
                     <View style={auth.logInContainer}>
                         <AppLogo large={true} />
                         <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={user.error} />
