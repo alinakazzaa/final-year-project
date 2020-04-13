@@ -11,6 +11,7 @@ import { home } from './styles/home.styles'
 import { colors } from '../../styles/base'
 import { TagList } from '../../components/list/TagList'
 import { Divider } from 'react-native-elements'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
 
 class HomeScreen extends React.Component {
 
@@ -28,24 +29,17 @@ class HomeScreen extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        // const { project, fetch_job } = this.props
-        // if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
-        //     this.getRecentHashtags()
-        // }
+        const { user, project, fetch_job, getProjectFetchJobs } = this.props
 
-        // if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
-        //     const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED)]
-        //     const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
-        //     this.setState({ recent_tags: tags })
-        // }
-    }
+        if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
+            getProjectFetchJobs(user.current_user.id, project.all_projects[0].id)
+        }
 
-    getRecentHashtags = () => {
-        const { user, project, getProjectFetchJobs } = this.props
-        let active_projects = [...project.all_projects.filter(proj => proj.active == true)]
-        // TO CHANGE
-        let project_id = active_projects[0].id // should be active_projects.length -1 - for test purposes as my first project has most info
-        getProjectFetchJobs(user.id, project_id)
+        if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
+            const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
+            const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
+            this.setState({ recent_tags: tags })
+        }
     }
 
     onTagPress = tag => {
@@ -53,7 +47,7 @@ class HomeScreen extends React.Component {
     }
 
     render() {
-        const { logOutUser, fetc } = this.props
+        const { logOutUser, fetch_job, project } = this.props
         const { recent_tags } = this.state
 
         return (
@@ -66,6 +60,7 @@ class HomeScreen extends React.Component {
                         onPress={() => logOutUser()}
                     /></View>}
                 />
+                {project.pending || fetch_job.pending && <LoadingScreen />}
                 <View style={home.container}>
                     <View style={home.top}>
                         <Text style={home.title}>Based on your previous searches</Text>
