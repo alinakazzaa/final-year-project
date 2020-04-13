@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs, filterFetchJobs } from '../../actions/fetchJob'
+import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs, filterFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { AppHeader } from '../../layouts/Header'
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
 import { BackButton } from '../../components/buttons/BackButton'
@@ -16,7 +15,6 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 class AllFetchJobs extends React.Component {
 
     state = {
-        isLoading: true,
         index: 0,
         pending: [],
         completed: [],
@@ -32,7 +30,6 @@ class AllFetchJobs extends React.Component {
     componentDidMount() {
         const { getProjectFetchJobs, user, project } = this.props
         getProjectFetchJobs(user.current_user.id, project.current_project.id)
-        this.setState({ isLoading: false })
     }
 
     goToFetchJob = fj => {
@@ -56,8 +53,13 @@ class AllFetchJobs extends React.Component {
         this.setState({ index })
     }
 
+    // componentWillUnmount() {
+    //     const { clearFetchJobState } = this.props
+    //     clearFetchJobState()
+    // }
+
     render() {
-        const { index, isLoading, isSearch, searched } = this.state
+        const { index, isSearch, searched } = this.state
         const { fetch_job, navigation } = this.props
 
         return (
@@ -71,30 +73,40 @@ class AllFetchJobs extends React.Component {
                     </View>}
                 />
                 <View style={fetch_job_style.container}>
-                    <TabView titles={['Pending', 'In Progress', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='32%' index={index} three />
-                    {isLoading &&
-                        <LoadingScreen text="Wait, getting your searches" />
+                    {fetch_job.pending &&
+                        <LoadingScreen />
                     }
-                    {!isLoading && index == 0 &&
-                        <View>
-                            <FetchJobList
-                                fetch_jobs={isSearch ? filterFetchJobs(searched, PENDING) : filterFetchJobs(fetch_job.all_fetch_jobs, PENDING)}
-                                goToFetchJob={this.goToFetchJob}
-                                deleteFetchJob={this.deleteFetchJob} />
+                    {!fetch_job.error && !fetch_job.pending &&
+                        <View><TabView
+                            titles={['Pending', 'In Progress', 'Completed']}
+                            onPress={this.setTab}
+                            color={colors.TERTIARY}
+                            size='32%'
+                            index={index}
+                            three />
+                            {index == 0 &&
+                                <View>
+                                    <FetchJobList
+                                        fetch_jobs={isSearch ? filterFetchJobs(searched, PENDING) : filterFetchJobs(fetch_job.all_fetch_jobs, PENDING)}
+                                        goToFetchJob={this.goToFetchJob}
+                                        deleteFetchJob={this.deleteFetchJob} />
+                                </View>}
+                            {index == 1 &&
+                                <View>
+                                    <FetchJobList
+                                        fetch_jobs={isSearch ? filterFetchJobs(searched, IN_PROGRESS) : filterFetchJobs(fetch_job.all_fetch_jobs, IN_PROGRESS)}
+                                        goToFetchJob={this.goToFetchJob}
+                                        deleteFetchJob={this.deleteFetchJob} />
+                                </View>}
+                            {index == 2 && <View>
+                                <FetchJobList
+                                    fetch_jobs={isSearch ? filterFetchJobs(searched, COMPLETED) : filterFetchJobs(fetch_job.all_fetch_jobs, COMPLETED)}
+                                    goToFetchJob={this.goToFetchJob}
+                                    deleteFetchJob={this.deleteFetchJob} />
+                            </View>}
                         </View>}
-                    {!isLoading && index == 1 &&
-                        <View>
-                            <FetchJobList
-                                fetch_jobs={isSearch ? filterFetchJobs(searched, IN_PROGRESS) : filterFetchJobs(fetch_job.all_fetch_jobs, IN_PROGRESS)}
-                                goToFetchJob={this.goToFetchJob}
-                                deleteFetchJob={this.deleteFetchJob} />
-                        </View>}
-                    {!isLoading && index == 2 && <View>
-                        <FetchJobList
-                            fetch_jobs={isSearch ? filterFetchJobs(searched, COMPLETED) : filterFetchJobs(fetch_job.all_fetch_jobs, COMPLETED)}
-                            goToFetchJob={this.goToFetchJob}
-                            deleteFetchJob={this.deleteFetchJob} />
-                    </View>}
+
+
                     <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => navigation.navigate('AddFetchJob')} />
                 </View>
             </View>
@@ -109,10 +121,11 @@ const mapStateToProps = state => ({
     running_fetch: state.running_fetch,
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    setCurrentFetchJob: setCurrentFetchJob,
-    removeFetchJob: removeFetchJob,
-    getProjectFetchJobs: getProjectFetchJobs,
-}, dispatch)
+const mapDispatchToProps = {
+    setCurrentFetchJob,
+    removeFetchJob,
+    getProjectFetchJobs,
+    clearFetchJobState
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFetchJobs)
