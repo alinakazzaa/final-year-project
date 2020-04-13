@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
-import { colors, fonts, spacing } from '../../styles/base';
-import RangeSlider from 'rn-range-slider';
-import { View } from 'native-base';
-import { base } from '../../styles/base';
+import { colors } from '../../styles/base'
+import RangeSlider from 'rn-range-slider'
+import { View } from 'native-base'
+import { base } from '../../styles/base'
 
 export default class Slider extends React.Component {
 
