@@ -41,7 +41,7 @@ const projectReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                current_project: { ...action.payload },
+                current_project: action.project,
                 pending: false
             }
 
