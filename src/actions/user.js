@@ -1,9 +1,9 @@
-import { USER_LOGOUT, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_PENDING, SET_CURRENT_USER_ERROR } from '../constants';
+import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR } from '../constants'
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
-import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types';
-import { DB_USER_REF } from '../constants/database';
-import { MSG_NO_USERS } from '../constants/response/messages';
+import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types'
+import { DB_USER_REF } from '../constants/database'
+import { MSG_NO_USERS } from '../constants/response/messages'
 
 
 export const getAllUsers = () => {
@@ -47,12 +47,6 @@ export const setUsersError = () => {
     }
 }
 
-export const setCurrentUserPending = () => {
-    return {
-        type: SET_CURRENT_USER_PENDING
-    }
-}
-
 export const setCurrentUserSuccess = user => {
     return {
         type: SET_CURRENT_USER_SUCCESS,
@@ -63,28 +57,27 @@ export const setCurrentUserSuccess = user => {
 export const setCurrentUserError = message => {
     return {
         type: SET_CURRENT_USER_ERROR,
-        message
+        message: message
     }
 }
 
 export const logOutUser = () => {
     return {
-        type: USER_LOGOUT
+        type: CLEAR_CURRENT_USER
     }
 }
 
-export const registerUser = user_val => {
+export const registerUser = userVal => {
     let user = {
-        username: user_val.username,
-        password: user_val.password,
-        email: user_val.email,
+        username: userVal.username,
+        password: userVal.password,
+        email: userVal.email,
         id: '',
         date_created: DATE_TODAY
 
     }
 
     return dispatch => {
-        dispatch(setCurrentUserPending())
 
         DB_USER_REF.push({
             details: {
@@ -107,7 +100,7 @@ export const updateUser = (user, user_id) => {
         details: {
             ...user
         }
-    });
+    })
 }
 
 export const removeUser = user => {
