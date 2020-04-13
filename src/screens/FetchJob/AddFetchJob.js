@@ -1,14 +1,13 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
-import FetchJobForm from '../../components/forms/FetchJobForm';
-import { AppHeader } from '../../layouts/Header';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob';
+import * as React from 'react'
+import { View, Text } from 'react-native'
+import FetchJobForm from '../../components/forms/FetchJobForm'
+import { AppHeader } from '../../layouts/Header'
+import { connect } from 'react-redux'
+import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
 import { fetch_job_style } from './styles/fetchJob.styles'
-import { BackButton } from '../../components/buttons/BackButton';
-import { TextButton } from '../../components/buttons/TextButton';
-import { DATE_TODAY } from '../../constants/TodayDate';
+import { BackButton } from '../../components/buttons/BackButton'
+import { TextButton } from '../../components/buttons/TextButton'
+import { DATE_TODAY } from '../../constants/TodayDate'
 
 class AddFetchJob extends React.Component {
 
@@ -41,12 +40,12 @@ class AddFetchJob extends React.Component {
 
     handleSubmit = () => {
         const { fetch_job } = this.state
-        const { user, project, addFetchJob, setCurrentFetchJob } = this.props
+        const { user, project, addFetchJob, setCurrentFetchJob, navigation } = this.props
         fetch_job.title = 'Hashtag search: ' + fetch_job.hashtag
         addFetchJob(user.current_user.id, project.current_project.id, fetch_job)
         setCurrentFetchJob({ details: fetch_job })
-        this.props.navigation.goBack()
-        this.props.navigation.navigate('AllFetchJobs')
+        navigation.goBack()
+        navigation.navigate('AllFetchJobs')
     }
 
     componentWillUnmount() {
@@ -55,7 +54,7 @@ class AddFetchJob extends React.Component {
 
     render() {
         const { fetch_job } = this.state
-        console.log(this.props.project)
+
         return (
             <View>
                 <AppHeader
@@ -73,18 +72,18 @@ class AddFetchJob extends React.Component {
                     <View style={fetch_job_style.info}><Text style={fetch_job_style.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
-        );
+        )
     }
 }
 
 const mapStateToProps = state => ({
     user: state.user,
     project: state.project
-});
+})
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    addFetchJob: addFetchJob,
-    setCurrentFetchJob: setCurrentFetchJob
-}, dispatch);
+const mapDispatchToProps = {
+    addFetchJob,
+    setCurrentFetchJob
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)
