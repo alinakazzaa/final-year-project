@@ -80,13 +80,14 @@ export const addFetchJob = (user_id, project_id, fetchJobVal) => {
             project_id: project_id,
             id: ''
         }
+
     }
 
     return dispatch => {
         db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
             ...fetch_job
         }).then(data => {
-            fetch_job.id = data.key
+            fetch_job.details.id = data.key
 
             db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${data.key}/details`).update({
                 id: data.key
