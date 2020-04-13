@@ -1,6 +1,5 @@
-import { USER_LOGOUT, SET_CURRENT_USER_PENDING } from '../constants'
+import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR } from '../constants'
 import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types'
-import { SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR } from '../constants/index'
 
 const initialState = {
     pending: null,
@@ -11,11 +10,6 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_CURRENT_USER_PENDING:
-            return {
-                ...state,
-                pending: true
-            }
 
         case SET_CURRENT_USER_SUCCESS:
             return {
@@ -31,7 +25,7 @@ const userReducer = (state = initialState, action) => {
                 pending: false,
                 error: { type: action.type, message: action.message }
             }
-        case USER_LOGOUT:
+        case CLEAR_CURRENT_USER:
             return {
                 ...initialState
             }
