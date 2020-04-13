@@ -3,12 +3,11 @@ import { Avatar } from 'react-native-elements'
 import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
-import { removeInfluencer } from '../../actions/influencer'
 import { formatNumber } from '../../actions/base'
 import { influencer_style } from '../../screens/Influencer/styles/influencer.styles'
 import { colors } from '../../styles/base'
 
-export const InfluencerList = ({ influencers, current_fetch_job, goToInfluencer, createCollab, addInfluencerByUsername, saveInfluencer }) => {
+export const InfluencerList = ({ influencers, goToInfluencer, createCollab, removeInfluencer, saveInfluencer }) => {
 
     const influList = (influ, index) => {
         return (
@@ -50,19 +49,19 @@ export const InfluencerList = ({ influencers, current_fetch_job, goToInfluencer,
                     </View>
                 </View>
                 <View style={influencer_style.footer}>
-                    <TouchableOpacity style={influencer_style.voteOption}>
+                    {influ.to_do && <TouchableOpacity style={influencer_style.voteOption}>
                         <IconButton
                             name='check'
                             size={50}
                             color={colors.GREEN}
                             type='material-icons'
-                            onPress={() => saveInfluencer(current_fetch_job, influ.id)}
-                        /></TouchableOpacity>
+                            onPress={() => saveInfluencer(influ)}
+                        /></TouchableOpacity>}
                     <TouchableOpacity style={influencer_style.createCollab}>
                         <IconButton
                             name='create'
                             size={40}
-                            color={colors.SECONDARY}
+                            color={colors.TERTIARY}
                             type='material-icons'
                             onPress={() => createCollab(influ)}
                         /></TouchableOpacity>
@@ -72,7 +71,7 @@ export const InfluencerList = ({ influencers, current_fetch_job, goToInfluencer,
                             size={50}
                             color={colors.RED}
                             type='material-icons'
-                            onPress={() => removeInfluencer(current_fetch_job, influ.id)}
+                            onPress={() => removeInfluencer(influ.id)}
                         /></TouchableOpacity>
                 </View>
             </View>
@@ -96,7 +95,6 @@ export const InfluencerList = ({ influencers, current_fetch_job, goToInfluencer,
 InfluencerList.propTypes = {
     influencers: PropTypes.array.isRequired,
     current_project: PropTypes.object.isRequired,
-    current_fetch_job: PropTypes.object.isRequired,
     goToInfluencer: PropTypes.func,
     addInfluencerByUsername: PropTypes.func,
     saveInfluencer: PropTypes.func,
