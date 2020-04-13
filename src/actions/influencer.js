@@ -5,12 +5,13 @@ import { SET_INFLUENCERS_ERROR, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS
 import { MSG_NO_INFLUENCERS } from '../constants/response/messages'
 
 export const getAllInfluencers = fetch_job => {
-    return dispatch => {
 
+    return dispatch => {
         const influencers = []
         dispatch(getInfluencersPending())
 
         fetch_job.influencers.success.forEach(id => {
+
             db.ref(`Influencers/${id}`).once('value', snapshot => {
                 influencers.push(snapshot.val())
 
@@ -51,7 +52,7 @@ export const getInfluencersError = () => {
 export const setCurrentInfluencer = influencer => {
     return {
         type: SET_CURRENT_INFLUENCER,
-        influencer: influencer
+        influencer
     }
 }
 
