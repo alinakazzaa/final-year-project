@@ -15,7 +15,8 @@ export const colors = {
     GREEN: '#30cf0c',
     BORDER: '#C8C8C8',
     GRAY: '#585b61',
-    SCREEN: '#F8F8F8'
+    SCREEN: '#F8F8F8',
+    RED: '#ff0000'
 }
 
 export const spacing = {

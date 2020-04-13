@@ -7,7 +7,7 @@ export const influencer_style = StyleSheet.create(
             ...container,
             paddingRight: spacing.MEDIUM,
             paddingLeft: spacing.MEDIUM,
-            backgroundColor: 'transparent',
+            backgroundColor: 'transparent'
         },
         scrollContainer: {
             padding: spacing.LARGE

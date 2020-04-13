@@ -1,13 +1,21 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, fonts } from '../../../styles/base';
+import { colors, spacing, fonts, dimensions } from '../../../styles/base';
 
 export const loading = StyleSheet.create(
     {
-        bar: {
+        small: {
             display: 'flex',
-            flex: 1,
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            height: dimensions.fullHeight * .15,
+            backgroundColor: 'transparent'
+        },
+        large: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: dimensions.fullHeight,
+            backgroundColor: 'transparent'
         },
         text: {
             fontFamily: fonts.PRIMARY,
