@@ -1,33 +1,31 @@
 import { db } from '../database/config/db';
 import { SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, UPDATE_PROJECT, REMOVE_PROJECT } from '../constants';
-import { DATE_TODAY } from '../constants/TodayDate'
 import { SET_PROJECTS_ERROR, SET_PROJECTS_SUCCESS, SET_PROJECTS_PENDING } from '../constants/response/types';
 import { MSG_NO_PROJECTS } from '../constants/response/messages';
 import { DB_USER_PROJECTS_REF } from '../constants/database';
 
 export const getUserProjects = user_id => {
-    const projects = []
+    return dispatch => {
+        dispatch(setUserProjectsPending())
 
-    DB_USER_PROJECTS_REF(user_id).on('value', proj_snapshot => {
-        proj_snapshot.forEach(proj_snap => {
-            const proj = {
-                ...proj_snap.val().details,
-                user_id: user_id
+        const projects = []
+
+        DB_USER_PROJECTS_REF(user_id).once('value', projectSnapshot => {
+            projectSnapshot.forEach(project => {
+                const proj = {
+                    ...project.val().details,
+                    user_id: user_id
+                }
+                projects.push(proj)
+            })
+
+            if (projects.length == 0) {
+                dispatch(setUserProjectsError())
+
+            } else {
+                dispatch(setUserProjectsSuccess(projects))
             }
-            projects.push(proj)
         })
-    })
-
-    if (projects.length == 0) {
-        return {
-            type: SET_PROJECTS_ERROR,
-            message: MSG_NO_PROJECTS
-        }
-    } else {
-        return {
-            type: SET_PROJECTS_SUCCESS,
-            projects: projects
-        }
     }
 }
 
@@ -35,6 +33,20 @@ export const setUserProjectsPending = () => {
 
     return {
         type: SET_PROJECTS_PENDING
+    }
+}
+
+export const setUserProjectsSuccess = projects => {
+    return {
+        type: SET_PROJECTS_SUCCESS,
+        projects: projects
+    }
+}
+
+export const setUserProjectsError = () => {
+    return {
+        type: SET_PROJECTS_ERROR,
+        message: MSG_NO_PROJECTS
     }
 }
 
@@ -47,55 +59,59 @@ export const clearCurrentProject = () => {
 export const setCurrentProject = project => {
     return {
         type: SET_CURRENT_PROJECT,
-        payload: project
+        project
     }
 }
 
-export const addProject = (user_id, project) => {
-    let project_obj = {
-        ...project,
-        description: project.description || '',
-        active: project.active || false,
-        date_created: DATE_TODAY,
+export const addProject = (user_id, project_val) => {
+
+    let project = {
+        ...project_val,
+        user_id,
+        description: project_val.description || '',
+        active: project_val.active || false,
         id: ''
     }
+    return dispatch => {
+        db.ref(`/Users/${user_id}/Projects/`).push({
+            details: { ...project }
+        }).then(data => {
+            project.id = data.key
 
-    const project_add = db.ref(`/Users/${user_id}/Projects/`).push({
-        details: { ...project_obj }
-    })
+            db.ref(`/Users/${user_id}/Projects/${data.key}/details`).update({
+                id: data.key
+            })
 
-    const key = project_add.key
-    project_obj = { ...project_obj, id: key }
-    db.ref(`/Users/${user_id}/Projects/${key}`).update({
-        details: { ...project_obj }
-    })
-
-    return {
-        type: ADD_PROJECT,
-        project: project_obj
+            dispatch({
+                type: ADD_PROJECT,
+                project
+            })
+        })
     }
 }
 
 export const updateProject = (user_id, project_id, project) => {
+    return dispatch => {
+        db.ref(`/Users/${user_id}/Projects/${project_id}/details`).update({
+            ...project
+        });
 
-    db.ref(`/Users/${user_id}/Projects/${project_id}/details`).update({
-        ...project
-    });
-
-    return {
-        type: UPDATE_PROJECT,
-        payload: project
+        dispatch({
+            type: UPDATE_PROJECT,
+            project
+        })
     }
-
-
 }
 
-export const removeProject = (user_id, project) => {
-    db.ref(`/Users/${user_id}/Projects`).child(project.id).remove()
+export const removeProject = project => {
+    console.log(project.id)
+    return dispatch => {
+        db.ref(`/Users/${project.user_id}/Projects`).child(project.id).remove()
 
-    return {
-        type: REMOVE_PROJECT,
-        payload: project
+        dispatch({
+            type: REMOVE_PROJECT,
+            project
+        })
     }
 }
 
