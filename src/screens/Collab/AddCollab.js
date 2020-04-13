@@ -1,12 +1,11 @@
-import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { AppHeader } from '../../layouts/Header';
-import { IconButton } from '../../components/buttons/IconButton';
-import CollabForm from '../../components/forms/CollabForm';
-import { TextButton } from '../../components/buttons/TextButton';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { addCollab } from '../../actions/collab';
+import * as React from 'react'
+import { View, StyleSheet } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import { IconButton } from '../../components/buttons/IconButton'
+import CollabForm from '../../components/forms/CollabForm'
+import { TextButton } from '../../components/buttons/TextButton'
+import { connect } from 'react-redux'
+import { addCollab } from '../../actions/collab'
 
 
 class AddCollab extends React.Component {
@@ -22,7 +21,7 @@ class AddCollab extends React.Component {
     }
 
     handleChange = collab => {
-        this.setState({ collab: collab });
+        this.setState({ collab: collab })
     }
 
     render() {
@@ -50,7 +49,7 @@ class AddCollab extends React.Component {
                         title="Save" />
                 </View>
             </View>
-        );
+        )
     }
 }
 
@@ -79,16 +78,16 @@ const styles = StyleSheet.create(
             alignContent: 'center',
             alignItems: 'center',
         },
-    });
+    })
 
 const mapStateToProps = state => ({
     user: state.user,
-    collab: state.collab,
-    project: state.project
-});
+    project: state.project,
+    collab: state.collab
+})
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    addCollab: addCollab
-}, dispatch);
+const mapDispatchToProps = {
+    addCollab
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCollab)
