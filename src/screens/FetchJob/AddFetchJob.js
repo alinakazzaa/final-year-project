@@ -29,9 +29,15 @@ class AddFetchJob extends React.Component {
         const { fetch_job } = this.state
 
         if (this.props.navigation.state.params)
-            this.setState({ fetch_job: { hashtag: this.props.navigation.state.params.tag } })
-
-        this.setState({ fetch_job: { ...fetch_job, date_created: DATE_TODAY, } })
+            this.setState({
+                fetch_job: {
+                    ...fetch_job,
+                    hashtag: this.props.navigation.state.params.tag,
+                    date_created: DATE_TODAY
+                }
+            })
+        else
+            this.setState({ fetch_job: { ...fetch_job, } })
     }
 
     handleChange = updated_fetch_job => {
