@@ -16,7 +16,7 @@ class Router extends Component {
         let { user } = this.props
 
         return (
-            user.current_user.username == null ? <LogIn /> : <MainApp />
+            user.current_user.id == null ? <LogIn /> : <MainApp />
         )
     }
 }
