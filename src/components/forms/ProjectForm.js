@@ -1,12 +1,13 @@
-import React from 'react';
-import { View, Keyboard, Text } from 'react-native';
+import React from 'react'
+import { View, Keyboard, Text } from 'react-native'
 import PropTypes from 'prop-types'
 // @ts-ignore
-import t from 'tcomb-form-native';
-import { project_style, projectForm } from '../../screens/Project/styles/project.styles';
-import { SwitchItem } from '../switch/Switch';
+import t from 'tcomb-form-native'
+import { project_style, projectForm } from '../../screens/Project/styles/project.styles'
+import { SwitchItem } from '../switch/Switch'
+import { inputView } from '../../styles/base'
 
-const Form = t.form.Form;
+const Form = t.form.Form
 
 const formStyles = {
     ...Form.stylesheet,
@@ -17,32 +18,27 @@ const Project = t.struct({
     title: t.String,
     date_created: t.String,
     description: t.maybe(t.String),
-});
+})
 
 const options = {
     auto: 'none',
     fields: {
         title: {
-            error: 'Project requires a title!',
+            error: 'Project requires a title!'
 
         },
-        description: {
-            multiline: true,
+        date_created: {
+            editable: false
         },
+        description: {
+            multiline: true
+        }
     },
-    stylesheet: formStyles,
-};
+    stylesheet: formStyles
+}
 
 
 export default class ProjectForm extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            value: {
-                active: false
-            }
-        }
-    }
 
     render() {
         const { project_value, handleChange, toggleSwitch } = this.props
