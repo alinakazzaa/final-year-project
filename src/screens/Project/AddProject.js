@@ -5,9 +5,9 @@ import ProjectForm from '../../components/forms/ProjectForm'
 import { TextButton } from '../../components/buttons/TextButton'
 import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { BackButton } from '../../components/buttons/BackButton'
 import { project_style } from './styles/project.styles'
+import { DATE_TODAY } from '../../constants/TodayDate'
 
 class AddProject extends React.Component {
 
@@ -17,7 +17,8 @@ class AddProject extends React.Component {
 
     state = {
         project_value: {
-            active: false
+            active: false,
+            date_created: DATE_TODAY
         }
     }
 
@@ -58,8 +59,8 @@ const mapStateToProps = state => ({
     user: state.user
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    addProject: addProject
-}, dispatch)
+const mapDispatchToProps = {
+    addProject
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddProject)

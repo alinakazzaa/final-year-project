@@ -1,12 +1,11 @@
-import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import * as React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
 import { getCurrentInfluencer } from '../../reducers/influencerReducer'
-import { Avatar } from 'react-native-elements';
-import { IconButton } from '../../components/buttons/IconButton';
-import { AppHeader } from '../../layouts/Header';
-import { formatNumber } from '../../actions/base';
+import { Avatar } from 'react-native-elements'
+import { IconButton } from '../../components/buttons/IconButton'
+import { AppHeader } from '../../layouts/Header'
+import { formatNumber } from '../../actions/base'
 
 class ViewInfluencer extends React.Component {
 
@@ -76,7 +75,7 @@ class ViewInfluencer extends React.Component {
                     </View>
                 </View>
             </View >
-        );
+        )
     }
 }
 
@@ -178,15 +177,15 @@ const styles = StyleSheet.create(
             alignSelf: 'center',
             flexWrap: 'wrap'
         }
-    });
+    })
 
 const mapStateToProps = state => ({
     influencer: state.influencer
-});
+})
 
-const mapDispatchToProps = dispatch => bindActionCreators({
+const mapDispatchToProps = {
     getCurrentInfluencer
-}, dispatch);
+}
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewInfluencer)
