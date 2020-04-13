@@ -17,13 +17,10 @@ class AllCollabs extends React.Component {
         headerShown: false
     }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            index: 0,
-            searched: [],
-            isSearch: false
-        }
+    state = {
+        index: 0,
+        searched: [],
+        isSearch: false
     }
 
     componentDidMount() {
@@ -70,7 +67,8 @@ class AllCollabs extends React.Component {
                                     onChangeText={text => this.searchCollab(text)} inputStyle={base.inputStyle} inputContainerStyle={collab_style.searchInput} />
                             </View>
                             <TabView titles={['Active', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
-                            {!collab.error && !collab.pending &&
+                            {collab.pending && <LoadingScreen text="Wait, getting your collabs" />}
+                            {collab.error == null &&
                                 index == 0 ?
                                 <View>
                                     <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, true) : filterCollabs(collab.all_collabs, true)} />
