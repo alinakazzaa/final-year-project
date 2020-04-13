@@ -11,10 +11,10 @@ export const container = {
 export const tab = {
     textTransform: 'uppercase',
     textAlign: 'center',
-    color: colors.TERTIARY,
-    borderColor: colors.TERTIARY,
+    fontSize: fonts.SMALL * 0.9,
     fontWeight: fonts.WEIGHT_MEDIUM,
     padding: spacing.SMALL,
+    color: colors.TERTIARY
 }
 
 
@@ -56,13 +56,11 @@ export const twoTabs = (color, size) => StyleSheet.create(
         },
         tab: {
             ...tab,
+            backgroundColor: colors.SREEN
         },
         tabItem: {
             width: size,
             justifyContent: 'center',
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderColor: colors.BORDER,
         },
         selectedTab: {
             color: colors.WHITE,
