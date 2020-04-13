@@ -14,11 +14,8 @@ const fetchJobReducer = (state = initialState, action) => {
     const fetch_jobs = [...state.all_fetch_jobs]
 
     switch (action.type) {
-        // update FJ list on add & remove
         case ADD_FETCH_JOB:
-
             fetch_jobs.splice(fetch_jobs.length, 1, action.fetch_job)
-
             return {
                 ...state,
                 all_fetch_jobs: [...fetch_jobs]
@@ -26,14 +23,11 @@ const fetchJobReducer = (state = initialState, action) => {
 
 
         case REMOVE_FETCH_JOB:
-
             return {
                 ...state,
                 all_fetch_jobs: [...fetch_jobs.filter(fj => fj.details.id !== action.fetch_job.details.id)]
             }
 
-
-        // get fetch jobs for current project
         case SET_FETCH_JOBS_PENDING:
 
             return {
@@ -61,7 +55,7 @@ const fetchJobReducer = (state = initialState, action) => {
         case SET_CURRENT_FETCH_JOB:
             return {
                 ...state,
-                current_fetch_job: { ...action.fetch_job }
+                current_fetch_job: action.fetch_job
             }
 
         case UPDATE_FETCH_JOB:
