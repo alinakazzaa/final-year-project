@@ -214,8 +214,7 @@ export const fetch_job_style = StyleSheet.create(
         },
         searchView: {
             flexDirection: 'row',
-            padding: spacing.LARGE,
-            paddingBottom: 0
+            marginTop: spacing.SMALL
         },
         detailsBox: {
             flexDirection: 'row',
@@ -306,9 +305,9 @@ export const fetch_job_style = StyleSheet.create(
         },
         searchInput: {
             width: dimensions.fullWidth * 0.67,
-            borderColor: colors.BORDER,
-            borderBottomWidth: 2,
-            height: spacing.LARGE * 1.5,
+            borderColor: colors.TERTIARY,
+            borderBottomWidth: 1,
+            height: spacing.LARGE * 1.3,
         },
         right: {
             display: 'flex',
@@ -331,7 +330,7 @@ export const fetch_job_style = StyleSheet.create(
         },
         progressBar: {
             borderRadius: 10,
-            borderWidth: 0,
+            borderWidth: 0
         }
     });
 
@@ -352,7 +351,7 @@ export const fetchJobForm = {
     },
     select: {
         normal: {
-            ...inputView,
+            ...inputView
         },
     }
 }

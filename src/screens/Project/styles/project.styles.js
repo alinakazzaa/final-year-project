@@ -1,23 +1,22 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, container, inputLabel, dimensions, formContainer, form, inputView, boolSelect, width, inputViewLabel } from '../../../styles/base';
+import { colors, fonts, spacing, container, inputLabel, dimensions, formContainer, form, inputView, boolSelect, inputViewLabel } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
 export const project_style = StyleSheet.create(
     {
         allContainer: {
-            ...container,
-            backgroundColor: 'transparent',
+            ...container
         },
         viewContainer: {
             marginLeft: spacing.LARGE,
-            marginRight: spacing.LARGE,
+            marginRight: spacing.LARGE
         },
         scrollContainer: {
             padding: spacing.LARGE,
         },
         fetchScroll: {
             padding: spacing.SMALL,
-            paddingLeft: 0,
+            paddingLeft: 0
         },
         addContainer: {
             ...formContainer,
@@ -30,6 +29,7 @@ export const project_style = StyleSheet.create(
         },
         searchView: {
             flexDirection: 'row',
+            justifyContent: 'space-around',
             padding: spacing.LARGE,
             paddingBottom: 0
         },
@@ -46,46 +46,18 @@ export const project_style = StyleSheet.create(
             flexDirection: 'row',
             paddingTop: spacing.MEDIUM,
             borderBottomWidth: 1,
-            borderColor: colors.BORDER,
+            borderColor: colors.BORDER
         },
         collabBox: {
             maxHeight: dimensions.fullHeight * 0.2,
             flexDirection: 'column',
             borderBottomWidth: 1,
             borderColor: colors.BORDER,
-            paddingBottom: spacing.MEDIUM,
+            paddingBottom: spacing.MEDIUM
         },
         listView: {
             alignItems: 'center',
-            justifyContent: 'center',
-        },
-        tab: {
-            textTransform: 'uppercase',
-            textAlign: 'center',
-            padding: spacing.MEDIUM,
-            color: colors.TERTIARY,
-            borderColor: colors.TERTIARY,
-            fontWeight: fonts.WEIGHT_MEDIUM
-        },
-        tabItem: {
-            justifyContent: 'center',
-            width: dimensions.fullWidth * 0.45,
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderColor: colors.BORDER,
-        },
-        selectedTab: {
-            color: colors.WHITE,
-            textAlign: 'center',
-            padding: spacing.SMALL,
-            fontSize: fonts.SMALL,
-            textTransform: 'uppercase',
-            fontWeight: fonts.WEIGHT_MEDIUM
-        },
-        selectedTabItem: {
-            width: dimensions.fullWidth * 0.45,
-            justifyContent: 'center',
-            backgroundColor: colors.TERTIARY,
+            justifyContent: 'center'
         },
         listItem: {
             display: 'flex',
@@ -97,7 +69,7 @@ export const project_style = StyleSheet.create(
             padding: spacing.LARGE,
             fontFamily: fonts.PRIMARY,
             justifyContent: 'space-between',
-            marginBottom: spacing.MEDIUM,
+            marginBottom: spacing.MEDIUM
         },
         fetchJob: {
             display: 'flex',
@@ -105,7 +77,7 @@ export const project_style = StyleSheet.create(
             justifyContent: 'space-between',
             padding: spacing.SMALL,
             borderBottomWidth: 0.5,
-            borderColor: colors.BORDER,
+            borderColor: colors.BORDER
         },
         header: {
             paddingTop: spacing.LARGE,
@@ -126,9 +98,7 @@ export const project_style = StyleSheet.create(
         },
         title: {
             ...inputLabel,
-            fontWeight: fonts.WEIGHT_HEAVY,
-            borderBottomWidth: 1,
-            borderColor: colors.BORDER
+            fontWeight: fonts.WEIGHT_HEAVY
         },
         text: {
             ...inputViewLabel
@@ -145,9 +115,10 @@ export const project_style = StyleSheet.create(
         },
         searchInput: {
             width: dimensions.fullWidth * 0.67,
-            borderColor: colors.BORDER,
-            borderBottomWidth: 2,
-            height: spacing.LARGE * 1.5,
+            borderColor: colors.TERTIARY,
+            borderBottomWidth: 1,
+            height: spacing.LARGE * 1.4,
+            marginBottom: spacing.MEDIUM
         },
         left: {
             display: 'flex',
@@ -169,6 +140,10 @@ export const project_style = StyleSheet.create(
         },
         noneMsg: {
             padding: spacing.LARGE
+        },
+        searchTxt: {
+            marginTop: spacing.MEDIUM * 1.4,
+            marginLeft: spacing.MEDIUM
         }
     });
 
