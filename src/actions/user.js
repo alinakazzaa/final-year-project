@@ -7,35 +7,46 @@ import { MSG_NO_USERS } from '../constants/response/messages';
 
 
 export const getAllUsers = () => {
-    const users = []
+    return dispatch => {
+        const users = []
 
-    DB_USER_REF.on('value', u_snapshot => {
-        u_snapshot.forEach(u_snap => {
-            const user = {
-                ...u_snap.val().details
+        DB_USER_REF.once('value', u_snapshot => {
+            u_snapshot.forEach(u_snap => {
+                const user = {
+                    ...u_snap.val().details
+                }
+                users.push(user)
+            })
+
+            if (users.length == 0) {
+                dispatch(setUsersError())
+            } else {
+                dispatch(setUsersSuccess(users))
             }
-
-            users.push(user)
         })
-    })
-
-    if (users.length == 0) {
-        return {
-            type: SET_USERS_ERROR,
-            message: MSG_NO_USERS
-        }
-    } else {
-        return {
-            type: SET_USERS_SUCCESS,
-            users: users
-        }
     }
 }
 
 export const setUsersPending = () => {
 
     return {
-        type: SET_USERS_PENDING,
+        type: SET_USERS_PENDING
+    }
+}
+
+export const setUsersSuccess = users => {
+
+    return {
+        type: SET_USERS_SUCCESS,
+        users: users
+    }
+}
+
+export const setUsersError = () => {
+
+    return {
+        type: SET_USERS_ERROR,
+        message: MSG_NO_USERS
     }
 }
 
@@ -53,6 +64,12 @@ export const setLoggedInUserError = message => {
     }
 }
 
+export const logOutUser = () => {
+    return {
+        type: USER_LOGOUT
+    }
+}
+
 export const addUser = user => {
     const user_add = DB_USER_REF.push({
         details: {
@@ -60,7 +77,7 @@ export const addUser = user => {
             password: user.password,
             email: user.email,
             id: '',
-            date_created: DATE_TODAY,
+            date_created: DATE_TODAY
         }
     })
     const key = user_add.key
@@ -93,11 +110,5 @@ export const getUserByUsername = username => {
     })
 
     return user_obj
-}
-
-export const logOutUser = () => {
-    return {
-        type: USER_LOGOUT,
-    }
 }
 
