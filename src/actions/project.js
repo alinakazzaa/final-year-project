@@ -72,6 +72,7 @@ export const addProject = (user_id, project_val) => {
         active: project_val.active || false,
         id: ''
     }
+
     return dispatch => {
         db.ref(`/Users/${user_id}/Projects/`).push({
             details: { ...project }
@@ -90,9 +91,10 @@ export const addProject = (user_id, project_val) => {
     }
 }
 
-export const updateProject = (user_id, project_id, project) => {
+export const updateProject = project => {
+
     return dispatch => {
-        db.ref(`/Users/${user_id}/Projects/${project_id}/details`).update({
+        db.ref(`/Users/${project.user_id}/Projects/${project.id}/details`).update({
             ...project
         });
 
@@ -104,7 +106,6 @@ export const updateProject = (user_id, project_id, project) => {
 }
 
 export const removeProject = project => {
-    console.log(project.id)
     return dispatch => {
         db.ref(`/Users/${project.user_id}/Projects`).child(project.id).remove()
 
