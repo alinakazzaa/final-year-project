@@ -30,7 +30,7 @@ class LogInScreen extends React.Component {
     }
 
     logIn = userValue => {
-        const { user } = this.props
+        const { user, setCurrentUserSuccess, setCurrentUserError } = this.props
 
         if (userValue.username == null || userValue.password == null) {
             setCurrentUserError(MSG_EMPTY_FIELDS)
