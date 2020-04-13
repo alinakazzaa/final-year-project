@@ -75,6 +75,12 @@ class FetchJobView extends React.Component {
                         }
                         fetchResponse(response)
                     }
+                } else {
+                    let response = {
+                        type: GET_MEDIA_NEXT_PAGE_COMPLETED,
+                        message: COMPLETED_NEXT_PAGE,
+                    }
+                    fetchResponse(response)
                 }
             }
 
@@ -91,7 +97,15 @@ class FetchJobView extends React.Component {
 
     handleChange = updated_fetch_job => {
         const { fetch_job_value } = this.state
-        this.setState({ fetch_job_value: { ...fetch_job_value, details: { ...fetch_job_value.details, ...updated_fetch_job } } })
+        this.setState({
+            fetch_job_value: {
+                ...fetch_job_value,
+                details: {
+                    ...fetch_job_value.details,
+                    ...updated_fetch_job
+                }
+            }
+        })
     }
 
 
@@ -110,7 +124,7 @@ class FetchJobView extends React.Component {
 
     render() {
         const { fetch_job_value } = this.state
-        const { fetch_job, influencer, progress_percent } = this.props
+        const { influencer, progress_percent } = this.props
 
         return (
             <View>
