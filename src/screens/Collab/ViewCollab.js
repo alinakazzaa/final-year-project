@@ -3,14 +3,13 @@ import { View, Text } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 import { TextButton } from '../../components/buttons/TextButton'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { collab_style } from './styles/collab.styles'
 import CollabForm from '../../components/forms/CollabForm'
 import { TagList } from '../../components/list/TagList'
 import { getInfluByUsername } from '../../actions/influencer'
 import { fetchUserMedia } from '../../web/fetchUserMedia'
-import { fetchPending, fetchError, fetchSuccess } from '../../actions/fetch'
+import { fetchPending, fetchResponse } from '../../actions/fetch'
 import { PublicationList } from '../../components/list/PublicationList'
 
 
@@ -21,11 +20,11 @@ class ViewCollab extends React.Component {
     }
 
     componentDidMount() {
-        const { fetchPending, fetchSuccess, fetchError } = this.props
+        const { fetchPending, fetchResponse } = this.props
         let influ = getInfluByUsername('juanchoiregui')
 
         if (influ.id) {
-            fetchUserMedia(influ.id, ['berghain', 'mitte'], fetchPending, fetchSuccess, fetchError)
+            fetchUserMedia(influ.id, ['berghain', 'mitte'], fetchPending, fetchResponse)
         }
     }
 
@@ -98,13 +97,12 @@ class ViewCollab extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.user,
-    collab: state.collab,
+    collab: state.collab
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchPending: fetchPending,
-    fetchError: fetchError,
-    fetchSuccess: fetchSuccess,
-}, dispatch)
+const mapDispatchToProps = {
+    fetchPending,
+    fetchResponse
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCollab)
