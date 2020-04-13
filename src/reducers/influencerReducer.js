@@ -1,12 +1,12 @@
-import { SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_ERROR } from "../constants/response/types";
-import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER } from "../constants";
+import { SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_ERROR } from "../constants/response/types"
+import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER } from "../constants"
 
 const initialState = {
     all_influencers: [],
     current_influencer: {},
     pending: null,
     error: null
-};
+}
 
 const influencerReducer = (state = initialState, action) => {
     const influencers = [...state.all_influencers]
@@ -17,27 +17,27 @@ const influencerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: true
-            };
+            }
         case SET_INFLUENCERS_SUCCESS:
 
             return {
                 ...state,
                 all_influencers: [...action.influencers],
                 pending: false
-            };
+            }
         case SET_INFLUENCERS_ERROR:
 
             return {
                 ...state,
                 pending: false,
                 error: { type: action.type, message: action.message }
-            };
+            }
         case SET_CURRENT_INFLUENCER:
 
             return {
                 ...state,
                 current_influencer: { ...action.influencer }
-            };
+            }
 
         case REMOVE_INFLUENCER:
             return {
@@ -45,11 +45,8 @@ const influencerReducer = (state = initialState, action) => {
                 all_influencers: [...influencers.filter(influ => influ.id !== action.influencer_id)]
             }
         default:
-            return state;
+            return state
     }
 }
 
-export const getAllInfluencers = state => state.influencer.influencers
-export const getCurrentInfluencer = state => state.influencer.current_influencer
-
-export default influencerReducer;
+export default influencerReducer
