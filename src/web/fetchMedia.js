@@ -3,7 +3,7 @@ import { fetchInfluencer } from "./fetchInfluencer"
 import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_BY_HASHTAG_SUCCESS, COMPLETED_GET_ALL_USERS } from "../constants/response/types"
 import { GET_HASHTAG_MEDIA_ERROR, GET_HASHTAG_MEDIA_SUCCESS } from "../constants/response/messages"
 
-export const fetchMedia = (fetch_job, pending, success, error) => {
+export const fetchMedia = (fetch_job, pending, fetchResponse) => {
     let response
 
     pending(GET_MEDIA_BY_HASHTAG_PENDING, fetch_job)
@@ -16,7 +16,7 @@ export const fetchMedia = (fetch_job, pending, success, error) => {
                     type: GET_MEDIA_BY_HASHTAG_ERROR,
                     message: 'error: no hashtag media'
                 }
-                error(response)
+                fetchResponse(response)
             }
             else {
                 result.json().then(res => {
@@ -32,7 +32,7 @@ export const fetchMedia = (fetch_job, pending, success, error) => {
                     }
 
                     if (response.media_ids.length > 0) {
-                        getInfluencers(response.media_ids, fetch_job, pending, success, error)
+                        getInfluencers(response.media_ids, fetch_job, pending, fetchResponse)
                     } else {
                         response = {
                             type: COMPLETED_GET_ALL_USERS,
@@ -48,7 +48,7 @@ export const fetchMedia = (fetch_job, pending, success, error) => {
                         }
                     }
 
-                    success(response)
+                    fetchResponse(response)
                 })
             }
 
@@ -57,15 +57,15 @@ export const fetchMedia = (fetch_job, pending, success, error) => {
                 type: GET_MEDIA_BY_HASHTAG_ERROR,
                 message: String(error)
             }
-            error(response)
+            fetchResponse(response)
         })
 }
 
-export const getInfluencers = (ids, fetch_job, pending, success, error) => {
+export const getInfluencers = (ids, fetch_job, pending, fetchResponse) => {
     let i = 0
 
     let ref = setInterval(() => {
-        fetchInfluencer(ids[i], fetch_job, pending, success, error);
+        fetchInfluencer(ids[i], fetch_job, pending, fetchResponse);
         ++i
         if (i == ids.length) clearInterval(ref);
     }, 6000);
@@ -77,8 +77,8 @@ export const extractIds = (edges, criteria) => {
 
     if (edges.length > 0) {
         edges.forEach(edge => {
-            console.log(criteria)
             if (media_ids.find(id => id == edge.node.owner.id) == null)
+                // if (edge.node.edge_liked_by.count >= likesMin(criteria))
                 media_ids.push(edge.node.owner.id)
         })
     }
@@ -100,7 +100,7 @@ export const extractTags = edges => {
 
 export const likesMin = active => {
 
-    let likes_min = (active.followers_min * .2)
+    let likes_min = (Number(active.follower_min) * .2)
 
     return likes_min
 }

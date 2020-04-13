@@ -3,7 +3,7 @@ import { extractIds, getInfluencers } from './fetchMedia'
 import { GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_ERROR, COMPLETED_GET_ALL_USERS } from "../constants/response/types"
 import { GET_HASHTAG_MEDIA_SUCCESS, GET_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
 
-export const fetchNextPage = (fetch_job, pending, success, error) => {
+export const fetchNextPage = (fetch_job, pending, fetchResponse) => {
     pending(GET_MEDIA_NEXT_PAGE_PENDING)
     let parsed_end_cursor = fetch_job.end_cursor.replace('==', '%3D%3D')
     let response
@@ -14,22 +14,21 @@ export const fetchNextPage = (fetch_job, pending, success, error) => {
 
                 if (res.status = 'ok') {
                     let edge_hashtag_to_media = { ...res.data.hashtag.edge_hashtag_to_media }
-                    console.log(edge_hashtag_to_media)
 
                     response = {
                         type: GET_MEDIA_NEXT_PAGE_SUCCESS,
                         media_ids: extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria),
                         message: GET_HASHTAG_MEDIA_SUCCESS,
-                        has_next_page: edge_hashtag_to_media.page_info.has_next_page,
+                        has_next_page: edge_hashtag_to_media.page_info.has_next_page
                     }
 
                     if (response.media_ids.length > 0) {
-                        getInfluencers(response.media_ids, fetch_job, pending, success, error)
+                        getInfluencers(response.media_ids, fetch_job, pending, fetchResponse)
                     } else {
                         response = {
                             type: COMPLETED_GET_ALL_USERS,
                             message: GET_HASHTAG_MEDIA_ERROR,
-                            has_next_page: edge_hashtag_to_media.page_info.has_next_page,
+                            has_next_page: edge_hashtag_to_media.page_info.has_next_page
                         }
                     }
 
@@ -40,21 +39,21 @@ export const fetchNextPage = (fetch_job, pending, success, error) => {
                         }
                     }
 
-                    success(response)
+                    fetchResponse(response)
 
 
 
                 } else if (res.status = 'fail') {
                     response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: res.message }
-                    error(response)
+                    fetchResponse(response)
                 }
                 else {
                     response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: 'error: next page' }
-                    error(response)
+                    fetchResponse(response)
                 }
             })
         }).catch(error => {
             response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: 'error: next page' }
-            error(response)
+            fetchResponse(response)
         })
 }
