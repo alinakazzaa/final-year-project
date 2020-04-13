@@ -1,32 +1,32 @@
-import React from 'react';
-import { View, Keyboard, Text } from 'react-native';
+import React from 'react'
+import { View, Keyboard, Text } from 'react-native'
 import PropTypes from 'prop-types'
 // @ts-ignore
-import t from 'tcomb-form-native';
-import { fetch_job_style } from '../../screens/FetchJob/styles/fetchJob.styles';
+import t from 'tcomb-form-native'
+import { fetch_job_style } from '../../screens/FetchJob/styles/fetchJob.styles'
 import { formatNumber } from '../../actions/base'
-import TabView from '../tabview/TabView';
-import { colors, inputView } from '../../styles/base';
-import Slider from '../slider/Slider';
-import { criteria } from '../../constants/criteria';
-import { COMPLETED } from '../../constants';
-import bootstrap from 'tcomb-form-native/lib/stylesheets/bootstrap.js';
+import { TabView } from '../tabview/TabView'
+import { colors, inputView } from '../../styles/base'
+import Slider from '../slider/Slider'
+import { criteria } from '../../constants/criteria'
+import { COMPLETED } from '../../constants'
+import bootstrap from 'tcomb-form-native/lib/stylesheets/bootstrap.js'
 
-const Form = t.form.Form;
+const Form = t.form.Form
 
 var no_profiles = t.enums({
     10: '0 - 10',
     20: '10 - 20',
     50: '20 - 50',
     100: '50 - 100',
-});
+})
 
 const FetchJob = t.struct({
     hashtag: t.String,
     date_created: t.String,
     no_profiles: no_profiles,
 
-});
+})
 
 const options = {
     stylesheet: bootstrap,
@@ -36,7 +36,7 @@ const options = {
             autoCapitalize: 'none'
         },
         date_created: {
-            editable: false,
+            editable: false
         },
         no_profiles: {
             nullOption: { value: '', text: 'Choose amount' },
