@@ -60,8 +60,8 @@ const projectReducer = (state = initialState, action) => {
                 all_projects
             }
         case UPDATE_PROJECT:
-            let index = all_projects.findIndex(proj => proj.id == action.payload.id)
-            all_projects.splice(index, 1, action.payload)
+            let index = all_projects.findIndex(proj => proj.id == action.project.id)
+            all_projects.splice(index, 1, action.project)
 
             return {
                 ...state,
@@ -72,7 +72,7 @@ const projectReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_projects: [...state.all_projects.filter(project => project.id !== action.payload.id)]
+                all_projects: [...state.all_projects.filter(project => project.id !== action.project.id)]
             }
 
         default:
