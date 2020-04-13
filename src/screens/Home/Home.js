@@ -1,17 +1,16 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
-import { AppHeader } from '../../layouts/Header';
-import { IconButton } from '../../components/buttons/IconButton';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { getUserProjects } from '../../actions/project';
-import { getProjectFetchJobs } from '../../actions/fetchJob';
-import { COMPLETED } from '../../constants';
-import { logOutUser } from '../../actions/user';
-import { home } from './styles/home.styles';
-import { colors } from '../../styles/base';
+import * as React from 'react'
+import { View, Text } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import { IconButton } from '../../components/buttons/IconButton'
+import { connect } from 'react-redux'
+import { getUserProjects } from '../../actions/project'
+import { getProjectFetchJobs } from '../../actions/fetchJob'
+import { COMPLETED } from '../../constants'
+import { logOutUser } from '../../actions/user'
+import { home } from './styles/home.styles'
+import { colors } from '../../styles/base'
 import { TagList } from '../../components/list/TagList'
-import { Divider } from 'react-native-elements';
+import { Divider } from 'react-native-elements'
 
 class HomeScreen extends React.Component {
 
@@ -29,17 +28,16 @@ class HomeScreen extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { project, fetch_job } = this.props
+        // const { project, fetch_job } = this.props
+        // if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
+        //     this.getRecentHashtags()
+        // }
 
-        if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
-            this.getRecentHashtags()
-        }
-
-        if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
-            const completed_fetch_jobs = [...fetch_job.fetch_jobs.filter(fj => fj.details.status == COMPLETED)]
-            const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
-            this.setState({ recent_tags: tags })
-        }
+        // if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
+        //     const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED)]
+        //     const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
+        //     this.setState({ recent_tags: tags })
+        // }
     }
 
     getRecentHashtags = () => {
@@ -86,7 +84,7 @@ class HomeScreen extends React.Component {
                     </View>
                 </View>
             </View>
-        );
+        )
     }
 }
 
@@ -94,13 +92,13 @@ const mapStateToProps = state => ({
     user: state.user,
     project: state.project,
     fetch_job: state.fetch_job
-});
+})
 
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    getProjectFetchJobs: getProjectFetchJobs,
-    getUserProjects: getUserProjects,
-    logOutUser: logOutUser
-}, dispatch);
+const mapDispatchToProps = {
+    getProjectFetchJobs,
+    getUserProjects,
+    logOutUser
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
