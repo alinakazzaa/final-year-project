@@ -3,27 +3,26 @@ import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, RE
 import { DATE_TODAY } from '../constants/TodayDate'
 import { DB_USER_COLLABS_REF } from '../constants/database';
 import { SET_COLLABS_ERROR, SET_COLLABS_SUCCESS, SET_COLLABS_PENDING } from '../constants/response/types';
+import { MSG_NO_COLLABS } from '../constants/response/messages';
 
 export const getUserCollabs = user_id => {
     const collabs = []
 
-    DB_USER_COLLABS_REF(user_id).on('value', collab_snapshot => {
-        collab_snapshot.forEach(collab_snap => {
-            collabs.push(collab_snap.val())
-        })
-    })
+    return dispatch => {
 
-    if (collabs.length == 0) {
-        let error = { type: 'no collabs' }
-        return {
-            type: SET_COLLABS_ERROR,
-            message: error
-        }
-    } else {
-        return {
-            type: SET_COLLABS_SUCCESS,
-            collabs: collabs
-        }
+        dispatch(setCollabsPending())
+
+        DB_USER_COLLABS_REF(user_id).on('value', collab_snapshot => {
+            collab_snapshot.forEach(collab => {
+                collabs.push(collab.val())
+            })
+
+            if (collabs.length == 0) {
+                dispatch(setCollabsError())
+            } else {
+                dispatch(setCollabsSuccess)
+            }
+        })
     }
 }
 
@@ -34,66 +33,92 @@ export const setCollabsPending = () => {
     }
 }
 
+export const setCollabsSuccess = collabs => {
+
+    return {
+        type: SET_COLLABS_SUCCESS,
+        collabs
+    }
+}
+
+export const setCollabsError = () => {
+
+    return {
+        type: SET_COLLABS_ERROR,
+        message: MSG_NO_COLLABS
+    }
+}
+
 export const clearCurrentCollab = () => {
     return {
-        type: CLEAR_CURRENT_COLLAB,
+        type: CLEAR_CURRENT_COLLAB
     }
 }
 
 export const setCurrentCollab = collab => {
     return {
         type: SET_CURRENT_COLLAB,
-        collab: collab
+        collab
     }
 }
 
-export const addCollab = (user_id, project_id, collab) => {
-    let collab_obj = {
-        ...collab,
-        description: collab.description || '',
+export const addCollab = (user_id, project_id, collab_val) => {
+    let collab = {
+        ...collab_val,
+        description: collab_val.description || '',
         date_created: DATE_TODAY,
         id: '',
-        influencer: collab.influencer,
+        influencer: collab_val.influencer,
         user_id: user_id,
         project_id: project_id
     }
 
-    const collab_add = db.ref(`/Users/${user_id}/Collabs/`).push({
-        details: { ...collab_obj }
-    })
+    return dispatch => {
 
-    const key = collab_add.key
-    collab_obj = { ...collab_obj, id: key }
-    db.ref(`/Users/${user_id}/Collabs/${key}`).update({
-        details: { ...collab_obj }
-    })
+        db.ref(`/Users/${user_id}/Collabs/`).push({
+            details: { ...collab }
+        }).then(data => {
+            collab.id = data.key
 
-    return {
-        type: ADD_COLLAB,
-        collab: collab_obj
+            db.ref(`/Users/${user_id}/Collabs/${data.key}/details`).update({
+                id: data.key
+            })
+
+            dispatch({
+                type: ADD_COLLAB,
+                collab
+            })
+        })
     }
 }
 
 export const updateCollab = (user_id, collab) => {
+    return dispatch => {
+        db.ref(`/Users/${user_id}/Collabs/${collab.id}/details`).update({
+            ...collab
+        }).then(() => {
 
-    db.ref(`/Users/${user_id}/Collabs/${collab.id}/details`).update({
-        ...collab
-    });
+            dispatch({
+                type: UPDATE_COLLAB,
+                collab
+            })
+        })
 
-    return {
-        type: UPDATE_COLLAB,
-        collab: collab
+
+
     }
-
-
 }
 
 export const removeCollab = collab => {
-    db.ref(`/Users/${collab.user_id}/Collabs`).child(collab.id).remove()
+    return dispatch => {
+        db.ref(`/Users/${collab.user_id}/Collabs`).child(collab.id).remove().then(() => {
+            dispatch({
+                type: REMOVE_COLLAB,
+                collab: collab
+            })
+        })
 
-    return {
-        type: REMOVE_COLLAB,
-        collab: collab
+
     }
 }
 
