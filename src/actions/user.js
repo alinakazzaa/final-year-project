@@ -1,7 +1,7 @@
-import { USER_LOGOUT } from '../constants';
+import { USER_LOGOUT, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_PENDING, SET_CURRENT_USER_ERROR } from '../constants';
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
-import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR, SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types';
+import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types';
 import { DB_USER_REF } from '../constants/database';
 import { MSG_NO_USERS } from '../constants/response/messages';
 
@@ -10,12 +10,9 @@ export const getAllUsers = () => {
     return dispatch => {
         const users = []
 
-        DB_USER_REF.once('value', u_snapshot => {
-            u_snapshot.forEach(u_snap => {
-                const user = {
-                    ...u_snap.val().details
-                }
-                users.push(user)
+        DB_USER_REF.once('value', user_snapshot => {
+            user_snapshot.forEach(user => {
+                users.push({ ...user.val().details })
             })
 
             if (users.length == 0) {
@@ -50,16 +47,22 @@ export const setUsersError = () => {
     }
 }
 
-export const setLoggedInUserSuccess = user => {
+export const setCurrentUserPending = () => {
     return {
-        type: USER_LOGIN_SUCCESS,
+        type: SET_CURRENT_USER_PENDING
+    }
+}
+
+export const setCurrentUserSuccess = user => {
+    return {
+        type: SET_CURRENT_USER_SUCCESS,
         user: user
     }
 }
 
-export const setLoggedInUserError = message => {
+export const setCurrentUserError = message => {
     return {
-        type: USER_LOGIN_ERROR,
+        type: SET_CURRENT_USER_ERROR,
         message: message
     }
 }
@@ -70,21 +73,33 @@ export const logOutUser = () => {
     }
 }
 
-export const addUser = user => {
-    const user_add = DB_USER_REF.push({
-        details: {
-            username: user.username,
-            password: user.password,
-            email: user.email,
-            id: '',
-            date_created: DATE_TODAY
-        }
-    })
-    const key = user_add.key
+export const registerUser = user => {
+    let user_obj = {
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        id: '',
+        date_created: DATE_TODAY
 
-    db.ref(`/Users/${key}/details`).update({
-        id: key
-    })
+    }
+
+    return dispatch => {
+        dispatch(setCurrentUserPending())
+
+        DB_USER_REF.push({
+            details: {
+                ...user_obj
+            }
+
+        }).then(data => {
+            user_obj.id = data.key
+            db.ref(`/Users/${data.key}/details`).update({
+                id: data.key
+            })
+
+            dispatch(setCurrentUserSuccess(user_obj))
+        })
+    }
 }
 
 export const updateUser = (user, user_id) => {
@@ -99,16 +114,16 @@ export const removeUser = user => {
     db.ref(`/Users`).child(user.id).remove()
 }
 
-export const getUserByUsername = username => {
-    let user_obj = {}
-    DB_USER_REF.on('value', (user_snapshot) => {
-        user_snapshot.forEach(user_snap => {
-            if (user_snap.val().details.username == username) {
-                user_obj = { ...user_snap.val().details }
-            }
-        })
-    })
+// export const getUserByUsername = username => {
+//     let user_obj = {}
+//     DB_USER_REF.on('value', user_snapshot => {
+//         user_snapshot.forEach(user => {
+//             if (user.val().details.username == username) {
+//                 user_obj = { ...user.val().details }
+//             }
+//         })
+//     })
 
-    return user_obj
-}
+//     return user_obj
+// }
 
