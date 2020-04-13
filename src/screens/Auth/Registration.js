@@ -1,26 +1,23 @@
 import * as React from 'react'
 import { View } from 'react-native'
 import RegistrationForm from '../../components/forms/RegistrationForm'
-import { addUser, setLoggedInUserSuccess, getUserByUsername } from '../../actions/user'
+import { registerUser } from '../../actions/user'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { Gradient } from '../../styles/Gradient'
 import { auth } from './styles/auth.styles'
 import { AppLogo } from '../../components/logo/AppLogo'
-import { AppHeader } from '../../layouts/Header';
+import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 
 class RegistrationScreen extends React.Component {
 
     static navigationOptions = {
-        headerShown: false,
+        headerShown: false
     }
 
     registerUser = user => {
-        const { setLoggedInUserSuccess } = this.props
-        addUser(user)
-        const c_user = getUserByUsername(user.username)
-        setLoggedInUserSuccess(c_user)
+        const { registerUser } = this.props
+        registerUser(user)
     }
 
     goBack = () => {
@@ -43,8 +40,8 @@ class RegistrationScreen extends React.Component {
     }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    setLoggedInUserSuccess: setLoggedInUserSuccess
-}, dispatch)
+const mapDispatchToProps = {
+    registerUser
+}
 
 export default connect(null, mapDispatchToProps)(RegistrationScreen)
