@@ -10,8 +10,8 @@ export const getAllUsers = () => {
     return dispatch => {
         const users = []
 
-        DB_USER_REF.once('value', user_snapshot => {
-            user_snapshot.forEach(user => {
+        DB_USER_REF.once('value', userSnapshot => {
+            userSnapshot.forEach(user => {
                 users.push({ ...user.val().details })
             })
 
@@ -56,14 +56,14 @@ export const setCurrentUserPending = () => {
 export const setCurrentUserSuccess = user => {
     return {
         type: SET_CURRENT_USER_SUCCESS,
-        user: user
+        user
     }
 }
 
 export const setCurrentUserError = message => {
     return {
         type: SET_CURRENT_USER_ERROR,
-        message: message
+        message
     }
 }
 
@@ -73,11 +73,11 @@ export const logOutUser = () => {
     }
 }
 
-export const registerUser = user => {
-    let user_obj = {
-        username: user.username,
-        password: user.password,
-        email: user.email,
+export const registerUser = user_val => {
+    let user = {
+        username: user_val.username,
+        password: user_val.password,
+        email: user_val.email,
         id: '',
         date_created: DATE_TODAY
 
@@ -88,16 +88,16 @@ export const registerUser = user => {
 
         DB_USER_REF.push({
             details: {
-                ...user_obj
+                ...user
             }
 
         }).then(data => {
-            user_obj.id = data.key
+            user.id = data.key
             db.ref(`/Users/${data.key}/details`).update({
                 id: data.key
             })
 
-            dispatch(setCurrentUserSuccess(user_obj))
+            dispatch(setCurrentUserSuccess(user))
         })
     }
 }
