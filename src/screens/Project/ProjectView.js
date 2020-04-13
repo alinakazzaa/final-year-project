@@ -5,11 +5,10 @@ import { AppHeader } from '../../layouts/Header'
 import { TextButton } from '../../components/buttons/TextButton'
 import ProjectForm from '../../components/forms/ProjectForm'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { project_style } from './styles/project.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
-import { setCurrentFetchJob, getProjectFetchJobs, setProjectFetchJobsPending, clearFetchJobState } from '../../actions/fetchJob'
+import { setCurrentFetchJob, getProjectFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
 import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView'
 
 class ProjectView extends React.Component {
@@ -25,10 +24,9 @@ class ProjectView extends React.Component {
     }
 
     componentDidMount() {
-        const { user, project, getProjectFetchJobs, setProjectFetchJobsPending } = this.props
+        const { user, project, getProjectFetchJobs } = this.props
 
         if (project.current_project.title) {
-            setProjectFetchJobsPending()
             getProjectFetchJobs(user.current_user.id, project.current_project.id)
             this.setState({ project_value: { ...project.current_project } })
         }
@@ -111,17 +109,16 @@ const mapStateToProps = state => ({
     user: state.user,
     project: state.project,
     fetch_job: state.fetch_job,
-    influencer: state.influencer,
+    influencer: state.influencer
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    setCurrentFetchJob: setCurrentFetchJob,
-    getProjectFetchJobs: getProjectFetchJobs,
-    setProjectFetchJobsPending: setProjectFetchJobsPending,
-    clearCurrentProject: clearCurrentProject,
-    setCurrentProject: setCurrentProject,
-    clearFetchJobState: clearFetchJobState,
-    updateProject: updateProject
-}, dispatch);
+const mapDispatchToProps = {
+    setCurrentFetchJob,
+    getProjectFetchJobs,
+    clearCurrentProject,
+    setCurrentProject,
+    clearFetchJobState,
+    updateProject
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectView)
