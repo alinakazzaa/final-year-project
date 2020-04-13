@@ -8,62 +8,73 @@ import { MSG_NO_FETCH_JOBS } from '../constants/response/messages';
 export const getProjectFetchJobs = (user_id, project_id) => {
     const fetch_jobs = []
 
-    DB_PROJECT_FETCH_JOBS_REF(user_id, project_id).on('value', fj_snapshot => {
+    return dispatch => {
 
-        fj_snapshot.forEach(fj_snap => {
-            const fj = {
-                ...fj_snap.val()
+        dispatch(setProjectFetchJobsPending())
+
+        DB_PROJECT_FETCH_JOBS_REF(user_id, project_id).once('value', fetchJobSnapshot => {
+
+            fetchJobSnapshot.forEach(job => {
+                fetch_jobs.push({ ...job.val() })
+            })
+
+            if (fetch_jobs.length == 0) {
+                dispatch(setProjectFetchJobsError())
+            } else {
+                dispatch(setProjectFetchJobsSuccess(fetch_jobs))
             }
-            fetch_jobs.push(fj)
         })
-
-    })
-
-    if (fetch_jobs.length == 0) {
-
-        return {
-            type: SET_FETCH_JOBS_ERROR,
-            message: MSG_NO_FETCH_JOBS
-        }
-    } else {
-        return {
-            type: SET_FETCH_JOBS_SUCCESS,
-            fetch_jobs: fetch_jobs
-        }
     }
 }
 
 export const setProjectFetchJobsPending = () => {
 
     return {
-        type: SET_FETCH_JOBS_PENDING,
+        type: SET_FETCH_JOBS_PENDING
+    }
+}
+
+
+export const setProjectFetchJobsSuccess = fetch_jobs => {
+
+    return {
+        type: SET_FETCH_JOBS_SUCCESS,
+        fetch_jobs
+    }
+}
+
+
+export const setProjectFetchJobsError = () => {
+    return {
+        type: SET_FETCH_JOBS_ERROR,
+        message: MSG_NO_FETCH_JOBS
     }
 }
 
 export const setCurrentFetchJob = fetch_job => {
     return {
         type: SET_CURRENT_FETCH_JOB,
-        fetch_job: fetch_job
+        fetch_job
     }
 }
 
 export const clearCurrentFetchJob = () => {
     return {
-        type: CLEAR_CURRENT_FETCH_JOB,
+        type: CLEAR_CURRENT_FETCH_JOB
     }
 }
 
 export const clearFetchJobState = () => {
     return {
-        type: CLEAR_FETCH_JOB_STATE,
+        type: CLEAR_FETCH_JOB_STATE
     }
 }
 
 //DB
-export const addFetchJob = (user_id, project_id, fetch_job) => {
-    let fj_obj = {
+export const addFetchJob = (user_id, project_id, fetchJobVal) => {
+    let fetch_job = {
         details: {
-            ...fetch_job,
+            ...fetchJobVal,
             status: PENDING,
             user_id: user_id,
             project_id: project_id,
@@ -71,30 +82,28 @@ export const addFetchJob = (user_id, project_id, fetch_job) => {
         }
     }
 
-    const fj_add = db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
-        ...fj_obj
-    });
+    return dispatch => {
+        db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
+            ...fetch_job
+        }).then(data => {
+            fetch_job.id = data.key
 
+            db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${data.key}/details`).update({
+                id: data.key
+            })
 
-    const key = fj_add.key
-    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${key}/details`).update({
-        id: key
-    })
-
-
-    let updated = { ...fj_obj, id: key }
-
-    return {
-        type: ADD_FETCH_JOB,
-        fetch_job: updated
+            dispatch({
+                type: ADD_FETCH_JOB,
+                fetch_job
+            })
+        })
     }
 }
 
 export const updateStateFetchJob = fetch_job => {
-
     return {
         type: UPDATE_FETCH_JOB,
-        fetch_job: fetch_job
+        fetch_job
     }
 }
 
@@ -105,11 +114,13 @@ export const updateFetchJob = fetch_job => {
 }
 
 export const removeFetchJob = fetch_job => {
-    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs`).child(fetch_job.details.id).remove()
+    return dispatch => {
+        db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs`).child(fetch_job.details.id).remove()
 
-    return {
-        type: REMOVE_FETCH_JOB,
-        fetch_job: fetch_job
+        dispatch({
+            type: REMOVE_FETCH_JOB,
+            fetch_job
+        })
     }
 }
 
