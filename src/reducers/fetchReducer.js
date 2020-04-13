@@ -1,5 +1,5 @@
-import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_ERROR, GET_MEDIA_NEXT_PAGE_COMPLETED, GET_USER_PENDING, GET_USER_SUCCESS, COMPLETED_GET_ALL_USERS, GET_USER_ERROR } from '../constants/response/types';
-import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, MEDIA_NEXT_PAGE, USER_FETCH } from '../constants';
+import { GET_MEDIA_BY_HASHTAG_PENDING, GET_MEDIA_BY_HASHTAG_SUCCESS, GET_MEDIA_BY_HASHTAG_ERROR, GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_ERROR, GET_MEDIA_NEXT_PAGE_COMPLETED, GET_USER_PENDING, GET_USER_SUCCESS, COMPLETED_GET_ALL_USERS, GET_USER_ERROR } from '../constants/response/types'
+import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, MEDIA_NEXT_PAGE, USER_FETCH } from '../constants'
 
 const initialState = {
     pending: null,
@@ -15,7 +15,7 @@ const initialState = {
     has_next_page: null,
     end_cursor: null,
     related_tags: []
-};
+}
 
 const fetchReducer = (state = initialState, action) => {
     let running = { ...state }
@@ -31,7 +31,7 @@ const fetchReducer = (state = initialState, action) => {
                 details: { ...action.fetch_job.details, status: IN_PROGRESS },
                 pending: true,
                 stage: MEDIA_FETCH,
-                progress: { total: 0, done: 0 },
+                progress: { total: 0, done: 0 }
             }
 
             return {
@@ -72,7 +72,7 @@ const fetchReducer = (state = initialState, action) => {
             running = {
                 ...state,
                 response: null,
-                stage: MEDIA_NEXT_PAGE,
+                stage: MEDIA_NEXT_PAGE
             }
 
             return {
@@ -127,7 +127,7 @@ const fetchReducer = (state = initialState, action) => {
             running = {
                 ...state,
                 response: null,
-                stage: USER_FETCH,
+                stage: USER_FETCH
             }
 
             return {
@@ -195,7 +195,7 @@ const fetchReducer = (state = initialState, action) => {
                     response: {
                         type: COMPLETED_GET_ALL_USERS,
                         message: 'finished getting influencers'
-                    },
+                    }
                 }
             }
 
@@ -204,8 +204,8 @@ const fetchReducer = (state = initialState, action) => {
             }
 
         default:
-            return state;
+            return state
     }
 }
 
-export default fetchReducer;
+export default fetchReducer
