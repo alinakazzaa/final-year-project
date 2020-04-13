@@ -44,9 +44,9 @@ class ProjectView extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user, navigation, updateProject } = this.props
+        const { navigation, updateProject } = this.props
         let { project_value } = this.state
-        updateProject(user.current_user.id, project_value.id, project_value)
+        updateProject(project_value)
         navigation.goBack()
     }
 
