@@ -7,9 +7,6 @@ import influencerReducer from '../reducers/influencerReducer';
 import fetchReducer from '../reducers/fetchReducer';
 import collabReducer from '../reducers/collabReducer';
 
-const middlewares = [thunk];
-
-
 const rootReducer = combineReducers(
     {
         user: userReducer,
@@ -22,8 +19,10 @@ const rootReducer = combineReducers(
 );
 
 const configureStore = () => {
-    // @ts-ignore
-    return createStore(rootReducer, compose(applyMiddleware(...middlewares), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
+
+    return createStore(rootReducer, compose(applyMiddleware(thunk),
+        // @ts-ignore
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()))
 }
 
 export default configureStore;
