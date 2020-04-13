@@ -42,8 +42,8 @@ export const fonts = {
     LARGE: 20,
     PRIMARY: 'ArialRoundedMTBold',
     WEIGHT_LIGHT: '200',
-    WEIGHT_MEDIUM: '700',
-    WEIGHT_HEAVY: '800'
+    WEIGHT_MEDIUM: '500',
+    WEIGHT_HEAVY: '700'
 }
 
 // containers
@@ -62,11 +62,7 @@ export const formContainer = {
     marginLeft: '5%',
     padding: 30,
     borderRadius: 5,
-    width: dimensions.fullWidth * .85,
-    // shadowColor: colors.BLACK,
-    // shadowOffset: { width: 4, height: 4 },
-    // shadowOpacity: 0.5,
-    // shadowRadius: 10,
+    width: dimensions.fullWidth * .85
 }
 
 export const infoContainer = {
@@ -82,7 +78,7 @@ export const input = {
     height: height.MEDIUM,
     width: width.LARGE,
     borderColor: colors.BORDER,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
 }
 
 export const inputView = {
@@ -95,8 +91,6 @@ export const inputView = {
     borderBottomWidth: 1,
     fontSize: fonts.MEDIUM
 }
-
-
 
 export const inputLabel = {
     padding: 0,
@@ -174,7 +168,7 @@ export const base = StyleSheet.create(
         inputStyle: {
             color: colors.TERTIARY,
             fontSize: fonts.MEDIUM,
-            fontWeight: fonts.WEIGHT_MEDIUM,
+            fontWeight: fonts.WEIGHT_LIGHT
         },
         btnView: {
             alignItems: 'center',
