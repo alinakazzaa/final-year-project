@@ -1,12 +1,15 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
 import { InfluencerList } from '../../components/list/InfluencerList'
-import { getAllInfluencers, setCurrentInfluencer, filterInfluencers } from '../../actions/influencer'
+import {
+    getAllInfluencers, setCurrentInfluencer, filterInfluencers,
+    updateInfluencer, removeInfluencer
+} from '../../actions/influencer'
 import { connect } from 'react-redux'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 import { Gradient } from '../../styles/Gradient'
-import { colors, base } from '../../styles/base'
+import { colors, base, dimensions } from '../../styles/base'
 import { Input } from 'react-native-elements'
 import { influencer_style } from './styles/influencer.styles'
 import { TabView } from '../../components/tabview/TabView'
@@ -37,8 +40,7 @@ class AllInfluencers extends React.Component {
     }
 
     createCollab = influencer => {
-        const { navigation } = this.props
-        navigation.navigate('AddCollab', { influencer })
+        this.props.navigation.navigate('AddCollab', { influencer })
     }
 
     searchInfluencer = text => {
@@ -47,54 +49,62 @@ class AllInfluencers extends React.Component {
         this.setState({ searched: filtered_influencers, isSearch: true })
     }
 
-    saveInfluencer = () => {
+    saveInfluencer = influencer => {
+        const { updateInfluencer } = this.props
+        updateInfluencer({ ...influencer, to_do: false })
+    }
 
+    deleteInflu = id => {
+        const { fetch_job, removeInfluencer } = this.props
+        removeInfluencer(fetch_job.current_fetch_job, id)
     }
 
     render() {
-        const { influencer, project, fetch_job } = this.props
+        const { influencer, project } = this.props
         let { index } = this.state
 
         return (
             <View style={influencer.container}>
-                <Gradient>
+                <Gradient style={{ height: dimensions.fullHeight }}>
                     <AppHeader
                         left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                        center={<View style={influencer_style.searchView}>
+                        center={<View style={base.searchView}>
                             <Text style={influencer_style.title}>Search</Text>
-                            <Input onChangeText={text => this.searchInfluencer(text)} inputStyle={base.inputStyle} inputContainerStyle={influencer_style.searchInput} />
+                            <Input
+                                onChangeText={text => this.searchInfluencer(text)}
+                                inputStyle={base.inputStyle}
+                                inputContainerStyle={base.searchInput} />
                         </View>}
                     />
-                    <TabView
-                        titles={['To do', 'Saved']}
-                        color={colors.TERTIARY}
-                        onPress={index => this.setState({ index })}
-                        size='46%'
-                        index={index} />
+                    {influencer.pending && <LoadingScreen size='large' />}
+                    {!influencer.pending && !influencer.error &&
+                        <View>
+                            <TabView
+                                titles={['To do', 'Saved']}
+                                color={colors.TERTIARY}
+                                onPress={index => this.setState({ index })}
+                                size='46%'
+                                index={index} />
 
-                    {index == 0 ?
-                        <View>
-                            {influencer.pending ?
-                                <LoadingScreen text="Wait, getting your influencers" /> :
-                                <InfluencerList
-                                    saveInfluencer={this.saveInfluencer}
-                                    influencers={filterInfluencers(influencer.all_influencers, true)}
-                                    current_project={project.current_project}
-                                    current_fetch_job={fetch_job.current_fetch_job}
-                                    goToInfluencer={this.goToInfluencer}
-                                    createCollab={this.createCollab} />
-                            }
-                        </View> :
-                        <View>
-                            {influencer.pending ?
-                                <LoadingScreen text="Wait, getting your influencers" /> :
-                                <InfluencerList
-                                    influencers={filterInfluencers(influencer.all_influencers, false)}
-                                    current_project={project.current_project}
-                                    current_fetch_job={fetch_job.current_fetch_job}
-                                    goToInfluencer={this.goToInfluencer}
-                                    createCollab={this.createCollab} />
-                            }
+                            {index == 0 ?
+                                <View>
+
+                                    <InfluencerList
+                                        saveInfluencer={this.saveInfluencer}
+                                        influencers={filterInfluencers(influencer.all_influencers, true)}
+                                        current_project={project.current_project}
+                                        goToInfluencer={this.goToInfluencer}
+                                        createCollab={this.createCollab}
+                                        removeInfluencer={this.deleteInflu} />
+                                </View> :
+                                <View>
+                                    <InfluencerList
+                                        influencers={filterInfluencers(influencer.all_influencers, false)}
+                                        current_project={project.current_project}
+                                        goToInfluencer={this.goToInfluencer}
+                                        createCollab={this.createCollab}
+                                        removeInfluencer={this.deleteInflu} />
+                                </View>}
                         </View>}
                 </Gradient>
             </View>
@@ -110,7 +120,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     setCurrentInfluencer,
-    getAllInfluencers
+    getAllInfluencers,
+    updateInfluencer,
+    removeInfluencer
 }
 
 

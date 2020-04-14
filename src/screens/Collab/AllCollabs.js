@@ -56,28 +56,33 @@ class AllCollabs extends React.Component {
 
         return (
             <View>
-                {collab.pending ?
-                    <LoadingScreen text="Wait, getting your collabs" /> :
-                    <View>
-                        <AppHeader
-                            gradient={true} />
-                        <View style={collab_style.allContainer}>
-                            <View style={collab_style.searchView}>
-                                <Text style={collab_style.title}>Search</Text><Input
-                                    onChangeText={text => this.searchCollab(text)} inputStyle={base.inputStyle} inputContainerStyle={collab_style.searchInput} />
-                            </View>
-                            <TabView titles={['Active', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
-                            {collab.pending && <LoadingScreen text="Wait, getting your collabs" />}
-                            {collab.error == null &&
-                                index == 0 ?
-                                <View>
-                                    <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, true) : filterCollabs(collab.all_collabs, true)} />
-                                </View> :
-                                <View>
-                                    <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, false) : filterCollabs(collab.all_collabs, false)} />
-                                </View>}
-                            {/* <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} /> */}
-                        </View></View>}
+                <AppHeader
+                    gradient={true}
+                    left={<View style={base.searchTxt}><Text style={collab_style.title}>Search</Text></View>}
+                    center={<View style={base.searchView}>
+                        <Input
+                            onChangeText={text => this.searchCollab(text)}
+                            inputStyle={base.inputStyle}
+                            inputContainerStyle={base.searchInput} />
+                    </View>} />
+                <View style={collab_style.allContainer}>
+                    {collab.pending && <LoadingScreen size='large' />}
+                    <TabView titles={['Active', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
+                    {collab.pending && <LoadingScreen />}
+                    {collab.all_collabs.length > 0 &&
+                        index == 0 ?
+                        <View>
+                            <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, true) : filterCollabs(collab.all_collabs, true)} />
+                        </View> :
+                        <View>
+                            <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, false) : filterCollabs(collab.all_collabs, false)} />
+                        </View>}
+                    {collab.error &&
+                        <View style={base.centerItems}>
+                            <Text style={base.noneMessage}>No collaborations yet</Text>
+                            <Text style={base.noneMessage}>Run searches and find influencers to collaborate with</Text>
+                        </View>}
+                </View>
             </View>
         )
     }
