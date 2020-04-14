@@ -5,7 +5,7 @@ export const container = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: spacing.MEDIUM,
-    margin: spacing.MEDIUM,
+    margin: spacing.MEDIUM
 }
 
 export const tab = {
@@ -18,9 +18,9 @@ export const tab = {
 }
 
 
-export const threeTabs = (color, size) => StyleSheet.create(
+export const tabStyle = (color, size) => StyleSheet.create(
     {
-        container: {
+        view: {
             ...container
         },
         tab: {
@@ -49,31 +49,4 @@ export const threeTabs = (color, size) => StyleSheet.create(
     });
 
 
-export const twoTabs = (color, size) => StyleSheet.create(
-    {
-        container: {
-            ...container
-        },
-        tab: {
-            ...tab,
-            backgroundColor: colors.SREEN
-        },
-        tabItem: {
-            width: size,
-            justifyContent: 'center',
-        },
-        selectedTab: {
-            color: colors.WHITE,
-            textAlign: 'center',
-            padding: spacing.SMALL,
-            fontSize: fonts.SMALL,
-            textTransform: 'uppercase',
-            fontWeight: fonts.WEIGHT_MEDIUM
-        },
-        selectedTabItem: {
-            width: size,
-            justifyContent: 'center',
-            backgroundColor: color,
-        },
-    });
 
