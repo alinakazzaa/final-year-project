@@ -212,10 +212,6 @@ export const fetch_job_style = StyleSheet.create(
             margin: 0,
             padding: 0
         },
-        searchView: {
-            flexDirection: 'row',
-            marginTop: spacing.SMALL
-        },
         detailsBox: {
             flexDirection: 'row',
             paddingTop: spacing.MEDIUM,
@@ -303,12 +299,6 @@ export const fetch_job_style = StyleSheet.create(
             color: colors.TERTIARY
 
         },
-        searchInput: {
-            width: dimensions.fullWidth * 0.67,
-            borderColor: colors.TERTIARY,
-            borderBottomWidth: 1,
-            height: spacing.LARGE * 1.3,
-        },
         right: {
             display: 'flex',
             width: '10%'
@@ -325,33 +315,8 @@ export const fetch_job_style = StyleSheet.create(
             backgroundColor: colors.PRIMARY,
             margin: spacing.MEDIUM,
         },
-        noneMsg: {
-            padding: spacing.LARGE
-        },
         progressBar: {
             borderRadius: 10,
             borderWidth: 0
         }
-    });
-
-
-export const fetchJobForm = {
-    ...form,
-    textbox: {
-        normal: {
-            ...inputView,
-        },
-        error: {
-
-        },
-        disabled: {
-            ...inputView,
-            fontSize: 30
-        }
-    },
-    select: {
-        normal: {
-            ...inputView
-        },
-    }
-}
+    })
