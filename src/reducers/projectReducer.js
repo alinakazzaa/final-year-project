@@ -18,7 +18,8 @@ const projectReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: null,
-                pending: true
+                pending: true,
+                response: null
             }
 
         case SET_PROJECTS_SUCCESS:

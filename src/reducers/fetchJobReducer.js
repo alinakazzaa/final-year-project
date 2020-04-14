@@ -34,7 +34,8 @@ const fetchJobReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: true,
-                error: null
+                error: null,
+                response: null
             }
 
         case SET_FETCH_JOBS_SUCCESS:

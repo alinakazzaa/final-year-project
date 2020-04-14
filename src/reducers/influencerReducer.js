@@ -1,5 +1,5 @@
 import { SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_ERROR } from "../constants/response/types"
-import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER } from "../constants"
+import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER, UPDATE_INFLUENCER } from "../constants"
 
 const initialState = {
     all_influencers: [],
@@ -16,8 +16,11 @@ const influencerReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                pending: true
+                pending: true,
+                error: null,
+                response: null
             }
+
         case SET_INFLUENCERS_SUCCESS:
 
             return {
@@ -32,21 +35,35 @@ const influencerReducer = (state = initialState, action) => {
                 pending: false,
                 error: { type: action.type, message: action.message }
             }
+
         case SET_CURRENT_INFLUENCER:
 
             return {
                 ...state,
-                current_influencer: { ...action.influencer }
+                current_influencer: action.influencer
             }
+
+        case UPDATE_INFLUENCER:
+            influencers.splice(getIndex(influencers, action.influencer.id), 1, action.influencer)
+
+            return {
+                ...state,
+                all_influencers: influencers,
+                pending: false
+            }
+
 
         case REMOVE_INFLUENCER:
             return {
                 ...state,
-                all_influencers: [...influencers.filter(influ => influ.id !== action.influencer_id)]
+                all_influencers: [...influencers.filter(influ => influ.id !== action.id)],
+                pending: false
             }
         default:
             return state
     }
 }
+
+export const getIndex = (influencers, influ_id) => influencers.map(influ => { return influ.id }).indexOf(influ_id)
 
 export default influencerReducer

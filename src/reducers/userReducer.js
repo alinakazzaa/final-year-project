@@ -34,7 +34,8 @@ const userReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                pending: true
+                pending: true,
+                response: null
             }
 
         case SET_USERS_SUCCESS:

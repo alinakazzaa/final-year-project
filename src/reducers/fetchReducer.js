@@ -115,7 +115,8 @@ const fetchReducer = (state = initialState, action) => {
             running = {
                 ...state,
                 response: { type: action.type, message: action.message },
-                details: { ...state.details, status: COMPLETED }
+                details: { ...state.details, status: COMPLETED },
+                pending: false
             }
 
             return {

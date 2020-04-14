@@ -20,7 +20,8 @@ const collabReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: true,
-                error: null
+                error: null,
+                response: null
             }
 
         case SET_COLLABS_SUCCESS:
