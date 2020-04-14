@@ -83,21 +83,19 @@ export const addFetchJob = (user_id, project_id, fetchJobVal) => {
 
     }
 
-    return dispatch => {
-        db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
-            ...fetch_job
-        }).then(data => {
-            fetch_job.details.id = data.key
+    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
+        ...fetch_job
+    }).then(data => {
+        fetch_job.details.id = data.key
 
-            db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${data.key}/details`).update({
-                id: data.key
-            })
-
-            dispatch({
-                type: ADD_FETCH_JOB,
-                fetch_job
-            })
+        db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${data.key}/details`).update({
+            id: data.key
         })
+    })
+
+    return {
+        type: ADD_FETCH_JOB,
+        fetch_job
     }
 }
 
@@ -111,17 +109,15 @@ export const updateStateFetchJob = fetch_job => {
 export const updateFetchJob = fetch_job => {
     db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
         ...fetch_job
-    });
+    })
 }
 
 export const removeFetchJob = fetch_job => {
-    return dispatch => {
-        db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs`).child(fetch_job.details.id).remove()
+    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs`).child(fetch_job.details.id).remove()
 
-        dispatch({
-            type: REMOVE_FETCH_JOB,
-            fetch_job
-        })
+    return {
+        type: REMOVE_FETCH_JOB,
+        fetch_job
     }
 }
 

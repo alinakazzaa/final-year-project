@@ -73,46 +73,42 @@ export const addProject = (user_id, project_val) => {
         id: ''
     }
 
-    return dispatch => {
-        db.ref(`/Users/${user_id}/Projects/`).push({
-            details: { ...project }
-        }).then(data => {
-            project.id = data.key
+    db.ref(`/Users/${user_id}/Projects/`).push({
+        details: { ...project }
+    }).then(data => {
+        project.id = data.key
 
-            db.ref(`/Users/${user_id}/Projects/${data.key}/details`).update({
-                id: data.key
-            })
-
-            dispatch({
-                type: ADD_PROJECT,
-                project
-            })
+        db.ref(`/Users/${user_id}/Projects/${data.key}/details`).update({
+            id: data.key
         })
+    })
+
+    return {
+        type: ADD_PROJECT,
+        project
     }
 }
+
 
 export const updateProject = project => {
 
-    return dispatch => {
-        db.ref(`/Users/${project.user_id}/Projects/${project.id}/details`).update({
-            ...project
-        });
+    db.ref(`/Users/${project.user_id}/Projects/${project.id}/details`).update({
+        ...project
+    })
 
-        dispatch({
-            type: UPDATE_PROJECT,
-            project
-        })
+    return {
+        type: UPDATE_PROJECT,
+        project
     }
+
 }
 
 export const removeProject = project => {
-    return dispatch => {
-        db.ref(`/Users/${project.user_id}/Projects`).child(project.id).remove()
+    db.ref(`/Users/${project.user_id}/Projects`).child(project.id).remove()
 
-        dispatch({
-            type: REMOVE_PROJECT,
-            project
-        })
+    return {
+        type: REMOVE_PROJECT,
+        project
     }
 }
 

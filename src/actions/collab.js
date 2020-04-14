@@ -20,7 +20,7 @@ export const getUserCollabs = user_id => {
             if (collabs.length == 0) {
                 dispatch(setCollabsError())
             } else {
-                dispatch(setCollabsSuccess)
+                dispatch(setCollabsSuccess(collabs))
             }
         })
     }
@@ -29,7 +29,7 @@ export const getUserCollabs = user_id => {
 export const setCollabsPending = () => {
 
     return {
-        type: SET_COLLABS_PENDING,
+        type: SET_COLLABS_PENDING
     }
 }
 
@@ -72,53 +72,38 @@ export const addCollab = (user_id, project_id, collab_val) => {
         user_id: user_id,
         project_id: project_id
     }
+    db.ref(`/Users/${user_id}/Collabs/`).push({
+        details: { ...collab }
+    }).then(data => {
+        collab.id = data.key
 
-    return dispatch => {
-
-        db.ref(`/Users/${user_id}/Collabs/`).push({
-            details: { ...collab }
-        }).then(data => {
-            collab.id = data.key
-
-            db.ref(`/Users/${user_id}/Collabs/${data.key}/details`).update({
-                id: data.key
-            })
-
-            dispatch({
-                type: ADD_COLLAB,
-                collab
-            })
+        db.ref(`/Users/${user_id}/Collabs/${data.key}/details`).update({
+            id: data.key
         })
+    })
+
+    return {
+        type: ADD_COLLAB,
+        collab
     }
 }
 
 export const updateCollab = (user_id, collab) => {
-    return dispatch => {
-        db.ref(`/Users/${user_id}/Collabs/${collab.id}/details`).update({
-            ...collab
-        }).then(() => {
+    db.ref(`/Users/${user_id}/Collabs/${collab.id}/details`).update({
+        ...collab
+    })
 
-            dispatch({
-                type: UPDATE_COLLAB,
-                collab
-            })
-        })
-
-
-
+    return {
+        type: UPDATE_COLLAB,
+        collab
     }
 }
 
 export const removeCollab = collab => {
-    return dispatch => {
-        db.ref(`/Users/${collab.user_id}/Collabs`).child(collab.id).remove().then(() => {
-            dispatch({
-                type: REMOVE_COLLAB,
-                collab: collab
-            })
-        })
-
-
+    db.ref(`/Users/${collab.user_id}/Collabs`).child(collab.id).remove()
+    return {
+        type: REMOVE_COLLAB,
+        collab: collab
     }
 }
 
