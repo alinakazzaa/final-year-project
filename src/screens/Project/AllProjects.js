@@ -64,11 +64,10 @@ class AllProjects extends React.Component {
                         <Input
                             onChangeText={text => this.searchProject(text)} inputStyle={base.inputStyle} inputContainerStyle={project_style.searchInput} />
                     </View>} />
-
+                <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
                 {project.pending && <LoadingScreen size='large' />}
                 {!project.pending && !project.error &&
                     <View style={project_style.allContainer}>
-                        <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
                         {index == 0 ?
                             <View>
                                 <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={isSearch ? [...searched.filter(proj => proj.active == true)] : activeProjects(project)} />
@@ -76,12 +75,12 @@ class AllProjects extends React.Component {
                             <View>
                                 <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={isSearch ? [...searched.filter(proj => proj.active == false)] : archivedProjects(project)} />
                             </View>}
-                        <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} />
                     </View>}
                 {project.error &&
                     <View style={project_style.none}>
-                        <Text style={project_style.noneMsg}>{project.error.message}</Text>
+                        <Text style={project_style.noneMsg}>Start your first campaign</Text>
                     </View>}
+                <Icon name='plus' type='material-community' size={50} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} />
             </View>
         )
     }
