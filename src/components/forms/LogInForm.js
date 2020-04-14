@@ -26,6 +26,7 @@ const options = {
             error: 'Username is required',
         },
         password: {
+            password: true,
             error: 'Password is required',
 
         },

@@ -1,17 +1,12 @@
-import React from 'react';
-import { View, Keyboard } from 'react-native';
+import React from 'react'
+import { View, Keyboard } from 'react-native'
 import moment from 'moment'
-import t from 'tcomb-form-native';
-import { DATE_TODAY } from '../../constants/TodayDate';
-import { projectForm } from '../../screens/Project/styles/project.styles';
-import { collab_style } from '../../screens/Collab/styles/collab.styles';
+import t from 'tcomb-form-native'
+import { DATE_TODAY } from '../../constants/TodayDate'
+import { collab_style } from '../../screens/Collab/styles/collab.styles'
+import { form } from 'tcomb-form-native/lib'
 
-const Form = t.form.Form;
-
-const formStyles = {
-    ...Form.stylesheet,
-    ...projectForm
-}
+const Form = t.form.Form
 
 const Collab = t.struct({
     title: t.String,
@@ -21,9 +16,10 @@ const Collab = t.struct({
     influencer: t.String,
     compensation: t.maybe(t.String),
     description: t.maybe(t.String)
-});
+})
 
 const options = {
+    stylesheet: { ...Form.stylesheet, ...form },
     auto: 'none',
     fields: {
         title: {
@@ -40,13 +36,12 @@ const options = {
             defaultValueText: DATE_TODAY,
             config: {
                 format: date => {
-                    return moment(date).format('DD/MM/YYYY');
+                    return moment(date).format('DD/MM/YYYY')
                 },
             }
         }
-    },
-    stylesheet: formStyles,
-};
+    }
+}
 
 
 export default class CollabForm extends React.Component {
@@ -65,7 +60,7 @@ export default class CollabForm extends React.Component {
     onChange = value => {
         let { state_val } = this.state
         let updated_collab = { ...state_val, ...value }
-        this.setState({ value: updated_collab });
+        this.setState({ value: updated_collab })
         this.props.onChange(updated_collab)
     }
 

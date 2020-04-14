@@ -6,19 +6,18 @@ import t from 'tcomb-form-native'
 import { fetch_job_style } from '../../screens/FetchJob/styles/fetchJob.styles'
 import { formatNumber } from '../../actions/base'
 import { TabView } from '../tabview/TabView'
-import { colors, inputView } from '../../styles/base'
+import { colors, form } from '../../styles/base'
 import Slider from '../slider/Slider'
 import { criteria } from '../../constants/criteria'
 import { COMPLETED } from '../../constants'
-import bootstrap from 'tcomb-form-native/lib/stylesheets/bootstrap.js'
 
 const Form = t.form.Form
 
 var no_profiles = t.enums({
-    10: '0 - 10',
-    20: '10 - 20',
-    50: '20 - 50',
-    100: '50 - 100',
+    10: '0 - 20',
+    20: '20 - 40',
+    50: '40 - 60',
+    100: '60 - 100',
 })
 
 const FetchJob = t.struct({
@@ -29,7 +28,7 @@ const FetchJob = t.struct({
 })
 
 const options = {
-    stylesheet: bootstrap,
+    stylesheet: { ...Form.stylesheet, ...form },
     auto: 'none',
     fields: {
         hashtag: {
@@ -39,15 +38,10 @@ const options = {
             editable: false
         },
         no_profiles: {
-            nullOption: { value: '', text: 'Choose amount' },
-            itemStyle: { ...inputView }
-        },
-    },
+            nullOption: { value: 10, text: '0 - 20' }
+        }
+    }
 }
-
-options.stylesheet.textbox.normal = { ...inputView }
-options.stylesheet.textbox.disabled = { ...inputView }
-options.stylesheet.select.normal = { ...inputView }
 
 
 export default class FetchJobForm extends React.Component {
@@ -113,7 +107,7 @@ export default class FetchJobForm extends React.Component {
                 {fetch_job.status != COMPLETED && <View style={fetch_job_style.middle}>
                     <Text style={fetch_job_style.title}>Follower range</Text>
                     <View style={fetch_job_style.itemRowRange}>
-                        <TabView index={index} color={colors.SECONDARY} width='30%' titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
+                        <TabView index={index} color={colors.SECONDARY} width='38%' titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
                         <View style={fetch_job_style.rangeBox}>
                             <Text
                                 // @ts-ignore

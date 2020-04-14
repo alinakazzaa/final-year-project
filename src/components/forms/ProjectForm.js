@@ -5,14 +5,9 @@ import PropTypes from 'prop-types'
 import t from 'tcomb-form-native'
 import { project_style, projectForm } from '../../screens/Project/styles/project.styles'
 import { SwitchItem } from '../switch/Switch'
-import { inputView } from '../../styles/base'
+import { inputView, form } from '../../styles/base'
 
 const Form = t.form.Form
-
-const formStyles = {
-    ...Form.stylesheet,
-    ...projectForm
-}
 
 const Project = t.struct({
     title: t.String,
@@ -21,11 +16,11 @@ const Project = t.struct({
 })
 
 const options = {
+    stylesheet: { ...Form.stylesheet, ...form },
     auto: 'none',
     fields: {
         title: {
             error: 'Project requires a title!'
-
         },
         date_created: {
             editable: false
@@ -33,8 +28,7 @@ const options = {
         description: {
             multiline: true
         }
-    },
-    stylesheet: formStyles
+    }
 }
 
 

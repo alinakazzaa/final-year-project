@@ -33,11 +33,13 @@ const options = {
         },
         password: {
             error: 'Password is required',
-            title: "Password *"
+            title: "Password *",
+            password: true
         },
         confirm_password: {
             error: 'Confirmation of password is required',
-            title: "Confirm password *"
+            title: "Confirm password *",
+            password: true
         }
     },
     stylesheet: formStyles,
