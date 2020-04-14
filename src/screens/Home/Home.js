@@ -12,6 +12,10 @@ import { colors } from '../../styles/base'
 import { TagList } from '../../components/list/TagList'
 import { Divider } from 'react-native-elements'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { getAllInfluencers } from '../../actions/influencer'
+import { getUserCollabs } from '../../actions/collab'
+
+
 
 class HomeScreen extends React.Component {
 
@@ -20,7 +24,8 @@ class HomeScreen extends React.Component {
     }
 
     state = {
-        recent_tags: []
+        recent_tags: [],
+        recent_collabs: []
     }
 
     componentDidMount() {
@@ -29,7 +34,7 @@ class HomeScreen extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { user, project, fetch_job, getProjectFetchJobs } = this.props
+        const { user, project, fetch_job, getProjectFetchJobs, getUserCollabs, collab } = this.props
 
         if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
             getProjectFetchJobs(user.current_user.id, project.all_projects[0].id)
@@ -37,8 +42,23 @@ class HomeScreen extends React.Component {
 
         if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
             const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
-            const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
-            this.setState({ recent_tags: tags })
+            if (completed_fetch_jobs.length > 0) {
+                const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
+                this.setState({ recent_tags: tags })
+                getUserCollabs(user.current_user.id)
+            }
+
+        }
+
+        const recent_collabs = []
+        const collab_length = collab.all_collabs.length
+
+        if (prev.collab.all_collabs !== collab.all_collabs && collab_length > 0) {
+
+            for (var i = length; i > length - 3; i--) {
+                recent_collabs.push(collab.all_collabs[i])
+            }
+            this.setState({ ...this.state, recent_collabs })
         }
     }
 
@@ -47,8 +67,8 @@ class HomeScreen extends React.Component {
     }
 
     render() {
-        const { logOutUser, fetch_job, project } = this.props
-        const { recent_tags } = this.state
+        const { logOutUser, fetch_job, project, collab, influencer } = this.props
+        const { recent_tags, recent_collabs } = this.state
 
         return (
             <View>
@@ -60,17 +80,19 @@ class HomeScreen extends React.Component {
                         onPress={() => logOutUser()}
                     /></View>}
                 />
-                {project.pending || fetch_job.pending && <LoadingScreen />}
                 <View style={home.container}>
+                    {project.pending || fetch_job.pending && <LoadingScreen />}
                     <View style={home.top}>
-                        <Text style={home.title}>Based on your previous searches</Text>
-                        <Text style={home.text}>Consider these hashtagtags</Text>
-                        <View style={home.itemRow}>
-                            {recent_tags.length > 0 &&
-                                <TagList onPress={this.onTagPress} tags={recent_tags} />}
-                        </View>
+                        {(project.error !== null || fetch_job.error !== null) &&
+                            <View><Text style={home.title}>Create campaigns and find influencers to match your marketing needs!</Text>
+                                <Text style={home.title}>Run instagram profile searches by hashtags you associate with your product</Text></View>}
+                        {recent_tags.length > 0 && <View><Text style={home.title}>Based on your previous searches</Text>
+                            <Text style={home.text}>Consider these hashtags</Text>
+                            <View style={home.itemRow}>
+                                <TagList onPress={this.onTagPress} tags={recent_tags} />
+                            </View></View>}
                     </View>
-                    <View style={home.logInMsg}>
+                    <View style={home.middle}>
                         <Text style={home.largeTitle}>Recent collaborations....</Text>
                     </View>
                     <Divider />
@@ -86,14 +108,18 @@ class HomeScreen extends React.Component {
 const mapStateToProps = state => ({
     user: state.user,
     project: state.project,
-    fetch_job: state.fetch_job
+    fetch_job: state.fetch_job,
+    collab: state.collab,
+    influencer: state.influencer
 })
 
 
 const mapDispatchToProps = {
     getProjectFetchJobs,
     getUserProjects,
-    logOutUser
+    logOutUser,
+    getUserCollabs,
+    getAllInfluencers
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
