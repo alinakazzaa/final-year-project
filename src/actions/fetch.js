@@ -10,14 +10,14 @@ export const fetchPending = (action_type, fetch_job) => {
     } else {
         return {
             type: action_type,
-            fetch_job: fetch_job
+            fetch_job
         }
     }
 }
 
 export const fetchResponse = response => {
 
-    return response
+    return { ...response }
 }
 
 export const setRunningFetchJob = fetch_job => {

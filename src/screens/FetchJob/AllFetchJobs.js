@@ -67,23 +67,28 @@ class AllFetchJobs extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => navigation.goBack()} />}
-                    center={<View style={fetch_job_style.searchView}>
+                    center={<View style={base.searchView}>
                         <Text style={fetch_job_style.title}>Search</Text>
-                        <Input onChangeText={text => this.searchFetchJob(text)} inputStyle={base.inputStyle} inputContainerStyle={fetch_job_style.searchInput} />
+                        <Input onChangeText={text => this.searchFetchJob(text)} inputStyle={base.inputStyle} inputContainerStyle={base.searchInput} />
                     </View>}
                 />
                 <View style={fetch_job_style.container}>
+                    <TabView
+                        titles={['Pending', 'In Progress', 'Completed']}
+                        onPress={this.setTab}
+                        color={colors.TERTIARY}
+                        size='32%'
+                        index={index}
+                        three />
                     {fetch_job.pending &&
                         <LoadingScreen />
                     }
+                    {fetch_job.error &&
+                        <View style={base.centerItems}>
+                            <Text style={base.noneMessage}>Create your first influencer search</Text>
+                        </View>}
                     {!fetch_job.error && !fetch_job.pending &&
-                        <View><TabView
-                            titles={['Pending', 'In Progress', 'Completed']}
-                            onPress={this.setTab}
-                            color={colors.TERTIARY}
-                            size='32%'
-                            index={index}
-                            three />
+                        <View>
                             {index == 0 &&
                                 <View>
                                     <FetchJobList
@@ -105,8 +110,6 @@ class AllFetchJobs extends React.Component {
                                     deleteFetchJob={this.deleteFetchJob} />
                             </View>}
                         </View>}
-
-
                     <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => navigation.navigate('AddFetchJob')} />
                 </View>
             </View>

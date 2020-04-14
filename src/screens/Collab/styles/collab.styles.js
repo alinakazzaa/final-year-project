@@ -154,9 +154,6 @@ export const collab_style = StyleSheet.create(
         saveBtn: {
             ...button.btnContainer
         },
-        noneMsg: {
-            padding: spacing.LARGE
-        },
         thumbnail: {
             height: 100,
             width: 100,

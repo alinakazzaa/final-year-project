@@ -129,22 +129,24 @@ export const select = {
     color: colors.PRIMARY
 }
 
-export const form = {
-    controlLabel: {
-        normal: {
-            ...inputLabel
-        },
-        error: {
 
-        }
-    },
+export const form = {
     textbox: {
         normal: {
-            ...input
+            ...inputView
         },
         error: {
 
+        },
+        notEditable: {
+            ...inputView,
+            opacity: 0.5
         }
+    },
+    select: {
+        normal: {
+            ...inputView
+        },
     },
     checkbox: {
         normal: {
@@ -171,7 +173,30 @@ export const base = StyleSheet.create(
             fontSize: fonts.MEDIUM,
             fontWeight: fonts.WEIGHT_LIGHT
         },
-        btnView: {
+        noneMessage: {
+            ...inputLabel,
+            padding: spacing.LARGE * 2,
+            fontSize: fonts.SMALL,
+            color: colors.TERTIARY,
+            alignSelf: 'center'
+        },
+        centerItems: {
             alignItems: 'center',
-        }
+            textAlign: 'center'
+        },
+        searchView: {
+            flexDirection: 'row',
+            marginTop: spacing.LARGE
+        },
+        searchTxt: {
+            marginTop: spacing.MEDIUM * 1.4,
+            marginLeft: spacing.MEDIUM
+        },
+        searchInput: {
+            width: dimensions.fullWidth * 0.60,
+            borderColor: colors.TERTIARY,
+            borderBottomWidth: 1,
+            height: spacing.LARGE * 1.4,
+            marginBottom: spacing.MEDIUM
+        },
     });

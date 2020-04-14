@@ -12,7 +12,7 @@ export const project_style = StyleSheet.create(
             marginRight: spacing.LARGE
         },
         scrollContainer: {
-            padding: spacing.LARGE,
+            padding: spacing.LARGE
         },
         fetchScroll: {
             padding: spacing.SMALL,
@@ -26,12 +26,6 @@ export const project_style = StyleSheet.create(
             width: dimensions.fullWidth * .9,
             margin: 0,
             padding: 0
-        },
-        searchView: {
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            padding: spacing.LARGE,
-            paddingBottom: 0
         },
         detailsBox: {
             flexDirection: 'row',
@@ -113,13 +107,6 @@ export const project_style = StyleSheet.create(
             color: colors.TERTIARY
 
         },
-        searchInput: {
-            width: dimensions.fullWidth * 0.67,
-            borderColor: colors.TERTIARY,
-            borderBottomWidth: 1,
-            height: spacing.LARGE * 1.4,
-            marginBottom: spacing.MEDIUM
-        },
         left: {
             display: 'flex',
             width: '50%'
@@ -133,17 +120,6 @@ export const project_style = StyleSheet.create(
         },
         saveBtn: {
             ...button.btnContainer
-        },
-        none: {
-            alignItems: 'center',
-            textAlign: 'center'
-        },
-        noneMsg: {
-            padding: spacing.LARGE
-        },
-        searchTxt: {
-            marginTop: spacing.MEDIUM * 1.4,
-            marginLeft: spacing.MEDIUM
         }
     });
 

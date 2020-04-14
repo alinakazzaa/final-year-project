@@ -12,16 +12,6 @@ export const influencer_style = StyleSheet.create(
         scrollContainer: {
             padding: spacing.LARGE
         },
-        searchView: {
-            flexDirection: 'row',
-            marginTop: spacing.SMALL
-        },
-        searchInput: {
-            width: dimensions.fullWidth * 0.6,
-            borderColor: colors.TERTIARY,
-            borderBottomWidth: 1,
-            height: spacing.LARGE * 1.6
-        },
         listHead: {
             flexDirection: 'row',
             marginLeft: spacing.MEDIUM
