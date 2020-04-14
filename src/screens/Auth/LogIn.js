@@ -35,7 +35,7 @@ class LogInScreen extends React.Component {
         if (userValue.username == null || userValue.password == null) {
             setCurrentUserError(MSG_EMPTY_FIELDS)
         } else {
-            let found_user = user.all_users.find(u => u.username == userValue.username)
+            let found_user = user.all_users.find(u => u.username.toLowerCase() == userValue.username.toLowerCase())
 
             if (found_user) {
                 if (userValue.password == found_user.password)
