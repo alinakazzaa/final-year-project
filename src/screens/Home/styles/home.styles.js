@@ -9,8 +9,12 @@ export const home = StyleSheet.create(
             paddingRight: spacing.MEDIUM
         },
         top: {
-            marginTop: spacing.MEDIUM,
+            paddingTop: spacing.MEDIUM,
             paddingBottom: spacing.MEDIUM,
+        },
+        middle: {
+            marginTop: spacing.MEDIUM,
+            marginBottom: spacing.MEDIUM
         },
         title: {
             fontSize: fonts.SMALL,
@@ -29,9 +33,9 @@ export const home = StyleSheet.create(
             marginBottom: spacing.MEDIUM
         },
         itemRow: {
-            borderBottomWidth: 1,
-            borderTopWidth: 1,
-            borderColor: colors.BORDER,
+            // borderBottomWidth: 1,
+            // borderTopWidth: 1,
+            // borderColor: colors.BORDER,
             paddingTop: spacing.MEDIUM,
             paddingBottom: spacing.MEDIUM
 
@@ -43,16 +47,16 @@ export const home = StyleSheet.create(
         },
 
         largeTitle: {
-            // fontSize: 18,
-            // color: '#0B0033',
-            // fontFamily: 'Avenir-Book',
-            // fontWeight: "700",
-            // textAlign: 'center',
+            fontSize: 18,
+            color: '#0B0033',
+            fontFamily: 'Avenir-Book',
+            fontWeight: "700",
+            textAlign: 'center',
         },
-        logInMsg: {
-            justifyContent: 'center',
-            height: "20%",
-        },
+        // logInMsg: {
+        //     justifyContent: 'center',
+        //     height: "20%",
+        // },
         textCenter: {
             textAlign: 'center'
         },
