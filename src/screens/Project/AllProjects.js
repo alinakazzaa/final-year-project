@@ -56,31 +56,43 @@ class AllProjects extends React.Component {
         const { project } = this.props
 
         return (
-            <View>
+            <View style={{ backgroundColor: colors.SCREEN }}>
                 <AppHeader
                     gradient={true}
-                    left={<View style={project_style.searchTxt}><Text style={project_style.title}>Search</Text></View>}
-                    center={<View style={project_style.searchView}>
+                    left={<View style={base.searchTxt}><Text style={project_style.title}>Search</Text></View>}
+                    center={<View style={base.searchView}>
                         <Input
-                            onChangeText={text => this.searchProject(text)} inputStyle={base.inputStyle} inputContainerStyle={project_style.searchInput} />
+                            onChangeText={text => this.searchProject(text)}
+                            inputStyle={base.inputStyle}
+                            inputContainerStyle={base.searchInput} />
                     </View>} />
-                <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
-                {project.pending && <LoadingScreen size='large' />}
-                {!project.pending && !project.error &&
-                    <View style={project_style.allContainer}>
-                        {index == 0 ?
-                            <View>
-                                <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={isSearch ? [...searched.filter(proj => proj.active == true)] : activeProjects(project)} />
-                            </View> :
-                            <View>
-                                <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={isSearch ? [...searched.filter(proj => proj.active == false)] : archivedProjects(project)} />
-                            </View>}
-                    </View>}
-                {project.error &&
-                    <View style={project_style.none}>
-                        <Text style={project_style.noneMsg}>Start your first campaign</Text>
-                    </View>}
-                <Icon name='plus' type='material-community' size={50} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} />
+                <View style={project_style.allContainer}>
+                    <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
+                    {project.pending && <LoadingScreen size='large' />}
+                    {!project.pending && !project.error &&
+                        index == 0 ?
+                        <View>
+                            <ProjectList
+                                goToProject={this.goToProject}
+                                deleteProject={this.deleteProject}
+                                projects={isSearch ? [...searched.filter(proj => proj.active == true)] :
+                                    activeProjects(project)} />
+                        </View> :
+                        <View>
+                            <ProjectList
+                                goToProject={this.goToProject}
+                                deleteProject={this.deleteProject}
+                                projects={isSearch ? [...searched.filter(proj => proj.active == false)] :
+                                    archivedProjects(project)} />
+                        </View>}
+
+                    {project.error &&
+                        <View style={base.centerItems}>
+                            <Text style={base.noneMessage}>Start your first campaign</Text>
+                        </View>}
+                    <Icon name='plus' type='material-community' size={50} color={colors.TERTIARY}
+                        onPress={() => this.props.navigation.navigate('AddProject')} />
+                </View>
             </View>
         )
     }
