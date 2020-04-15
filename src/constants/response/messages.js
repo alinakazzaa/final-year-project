@@ -20,8 +20,8 @@ export const MSG_NO_COLLABS = 'There are no collaborations'
 export const MSG_NO_INFLUENCERS = 'There are no influencers'
 
 // FETCH
-export const GET_HASHTAG_MEDIA_SUCCESS = 'success: got users by hashtag'
-export const GET_HASHTAG_MEDIA_ERROR = 'error: didn\'t get users by hashtag'
+export const MSG_HASHTAG_MEDIA_SUCCESS = 'success: got users by hashtag'
+export const MSG_HASHTAG_MEDIA_ERROR = 'error: didn\'t get users by hashtag'
 
 
 // NEXT PAGE FETCH
