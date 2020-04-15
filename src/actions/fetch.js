@@ -16,8 +16,7 @@ export const fetchPending = (action_type, fetch_job) => {
 }
 
 export const fetchResponse = response => {
-
-    return { ...response }
+    return response
 }
 
 export const setRunningFetchJob = fetch_job => {
