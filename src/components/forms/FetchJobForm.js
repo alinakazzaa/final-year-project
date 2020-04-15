@@ -38,7 +38,6 @@ const options = {
             editable: false
         },
         no_profiles: {
-            nullOption: { value: 10, text: '0 - 20' }
         }
     }
 }
