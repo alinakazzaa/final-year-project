@@ -42,7 +42,7 @@ export const fonts = {
     MEDIUM: 18,
     LARGE: 20,
     PRIMARY: 'ArialRoundedMTBold',
-    WEIGHT_LIGHT: '200',
+    WEIGHT_LIGHT: '300',
     WEIGHT_MEDIUM: '500',
     WEIGHT_HEAVY: '700'
 }
@@ -186,17 +186,18 @@ export const base = StyleSheet.create(
         },
         searchView: {
             flexDirection: 'row',
-            marginTop: spacing.LARGE
+            marginTop: spacing.MEDIUM
         },
         searchTxt: {
-            marginTop: spacing.MEDIUM * 1.4,
-            marginLeft: spacing.MEDIUM
+            marginTop: spacing.MEDIUM,
+            marginLeft: spacing.MEDIUM,
+            color: colors.TERTIARY
         },
         searchInput: {
             width: dimensions.fullWidth * 0.60,
             borderColor: colors.TERTIARY,
             borderBottomWidth: 1,
-            height: spacing.LARGE * 1.4,
+            height: spacing.LARGE * 1.5,
             marginBottom: spacing.MEDIUM
         },
     });
