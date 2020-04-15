@@ -61,7 +61,7 @@ export const BottomNavigator = createBottomTabNavigator(
             screen: CollabStack,
             navigationOptions: {
                 tabBarIcon: () => (
-                    <Icon name={collab ? 'people' : 'people-outline'} type='material' size={32} color={colors.TERTIARY} onPress={() => changeActive('collab')} />
+                    <Icon name={collab ? 'people' : 'people-outline'} type='material' size={34} color={colors.TERTIARY} onPress={() => changeActive('collab')} />
                 )
             },
         },
@@ -69,7 +69,7 @@ export const BottomNavigator = createBottomTabNavigator(
             screen: SettingsScreen,
             navigationOptions: {
                 tabBarIcon: () => (
-                    <Icon name={settings ? 'settings' : 'settings-outline'} type='material-community' size={32} color={colors.TERTIARY} onPress={() => changeActive('settings')} />
+                    <Icon name={settings ? 'account' : 'account-outline'} type='material-community' size={30} color={colors.TERTIARY} onPress={() => changeActive('settings')} />
                 )
             }
         },
@@ -78,8 +78,7 @@ export const BottomNavigator = createBottomTabNavigator(
         initialRouteName: 'Projects',
         tabBarOptions: {
             showLabel: false,
-            style: { ...nav.tabBar },
-            tabStyle: { ...nav.tabItem }
+            style: { ...nav.tabBar }
         }
     },
 
