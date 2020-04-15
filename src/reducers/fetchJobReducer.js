@@ -61,11 +61,12 @@ const fetchJobReducer = (state = initialState, action) => {
             }
 
         case UPDATE_FETCH_JOB:
-            fetch_jobs.splice(getIndex(fetch_jobs, action.fetch_job), 1, action.fetch_job)
+            let index = fetch_jobs.findIndex(fj => fj.details.id == action.fetch_job.details.id)
+            fetch_jobs.splice(index, 1, action.fetch_job)
 
             return {
                 ...state,
-                all_fetch_jobs: fetch_jobs
+                all_fetch_jobs: [...fetch_jobs]
             }
 
         case CLEAR_CURRENT_FETCH_JOB:
@@ -84,7 +85,5 @@ const fetchJobReducer = (state = initialState, action) => {
             return state
     }
 }
-
-export const getIndex = (fetch_jobs, job) => fetch_jobs.map(fj => { return fj }).indexOf(job.details.id)
 
 export default fetchJobReducer

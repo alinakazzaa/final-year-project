@@ -1,59 +1,55 @@
 import { INSTAGRAM_GET_NEXT_PAGE_MEDIA } from "../constants/insta_endpoints"
 import { extractIds, getInfluencers } from './fetchMedia'
-import { GET_MEDIA_NEXT_PAGE_PENDING, GET_MEDIA_NEXT_PAGE_SUCCESS, GET_MEDIA_NEXT_PAGE_ERROR, COMPLETED_GET_ALL_USERS } from "../constants/response/types"
-import { GET_HASHTAG_MEDIA_SUCCESS, GET_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
+import { GET_MEDIA_PENDING, GET_MEDIA_ERROR, GET_MEDIA_SUCCESS, COMPLETED_FETCH } from "../constants/response/types"
+import { MSG_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
 
 export const fetchNextPage = (fetch_job, pending, fetchResponse) => {
-    pending(GET_MEDIA_NEXT_PAGE_PENDING)
+
+    pending(GET_MEDIA_PENDING, fetch_job)
     let parsed_end_cursor = fetch_job.end_cursor.replace('==', '%3D%3D')
     let response
-    console.log(INSTAGRAM_GET_NEXT_PAGE_MEDIA(fetch_job.details.hashtag, parsed_end_cursor))
     fetch(INSTAGRAM_GET_NEXT_PAGE_MEDIA(fetch_job.details.hashtag, parsed_end_cursor))
         .then(result => {
             result.json().then(res => {
 
                 if (res.status = 'ok') {
-                    let edge_hashtag_to_media = { ...res.data.hashtag.edge_hashtag_to_media }
+                    const edge_hashtag_to_media = { ...res.data.hashtag.edge_hashtag_to_media }
 
-                    response = {
-                        type: GET_MEDIA_NEXT_PAGE_SUCCESS,
-                        media_ids: extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria),
-                        message: GET_HASHTAG_MEDIA_SUCCESS,
-                        has_next_page: edge_hashtag_to_media.page_info.has_next_page
-                    }
-
-                    if (response.media_ids.length > 0) {
-                        getInfluencers(response.media_ids, fetch_job, pending, fetchResponse)
+                    if (edge_hashtag_to_media.count == 0) {
+                        response = {
+                            type: GET_MEDIA_ERROR,
+                            message: MSG_HASHTAG_MEDIA_ERROR
+                        }
                     } else {
+
+                        const ids = [...extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria)]
+
                         response = {
-                            type: COMPLETED_GET_ALL_USERS,
-                            message: GET_HASHTAG_MEDIA_ERROR,
-                            has_next_page: edge_hashtag_to_media.page_info.has_next_page
+                            has_next_page: edge_hashtag_to_media.page_info.has_next_page,
+                            end_cursor: edge_hashtag_to_media.page_info.end_cursor,
+                            type: GET_MEDIA_SUCCESS,
+                            media_ids: ids
+                        }
+
+                        if (ids.length > 0) {
+                            getInfluencers(ids, fetch_job, pending, fetchResponse)
+                        }
+
+                        if (!response.has_next_page) {
+                            response = { ...response, type: COMPLETED_FETCH }
                         }
                     }
 
-                    if (response.has_next_page) {
-                        response = {
-                            ...response,
-                            end_cursor: edge_hashtag_to_media.page_info.end_cursor
-                        }
-                    }
-
                     fetchResponse(response)
 
-
-
-                } else if (res.status = 'fail') {
-                    response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: res.message }
+                } else {
+                    response = { type: GET_MEDIA_ERROR, message: res.message }
                     fetchResponse(response)
                 }
-                else {
-                    response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: 'error: next page' }
-                    fetchResponse(response)
-                }
+
             })
         }).catch(error => {
-            response = { type: GET_MEDIA_NEXT_PAGE_ERROR, message: 'error: next page' }
+            response = { type: GET_MEDIA_ERROR, message: error }
             fetchResponse(response)
         })
 }
