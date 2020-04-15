@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, formContainer, container, dimensions, inputLabel, infoContainer, form, inputViewLabel, inputView } from '../../../styles/base';
+import { colors, fonts, spacing, formContainer, container, dimensions, inputLabel, infoContainer, form, inputViewLabel, inputView, base } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
 export const fetch_job_style = StyleSheet.create(
@@ -69,7 +69,8 @@ export const fetch_job_style = StyleSheet.create(
             width: dimensions.fullWidth * 0.7
         },
         progress: {
-
+            paddingTop: spacing.MEDIUM,
+            paddingBottom: spacing.MEDIUM
         },
         itemRow: {
             display: 'flex',
@@ -141,9 +142,7 @@ export const fetch_job_style = StyleSheet.create(
         },
         title: {
             ...inputLabel,
-            fontWeight: fonts.WEIGHT_HEAVY,
-            borderBottomWidth: 1,
-            borderColor: colors.BORDER,
+            fontWeight: fonts.WEIGHT_HEAVY
         },
         listItem: {
             display: 'flex',
@@ -308,7 +307,10 @@ export const fetch_job_style = StyleSheet.create(
             marginTop: spacing.LARGE
         },
         saveBtn: {
-            ...button.btnContainer
+            borderWidth: 1,
+            padding: spacing.MEDIUM,
+            alignSelf: 'flex-end',
+            borderRadius: 10
         },
         startBtn: {
             ...button.borderBtn,
@@ -318,5 +320,14 @@ export const fetch_job_style = StyleSheet.create(
         progressBar: {
             borderRadius: 10,
             borderWidth: 0
+        },
+        percentView: {
+            ...base.centerItems,
+            margin: spacing.MEDIUM
+        },
+        percent: {
+            ...inputLabel,
+            fontWeight: fonts.WEIGHT_HEAVY,
+            fontSize: fonts.LARGE
         }
-    })
+    });

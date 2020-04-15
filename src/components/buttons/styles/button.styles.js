@@ -5,7 +5,7 @@ export const button = StyleSheet.create(
     {
         btnText: {
             color: colors.WHITE,
-            fontSize: fonts.MEDIUM,
+            fontSize: fonts.LARGE,
             textTransform: 'uppercase',
             fontWeight: fonts.WEIGHT_MEDIUM
         },
