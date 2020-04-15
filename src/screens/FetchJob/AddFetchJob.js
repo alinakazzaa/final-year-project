@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
 import { fetch_job_style } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton'
-import { TextButton } from '../../components/buttons/TextButton'
+import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
 
 class AddFetchJob extends React.Component {
@@ -37,7 +37,7 @@ class AddFetchJob extends React.Component {
                 }
             })
         else
-            this.setState({ fetch_job: { ...fetch_job, } })
+            this.setState({ fetch_job: { ...fetch_job, date_created: DATE_TODAY } })
     }
 
     handleChange = updated_fetch_job => {
@@ -65,7 +65,7 @@ class AddFetchJob extends React.Component {
             <View>
                 <AppHeader
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                    right={<TextButton containerStyle={fetch_job_style.saveBtn} onPress={this.handleSubmit} title="Save" />}
+                    right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />
                 <View style={fetch_job_style.addContainer}>

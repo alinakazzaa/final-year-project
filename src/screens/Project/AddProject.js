@@ -2,12 +2,12 @@ import * as React from 'react'
 import { View } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import ProjectForm from '../../components/forms/ProjectForm'
-import { TextButton } from '../../components/buttons/TextButton'
 import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
 import { BackButton } from '../../components/buttons/BackButton'
 import { project_style } from './styles/project.styles'
 import { DATE_TODAY } from '../../constants/TodayDate'
+import { SaveButton } from '../../components/buttons/SaveButton'
 
 class AddProject extends React.Component {
 
@@ -45,7 +45,7 @@ class AddProject extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                    right={<TextButton containerStyle={project_style.saveBtn} onPress={this.handleSubmit} title="Save" />}
+                    right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <View style={project_style.addContainer}>
                     <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />

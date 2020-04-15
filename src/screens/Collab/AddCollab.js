@@ -6,6 +6,7 @@ import CollabForm from '../../components/forms/CollabForm'
 import { TextButton } from '../../components/buttons/TextButton'
 import { connect } from 'react-redux'
 import { addCollab } from '../../actions/collab'
+import { BackButton } from '../../components/buttons/BackButton'
 
 
 class AddCollab extends React.Component {
@@ -31,12 +32,7 @@ class AddCollab extends React.Component {
         return (
             <View style={styles.container}>
                 <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
+                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                     right={
                         <View style={styles.saveBtn}>
                             <TextButton onPress={this.handleSubmit} title="Save" />

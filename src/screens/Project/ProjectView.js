@@ -2,7 +2,6 @@ import * as React from 'react'
 import { View, TouchableOpacity, Text, ScrollView } from 'react-native'
 import { clearCurrentProject, setCurrentProject, updateProject } from '../../actions/project'
 import { AppHeader } from '../../layouts/Header'
-import { TextButton } from '../../components/buttons/TextButton'
 import ProjectForm from '../../components/forms/ProjectForm'
 import { connect } from 'react-redux'
 import { project_style } from './styles/project.styles'
@@ -10,6 +9,7 @@ import { BackButton } from '../../components/buttons/BackButton'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { setCurrentFetchJob, getProjectFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
 import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView'
+import { SaveButton } from '../../components/buttons/SaveButton'
 
 class ProjectView extends React.Component {
 
@@ -55,11 +55,11 @@ class ProjectView extends React.Component {
         this.setState({ project_value: { ...project_value, active: value } })
     }
 
-    componentWillUnmount() {
-        const { clearCurrentProject, clearFetchJobState } = this.props
-        clearCurrentProject()
-        clearFetchJobState()
-    }
+    // componentWillUnmount() {
+    //     const { clearCurrentProject, clearFetchJobState } = this.props
+    //     clearCurrentProject()
+    //     clearFetchJobState()
+    // }
 
     render() {
         const { fetch_job, navigation } = this.props
@@ -70,7 +70,7 @@ class ProjectView extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => navigation.goBack()} />}
-                    right={<TextButton containerStyle={project_style.saveBtn} onPress={this.handleSubmit} title="Save" />}
+                    right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <View style={project_style.viewContainer}>
                     <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />

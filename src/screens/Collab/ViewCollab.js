@@ -2,7 +2,6 @@ import * as React from 'react'
 import { View, Text } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
-import { TextButton } from '../../components/buttons/TextButton'
 import { connect } from 'react-redux'
 import { collab_style } from './styles/collab.styles'
 import CollabForm from '../../components/forms/CollabForm'
@@ -11,12 +10,18 @@ import { getInfluByUsername } from '../../actions/influencer'
 import { fetchUserMedia } from '../../web/fetchUserMedia'
 import { fetchPending, fetchResponse } from '../../actions/fetch'
 import { PublicationList } from '../../components/list/PublicationList'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { SaveButton } from '../../components/buttons/SaveButton'
 
 
 class ViewCollab extends React.Component {
 
     static navigationOptions = {
         headerShown: false
+    }
+
+    state = {
+        tags: [{ name: 'berghain', editable: false }, { name: 'mitte', editable: false }]
     }
 
     componentDidMount() {
@@ -40,6 +45,13 @@ class ViewCollab extends React.Component {
         // this.setState({ project: updatedProject })
     }
 
+    editTag = (tag, index) => {
+        const hashtags = [...this.state.tags]
+        const hashtag = { ...hashtags[index], editable: !hashtags[index].editable }
+        hashtags.splice(index, 1, hashtag)
+        this.setState({ tags: hashtags })
+    }
+
     handleSubmit = () => {
         // const { user, navigation, updateProject } = this.props
         // let { project_value } = this.state
@@ -50,15 +62,15 @@ class ViewCollab extends React.Component {
 
 
     render() {
+        const { tags } = this.state
         const { collab, navigation } = this.props
-
 
         return (
             <View>
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => navigation.goBack()} />}
-                    right={<TextButton containerStyle={collab_style.saveBtn} onPress={this.handleSubmit} title="Save" />}
+                    right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <View style={collab_style.viewContainer}>
                     <View>
@@ -80,13 +92,14 @@ class ViewCollab extends React.Component {
                     </View>
                     <View style={collab_style.tagsBox}>
                         <Text style={collab_style.title}>Hashtags</Text>
-                        <TagList tags={['testing', 'stuff']} />
+                        <TagList tags={tags} onPress={this.editTag} />
                     </View>
+                    {collab.pending && <LoadingScreen />}
                     <View style={collab_style.header}>
                         <Text style={collab_style.title}>Publications</Text>
                     </View>
                     {collab.current_collab.details.active ?
-                        <PublicationList publications={collab.publications} /> :
+                        <PublicationList publications={collab.current_collab.publications} /> :
                         <View style={collab_style.listView}><Text style={collab_style.noneMsg}>No publications yet</Text></View>}
                 </View>
             </View>
