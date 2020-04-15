@@ -7,7 +7,7 @@ import { colors } from '../../styles/base';
 export const BackButton = ({ onPress }) => {
     return <Icon
         name='arrow-left'
-        size={35}
+        size={40}
         color={colors.TERTIARY}
         type='material-community'
         onPress={onPress}
@@ -15,8 +15,7 @@ export const BackButton = ({ onPress }) => {
 }
 
 BackButton.propTypes = {
-    onPress: PropTypes.func,
-    style: PropTypes.object,
+    onPress: PropTypes.func
 }
 
 BackButton.defaultProps = {
