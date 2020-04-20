@@ -6,10 +6,9 @@ import { tag } from '../../styles/tag'
 
 
 export const TagList = ({ tags, onPress }) => {
-    const tagList = tag => {
-
+    const tagList = (tag, index) => {
         return (
-            <Tag title={tag} onPress={onPress} />
+            <Tag key={index} title={tag.name} editable={tag.editable} onPress={onPress} index={index} />
         )
     }
 
@@ -18,7 +17,7 @@ export const TagList = ({ tags, onPress }) => {
             {
                 tags.length > 0 && tags.map((tag, index) => {
                     return (
-                        tagList(tag)
+                        tagList(tag, index)
                     );
                 })
 
