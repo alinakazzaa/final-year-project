@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, container, dimensions, inputLabel } from '../../../styles/base';
+import { colors, fonts, spacing, container } from '../../../styles/base';
+import { inputLabel } from '../../../styles/form';
 
 export const influencer_style = StyleSheet.create(
     {
@@ -15,11 +16,6 @@ export const influencer_style = StyleSheet.create(
         listHead: {
             flexDirection: 'row',
             marginLeft: spacing.MEDIUM
-        },
-        title: {
-            ...inputLabel,
-            fontWeight: fonts.WEIGHT_MEDIUM,
-            fontSize: fonts.MEDIUM
         },
         loadingTxt: {
             fontFamily: fonts.PRIMARY,

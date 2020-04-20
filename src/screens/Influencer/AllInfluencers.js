@@ -69,7 +69,7 @@ class AllInfluencers extends React.Component {
                     <AppHeader
                         left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                         center={<View style={base.searchView}>
-                            <Text style={influencer_style.title}>Search</Text>
+                            <Text style={base.title}>Search</Text>
                             <Input
                                 onChangeText={text => this.searchInfluencer(text)}
                                 inputStyle={base.inputStyle}

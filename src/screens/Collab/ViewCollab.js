@@ -3,7 +3,7 @@ import { View, Text, Linking } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 import { connect } from 'react-redux'
-import { collab_style } from './styles/collab.styles'
+import { collabStyle } from './styles/collab.styles'
 import CollabForm from '../../components/forms/CollabForm'
 import { TagList } from '../../components/list/TagList'
 import { getInfluByUsername } from '../../actions/influencer'
@@ -12,6 +12,7 @@ import { fetchPending, fetchResponse } from '../../actions/fetch'
 import { PublicationList } from '../../components/list/PublicationList'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
+import { base } from '../../styles/base'
 
 
 class ViewCollab extends React.Component {
@@ -77,39 +78,22 @@ class ViewCollab extends React.Component {
                     left={<BackButton onPress={() => navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <View style={collab_style.viewContainer}>
-                    <View>
-                        <View style={collab_style.header}>
-                            <Text style={collab_style.title}>Details</Text>
-                        </View>
-                        <View style={collab_style.detailsBox}>
-                            <View style={collab_style.labelsCol}>
-                                <Text style={collab_style.label}>Title</Text>
-                                {/* <Text style={collab_style.label}>Date created</Text> */}
-                                {/* <Text style={collab_style.label}>Date Start</Text> */}
-                                <Text style={collab_style.label}>Campaign</Text>
-                                <Text style={collab_style.label}>Influencer</Text>
-                                <Text style={collab_style.label}>Compensation</Text>
-                                <Text style={collab_style.label}>Description</Text>
-                            </View>
-                            <CollabForm onChange={this.handleChange} collab={collab.current_collab} />
-                        </View>
-                    </View>
-                    <View style={collab_style.tagsBox}>
-                        <Text style={collab_style.title}>Hashtags</Text>
+                <View style={collabStyle.viewContainer}>
+                    <CollabForm onChange={this.handleChange} collab={collab.current_collab} />
+                    <View style={collabStyle.tagsBox}>
+                        <Text style={collabStyle.title}>Hashtags</Text>
                         <TagList tags={tags} onPress={this.editTag} />
                     </View>
                     {collab.pending && <LoadingScreen />}
-                    <View style={collab_style.header}>
-                        <Text style={collab_style.title}>Publications</Text>
+                    <View style={collabStyle.header}>
+                        <Text style={collabStyle.title}>Publications</Text>
                     </View>
                     {collab.current_collab.details.active ?
                         <PublicationList publications={collab.current_collab.publications}
                             onPress={this.onThumbnailPress} /> :
-                        <View style={collab_style.listView}><Text style={collab_style.noneMsg}>No publications yet</Text></View>}
+                        <View style={collabStyle.listView}><Text style={base.noneMessage}>No publications yet</Text></View>}
                 </View>
             </View>
-
         )
     }
 }

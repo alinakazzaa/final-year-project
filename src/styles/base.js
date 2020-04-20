@@ -1,5 +1,6 @@
 import { Dimensions } from 'react-native'
 import { StyleSheet } from 'react-native';
+import { inputLabel } from './form';
 
 export const dimensions = {
     fullHeight: Dimensions.get('window').height,
@@ -55,8 +56,6 @@ export const container = {
     backgroundColor: colors.SCREEN
 }
 
-
-
 export const formContainer = {
     margin: '3%',
     marginRight: '5%',
@@ -70,94 +69,11 @@ export const infoContainer = {
     margin: '3%',
 }
 
-// components
-
-export const input = {
-    color: colors.TERTIARY,
-    fontSize: fonts.MEDIUM,
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    height: height.MEDIUM,
-    width: width.LARGE,
-    borderColor: colors.BORDER,
-    borderBottomWidth: 1
-}
-
-export const inputView = {
-    color: colors.TERTIARY,
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    width: dimensions.fullWidth * 0.55,
-    minHeight: height.MEDIUM,
-    borderColor: colors.BORDER,
-    borderWidth: 0,
-    borderBottomWidth: 1,
-    fontSize: fonts.MEDIUM
-}
-
-export const inputLabel = {
-    padding: 0,
-    margin: 0,
-    color: colors.TERTIARY,
-    marginTop: spacing.SMALL,
-    marginBottom: spacing.MEDIUM,
-    fontSize: fonts.SMALL,
-    textTransform: 'uppercase',
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    fontFamily: fonts.PRIMARY,
-}
-
-export const inputViewLabel = {
-
-    textTransform: 'uppercase',
-    color: colors.TERTIARY,
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    marginBottom: spacing.MEDIUM,
-    margin: 0,
-    marginRight: spacing.LARGE,
-    minWidth: width.MEDIUM * 0.8,
-    height: height.MEDIUM,
-    fontSize: fonts.SMALL,
-    paddingTop: spacing.MEDIUM * 0.8
-}
-
-export const boolSelect = {
-    height: 100,
-    padding: spacing.MEDIUM
-}
-
-export const select = {
-    height: 100,
-    color: colors.PRIMARY
-}
-
-
-export const form = {
-    textbox: {
-        normal: {
-            ...inputView
-        },
-        error: {
-
-        },
-        notEditable: {
-            ...inputView,
-            opacity: 0.5
-        }
-    },
-    select: {
-        normal: {
-            ...inputView
-        },
-    },
-    checkbox: {
-        normal: {
-            ...boolSelect
-        }
-    }
-}
-
-
 export const base = StyleSheet.create(
     {
+        scrollContainer: {
+            padding: spacing.LARGE
+        },
         slider: {
             height: 20,
             justifyContent: 'center',
@@ -167,6 +83,27 @@ export const base = StyleSheet.create(
             paddingLeft: 0,
             paddingRight: 0,
             borderColor: colors.PRIMARY
+        },
+        title: {
+            ...inputLabel,
+            fontWeight: fonts.WEIGHT_HEAVY,
+            // fontSize: fonts.SMALL,
+            // fontFamily: fonts.PRIMARY,
+            // color: colors.TERTIARY,
+            // marginBottom: spacing.MEDIUM,
+            // fontWeight: fonts.WEIGHT_HEAVY,
+            // textTransform: 'uppercase',
+        },
+        text: {
+            color: colors.TERTIARY,
+            fontSize: fonts.MEDIUM,
+            padding: spacing.MEDIUM,
+            marginBottom: spacing.MEDIUM,
+            textTransform: 'uppercase',
+            fontWeight: fonts.WEIGHT_LEIGHT
+        },
+        label: {
+
         },
         inputStyle: {
             color: colors.TERTIARY,
@@ -200,4 +137,4 @@ export const base = StyleSheet.create(
             height: spacing.LARGE * 1.5,
             marginBottom: spacing.MEDIUM
         },
-    });
+    })

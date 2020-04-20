@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
-import { collab_style } from './styles/collab.styles'
+import { collabStyle } from './styles/collab.styles'
 import { connect } from 'react-redux'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { colors, base } from '../../styles/base'
@@ -58,14 +58,14 @@ class AllCollabs extends React.Component {
             <View>
                 <AppHeader
                     gradient={true}
-                    left={<View style={base.searchTxt}><Text style={collab_style.title}>Search</Text></View>}
+                    left={<View style={base.searchTxt}><Text style={collabStyle.title}>Search</Text></View>}
                     center={<View style={base.searchView}>
                         <Input
                             onChangeText={text => this.searchCollab(text)}
                             inputStyle={base.inputStyle}
                             inputContainerStyle={base.searchInput} />
                     </View>} />
-                <View style={collab_style.allContainer}>
+                <View style={collabStyle.allContainer}>
                     {collab.pending && <LoadingScreen size='large' />}
                     <TabView titles={['Active', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
                     {collab.pending && <LoadingScreen />}

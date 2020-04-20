@@ -13,7 +13,7 @@ import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
 import { fetchPending, fetchResponse, clearRunningFetchJob } from '../../actions/fetch'
 import { fetchNextPage } from '../../web/fetchNextPage'
 import { COMPLETED_GET_USERS, COMPLETED_FETCH, GET_MEDIA_SUCCESS } from '../../constants/response/types'
-import { fetch_job_style } from './styles/fetchJob.styles'
+import { fetchJobStyle } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import FetchJobForm from '../../components/forms/FetchJobForm'
 import { base, dimensions, colors, spacing } from '../../styles/base'
@@ -126,42 +126,42 @@ class FetchJobView extends React.Component {
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <View style={fetch_job_style.viewContainer}>
+                <View style={fetchJobStyle.viewContainer}>
                     <FetchJobForm goBack={this.props.navigation.goBack} fetch_job={{ ...fetch_job_value.details }} handleChange={this.handleChange} />
-                    <View style={fetch_job_style.middle}>
-                        <Text style={fetch_job_style.title}>Status</Text>
-                        <View style={fetch_job_style.statusView}>
+                    <View style={fetchJobStyle.middle}>
+                        <Text style={base.title}>Status</Text>
+                        <View style={fetchJobStyle.statusView}>
                             {fetch_job_value.details !== null && fetch_job_value.details.status == IN_PROGRESS &&
-                                <View style={fetch_job_style.progress}>
+                                <View style={fetchJobStyle.progress}>
                                     <View style={{ marginBottom: spacing.MEDIUM, flexDirection: 'column', justifyContent: 'space-between' }}>
                                         <Gradient style={{ borderRadius: 10 }}>
-                                            <Bar indeterminate={true} color={colors.SCREEN} width={dimensions.fullWidth * 0.9} height={25} style={fetch_job_style.progressBar} />
+                                            <Bar indeterminate={true} color={colors.SCREEN} width={dimensions.fullWidth * 0.9} height={25} style={fetchJobStyle.progressBar} />
                                         </Gradient>
-                                        <View style={fetch_job_style.percentView}><Text style={fetch_job_style.percent}>{progress_percent.toFixed()} %</Text></View>
+                                        <View style={fetchJobStyle.percentView}><Text style={fetchJobStyle.percent}>{progress_percent.toFixed()} %</Text></View>
                                     </View>
 
 
                                 </View>
                             }
-                            {fetch_job_value.details.status !== IN_PROGRESS && <Text style={fetch_job_style.statusData}>{fetch_job_value.details.status}</Text>}
+                            {fetch_job_value.details.status !== IN_PROGRESS && <Text style={fetchJobStyle.statusData}>{fetch_job_value.details.status}</Text>}
                         </View>
                     </View>
                     {fetch_job_value.details.status == COMPLETED &&
-                        <View style={fetch_job_style.bottomView}>
-                            <View style={fetch_job_style.influencers}>
-                                <Text style={fetch_job_style.title}>Influencers</Text>
-                                <TouchableOpacity style={fetch_job_style.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
-                                    <Text style={fetch_job_style.title}>View All</Text>
+                        <View style={fetchJobStyle.bottomView}>
+                            <View style={fetchJobStyle.influencers}>
+                                <Text style={base.title}>Influencers</Text>
+                                <TouchableOpacity style={fetchJobStyle.viewAllBtn} onPress={() => this.props.navigation.navigate('AllInfluencers')}>
+                                    <Text style={base.title}>View All</Text>
                                 </TouchableOpacity>
                             </View>
                             {influencer.pending && <LoadingScreen />}
                             {!influencer.pending && <InfluencerListFjView influencers={influencer.all_influencers} />}
                             {influencer.error != null &&
-                                <View style={fetch_job_style.none}><Text style={fetch_job_style.data}>{influencer.error.message}</Text></View>}
+                                <View style={fetchJobStyle.none}><Text style={fetchJobStyle.data}>{influencer.error.message}</Text></View>}
                         </View>}
                     {fetch_job_value.details.status == PENDING &&
-                        < View style={fetch_job_style.btnView}>
-                            <TextButton title="Start" containerStyle={fetch_job_style.startBtn} buttonText={base.defaultTxt} onPress={() => this.startFetchJob()} />
+                        < View style={fetchJobStyle.btnView}>
+                            <TextButton title="Start" containerStyle={fetchJobStyle.startBtn} buttonText={base.defaultTxt} onPress={() => this.startFetchJob()} />
                         </View>}
                 </View >
             </View >

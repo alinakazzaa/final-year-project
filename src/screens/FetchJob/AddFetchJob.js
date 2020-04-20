@@ -4,7 +4,7 @@ import FetchJobForm from '../../components/forms/FetchJobForm'
 import { AppHeader } from '../../layouts/Header'
 import { connect } from 'react-redux'
 import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
-import { fetch_job_style } from './styles/fetchJob.styles'
+import { fetchJobStyle } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
@@ -68,14 +68,14 @@ class AddFetchJob extends React.Component {
                     right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />
-                <View style={fetch_job_style.addContainer}>
-                    <View style={fetch_job_style.info}>
-                        <Text style={fetch_job_style.text}>Search users by hashtag</Text>
+                <View style={fetchJobStyle.addContainer}>
+                    <View style={fetchJobStyle.info}>
+                        <Text style={fetchJobStyle.text}>Search users by hashtag</Text>
                     </View>
-                    {fetch_job.hashtag == null && <View style={fetch_job_style.info}>
-                        <Text style={fetch_job_style.text}>Avoid overly specific tags</Text></View>}
+                    {fetch_job.hashtag == null && <View style={fetchJobStyle.info}>
+                        <Text style={fetchJobStyle.text}>Avoid overly specific tags</Text></View>}
                     <FetchJobForm fetch_job={fetch_job} handleChange={this.handleChange} />
-                    <View style={fetch_job_style.info}><Text style={fetch_job_style.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
+                    <View style={fetchJobStyle.info}><Text style={fetchJobStyle.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         )

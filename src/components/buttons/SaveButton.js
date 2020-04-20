@@ -8,7 +8,7 @@ export const SaveButton = ({ onPress }) => {
     return <Icon
         name='check'
         size={40}
-        color={colors.TERTIARY}
+        color={colors.SCREEN}
         type='material-community'
         onPress={onPress}
         underlayColor='transparent' />

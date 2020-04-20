@@ -5,19 +5,19 @@ import { PulseIndicator } from 'react-native-indicators'
 import { Icon } from 'react-native-elements'
 import { IN_PROGRESS } from '../../constants/index'
 import { colors } from '../../styles/base'
-import { fetch_job_style } from '../../screens/FetchJob/styles/fetchJob.styles'
+import { fetchJobStyle } from '../../screens/FetchJob/styles/fetchJob.styles'
 
 export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob }) => {
     const FJList = (fj, index) => {
 
         return (
             <TouchableOpacity key={index} onPress={() => goToFetchJob(fj)}>
-                <View style={fetch_job_style.listItem}>
-                    <View style={fetch_job_style.left}>
-                        <Text style={fetch_job_style.hashtag}>{fj.details.hashtag}</Text>
+                <View style={fetchJobStyle.listItem}>
+                    <View style={fetchJobStyle.left}>
+                        <Text style={fetchJobStyle.hashtag}>{fj.details.hashtag}</Text>
                     </View>
                     <View>
-                        <Text style={fetch_job_style.date}>{fj.details.date_created}</Text>
+                        <Text style={fetchJobStyle.date}>{fj.details.date_created}</Text>
                     </View>
                     {fj.details.status != IN_PROGRESS && <View>
                         <Icon name='delete-outline' type="material-community" size={25} color={colors.TERTIARY} onPress={() => deleteFetchJob(fj)} />
@@ -34,14 +34,14 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob }) => {
     return (
 
         <View>
-            <View style={fetch_job_style.listHead}>
-                <Text style={fetch_job_style.title}>Title</Text>
-                <Text style={fetch_job_style.title}>Date</Text>
-                <Text style={fetch_job_style.title}>Hashtag</Text>
-                <Text style={fetch_job_style.title}>Location</Text>
+            <View style={fetchJobStyle.listHead}>
+                <Text style={fetchJobStyle.title}>Title</Text>
+                <Text style={fetchJobStyle.title}>Date</Text>
+                <Text style={fetchJobStyle.title}>Hashtag</Text>
+                <Text style={fetchJobStyle.title}>Location</Text>
             </View>
             <ScrollView keyboardDismissMode='on-drag'
-                contentContainerStyle={fetch_job_style.scrollContainer}>
+                contentContainerStyle={fetchJobStyle.scrollContainer}>
                 {fetch_jobs.map((fj, index) => {
                     return FJList(fj, index)
                 })}

@@ -9,7 +9,7 @@ import { BackButton } from '../../components/buttons/BackButton'
 import { TabView } from '../../components/tabview/TabView'
 import { colors, base } from '../../styles/base'
 import { Input, Icon } from 'react-native-elements'
-import { fetch_job_style } from './styles/fetchJob.styles'
+import { fetchJobStyle } from './styles/fetchJob.styles'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 
 class AllFetchJobs extends React.Component {
@@ -68,11 +68,11 @@ class AllFetchJobs extends React.Component {
                     gradient={true}
                     left={<BackButton onPress={() => navigation.goBack()} />}
                     center={<View style={base.searchView}>
-                        <Text style={fetch_job_style.title}>Search</Text>
+                        <Text style={base.title}>Search</Text>
                         <Input onChangeText={text => this.searchFetchJob(text)} inputStyle={base.inputStyle} inputContainerStyle={base.searchInput} />
                     </View>}
                 />
-                <View style={fetch_job_style.container}>
+                <View style={fetchJobStyle.container}>
                     <TabView
                         titles={['Pending', 'In Progress', 'Completed']}
                         onPress={this.setTab}

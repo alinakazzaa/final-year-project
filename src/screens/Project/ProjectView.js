@@ -10,6 +10,7 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { setCurrentFetchJob, getProjectFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
 import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView'
 import { SaveButton } from '../../components/buttons/SaveButton'
+import { base } from '../../styles/base'
 
 class ProjectView extends React.Component {
 
@@ -81,7 +82,7 @@ class ProjectView extends React.Component {
                                 <Text style={project_style.title}>View All</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={project_style.listView}><Text style={project_style.noneMsg}>No collaborations yet</Text></View>
+                        <View style={project_style.listView}><Text style={base.noneMessage}>No collaborations yet</Text></View>
                     </View>
                     <View>
                         <View style={project_style.header}>
@@ -91,7 +92,7 @@ class ProjectView extends React.Component {
                             </TouchableOpacity>
                         </View>
                         {fetch_job.pending && <LoadingScreen />}
-                        {fetch_job.error && <View style={project_style.listView}><Text style={project_style.noneMsg}>No searches</Text></View>}
+                        {fetch_job.error && <View style={project_style.listView}><Text style={base.noneMessage}>No searches</Text></View>}
                         {!fetch_job.error && !fetch_job.pending && <ScrollView
                             contentContainerStyle={project_style.fetchScroll}>
                             {fetch_job.all_fetch_jobs.length > 0 && <View>

@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { colors, container, spacing, fonts, formContainer, input, inputLabel } from '../../../styles/base';
+import { colors, container, spacing, fonts, formContainer } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
-export const auth = StyleSheet.create(
+export const authStyle = StyleSheet.create(
     {
         logInContainer: {
             ...container,
@@ -27,14 +27,6 @@ export const auth = StyleSheet.create(
             color: colors.WHITE,
             marginBottom: spacing.LARGE,
             fontWeight: fonts.WEIGHT_LEIGHT,
-        },
-        text: {
-            color: colors.TERTIARY,
-            fontSize: 16,
-            padding: spacing.MEDIUM,
-            marginBottom: spacing.MEDIUM,
-            textTransform: 'uppercase',
-            fontWeight: fonts.WEIGHT_LEIGHT
         },
         logInButton: {
             ...button.borderBtn,

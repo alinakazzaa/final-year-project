@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
-import { collab_style } from '../../screens/Collab/styles/collab.styles'
+import { collabStyle } from '../../screens/Collab/styles/collab.styles'
 import { Icon } from 'react-native-elements'
 import { colors } from '../../styles/base'
 
@@ -27,7 +27,7 @@ export const CollabList = ({ collabs, deleteCollab, goToCollab }) => {
 
     return (
         <ScrollView keyboardDismissMode='on-drag'
-            contentContainerStyle={collab_style.scrollContainer}
+            contentContainerStyle={base.scrollContainer}
         >
             <View>
                 {

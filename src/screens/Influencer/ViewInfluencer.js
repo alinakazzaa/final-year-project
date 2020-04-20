@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import { getCurrentInfluencer } from '../../reducers/influencerReducer'
 import { Avatar } from 'react-native-elements'
 import { IconButton } from '../../components/buttons/IconButton'
 import { AppHeader } from '../../layouts/Header'
@@ -184,7 +183,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    getCurrentInfluencer
+
 }
 
 

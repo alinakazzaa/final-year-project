@@ -1,21 +1,27 @@
-import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, formContainer, container, dimensions, inputLabel, infoContainer, form, inputViewLabel, inputView, base } from '../../../styles/base';
-import { button } from '../../../components/buttons/styles/button.styles';
+import { StyleSheet } from 'react-native'
+import { colors, fonts, spacing, formContainer, container, dimensions, infoContainer, base } from '../../../styles/base'
+import { button } from '../../../components/buttons/styles/button.styles'
 
-export const fetch_job_style = StyleSheet.create(
+export const fetchJobStyle = StyleSheet.create(
     {
         container: {
             ...container,
             paddingRight: spacing.MEDIUM,
             paddingLeft: spacing.MEDIUM,
-            backgroundColor: 'transparent',
+            backgroundColor: 'transparent'
+        },
+        addContainer: {
+            ...formContainer,
+            borderRadius: 0,
+            marginTop: spacing.MEDIUM,
+            paddingLeft: 0,
+            width: dimensions.fullWidth * .9,
+            margin: 0,
+            padding: 0
         },
         info: {
             marginTop: spacing.SMALL,
             marginBottom: spacing.LARGE
-        },
-        midView: {
-
         },
         bottomView: {
             display: 'flex',
@@ -140,10 +146,6 @@ export const fetch_job_style = StyleSheet.create(
             borderColor: colors.BORDER,
             paddingTop: spacing.LARGE
         },
-        title: {
-            ...inputLabel,
-            fontWeight: fonts.WEIGHT_HEAVY
-        },
         listItem: {
             display: 'flex',
             flexDirection: 'row',
@@ -202,15 +204,7 @@ export const fetch_job_style = StyleSheet.create(
             padding: spacing.SMALL,
             paddingLeft: 0,
         },
-        addContainer: {
-            ...formContainer,
-            borderRadius: 0,
-            marginTop: spacing.MEDIUM,
-            paddingLeft: 0,
-            width: dimensions.fullWidth * .9,
-            margin: 0,
-            padding: 0
-        },
+
         detailsBox: {
             flexDirection: 'row',
             paddingTop: spacing.MEDIUM,
@@ -279,17 +273,6 @@ export const fetch_job_style = StyleSheet.create(
             paddingLeft: 0,
             flexDirection: 'row',
             justifyContent: 'space-between'
-        },
-        labelsCol: {
-            marginTop: spacing.SMALL
-        },
-        label: {
-            ...inputViewLabel
-        },
-        labelActive: {
-            ...inputViewLabel,
-            marginBottom: spacing.MEDIUM,
-
         },
         buttonText: {
             ...button.btnText,
