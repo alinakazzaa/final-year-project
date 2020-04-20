@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 import { connect } from 'react-redux'
@@ -28,9 +28,9 @@ class ViewCollab extends React.Component {
         const { fetchPending, fetchResponse } = this.props
         let influ = getInfluByUsername('juanchoiregui')
 
-        if (influ.id) {
-            fetchUserMedia(influ.id, ['berghain', 'mitte'], fetchPending, fetchResponse)
-        }
+        // if (influ.id) {
+        //     fetchUserMedia(influ.id, ['berghain', 'mitte'], fetchPending, fetchResponse)
+        // }
     }
 
     goToPublication = pub => {
@@ -58,6 +58,11 @@ class ViewCollab extends React.Component {
         // updateProject(user.id, project_value.id, project_value)
         // navigation.goBack()
     }
+
+    onThumbnailPress = () => {
+        Linking.openURL('instagram://user?username=alinakazzaa')
+    }
+
 
 
 
@@ -99,7 +104,8 @@ class ViewCollab extends React.Component {
                         <Text style={collab_style.title}>Publications</Text>
                     </View>
                     {collab.current_collab.details.active ?
-                        <PublicationList publications={collab.current_collab.publications} /> :
+                        <PublicationList publications={collab.current_collab.publications}
+                            onPress={this.onThumbnailPress} /> :
                         <View style={collab_style.listView}><Text style={collab_style.noneMsg}>No publications yet</Text></View>}
                 </View>
             </View>
