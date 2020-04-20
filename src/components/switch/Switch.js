@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Text, View, Switch } from 'react-native';
-import { base, colors } from '../../styles/base';
+import { Text, View, Switch } from 'react-native'
+import { base, colors } from '../../styles/base'
 
 export const SwitchItem = ({ label, value, onChange }) => {
 
