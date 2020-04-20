@@ -2,6 +2,7 @@ import React from 'react'
 import { TouchableOpacity, View, Text, Image } from 'react-native'
 import PropTypes from 'prop-types'
 import { collabStyle } from '../../screens/Collab/styles/collab.styles'
+import { base } from '../../styles/base'
 
 
 export const PublicationList = ({ publications, onPress }) => {
@@ -9,14 +10,14 @@ export const PublicationList = ({ publications, onPress }) => {
         return (
             <TouchableOpacity key={index} onPress={() => onPress(pub)}>
                 <View style={collabStyle.listItem}>
-                    <Text style={collabStyle.text}># {pub.hashtag}</Text>
+                    <Text style={base.text}># {pub.hashtag}</Text>
                     <Image
                         style={collabStyle.thumbnail}
                         source={{
                             uri: pub.thumbnail,
                         }} />
-                    <Text style={collabStyle.text}>Likes: {pub.likes}</Text>
-                    <Text style={collabStyle.text}>Comments: {pub.comments}</Text>
+                    <Text style={base.text}>Likes: {pub.likes}</Text>
+                    <Text style={base.text}>Comments: {pub.comments}</Text>
                 </View>
             </TouchableOpacity>
         )

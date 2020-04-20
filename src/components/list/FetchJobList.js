@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { PulseIndicator } from 'react-native-indicators'
 import { Icon } from 'react-native-elements'
 import { IN_PROGRESS } from '../../constants/index'
-import { colors } from '../../styles/base'
+import { colors, base } from '../../styles/base'
 import { fetchJobStyle } from '../../screens/FetchJob/styles/fetchJob.styles'
 
 export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob }) => {
@@ -35,10 +35,10 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob }) => {
 
         <View>
             <View style={fetchJobStyle.listHead}>
-                <Text style={fetchJobStyle.title}>Title</Text>
-                <Text style={fetchJobStyle.title}>Date</Text>
-                <Text style={fetchJobStyle.title}>Hashtag</Text>
-                <Text style={fetchJobStyle.title}>Location</Text>
+                <Text style={base.title}>Title</Text>
+                <Text style={base.title}>Date</Text>
+                <Text style={base.title}>Hashtag</Text>
+                <Text style={base.title}>Location</Text>
             </View>
             <ScrollView keyboardDismissMode='on-drag'
                 contentContainerStyle={fetchJobStyle.scrollContainer}>

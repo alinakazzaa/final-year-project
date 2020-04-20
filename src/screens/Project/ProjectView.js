@@ -77,18 +77,18 @@ class ProjectView extends React.Component {
                     <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
                     <View style={project_style.collabBox}>
                         <View style={project_style.header}>
-                            <Text style={project_style.title}>Collaborations</Text>
+                            <Text style={base.title}>Collaborations</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AllCollabs')}>
-                                <Text style={project_style.title}>View All</Text>
+                                <Text style={base.title}>View All</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={project_style.listView}><Text style={base.noneMessage}>No collaborations yet</Text></View>
                     </View>
                     <View>
                         <View style={project_style.header}>
-                            <Text style={project_style.title}>Searches</Text>
+                            <Text style={base.title}>Searches</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AllFetchJobs')}>
-                                <Text style={project_style.title}>See All</Text>
+                                <Text style={base.title}>See All</Text>
                             </TouchableOpacity>
                         </View>
                         {fetch_job.pending && <LoadingScreen />}

@@ -41,9 +41,9 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                     </View>
                     <View style={influencer_style.middleRight}>
                         <View style={influencer_style.info}>
-                            <Text style={influencer_style.title}>Followers</Text>
+                            <Text style={base.title}>Followers</Text>
                             <Text style={influencer_style.infoText}>{formatNumber(influ.followers)}</Text>
-                            <Text style={influencer_style.title}>No of media</Text>
+                            <Text style={base.title}>No of media</Text>
                             <Text style={influencer_style.infoText}>{formatNumber(influ.media_count)}</Text>
                         </View>
                     </View>

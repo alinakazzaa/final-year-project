@@ -7,8 +7,8 @@ export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
     const FJList = (fj, index) => {
 
         return <TouchableOpacity style={project_style.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
-            <Text style={project_style.text}>{fj.details.hashtag}</Text>
-            <Text style={project_style.text}>{fj.details.date_created}</Text>
+            <Text style={base.text}>{fj.details.hashtag}</Text>
+            <Text style={base.text}>{fj.details.date_created}</Text>
         </TouchableOpacity >
     }
 

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { colors, fonts, spacing, formContainer, container, dimensions, infoContainer, base } from '../../../styles/base'
 import { button } from '../../../components/buttons/styles/button.styles'
+import { inputLabel } from '../../../styles/form';
 
 export const fetchJobStyle = StyleSheet.create(
     {

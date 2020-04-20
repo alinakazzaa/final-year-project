@@ -12,10 +12,10 @@ export const ProjectList = ({ projects, deleteProject, goToProject }) => {
             <TouchableOpacity key={index} onPress={() => goToProject(proj)}>
                 <View style={project_style.listItem}>
                     <View style={project_style.left}>
-                        <Text style={project_style.title}>{proj.title}</Text>
+                        <Text style={base.title}>{proj.title}</Text>
                     </View>
                     <View style={project_style.middle}>
-                        <Text style={project_style.title}>{proj.date_created}</Text>
+                        <Text style={base.title}>{proj.date_created}</Text>
                     </View>
                     <View style={project_style.right}>
                         <Icon name='delete-outline' type="material-community" size={25} color={colors.TERTIARY} onPress={() => deleteProject(proj)} />

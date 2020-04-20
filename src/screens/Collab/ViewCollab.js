@@ -81,12 +81,12 @@ class ViewCollab extends React.Component {
                 <View style={collabStyle.viewContainer}>
                     <CollabForm onChange={this.handleChange} collab={collab.current_collab} />
                     <View style={collabStyle.tagsBox}>
-                        <Text style={collabStyle.title}>Hashtags</Text>
+                        <Text style={base.title}>Hashtags</Text>
                         <TagList tags={tags} onPress={this.editTag} />
                     </View>
                     {collab.pending && <LoadingScreen />}
                     <View style={collabStyle.header}>
-                        <Text style={collabStyle.title}>Publications</Text>
+                        <Text style={base.title}>Publications</Text>
                     </View>
                     {collab.current_collab.details.active ?
                         <PublicationList publications={collab.current_collab.publications}

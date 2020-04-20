@@ -58,7 +58,7 @@ class AllCollabs extends React.Component {
             <View>
                 <AppHeader
                     gradient={true}
-                    left={<View style={base.searchTxt}><Text style={collabStyle.title}>Search</Text></View>}
+                    left={<View style={base.searchTxt}><Text style={base.title}>Search</Text></View>}
                     center={<View style={base.searchView}>
                         <Input
                             onChangeText={text => this.searchCollab(text)}

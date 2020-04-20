@@ -59,7 +59,7 @@ class AllProjects extends React.Component {
             <View style={{ backgroundColor: colors.SCREEN }}>
                 <AppHeader
                     gradient={true}
-                    left={<View style={base.searchTxt}><Text style={project_style.title}>Search</Text></View>}
+                    left={<View style={base.searchTxt}><Text style={base.title}>Search</Text></View>}
                     center={<View style={base.searchView}>
                         <Input
                             onChangeText={text => this.searchProject(text)}

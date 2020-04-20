@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, container, inputLabel, dimensions, formContainer, form, inputView, boolSelect, inputViewLabel } from '../../../styles/base';
+import { colors, fonts, spacing, container, dimensions, formContainer } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
 export const project_style = StyleSheet.create(
@@ -82,21 +82,6 @@ export const project_style = StyleSheet.create(
         labelsCol: {
 
         },
-        label: {
-            ...inputViewLabel
-        },
-        labelActive: {
-            ...inputViewLabel,
-            marginBottom: spacing.MEDIUM,
-
-        },
-        title: {
-            ...inputLabel,
-            fontWeight: fonts.WEIGHT_HEAVY
-        },
-        text: {
-            ...inputViewLabel
-        },
         cancelBtn: {
             paddingRight: spacing.LARGE
         },
@@ -121,21 +106,4 @@ export const project_style = StyleSheet.create(
         saveBtn: {
             ...button.btnContainer
         }
-    });
-
-export const projectForm = {
-    ...form,
-    textbox: {
-        normal: {
-            ...inputView
-        },
-        error: {
-
-        }
-    },
-    checkbox: {
-        normal: {
-            ...boolSelect
-        }
-    }
-}
+    })

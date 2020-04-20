@@ -15,7 +15,8 @@ const Collab = t.struct({
     campaign: t.String,
     influencer: t.String,
     compensation: t.maybe(t.String),
-    description: t.maybe(t.String)
+    description: t.maybe(t.String),
+    isActive: t.Boolean
 })
 
 const options = {

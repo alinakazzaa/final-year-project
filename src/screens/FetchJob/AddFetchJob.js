@@ -70,12 +70,12 @@ class AddFetchJob extends React.Component {
                 />
                 <View style={fetchJobStyle.addContainer}>
                     <View style={fetchJobStyle.info}>
-                        <Text style={fetchJobStyle.text}>Search users by hashtag</Text>
+                        <Text style={base.text}>Search users by hashtag</Text>
                     </View>
                     {fetch_job.hashtag == null && <View style={fetchJobStyle.info}>
-                        <Text style={fetchJobStyle.text}>Avoid overly specific tags</Text></View>}
+                        <Text style={base.text}>Avoid overly specific tags</Text></View>}
                     <FetchJobForm fetch_job={fetch_job} handleChange={this.handleChange} />
-                    <View style={fetchJobStyle.info}><Text style={fetchJobStyle.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
+                    <View style={fetchJobStyle.info}><Text style={base.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         )

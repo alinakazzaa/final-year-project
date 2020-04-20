@@ -105,7 +105,7 @@ export default class FetchJobForm extends React.Component {
                     </View>
                 </View>
                 {fetch_job.status != COMPLETED && <View style={fetchJobStyle.middle}>
-                    <Text style={fetchJobStyle.title}>Follower range</Text>
+                    <Text style={base.title}>Follower range</Text>
                     <View style={fetchJobStyle.itemRowRange}>
                         <TabView index={index} color={colors.SECONDARY} width='38%' titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
                         <View style={fetchJobStyle.rangeBox}>

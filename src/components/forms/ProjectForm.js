@@ -3,9 +3,9 @@ import { View, Keyboard, Text } from 'react-native'
 import PropTypes from 'prop-types'
 // @ts-ignore
 import t from 'tcomb-form-native'
-import { project_style, projectForm } from '../../screens/Project/styles/project.styles'
+import { project_style } from '../../screens/Project/styles/project.styles'
 import { SwitchItem } from '../switch/Switch'
-import { inputView, form } from '../../styles/base'
+import { form } from '../../styles/form'
 
 const Form = t.form.Form
 
@@ -41,13 +41,13 @@ export default class ProjectForm extends React.Component {
             <View>
                 <View>
                     <View style={project_style.header}>
-                        <Text style={project_style.title}>Details</Text>
+                        <Text style={base.title}>Details</Text>
                     </View>
                     <View style={project_style.detailsBox}>
-                        <View style={project_style.labelsCol}>
-                            <Text style={project_style.label}>Title</Text>
-                            <Text style={project_style.label}>Date created</Text>
-                            <Text style={project_style.label}>Description</Text>
+                        <View style={base.labelsCol}>
+                            <Text style={base.label}>Title</Text>
+                            <Text style={base.label}>Date created</Text>
+                            <Text style={base.label}>Description</Text>
                         </View>
                         <View style={project_style.inputBox}>
                             <Form
@@ -61,7 +61,7 @@ export default class ProjectForm extends React.Component {
                         </View>
                     </View>
                     <View style={project_style.switchView}>
-                        <Text style={project_style.labelActive}>Active</Text>
+                        <Text style={base.labelActive}>Active</Text>
                         <SwitchItem value={project_value.active} onChange={value => toggleSwitch(value)} />
                     </View>
                 </View>
