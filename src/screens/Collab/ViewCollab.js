@@ -1,20 +1,17 @@
-import * as React from 'react';
-import { View, Text, YellowBox } from 'react-native';
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-import { AppHeader } from '../../layouts/Header';
-import { BackButton } from '../../components/buttons/BackButton';
-import { TextButton } from '../../components/buttons/TextButton';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { collab } from './styles/collab.styles';
-import CollabForm from '../../components/forms/CollabForm';
-import { TagList } from '../../components/list/TagList';
-import { getInfluByUsername } from '../../actions/influencer';
-import { fetchUserMedia } from '../../web/fetchUserMedia';
-import { fetchPending, fetchError, fetchSuccess } from '../../actions/fetch';
-import { PublicationList } from '../../components/list/PublicationList';
+import * as React from 'react'
+import { View, Text, Linking } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import { BackButton } from '../../components/buttons/BackButton'
+import { connect } from 'react-redux'
+import { collab_style } from './styles/collab.styles'
+import CollabForm from '../../components/forms/CollabForm'
+import { TagList } from '../../components/list/TagList'
+import { getInfluByUsername } from '../../actions/influencer'
+import { fetchUserMedia } from '../../web/fetchUserMedia'
+import { fetchPending, fetchResponse } from '../../actions/fetch'
+import { PublicationList } from '../../components/list/PublicationList'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { SaveButton } from '../../components/buttons/SaveButton'
 
 
 class ViewCollab extends React.Component {
@@ -23,13 +20,17 @@ class ViewCollab extends React.Component {
         headerShown: false
     }
 
+    state = {
+        tags: [{ name: 'berghain', editable: false }, { name: 'mitte', editable: false }]
+    }
+
     componentDidMount() {
-        const { curerent_collab, pending, success, error } = this.props
+        const { fetchPending, fetchResponse } = this.props
         let influ = getInfluByUsername('juanchoiregui')
 
-        if (influ.id) {
-            fetchUserMedia(influ.id, ['berghain', 'mitte'], pending, success, error)
-        }
+        // if (influ.id) {
+        //     fetchUserMedia(influ.id, ['berghain', 'mitte'], fetchPending, fetchResponse)
+        // }
     }
 
     goToPublication = pub => {
@@ -44,6 +45,13 @@ class ViewCollab extends React.Component {
         // this.setState({ project: updatedProject })
     }
 
+    editTag = (tag, index) => {
+        const hashtags = [...this.state.tags]
+        const hashtag = { ...hashtags[index], editable: !hashtags[index].editable }
+        hashtags.splice(index, 1, hashtag)
+        this.setState({ tags: hashtags })
+    }
+
     handleSubmit = () => {
         // const { user, navigation, updateProject } = this.props
         // let { project_value } = this.state
@@ -51,67 +59,69 @@ class ViewCollab extends React.Component {
         // navigation.goBack()
     }
 
+    onThumbnailPress = () => {
+        Linking.openURL('instagram://user?username=alinakazzaa')
+    }
+
+
 
 
     render() {
-        const { current_collab, publications } = this.props
-
+        const { tags } = this.state
+        const { collab, navigation } = this.props
 
         return (
             <View>
                 <AppHeader
                     gradient={true}
-                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                    right={<TextButton containerStyle={collab.saveBtn} onPress={this.handleSubmit} title="Save" />}
+                    left={<BackButton onPress={() => navigation.goBack()} />}
+                    right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <View style={collab.viewContainer}>
+                <View style={collab_style.viewContainer}>
                     <View>
-                        <View style={collab.header}>
-                            <Text style={collab.title}>Details</Text>
+                        <View style={collab_style.header}>
+                            <Text style={collab_style.title}>Details</Text>
                         </View>
-                        <View style={collab.detailsBox}>
-                            <View style={collab.labelsCol}>
-                                <Text style={collab.label}>Title</Text>
-                                {/* <Text style={collab.label}>Date created</Text> */}
-                                {/* <Text style={collab.label}>Date Start</Text> */}
-                                <Text style={collab.label}>Campaign</Text>
-                                <Text style={collab.label}>Influencer</Text>
-                                <Text style={collab.label}>Compensation</Text>
-                                <Text style={collab.label}>Description</Text>
+                        <View style={collab_style.detailsBox}>
+                            <View style={collab_style.labelsCol}>
+                                <Text style={collab_style.label}>Title</Text>
+                                {/* <Text style={collab_style.label}>Date created</Text> */}
+                                {/* <Text style={collab_style.label}>Date Start</Text> */}
+                                <Text style={collab_style.label}>Campaign</Text>
+                                <Text style={collab_style.label}>Influencer</Text>
+                                <Text style={collab_style.label}>Compensation</Text>
+                                <Text style={collab_style.label}>Description</Text>
                             </View>
-                            <CollabForm onChange={this.handleChange} collab={current_collab} />
+                            <CollabForm onChange={this.handleChange} collab={collab.current_collab} />
                         </View>
                     </View>
-                    <View style={collab.tagsBox}>
-                        <Text style={collab.title}>Hashtags</Text>
-                        <TagList tags={['testing', 'stuff']} />
+                    <View style={collab_style.tagsBox}>
+                        <Text style={collab_style.title}>Hashtags</Text>
+                        <TagList tags={tags} onPress={this.editTag} />
                     </View>
-                    <View style={collab.header}>
-                        <Text style={collab.title}>Publications</Text>
+                    {collab.pending && <LoadingScreen />}
+                    <View style={collab_style.header}>
+                        <Text style={collab_style.title}>Publications</Text>
                     </View>
-                    {current_collab.details.active ?
-                        <PublicationList publications={publications} /> :
-                        <View style={collab.listView}><Text style={collab.noneMsg}>No publications yet</Text></View>}
+                    {collab.current_collab.details.active ?
+                        <PublicationList publications={collab.current_collab.publications}
+                            onPress={this.onThumbnailPress} /> :
+                        <View style={collab_style.listView}><Text style={collab_style.noneMsg}>No publications yet</Text></View>}
                 </View>
             </View>
 
-        );
+        )
     }
 }
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    pending: state.collab.pending,
-    error: state.collab.error,
-    current_collab: state.collab.current_collab,
-    publications: state.collab.publications
-});
+    user: state.user,
+    collab: state.collab
+})
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    pending: fetchPending,
-    error: fetchError,
-    success: fetchSuccess,
-}, dispatch);
+const mapDispatchToProps = {
+    fetchPending,
+    fetchResponse
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCollab)

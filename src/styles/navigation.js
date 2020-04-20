@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, height, width } from './base';
+import { colors } from './base'
 
 export const nav = StyleSheet.create(
     {

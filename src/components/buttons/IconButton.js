@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Icon } from 'react-native-elements';
-import { colors } from '../../styles/base';
+import { Icon } from 'react-native-elements'
+import { colors } from '../../styles/base'
 
 
 export const IconButton = ({ type, name, color, size, onPress, style }) => {

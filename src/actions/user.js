@@ -1,102 +1,122 @@
-import { DB_USER_REF, USER_LOGOUT } from '../constants';
+import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR } from '../constants'
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
-import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR, SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types';
-import { NO_USERS } from '../constants/response/messages';
+import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types'
+import { DB_USER_REF } from '../constants/database'
+import { MSG_NO_USERS } from '../constants/response/messages'
 
 
 export const getAllUsers = () => {
-    const users = []
+    return dispatch => {
+        const users = []
 
-    DB_USER_REF.on('value', u_snapshot => {
-        u_snapshot.forEach(u_snap => {
-            const user = {
-                ...u_snap.val().details
+        DB_USER_REF.once('value', userSnapshot => {
+            userSnapshot.forEach(user => {
+                users.push({ ...user.val().details })
+            })
+
+            if (users.length == 0) {
+                dispatch(setUsersError())
+            } else {
+                dispatch(setUsersSuccess(users))
             }
-
-            users.push(user)
         })
-    })
-
-    if (users.length == 0) {
-        return {
-            type: SET_USERS_ERROR,
-            message: NO_USERS
-        }
-    } else {
-        return {
-            type: SET_USERS_SUCCESS,
-            users: users
-        }
     }
 }
 
 export const setUsersPending = () => {
 
     return {
-        type: SET_USERS_PENDING,
+        type: SET_USERS_PENDING
     }
 }
 
-export const setLoggedInUserSuccess = user => {
+export const setUsersSuccess = users => {
+
     return {
-        type: USER_LOGIN_SUCCESS,
-        user: user
+        type: SET_USERS_SUCCESS,
+        users: users
     }
 }
 
-export const setLoggedInUserError = message => {
+export const setUsersError = () => {
+
     return {
-        type: USER_LOGIN_ERROR,
+        type: SET_USERS_ERROR,
+        message: MSG_NO_USERS
+    }
+}
+
+export const setCurrentUserSuccess = user => {
+    return {
+        type: SET_CURRENT_USER_SUCCESS,
+        user
+    }
+}
+
+export const setCurrentUserError = message => {
+    return {
+        type: SET_CURRENT_USER_ERROR,
         message: message
     }
 }
 
-export const addUser = user => {
-    const user_add = DB_USER_REF.push({
-        details: {
-            username: user.username,
-            password: user.password,
-            email: user.email,
-            id: '',
-            date_created: DATE_TODAY,
-        }
-    })
-    const key = user_add.key
+export const logOutUser = () => {
+    return {
+        type: CLEAR_CURRENT_USER
+    }
+}
 
-    db.ref(`/Users/${key}/details`).update({
-        id: key
-    })
+export const registerUser = userVal => {
+    let user = {
+        username: userVal.username,
+        password: userVal.password,
+        email: userVal.email,
+        id: '',
+        date_created: DATE_TODAY
+
+    }
+
+    return dispatch => {
+
+        DB_USER_REF.push({
+            details: {
+                ...user
+            }
+
+        }).then(data => {
+            user.id = data.key
+            db.ref(`/Users/${data.key}/details`).update({
+                id: data.key
+            })
+
+            dispatch(setCurrentUserSuccess(user))
+        })
+    }
 }
 
 export const updateUser = (user, user_id) => {
     db.ref(`/Users/${user_id}`).update({
         details: {
-
+            ...user
         }
-    });
+    })
 }
 
 export const removeUser = user => {
     db.ref(`/Users`).child(user.id).remove()
 }
 
-export const getUserByUsername = username => {
-    let user_obj = {}
-    DB_USER_REF.on('value', (user_snapshot) => {
-        user_snapshot.forEach(user_snap => {
-            if (user_snap.val().details.username == username) {
-                user_obj = { ...user_snap.val().details }
-            }
-        })
-    })
+// export const getUserByUsername = username => {
+//     let user_obj = {}
+//     DB_USER_REF.on('value', user_snapshot => {
+//         user_snapshot.forEach(user => {
+//             if (user.val().details.username == username) {
+//                 user_obj = { ...user.val().details }
+//             }
+//         })
+//     })
 
-    return user_obj
-}
-
-export const logOutUser = () => {
-    return {
-        type: USER_LOGOUT,
-    }
-}
+//     return user_obj
+// }
 

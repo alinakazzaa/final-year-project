@@ -1,8 +1,8 @@
-import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_BY_USERNAME, INSTAGRAM_GET_USER_FOLLOWED_BY, INSTAGRAM_GET_USER_MEDIA_COUNT } from "../constants/endpoints"
+import { INSTAGRAM_GET_USER_BY_ID, INSTAGRAM_GET_USER_FOLLOWED_BY, INSTAGRAM_GET_USER_MEDIA_COUNT } from "../constants/insta_endpoints"
 import { addInfluencer } from "../actions/influencer"
 import { GET_USER_SUCCESS, GET_USER_ERROR, GET_USER_PENDING } from "../constants/response/types"
 
-export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
+export const fetchInfluencer = (id, fetch_job, pending, fetchResponse) => {
     let influ_obj
     let response
 
@@ -29,11 +29,11 @@ export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
                                         if (checkCriteria(fetch_job.details.criteria, influ_obj.followers)) {
                                             response = { type: GET_USER_SUCCESS, message: 'success: user within range', id: id }
                                             addInfluencer(influ_obj)
-                                            success(response)
+                                            fetchResponse(response)
 
                                         } else {
                                             response = { type: GET_USER_ERROR, message: 'fail: user not within range', id: id }
-                                            error(response)
+                                            fetchResponse(response)
                                         }
                                     }
                                 })
@@ -41,11 +41,11 @@ export const fetchInfluencer = (id, fetch_job, pending, success, error) => {
                     })
                     .catch(err => {
                         response = { type: GET_USER_ERROR, message: String(err), id: id }
-                        error(response)
+                        fetchResponse(response)
                     })
             } else {
                 response = { type: GET_USER_ERROR, message: 'fail: user by ID', id: id }
-                error(response)
+                fetchResponse(response)
             }
         })
 }

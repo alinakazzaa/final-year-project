@@ -1,16 +1,14 @@
 import React from 'react'
-import { Icon, Avatar } from 'react-native-elements'
-import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from 'react-native'
-import { IconButton } from '../buttons/IconButton'
+import { TouchableOpacity, Text, View } from 'react-native'
 import PropTypes from 'prop-types'
-import { TextButton } from '../buttons/TextButton'
-import { project } from '../../screens/Project/styles/project.styles'
+import { project_style } from '../../screens/Project/styles/project.styles'
 
 export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
     const FJList = (fj, index) => {
-        return <TouchableOpacity style={project.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
-            <Text style={project.text}>{fj.details.hashtag}</Text>
-            <Text style={project.text}>{fj.details.date_created}</Text>
+
+        return <TouchableOpacity style={project_style.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
+            <Text style={project_style.text}>{fj.details.hashtag}</Text>
+            <Text style={project_style.text}>{fj.details.date_created}</Text>
         </TouchableOpacity >
     }
 

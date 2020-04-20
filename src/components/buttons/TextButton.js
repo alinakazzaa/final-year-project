@@ -1,8 +1,7 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { base } from '../../styles/base'
-import { button } from './styles/button.styles';
+import { TouchableOpacity, Text } from 'react-native'
+import { button } from './styles/button.styles'
 
 
 export const TextButton = ({ title, onPress, containerStyle, buttonText }) => {

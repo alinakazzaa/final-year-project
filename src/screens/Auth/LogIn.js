@@ -1,87 +1,80 @@
-import * as React from 'react';
-import { View, YellowBox } from 'react-native';
-import LogInForm from '../../components/forms/LogInForm';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { setLoggedInUserError, setLoggedInUserSuccess, setUsersPending, getAllUsers } from '../../actions/user';
+import * as React from 'react'
+import { View } from 'react-native'
+import LogInForm from '../../components/forms/LogInForm'
+import { connect } from 'react-redux'
+import { setCurrentUserError, setCurrentUserSuccess, setUsersPending, getAllUsers } from '../../actions/user'
 import { auth } from './styles/auth.styles'
-import { Gradient } from '../../styles/Gradient';
-import { INCORRECT_PASSWORD, NO_USER } from '../../constants/response/messages';
+import { Gradient } from '../../styles/Gradient'
 import { AppLogo } from '../../components/logo/AppLogo'
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { MSG_EMPTY_FIELDS, MSG_INCORRECT_PASSWORD, MSG_NO_USER } from '../../constants/response/messages'
 
 class LogInScreen extends React.Component {
+
+    state = {
+        isLoading: false
+    }
 
     static navigationOptions = {
         headerShown: false,
     }
 
     componentDidMount() {
-        const { getAllUsers, setUsersPending } = this.props;
-        setUsersPending
+        const { getAllUsers, setUsersPending } = this.props
+        setUsersPending()
         getAllUsers()
-    }
-
-    componentDidUpdate(prev) {
-        const { setLoggedInUserSuccess, users } = this.props
-
-        if (prev.users != users) {
-            let user_obj = users.find(u => u.username == "A") || {}
-            setLoggedInUserSuccess(user_obj)
-        }
-
     }
 
     goToRegister = () => {
         this.props.navigation.navigate("Registration")
     }
 
-    logIn = user => {
-        const { setLoggedInUserSuccess, setLoggedInUserError, users } = this.props;
-        let user_obj
+    logIn = userValue => {
+        const { user, setCurrentUserSuccess, setCurrentUserError } = this.props
 
-        if (user.username == null || user.username == '') {
-            setLoggedInUserError(NO_USER)
+        if (userValue.username == null || userValue.password == null) {
+            setCurrentUserError(MSG_EMPTY_FIELDS)
         } else {
-            user_obj = users.find(u => u.username == user.username) || {}
-            if (user.password == null || user.password == '' || user.password != user_obj.password) {
-                setLoggedInUserError(INCORRECT_PASSWORD)
+            let found_user = user.all_users.find(u => u.username.toLowerCase() == userValue.username.toLowerCase())
+
+            if (found_user) {
+                if (userValue.password == found_user.password)
+                    setCurrentUserSuccess(found_user)
+                else
+                    setCurrentUserError(MSG_INCORRECT_PASSWORD)
             } else {
-                setLoggedInUserSuccess(user_obj)
+                setCurrentUserError(MSG_NO_USER)
             }
         }
     }
 
     render() {
-        const { error } = this.props
+        const { user } = this.props
 
         return (
             <View>
-                <Gradient horizontal={true}>
+                {user.pending ? <LoadingScreen size='large' text="Welcome message or screen with animation" /> : <Gradient horizontal={true}>
                     <View style={auth.logInContainer}>
                         <AppLogo large={true} />
-                        <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={error} />
+                        <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={user.error} />
                     </View>
-                </Gradient>
+                </Gradient>}
+
             </View>
-        );
+        )
     }
 }
 
 const mapStateToProps = state => ({
-    state: state.user,
-    users: state.user.users,
-    error: state.user.error,
-    pending: state.user.pending
-});
+    user: state.user
+})
 
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    setLoggedInUserError: setLoggedInUserError,
-    setLoggedInUserSuccess: setLoggedInUserSuccess,
-    setUsersPending: setUsersPending,
-    getAllUsers: getAllUsers,
-}, dispatch);
+const mapDispatchToProps = {
+    setCurrentUserError,
+    setCurrentUserSuccess,
+    setUsersPending,
+    getAllUsers
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogInScreen)

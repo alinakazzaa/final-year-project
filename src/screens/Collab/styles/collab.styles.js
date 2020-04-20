@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { colors, fonts, spacing, container, inputLabel, dimensions, input, formContainer, form, select, height, inputView, boolSelect, width, inputViewLabel } from '../../../styles/base';
 import { button } from '../../../components/buttons/styles/button.styles';
 
-export const collab = StyleSheet.create(
+export const collab_style = StyleSheet.create(
     {
         allContainer: {
             ...container,
@@ -13,7 +13,7 @@ export const collab = StyleSheet.create(
             marginRight: spacing.LARGE,
         },
         scrollContainer: {
-            padding: spacing.LARGE,
+            padding: spacing.LARGE
         },
         publicationsBox: {
             flexDirection: 'row',
@@ -28,11 +28,6 @@ export const collab = StyleSheet.create(
             width: dimensions.fullWidth * .9,
             margin: 0,
             padding: 0
-        },
-        searchView: {
-            flexDirection: 'row',
-            padding: spacing.LARGE,
-            paddingBottom: 0
         },
         listView: {
             alignItems: 'center',
@@ -54,34 +49,6 @@ export const collab = StyleSheet.create(
             marginTop: spacing.LARGE,
             borderBottomColor: colors.BORDER,
             borderBottomWidth: 1
-        },
-        tab: {
-            textTransform: 'uppercase',
-            textAlign: 'center',
-            padding: spacing.MEDIUM,
-            color: colors.TERTIARY,
-            borderColor: colors.TERTIARY,
-            fontWeight: fonts.WEIGHT_MEDIUM
-        },
-        tabItem: {
-            justifyContent: 'center',
-            width: dimensions.fullWidth * 0.45,
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderColor: colors.BORDER,
-        },
-        selectedTab: {
-            color: colors.WHITE,
-            textAlign: 'center',
-            padding: spacing.SMALL,
-            fontSize: fonts.SMALL,
-            textTransform: 'uppercase',
-            fontWeight: fonts.WEIGHT_MEDIUM
-        },
-        selectedTabItem: {
-            width: dimensions.fullWidth * 0.45,
-            justifyContent: 'center',
-            backgroundColor: colors.TERTIARY,
         },
         listItem: {
             // display: 'flex',
@@ -114,31 +81,13 @@ export const collab = StyleSheet.create(
         },
         title: {
             ...inputLabel,
-            fontWeight: fonts.WEIGHT_HEAVY,
-            borderBottomWidth: 1,
-            borderColor: colors.BORDER
+            fontWeight: fonts.WEIGHT_HEAVY
         },
         text: {
             ...inputLabel,
             color: colors.TERTIARY,
             fontWeight: fonts.WEIGHT_MEDIUM,
             fontSize: fonts.SMALL,
-        },
-        cancelBtn: {
-            paddingRight: spacing.LARGE
-        },
-        buttonText: {
-            ...button.btnText,
-            fontSize: fonts.SMALL * 0.9,
-            fontWeight: fonts.WEIGHT_MEDIUM,
-            color: colors.TERTIARY
-
-        },
-        searchInput: {
-            width: dimensions.fullWidth * 0.67,
-            borderColor: colors.BORDER,
-            borderBottomWidth: 2,
-            height: spacing.LARGE * 1.5,
         },
         left: {
             display: 'flex',
@@ -151,20 +100,13 @@ export const collab = StyleSheet.create(
             display: 'flex',
             width: '10%'
         },
-        saveBtn: {
-            ...button.btnContainer
-        },
-        noneMsg: {
-            padding: spacing.LARGE
-        },
         thumbnail: {
             height: 100,
             width: 100,
             margin: spacing.MEDIUM,
             marginBottom: 0
-        },
-
-    });
+        }
+    })
 
 export const projectForm = {
     ...form,

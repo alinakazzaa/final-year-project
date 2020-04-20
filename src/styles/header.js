@@ -1,16 +1,16 @@
-import { StyleSheet } from 'react-native';
-import { colors, spacing } from './base';
+import { StyleSheet } from 'react-native'
+import { colors, dimensions } from './base'
 
 
 export const header = StyleSheet.create(
     {
         transparent: {
             backgroundColor: 'transparent',
-            height: 110,
+            height: dimensions.fullHeight * 0.12,
             borderBottomColor: 'transparent',
         },
         color: {
             backgroundColor: colors.WHITE,
-            height: 110
+            height: dimensions.fullHeight * 0.12,
         }
-    });
+    })

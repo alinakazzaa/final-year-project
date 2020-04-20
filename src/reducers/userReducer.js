@@ -1,46 +1,50 @@
-import { USER_LOGOUT } from '../constants';
-import { USER_LOGIN_SUCCESS, USER_LOGIN_ERROR, SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types';
+import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR } from '../constants'
+import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types'
 
 const initialState = {
     pending: null,
     error: null,
-    users: [],
+    all_users: [],
     current_user: {}
-};
+}
 
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
 
-        case USER_LOGIN_SUCCESS:
+        case SET_CURRENT_USER_SUCCESS:
             return {
                 ...state,
-                current_user: action.user,
+                current_user: { ...action.user },
                 pending: false,
-                error: null
-            };
-        case USER_LOGIN_ERROR:
+                error: null,
+                all_users: []
+            }
+        case SET_CURRENT_USER_ERROR:
             return {
+                ...state,
                 pending: false,
-                error: { type: action.type, message: action.message },
-            };
-        case USER_LOGOUT:
+                error: { type: action.type, message: action.message }
+            }
+        case CLEAR_CURRENT_USER:
             return {
                 ...initialState
-            };
+            }
 
         case SET_USERS_PENDING:
 
             return {
                 ...state,
-                pending: true
+                pending: true,
+                response: null
             }
 
         case SET_USERS_SUCCESS:
 
             return {
                 ...state,
-                users: action.users,
-                pending: false
+                all_users: [...action.users],
+                pending: false,
+                error: null
             }
 
         case SET_USERS_ERROR:
@@ -48,10 +52,10 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pending: false,
-                error: action.error
+                error: { type: action.type, message: action.message }
             }
         default:
-            return state;
+            return state
     }
 }
-export default userReducer;
+export default userReducer

@@ -1,38 +1,28 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createAppContainer } from 'react-navigation';
-import * as userActions from '../actions/user';
-import { ApplicationStack } from './ApplicationStack';
-import { BottomNavigator } from './BottomNavigation';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { createAppContainer } from 'react-navigation'
+import { ApplicationStack } from './ApplicationStack'
+import { BottomNavigator } from './BottomNavigation'
+import { YellowBox } from 'react-native'
 
-const LogIn = createAppContainer(ApplicationStack);
-const MainApp = createAppContainer(BottomNavigator);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
+
+const LogIn = createAppContainer(ApplicationStack)
+const MainApp = createAppContainer(BottomNavigator)
 
 class Router extends Component {
 
     render() {
-        let { user, error, pending } = this.props
+        let { user } = this.props
 
         return (
-            user.username == null ? <LogIn /> : <MainApp />
-        );
+            user.current_user.id == null ? <LogIn /> : <MainApp />
+        )
     }
-};
+}
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    error: state.user.error,
-    pending: state.user.pending
-});
+    user: state.user
+})
 
-const ActionCreators = Object.assign(
-    {},
-    userActions
-);
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Router)
+export default connect(mapStateToProps)(Router)

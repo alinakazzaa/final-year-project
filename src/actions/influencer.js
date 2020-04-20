@@ -1,56 +1,58 @@
-import { db } from '../database/config/db';
+import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
-import { SET_CURRENT_INFLUENCER } from '../constants';
-import { SET_INFLUENCERS_ERROR, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS } from '../constants/response/types';
+import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER, UPDATE_INFLUENCER } from '../constants'
+import { SET_INFLUENCERS_ERROR, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS } from '../constants/response/types'
+import { MSG_NO_INFLUENCERS } from '../constants/response/messages'
 
 export const getAllInfluencers = fetch_job => {
 
-    getInfluencersPending()
+    return dispatch => {
+        const influencers = []
+        dispatch(setInfluencersPending())
 
-    let influencers = []
-    let influencers_success = []
+        fetch_job.influencers.success.forEach(id => {
+            db.ref(`Influencers/${id}`).once('value', snapshot => {
+                influencers.push(snapshot.val())
 
-    db.ref(`Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}/influencers/success`).on('value', (success) => {
-        influencers = success.val()
-    });
-
-
-    influencers.forEach(id => {
-        db.ref('Influencers/').on('value', (influ_snapshot) => {
-            influ_snapshot.forEach(influ_snap => {
-
-                if (influ_snap.key == id)
-                    influencers_success.push(influ_snap.val())
+                if (influencers.length == fetch_job.influencers.success.length)
+                    if (influencers.length > 0) {
+                        dispatch(setInfluencersSuccess(influencers))
+                    } else {
+                        dispatch(setInfluencersError())
+                    }
             })
-        });
+        })
 
-    })
 
-    if (influencers_success.length > 0) {
-        return {
-            type: SET_INFLUENCERS_SUCCESS,
-            influencers: influencers_success
-        }
-    } else {
-        let error = { type: 'no influencers' }
-        return {
-            type: SET_INFLUENCERS_ERROR,
-            message: error
-        }
     }
 }
 
-export const getInfluencersPending = () => {
+export const setInfluencersPending = () => {
 
     return {
-        type: SET_INFLUENCERS_PENDING,
+        type: SET_INFLUENCERS_PENDING
+    }
+}
+
+export const setInfluencersSuccess = influencers => {
+
+    return {
+        type: SET_INFLUENCERS_SUCCESS,
+        influencers
+    }
+}
+
+export const setInfluencersError = () => {
+    return {
+        type: SET_INFLUENCERS_ERROR,
+        message: MSG_NO_INFLUENCERS
     }
 }
 
 export const setCurrentInfluencer = influencer => {
     return {
         type: SET_CURRENT_INFLUENCER,
-        payload: influencer
+        influencer
     }
 }
 
@@ -63,15 +65,30 @@ export const addInfluencer = influencer => {
     })
 }
 
-export const updateInfluencer = (hashtag, influencer) => {
-    db.ref(`/Influencers/hashtags/${hashtag}/${influencer.id}`).update({
+export const updateInfluencer = influencer => {
+
+    db.ref(`/Influencers/${influencer.id}`).update({
         ...influencer
-    });
+    })
+
+    return {
+        type: UPDATE_INFLUENCER,
+        influencer
+    }
 }
 
-export const removeInfluencer = (hashtag, influencer_id) => {
-    db.ref(`/Influencers/hashtags/${hashtag}`).child(influencer_id).remove()
+export const removeInfluencer = (fetch_job, influencer_id) => {
+
+    db.ref(`/Influencers/${influencer_id}`).remove()
+    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/ ` +
+        `FetchJobs/${fetch_job.details.id}/influencers/success/influencer_id`).remove()
+
+    return {
+        type: REMOVE_INFLUENCER,
+        id: influencer_id
+    }
 }
+
 
 export const getInfluByUsername = username => {
     let influ_obj = {}
@@ -84,4 +101,8 @@ export const getInfluByUsername = username => {
     })
 
     return influ_obj
+}
+
+export const filterInfluencers = (influencers, status) => {
+    return [...influencers.filter(influ => influ.to_do == status)]
 }

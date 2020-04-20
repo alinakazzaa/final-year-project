@@ -1,15 +1,11 @@
-import * as React from 'react';
-import { View, Text, YellowBox, StyleSheet } from 'react-native';
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
-import { AppHeader } from '../../layouts/Header';
-import { IconButton } from '../../components/buttons/IconButton';
-import CollabForm from '../../components/forms/CollabForm';
-import { TextButton } from '../../components/buttons/TextButton';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { addCollab } from '../../actions/collab';
+import * as React from 'react'
+import { View, StyleSheet } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import CollabForm from '../../components/forms/CollabForm'
+import { TextButton } from '../../components/buttons/TextButton'
+import { connect } from 'react-redux'
+import { addCollab } from '../../actions/collab'
+import { BackButton } from '../../components/buttons/BackButton'
 
 
 class AddCollab extends React.Component {
@@ -19,49 +15,43 @@ class AddCollab extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user, current_project, addCollab } = this.props
-        addCollab(user.id, current_project.id, { ...this.state.collab })
-        this.props.navigation.goBack()
+        const { user, project, addCollab, navigation } = this.props
+        addCollab(user.current_user.id, project.current_project.id, { ...this.state.collab })
+        navigation.goBack()
     }
 
     handleChange = collab => {
-        this.setState({ collab: collab });
+        this.setState({ collab: collab })
     }
 
     render() {
-        const { influencer, current_project } = this.props.navigation.state.params
+        const { project, navigation } = this.props
+        const { influencer } = navigation.state.params
 
         return (
             <View style={styles.container}>
                 <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
+                    left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                     right={
                         <View style={styles.saveBtn}>
                             <TextButton onPress={this.handleSubmit} title="Save" />
                         </View>}
                 />
-                <CollabForm influencer={influencer} current_project={current_project} goBack={this.props.navigation.goBack} onChange={this.handleChange} />
+                <CollabForm influencer={influencer} current_project={project.current_project} goBack={navigation.goBack} onChange={this.handleChange} />
                 <View style={styles.bottomView}>
                     <TextButton style={styles.saveBtn}
                         // onPress={this.handleSubmit}
                         title="Save" />
                 </View>
             </View>
-        );
+        )
     }
 }
 
 const styles = StyleSheet.create(
     {
         container: {
-            flex: 1,
-            // justifyContent: 'center',
-            // alignItems: 'center',
+            flex: 1
         },
         text: {
             textAlign: 'center',
@@ -83,16 +73,16 @@ const styles = StyleSheet.create(
             alignContent: 'center',
             alignItems: 'center',
         },
-    });
+    })
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    current_project: state.project.current_project
-});
+    user: state.user,
+    project: state.project,
+    collab: state.collab
+})
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    addCollab: addCollab
-}, dispatch);
+const mapDispatchToProps = {
+    addCollab
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCollab)

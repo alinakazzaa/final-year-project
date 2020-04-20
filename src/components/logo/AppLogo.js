@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text } from 'react-native'
 import { logo } from '../../styles/logo'
 
 

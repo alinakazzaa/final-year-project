@@ -1,19 +1,15 @@
-import * as React from 'react';
-import { View, Text, YellowBox } from 'react-native';
-import { AppHeader } from '../../layouts/Header';
-import { collab } from './styles/collab.styles';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { LoadingScreen } from '../../components/loading/LoadingScreen';
-import { colors, base } from '../../styles/base';
-import TabView from '../../components/tabview/TabView';
-import { Input, Icon } from 'react-native-elements';
-import { getUserCollabs, setCollabsPending, setCurrentCollab, removeCollab } from '../../actions/collab';
-import { completedCollabs, activeCollabs, searchedCollabs } from '../../reducers/collabReducer';
-import { CollabList } from '../../components/list/CollabList';
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-
+import * as React from 'react'
+import { View, Text } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import { collab_style } from './styles/collab.styles'
+import { connect } from 'react-redux'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { colors, base } from '../../styles/base'
+import { TabView } from '../../components/tabview/TabView'
+import { Input } from 'react-native-elements'
+import { getUserCollabs, setCollabsPending, setCurrentCollab, removeCollab, filterCollabs } from '../../actions/collab'
+import { searchedCollabs } from '../../reducers/collabReducer'
+import { CollabList } from '../../components/list/CollabList'
 
 class AllCollabs extends React.Component {
 
@@ -21,24 +17,21 @@ class AllCollabs extends React.Component {
         headerShown: false
     }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            index: 0,
-            searched: [],
-            isSearch: false
-        }
+    state = {
+        index: 0,
+        searched: [],
+        isSearch: false
     }
 
     componentDidMount() {
         let { user, setCollabsPending, getUserCollabs } = this.props
         setCollabsPending()
-        getUserCollabs(user.id)
+        getUserCollabs(user.current_user.id)
     }
 
     goToCollab = collab => {
-        let { setCurrentCollab } = this.props
-        this.props.navigation.navigate('ViewCollab')
+        let { setCurrentCollab, navigation } = this.props
+        navigation.navigate('ViewCollab')
         setCurrentCollab(collab)
     }
 
@@ -48,8 +41,8 @@ class AllCollabs extends React.Component {
     }
 
     searchCollab = text => {
-        const { state } = this.props
-        let filtered_collabs = searchedCollabs(state, text)
+        const { collab } = this.props
+        let filtered_collabs = searchedCollabs(collab, text)
         this.setState({ searched: filtered_collabs, isSearch: true })
     }
 
@@ -59,51 +52,52 @@ class AllCollabs extends React.Component {
 
     render() {
         const { index, searched, isSearch } = this.state
-        const { active, completed, pending, error } = this.props
+        const { collab } = this.props
 
         return (
             <View>
-                {pending ?
-                    <LoadingScreen text="Wait, getting your collabs" /> :
-                    <View>
-                        <AppHeader
-                            gradient={true} />
-                        <View style={collab.allContainer}>
-                            <View style={collab.searchView}>
-                                <Text style={collab.title}>Search</Text><Input
-                                    onChangeText={text => this.searchCollab(text)} inputStyle={base.inputStyle} inputContainerStyle={collab.searchInput} />
-                            </View>
-                            <TabView titles={['Active', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
-                            {!error && !pending &&
-                                index == 0 ?
-                                <View>
-                                    <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? [...searched.filter(c => c.active == true)] : active} />
-                                </View> :
-                                <View>
-                                    <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? [...searched.filter(c => c.active == false)] : completed} />
-                                </View>}
-                            {/* <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} /> */}
-                        </View></View>}
+                <AppHeader
+                    gradient={true}
+                    left={<View style={base.searchTxt}><Text style={collab_style.title}>Search</Text></View>}
+                    center={<View style={base.searchView}>
+                        <Input
+                            onChangeText={text => this.searchCollab(text)}
+                            inputStyle={base.inputStyle}
+                            inputContainerStyle={base.searchInput} />
+                    </View>} />
+                <View style={collab_style.allContainer}>
+                    {collab.pending && <LoadingScreen size='large' />}
+                    <TabView titles={['Active', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
+                    {collab.pending && <LoadingScreen />}
+                    {collab.all_collabs.length > 0 &&
+                        index == 0 ?
+                        <View>
+                            <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, true) : filterCollabs(collab.all_collabs, true)} />
+                        </View> :
+                        <View>
+                            <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, false) : filterCollabs(collab.all_collabs, false)} />
+                        </View>}
+                    {collab.error &&
+                        <View style={base.centerItems}>
+                            <Text style={base.noneMessage}>No collaborations yet</Text>
+                            <Text style={base.noneMessage}>Run searches and find influencers to collaborate with</Text>
+                        </View>}
+                </View>
             </View>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    pending: state.collab.pending,
-    error: state.collab.error,
-    active: activeCollabs(state),
-    completed: completedCollabs(state)
+    user: state.user,
+    collab: state.collab
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    getUserCollabs: getUserCollabs,
-    setCollabsPending: setCollabsPending,
-    setCurrentCollab: setCurrentCollab,
-    removeCollab: removeCollab
-
-}, dispatch)
+const mapDispatchToProps = {
+    getUserCollabs,
+    setCollabsPending,
+    setCurrentCollab,
+    removeCollab
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllCollabs)

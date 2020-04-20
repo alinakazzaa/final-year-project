@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Keyboard } from 'react-native'
+import PropTypes from 'prop-types'
 import { TextButton } from '../../components/buttons/TextButton'
 // @ts-ignore
 import t from 'tcomb-form-native'
@@ -32,11 +33,13 @@ const options = {
         },
         password: {
             error: 'Password is required',
-            title: "Password *"
+            title: "Password *",
+            password: true
         },
         confirm_password: {
             error: 'Confirmation of password is required',
-            title: "Confirm password *"
+            title: "Confirm password *",
+            password: true
         }
     },
     stylesheet: formStyles,
@@ -54,14 +57,12 @@ export default class RegistrationForm extends React.Component {
     }
 
     onSubmit = () => {
-        const { logIn, registerUser } = this.props
+        const { registerUser } = this.props
         const { value } = this.state
         registerUser(value)
-        logIn(value)
     }
 
     render() {
-
         return (
             <View style={auth.formContainer}>
                 <Form
@@ -80,13 +81,8 @@ export default class RegistrationForm extends React.Component {
 
 
 RegistrationForm.propTypes = {
-
+    registerUser: PropTypes.func.isRequired,
 }
-
-RegistrationForm.defaultProps = {
-
-}
-
 
 
 

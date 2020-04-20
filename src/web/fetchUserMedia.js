@@ -1,7 +1,7 @@
-import { INSTAGRAM_GET_USER_MEDIA } from "../constants/endpoints"
+import { INSTAGRAM_GET_USER_MEDIA } from "../constants/insta_endpoints"
 import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_ERROR, GET_USER_MEDIA_SUCCESS } from "../constants/response/types"
 
-export const fetchUserMedia = (user_id, hashtags, pending, success, error) => {
+export const fetchUserMedia = (user_id, hashtags, pending, fetchResponse) => {
     pending(GET_USER_MEDIA_PENDING)
 
     let response
@@ -19,20 +19,20 @@ export const fetchUserMedia = (user_id, hashtags, pending, success, error) => {
                         message: 'success: user media',
                     }
                     console.log(response.media)
-                    success(response)
+                    fetchResponse(response)
 
                 } else if (res.status = 'fail') {
                     response = { type: GET_USER_MEDIA_ERROR, message: res.message }
-                    error(response)
+                    fetchResponse(response)
                 }
                 else {
                     response = { type: GET_USER_MEDIA_ERROR, message: 'error: user media' }
-                    error(response)
+                    fetchResponse(response)
                 }
             })
         }).catch(error => {
             response = { type: GET_USER_MEDIA_ERROR, message: 'error: user media' }
-            error(response)
+            fetchResponse(response)
         })
 }
 

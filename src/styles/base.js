@@ -15,7 +15,8 @@ export const colors = {
     GREEN: '#30cf0c',
     BORDER: '#C8C8C8',
     GRAY: '#585b61',
-    SCREEN: '#F8F8F8'
+    SCREEN: '#F8F8F8',
+    RED: '#ff0000'
 }
 
 export const spacing = {
@@ -41,9 +42,9 @@ export const fonts = {
     MEDIUM: 18,
     LARGE: 20,
     PRIMARY: 'ArialRoundedMTBold',
-    WEIGHT_LIGHT: '200',
-    WEIGHT_MEDIUM: '700',
-    WEIGHT_HEAVY: '800'
+    WEIGHT_LIGHT: '300',
+    WEIGHT_MEDIUM: '500',
+    WEIGHT_HEAVY: '700'
 }
 
 // containers
@@ -62,11 +63,7 @@ export const formContainer = {
     marginLeft: '5%',
     padding: 30,
     borderRadius: 5,
-    width: dimensions.fullWidth * .85,
-    // shadowColor: colors.BLACK,
-    // shadowOffset: { width: 4, height: 4 },
-    // shadowOpacity: 0.5,
-    // shadowRadius: 10,
+    width: dimensions.fullWidth * .85
 }
 
 export const infoContainer = {
@@ -82,7 +79,7 @@ export const input = {
     height: height.MEDIUM,
     width: width.LARGE,
     borderColor: colors.BORDER,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
 }
 
 export const inputView = {
@@ -95,8 +92,6 @@ export const inputView = {
     borderBottomWidth: 1,
     fontSize: fonts.MEDIUM
 }
-
-
 
 export const inputLabel = {
     padding: 0,
@@ -134,22 +129,24 @@ export const select = {
     color: colors.PRIMARY
 }
 
-export const form = {
-    controlLabel: {
-        normal: {
-            ...inputLabel
-        },
-        error: {
 
-        }
-    },
+export const form = {
     textbox: {
         normal: {
-            ...input
+            ...inputView
         },
         error: {
 
+        },
+        notEditable: {
+            ...inputView,
+            opacity: 0.5
         }
+    },
+    select: {
+        normal: {
+            ...inputView
+        },
     },
     checkbox: {
         normal: {
@@ -174,9 +171,33 @@ export const base = StyleSheet.create(
         inputStyle: {
             color: colors.TERTIARY,
             fontSize: fonts.MEDIUM,
-            fontWeight: fonts.WEIGHT_MEDIUM,
+            fontWeight: fonts.WEIGHT_LIGHT
         },
-        btnView: {
+        noneMessage: {
+            ...inputLabel,
+            padding: spacing.LARGE * 2,
+            fontSize: fonts.SMALL,
+            color: colors.TERTIARY,
+            alignSelf: 'center'
+        },
+        centerItems: {
             alignItems: 'center',
-        }
+            textAlign: 'center'
+        },
+        searchView: {
+            flexDirection: 'row',
+            marginTop: spacing.MEDIUM
+        },
+        searchTxt: {
+            marginTop: spacing.MEDIUM,
+            marginLeft: spacing.MEDIUM,
+            color: colors.TERTIARY
+        },
+        searchInput: {
+            width: dimensions.fullWidth * 0.60,
+            borderColor: colors.TERTIARY,
+            borderBottomWidth: 1,
+            height: spacing.LARGE * 1.5,
+            marginBottom: spacing.MEDIUM
+        },
     });

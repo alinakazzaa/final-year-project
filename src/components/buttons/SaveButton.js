@@ -4,9 +4,9 @@ import { Icon } from 'react-native-elements';
 import { colors } from '../../styles/base';
 
 
-export const BackButton = ({ onPress }) => {
+export const SaveButton = ({ onPress }) => {
     return <Icon
-        name='arrow-left'
+        name='check'
         size={40}
         color={colors.TERTIARY}
         type='material-community'
@@ -14,10 +14,10 @@ export const BackButton = ({ onPress }) => {
         underlayColor='transparent' />
 }
 
-BackButton.propTypes = {
+SaveButton.propTypes = {
     onPress: PropTypes.func
 }
 
-BackButton.defaultProps = {
-    onPress: null,
+SaveButton.defaultProps = {
+    onPress: null
 }

@@ -1,18 +1,15 @@
 import * as React from 'react'
-import { View, Text, YellowBox } from 'react-native'
+import { View, Text } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { ProjectList } from '../../components/list/ProjectList'
 import { Input, Icon } from 'react-native-elements'
-import { removeProject, setCurrentProject, getUserProjects, setUserProjectsPending } from '../../actions/project'
+import { removeProject, setCurrentProject, getUserProjects } from '../../actions/project'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { activeProjects, archivedProjects, searchedProjects } from '../../reducers/projectReducer'
-import { project } from './styles/project.styles'
+import { activeProjects, archivedProjects } from '../../reducers/projectReducer'
+import { project_style } from './styles/project.styles'
 import { colors, base } from '../../styles/base'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
-import TabView from '../../components/tabview/TabView'
-
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
+import { TabView } from '../../components/tabview/TabView'
 
 class AllProjects extends React.Component {
 
@@ -20,19 +17,17 @@ class AllProjects extends React.Component {
         headerShown: false,
     }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            index: 0,
-            searched: [],
-            isSearch: false
-        }
+    state = {
+        index: 0,
+        searched: [],
+        isSearch: false,
+        active: [],
+        archived: []
     }
 
     componentDidMount() {
-        let { user, setUserProjectsPending, getUserProjects } = this.props
-        setUserProjectsPending()
-        getUserProjects(user.id)
+        let { user, getUserProjects } = this.props
+        getUserProjects(user.current_user.id)
     }
 
     goToProject = proj => {
@@ -42,13 +37,13 @@ class AllProjects extends React.Component {
     }
 
     deleteProject = project => {
-        let { user, removeProject } = this.props
-        removeProject(user.id, project)
+        let { removeProject } = this.props
+        removeProject(project)
     }
 
     searchProject = text => {
-        const { state } = this.props
-        let filtered_projects = searchedProjects(state, text)
+        const { project } = this.props
+        let filtered_projects = [...project.all_projects.filter(proj => proj.title.toLowerCase().includes(text.toLowerCase()))]
         this.setState({ searched: filtered_projects, isSearch: true })
     }
 
@@ -58,52 +53,60 @@ class AllProjects extends React.Component {
 
     render() {
         const { index, searched, isSearch } = this.state
-        const { active, archived, pending } = this.props
+        const { project } = this.props
 
         return (
-            <View>
-                {pending ?
-                    <LoadingScreen text="Wait, getting your campaigns" /> :
-                    <View>
-                        <AppHeader
-                            gradient={true} />
-                        <View style={project.allContainer}>
-                            <View style={project.searchView}>
-                                <Text style={project.title}>Search</Text><Input
-                                    onChangeText={text => this.searchProject(text)} inputStyle={base.inputStyle} inputContainerStyle={project.searchInput} />
-                            </View>
-                            <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
-                            {this.props.state.project.error && <View style={project.none}><Text style={project.noneMsg}>No projects</Text></View>}
-                            {!this.props.state.project.error && !this.props.state.project.pending &&
-                                index == 0 ?
-                                <View>
-                                    <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={isSearch ? [...searched.filter(proj => proj.active == true)] : active} />
-                                </View> :
-                                <View>
-                                    <ProjectList goToProject={this.goToProject} deleteProject={this.deleteProject} projects={isSearch ? [...searched.filter(proj => proj.active == false)] : archived} />
-                                </View>}
-                            <Icon name='plus' type='material-community' size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate('AddProject')} />
-                        </View></View>}
+            <View style={{ backgroundColor: colors.SCREEN }}>
+                <AppHeader
+                    gradient={true}
+                    left={<View style={base.searchTxt}><Text style={project_style.title}>Search</Text></View>}
+                    center={<View style={base.searchView}>
+                        <Input
+                            onChangeText={text => this.searchProject(text)}
+                            inputStyle={base.inputStyle}
+                            inputContainerStyle={base.searchInput} />
+                    </View>} />
+                <View style={project_style.allContainer}>
+                    <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
+                    {project.pending && <LoadingScreen size='large' />}
+                    {!project.pending && !project.error &&
+                        index == 0 ?
+                        <View>
+                            <ProjectList
+                                goToProject={this.goToProject}
+                                deleteProject={this.deleteProject}
+                                projects={isSearch ? [...searched.filter(proj => proj.active == true)] :
+                                    activeProjects(project)} />
+                        </View> :
+                        <View>
+                            <ProjectList
+                                goToProject={this.goToProject}
+                                deleteProject={this.deleteProject}
+                                projects={isSearch ? [...searched.filter(proj => proj.active == false)] :
+                                    archivedProjects(project)} />
+                        </View>}
+
+                    {project.error &&
+                        <View style={base.centerItems}>
+                            <Text style={base.noneMessage}>Start your first campaign</Text>
+                        </View>}
+                    <Icon name='plus' type='material-community' size={50} color={colors.TERTIARY}
+                        onPress={() => this.props.navigation.navigate('AddProject')} />
+                </View>
             </View>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    state: state,
-    user: state.user.current_user,
-    projects: state.project.projects,
-    active: activeProjects(state),
-    archived: archivedProjects(state),
-    pending: state.project.pending,
-    error: state.project.error
+    user: state.user,
+    project: state.project
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({
+const mapDispatchToProps = {
     setCurrentProject,
-    getUserProjects: getUserProjects,
-    setUserProjectsPending: setUserProjectsPending,
-    removeProject: removeProject,
-}, dispatch)
+    getUserProjects,
+    removeProject
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProjects)

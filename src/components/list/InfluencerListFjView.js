@@ -1,11 +1,10 @@
 import React from 'react'
-import { Icon, Avatar } from 'react-native-elements'
-import { StyleSheet, TouchableOpacity, Text, Keyboard, View, ScrollView } from 'react-native'
-import { IconButton } from '../buttons/IconButton'
+import { Avatar } from 'react-native-elements'
+import { StyleSheet, TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
-import { TextButton } from '../buttons/TextButton'
+import { spacing } from '../../styles/base'
 
-export const InfluencerListFjView = ({ influencers, goToInfluencer, addInfluencerByUsername, addToPotential, removeInfluencer }) => {
+export const InfluencerListFjView = ({ influencers, goToInfluencer }) => {
     let COUNT = 0
     const influList = (influ, index) => {
         return (
@@ -49,8 +48,9 @@ const styles = StyleSheet.create(
             // justifyContent: 'space-around',
         },
         scrollContainer: {
-            padding: '2%',
-            paddingLeft: 0,
+            paddingTop: spacing.LARGE,
+            paddingBottom: spacing.LARGE
+
         },
         listItem: {
             display: 'flex',
@@ -123,17 +123,9 @@ const styles = StyleSheet.create(
 
 InfluencerListFjView.propTypes = {
     influencers: PropTypes.array.isRequired,
-    goToInfluencer: PropTypes.func,
-    addInfluencerByUsername: PropTypes.func,
-    addToPotential: PropTypes.func,
-    removeInfluencer: PropTypes.func,
-    criteria: PropTypes.object
+    goToInfluencer: PropTypes.func
 }
 
 InfluencerListFjView.defaultProps = {
-    goToInfluencer: null,
-    addInfluencerByUsername: null,
-    addToPotential: null,
-    removeInfluencer: null,
-    criteria: {}
+    goToInfluencer: null
 }

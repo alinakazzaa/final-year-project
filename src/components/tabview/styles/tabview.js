@@ -5,22 +5,22 @@ export const container = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: spacing.MEDIUM,
-    margin: spacing.MEDIUM,
+    margin: spacing.MEDIUM
 }
 
 export const tab = {
     textTransform: 'uppercase',
     textAlign: 'center',
-    color: colors.TERTIARY,
-    borderColor: colors.TERTIARY,
+    fontSize: fonts.SMALL * 0.9,
     fontWeight: fonts.WEIGHT_MEDIUM,
     padding: spacing.SMALL,
+    color: colors.TERTIARY
 }
 
 
-export const threeTabs = (color, size) => StyleSheet.create(
+export const tabStyle = (color, size) => StyleSheet.create(
     {
-        container: {
+        view: {
             ...container
         },
         tab: {
@@ -49,33 +49,4 @@ export const threeTabs = (color, size) => StyleSheet.create(
     });
 
 
-export const twoTabs = (color, size) => StyleSheet.create(
-    {
-        container: {
-            ...container
-        },
-        tab: {
-            ...tab,
-        },
-        tabItem: {
-            width: size,
-            justifyContent: 'center',
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderColor: colors.BORDER,
-        },
-        selectedTab: {
-            color: colors.WHITE,
-            textAlign: 'center',
-            padding: spacing.SMALL,
-            fontSize: fonts.SMALL,
-            textTransform: 'uppercase',
-            fontWeight: fonts.WEIGHT_MEDIUM
-        },
-        selectedTabItem: {
-            width: size,
-            justifyContent: 'center',
-            backgroundColor: color,
-        },
-    });
 

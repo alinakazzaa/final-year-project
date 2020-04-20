@@ -1,21 +1,21 @@
-import * as React from 'react';
-import { View, Text, YellowBox } from 'react-native';
-import { AppHeader } from '../../layouts/Header';
-import { IconButton } from '../../components/buttons/IconButton';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { getUserProjects } from '../../actions/project';
-import { getProjectFetchJobs } from '../../actions/fetchJob';
-import { COMPLETED } from '../../constants';
-import { logOutUser } from '../../actions/user';
-import { SET_PROJECTS_SUCCESS } from '../../constants/response/types';
-import { activeProjects } from '../../reducers/projectReducer';
-import { home } from './styles/home.styles';
-import { colors } from '../../styles/base';
+import * as React from 'react'
+import { View, Text } from 'react-native'
+import { AppHeader } from '../../layouts/Header'
+import { IconButton } from '../../components/buttons/IconButton'
+import { connect } from 'react-redux'
+import { getUserProjects } from '../../actions/project'
+import { getProjectFetchJobs } from '../../actions/fetchJob'
+import { COMPLETED } from '../../constants'
+import { logOutUser } from '../../actions/user'
+import { home } from './styles/home.styles'
+import { colors } from '../../styles/base'
 import { TagList } from '../../components/list/TagList'
-import { Divider } from 'react-native-elements';
+import { Divider } from 'react-native-elements'
+import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { getAllInfluencers } from '../../actions/influencer'
+import { getUserCollabs } from '../../actions/collab'
 
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+
 
 class HomeScreen extends React.Component {
 
@@ -23,32 +23,43 @@ class HomeScreen extends React.Component {
         headerShown: false,
     }
 
-
     state = {
-        recent_tags: []
+        recent_tags: [],
+        recent_collabs: []
     }
 
     componentDidMount() {
         const { user, getUserProjects } = this.props
-
-        if (getUserProjects(user.id).type == SET_PROJECTS_SUCCESS) {
-            this.getRecentHashtags()
-        }
-
+        getUserProjects(user.current_user.id)
     }
 
-    getRecentHashtags = () => {
-        const { user, active_projects, getUserProjects, getProjectFetchJobs, completed_fetch_jobs } = this.props
-        let tags = []
-        getUserProjects(user.id)
-        let project_id = active_projects[0].id // should be active_projects.length -1
-        getProjectFetchJobs(user.id, project_id)
+    componentDidUpdate(prev) {
+        const { user, project, fetch_job, getProjectFetchJobs, getUserCollabs, collab } = this.props
 
-        completed_fetch_jobs.forEach(job => {
-            tags = [...tags, ...job.related_tags]
-        });
+        if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
+            getProjectFetchJobs(user.current_user.id, project.all_projects[0].id)
+        }
 
-        this.setState({ recent_tags: tags })
+        if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
+            const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
+            if (completed_fetch_jobs.length > 0) {
+                const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
+                this.setState({ recent_tags: tags })
+                getUserCollabs(user.current_user.id)
+            }
+
+        }
+
+        const recent_collabs = []
+        const collab_length = collab.all_collabs.length
+
+        if (prev.collab.all_collabs !== collab.all_collabs && collab_length > 0) {
+
+            for (var i = length; i > length - 3; i--) {
+                recent_collabs.push(collab.all_collabs[i])
+            }
+            this.setState({ ...this.state, recent_collabs })
+        }
     }
 
     onTagPress = tag => {
@@ -56,8 +67,8 @@ class HomeScreen extends React.Component {
     }
 
     render() {
-        const { user, logOutUser, completed_fetch_jobs, } = this.props
-        const { recent_tags } = this.state
+        const { logOutUser, fetch_job, project, collab, influencer } = this.props
+        const { recent_tags, recent_collabs } = this.state
 
         return (
             <View>
@@ -70,15 +81,18 @@ class HomeScreen extends React.Component {
                     /></View>}
                 />
                 <View style={home.container}>
+                    {project.pending || fetch_job.pending && <LoadingScreen />}
                     <View style={home.top}>
-                        <Text style={home.title}>Based on your previous searches</Text>
-                        <Text style={home.text}>Consider these hashtagtags</Text>
-                        <View style={home.itemRow}>
-                            {completed_fetch_jobs.length > 0 &&
-                                <TagList onPress={this.onTagPress} tags={recent_tags} />}
-                        </View>
+                        {(project.error !== null || fetch_job.error !== null) &&
+                            <View><Text style={home.title}>Create campaigns and find influencers to match your marketing needs!</Text>
+                                <Text style={home.title}>Run instagram profile searches by hashtags you associate with your product</Text></View>}
+                        {recent_tags.length > 0 && <View><Text style={home.title}>Based on your previous searches</Text>
+                            <Text style={home.text}>Consider these hashtags</Text>
+                            <View style={home.itemRow}>
+                                <TagList onPress={this.onTagPress} tags={recent_tags} />
+                            </View></View>}
                     </View>
-                    <View style={home.logInMsg}>
+                    <View style={home.middle}>
                         <Text style={home.largeTitle}>Recent collaborations....</Text>
                     </View>
                     <Divider />
@@ -87,21 +101,25 @@ class HomeScreen extends React.Component {
                     </View>
                 </View>
             </View>
-        );
+        )
     }
 }
 
 const mapStateToProps = state => ({
-    user: state.user.current_user,
-    active_projects: activeProjects(state),
-    completed_fetch_jobs: state.fetch_job.fetch_jobs ? state.fetch_job.fetch_jobs.filter(fj => fj.details.status == COMPLETED) : [],
-});
+    user: state.user,
+    project: state.project,
+    fetch_job: state.fetch_job,
+    collab: state.collab,
+    influencer: state.influencer
+})
 
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    getProjectFetchJobs: getProjectFetchJobs,
-    getUserProjects: getUserProjects,
-    logOutUser: logOutUser
-}, dispatch);
+const mapDispatchToProps = {
+    getProjectFetchJobs,
+    getUserProjects,
+    logOutUser,
+    getUserCollabs,
+    getAllInfluencers
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
