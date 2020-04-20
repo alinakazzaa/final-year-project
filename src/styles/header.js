@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, dimensions } from './base';
+import { StyleSheet } from 'react-native'
+import { colors, dimensions } from './base'
 
 
 export const header = StyleSheet.create(
@@ -13,4 +13,4 @@ export const header = StyleSheet.create(
             backgroundColor: colors.WHITE,
             height: dimensions.fullHeight * 0.12,
         }
-    });
+    })

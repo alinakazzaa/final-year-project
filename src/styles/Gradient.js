@@ -1,7 +1,7 @@
-import React from 'react';
-import { View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { colors } from './base.js';
+import React from 'react'
+import { View } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
+import { colors } from './base.js'
 
 
 export const Gradient = props => {

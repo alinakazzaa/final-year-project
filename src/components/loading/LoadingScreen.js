@@ -1,7 +1,7 @@
-import React from 'react';
-import { colors } from '../../styles/base';
-import { ActivityIndicator, View, Text } from 'react-native';
-import { loading } from './styles/loading.styles';
+import React from 'react'
+import { colors } from '../../styles/base'
+import { ActivityIndicator, View, Text } from 'react-native'
+import { loading } from './styles/loading.styles'
 import PropTypes from 'prop-types'
 
 

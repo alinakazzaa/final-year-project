@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
-import { IconButton } from '../../components/buttons/IconButton'
 import CollabForm from '../../components/forms/CollabForm'
 import { TextButton } from '../../components/buttons/TextButton'
 import { connect } from 'react-redux'
