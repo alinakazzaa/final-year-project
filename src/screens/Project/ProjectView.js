@@ -19,7 +19,7 @@ class ProjectView extends React.Component {
     }
 
     state = {
-        project_value: {
+        projectValue: {
             active: false
         }
     }
@@ -29,7 +29,7 @@ class ProjectView extends React.Component {
 
         if (project.current_project.title) {
             getProjectFetchJobs(user.current_user.id, project.current_project.id)
-            this.setState({ project_value: { ...project.current_project } })
+            this.setState({ projectValue: { ...project.current_project } })
         }
 
     }
@@ -41,30 +41,24 @@ class ProjectView extends React.Component {
     }
 
     handleChange = updated_project => {
-        this.setState({ project_value: updated_project })
+        this.setState({ projectValue: updated_project })
     }
 
     handleSubmit = () => {
         const { navigation, updateProject } = this.props
-        let { project_value } = this.state
-        updateProject(project_value)
+        let { projectValue } = this.state
+        updateProject(projectValue)
         navigation.goBack()
     }
 
     toggleSwitch = value => {
-        const { project_value } = this.state
-        this.setState({ project_value: { ...project_value, active: value } })
+        const { projectValue } = this.state
+        this.setState({ projectValue: { ...projectValue, active: value } })
     }
-
-    // componentWillUnmount() {
-    //     const { clearCurrentProject, clearFetchJobState } = this.props
-    //     clearCurrentProject()
-    //     clearFetchJobState()
-    // }
 
     render() {
         const { fetch_job, navigation } = this.props
-        const { project_value } = this.state
+        const { projectValue } = this.state
 
         return (
             <View>
@@ -73,26 +67,26 @@ class ProjectView extends React.Component {
                     left={<BackButton onPress={() => navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <View style={project_style.viewContainer}>
-                    <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
-                    <View style={project_style.collabBox}>
-                        <View style={project_style.header}>
+                <View style={base.container}>
+                    <ProjectForm handleChange={this.handleChange} project_value={projectValue} toggleSwitch={this.toggleSwitch} />
+                    <View style={base.itemViewListContainer}>
+                        <View style={base.itemViewListNav}>
                             <Text style={base.title}>Collaborations</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AllCollabs')}>
                                 <Text style={base.title}>View All</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={project_style.listView}><Text style={base.noneMessage}>No collaborations yet</Text></View>
+                        <View style={base.centerItems}><Text style={base.noneMessage}>No collaborations yet</Text></View>
                     </View>
                     <View>
-                        <View style={project_style.header}>
+                        <View style={base.itemViewListNav}>
                             <Text style={base.title}>Searches</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AllFetchJobs')}>
                                 <Text style={base.title}>See All</Text>
                             </TouchableOpacity>
                         </View>
                         {fetch_job.pending && <LoadingScreen />}
-                        {fetch_job.error && <View style={project_style.listView}><Text style={base.noneMessage}>No searches</Text></View>}
+                        {fetch_job.error && <View style={base.centerItems}><Text style={base.noneMessage}>No searches</Text></View>}
                         {!fetch_job.error && !fetch_job.pending && <ScrollView
                             contentContainerStyle={project_style.fetchScroll}>
                             {fetch_job.all_fetch_jobs.length > 0 && <View>

@@ -5,7 +5,6 @@ import { project_style } from '../../screens/Project/styles/project.styles'
 import { Icon } from 'react-native-elements'
 import { colors, base } from '../../styles/base'
 
-
 export const ProjectList = ({ projects, deleteProject, goToProject }) => {
     const projList = (proj, index) => {
         return (
@@ -27,7 +26,7 @@ export const ProjectList = ({ projects, deleteProject, goToProject }) => {
 
     return (
         <ScrollView keyboardDismissMode='on-drag'
-            contentContainerStyle={project_style.scrollContainer}
+            contentContainerStyle={base.scrollContainer}
         >
             <View>
                 {
