@@ -5,7 +5,7 @@ export const container = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: spacing.MEDIUM,
-    margin: spacing.MEDIUM
+    // margin: spacing.MEDIUM
 }
 
 export const tab = {
@@ -21,7 +21,8 @@ export const tab = {
 export const tabStyle = (color, size) => StyleSheet.create(
     {
         view: {
-            ...container
+            ...container,
+            justifyContent: 'space-between'
         },
         tab: {
             ...tab

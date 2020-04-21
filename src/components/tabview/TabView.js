@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View, Text, TouchableOpacity } from 'react-native'
-import { tabStyle } from './styles/tabview'
+import { tabStyle } from './styles/tabview.styles'
 
 export const TabView = ({ three, titles, index, onPress, color, size }) => {
 
