@@ -13,16 +13,17 @@ export default class Slider extends React.Component {
             style={sliderStyle.bar}
             lineWidth={23}
             thumbBorderColor={colors.SECONDARY}
-            thumbColor={colors.TERTIARY}
+            thumbColor={colors.SCREEN}
             labelStyle="none"
             thumbRadius={13}
-            thumbBorderWidth={1}
+            thumbBorderWidth={2}
             min={min}
             max={max}
+            initialLowValue={min}
+            initialHighValue={max}
             step={step}
             onValueChanged={(low, high) => {
                 onChange(low, high)
-                this.setState({ min: low, max: high })
             }}
             selectionColor={colors.SECONDARY}
         />

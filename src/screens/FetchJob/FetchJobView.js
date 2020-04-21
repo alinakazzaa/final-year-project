@@ -22,12 +22,13 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
 
 class FetchJobView extends React.Component {
-
     state = {
         currentJob: {
-            details: { criteria: { followerMin: 0, followerMax: 0 } }
-        }
+            details: {}
+        },
+        pending: true
     }
+
 
     static navigationOptions = {
         headerShown: false
@@ -44,7 +45,9 @@ class FetchJobView extends React.Component {
             job = { ...fetch_job.current_fetch_job }
         }
 
-        this.setState({ currentJob: { ...job } })
+        this.setState({ ...this.state, currentJob: job }, () => {
+            this.setState({ ...this.state, pending: false })
+        })
 
         if (fetch_job.current_fetch_job.details.status == COMPLETED && fetch_job.current_fetch_job.influencers.success.length > 0) {
             getAllInfluencers(fetch_job.current_fetch_job)
@@ -65,7 +68,7 @@ class FetchJobView extends React.Component {
         if (running_fetch.response !== null)
             if (running_fetch.response.type == COMPLETED_GET_USERS || running_fetch.response.type == GET_MEDIA_SUCCESS) {
                 if (running_fetch.influencers.success.length < Number(running_fetch.details.no_profiles)) {
-                    if (running_fetch.has_next_page)
+                    if (running_fetch.has_next_page && running_fetch.progress.total == running_fetch.progress.done)
                         fetchNextPage(running_fetch, fetchPending, fetchResponse)
                 } else {
                     fetchResponse({
@@ -105,7 +108,7 @@ class FetchJobView extends React.Component {
     }
 
     render() {
-        const { currentJob } = this.state
+        const { currentJob, pending } = this.state
         const { influencer, navigation, running_fetch } = this.props
 
         const progress_percent = running_fetch.influencers.success.length /
@@ -118,8 +121,8 @@ class FetchJobView extends React.Component {
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <View style={base.container}>
-                    <FetchJobForm goBack={navigation.goBack} fetchJob={currentJob.details}
-                        handleChange={this.handleChange} />
+                    {!pending && <FetchJobForm goBack={navigation.goBack} fetchJob={currentJob.details}
+                        handleChange={this.handleChange} />}
                     <View style={fetchJobStyle.middle}>
                         <Text style={base.title}>Status</Text>
                         <View style={fetchJobStyle.statusView}>
