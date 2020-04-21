@@ -6,7 +6,7 @@ import t from 'tcomb-form-native'
 import { fetchJobStyle } from '../../screens/FetchJob/styles/fetchJob.styles'
 import { formatNumber } from '../../actions/base'
 import { TabView } from '../tabview/TabView'
-import { colors, base } from '../../styles/base'
+import { colors, base, dimensions } from '../../styles/base'
 import Slider from '../slider/Slider'
 import { criteria } from '../../constants/criteria'
 import { COMPLETED } from '../../constants'
@@ -83,7 +83,7 @@ export default class FetchJobForm extends React.Component {
         const { index, min, max } = this.state
 
         return (
-            <View>
+            <View style={base.formContainer}>
                 <View style={form.header}>
                     <Text style={base.title}>Details</Text>
                 </View>
@@ -107,14 +107,10 @@ export default class FetchJobForm extends React.Component {
                 {fetch_job.status != COMPLETED && <View style={fetchJobStyle.middle}>
                     <Text style={base.title}>Follower range</Text>
                     <View style={fetchJobStyle.itemRowRange}>
-                        <TabView index={index} color={colors.SECONDARY} width='38%' titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
+                        <TabView index={index} color={colors.SECONDARY} size={dimensions.fullWidth * .25} titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
                         <View style={fetchJobStyle.rangeBox}>
-                            <Text
-                                // @ts-ignore
-                                style={fetchJobStyle.lblRange}>{formatNumber(fetch_job.criteria.follower_min)}</Text>
-                            <Text
-                                // @ts-ignore
-                                style={fetchJobStyle.lblRange}>{formatNumber(fetch_job.criteria.follower_max)}</Text>
+                            <Text style={form.inputViewLabel}>{formatNumber(fetch_job.criteria.follower_min)}</Text>
+                            <Text style={form.inputViewLabel}>{formatNumber(fetch_job.criteria.follower_max)}</Text>
                         </View>
                         <View style={fetchJobStyle.rangeSlider}>
                             {index == 0 && <Slider

@@ -72,7 +72,7 @@ class AllFetchJobs extends React.Component {
                         <Input onChangeText={text => this.searchFetchJob(text)} inputStyle={base.inputStyle} inputContainerStyle={base.searchInput} />
                     </View>}
                 />
-                <View style={fetchJobStyle.container}>
+                <View style={base.container}>
                     <TabView
                         titles={['Pending', 'In Progress', 'Completed']}
                         onPress={this.setTab}

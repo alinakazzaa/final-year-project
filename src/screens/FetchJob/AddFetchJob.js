@@ -69,14 +69,9 @@ class AddFetchJob extends React.Component {
                     right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />
-                <View style={base.formContainer}>
-                    <View style={fetchJobStyle.info}>
-                        <Text style={base.text}>Search users by hashtag</Text>
-                    </View>
-                    {fetch_job.hashtag == null && <View style={fetchJobStyle.info}>
-                        <Text style={base.text}>Avoid overly specific tags</Text></View>}
+                <View style={base.container}>
                     <FetchJobForm fetch_job={fetch_job} handleChange={this.handleChange} />
-                    <View style={fetchJobStyle.info}><Text style={base.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
+                    <View><Text style={base.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         )
