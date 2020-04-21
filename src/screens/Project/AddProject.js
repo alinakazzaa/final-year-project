@@ -47,7 +47,9 @@ class AddProject extends React.Component {
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
+                <View style={base.container}>
+                    <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
+                </View>
             </View>
         )
     }
