@@ -79,13 +79,11 @@ export const base = StyleSheet.create(
             paddingRight: spacing.LARGE
         },
         scrollContainer: {
-            paddingBottom: spacing.LARGE,
-            paddingTop: spacing.LARGE
+            paddingTop: spacing.MEDIUM
         },
         itemViewListContainer: {
-            maxHeight: dimensions.fullHeight * 0.2,
-            flexDirection: 'column',
-            paddingBottom: spacing.MEDIUM
+            minHeight: dimensions.fullHeight * 0.2,
+            flexDirection: 'column'
         },
         itemViewListNav: {
             paddingTop: spacing.LARGE,

@@ -1,4 +1,4 @@
-import { spacing, colors, fonts, height, dimensions } from "./base"
+import { spacing, colors, fonts, height, dimensions, width } from "./base"
 import { StyleSheet } from 'react-native'
 
 
@@ -10,11 +10,11 @@ export const boolSelect = {
 export const inputView = {
     color: colors.TERTIARY,
     fontWeight: fonts.WEIGHT_LEIGHT,
-    width: dimensions.fullWidth * 0.55,
+    minWidth: width.LARGE,
     minHeight: height.MEDIUM,
     borderColor: colors.BORDER,
     borderBottomWidth: 0.7,
-    fontSize: fonts.MEDIUM
+    fontSize: fonts.LARGE
 }
 
 export const formStyle = {
@@ -47,6 +47,7 @@ export const formStyle = {
 export const form = StyleSheet.create(
     {
         header: {
+            marginTop: spacing.MEDIUM,
             paddingTop: spacing.LARGE,
             paddingBottom: spacing.MEDIUM,
             paddingLeft: 0,
@@ -55,7 +56,8 @@ export const form = StyleSheet.create(
         },
         detailsBox: {
             flexDirection: 'row',
-            paddingTop: spacing.MEDIUM,
+            padding: spacing.MEDIUM,
+            // paddingTop: spacing.MEDIUM,
             paddingBottom: spacing.LARGE,
             borderTopWidth: 1,
             borderColor: colors.BORDER,

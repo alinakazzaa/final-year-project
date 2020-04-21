@@ -1,27 +1,25 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, container } from '../../../styles/base';
-import { inputLabel } from '../../../styles/form';
+import { colors, fonts, spacing, dimensions } from '../../../styles/base'
 
 export const influencer_style = StyleSheet.create(
     {
-        container: {
-            ...container,
-            paddingRight: spacing.MEDIUM,
-            paddingLeft: spacing.MEDIUM,
-            backgroundColor: 'transparent'
-        },
-        scrollContainer: {
-            padding: spacing.LARGE
-        },
-        listHead: {
+        influList: {
             flexDirection: 'row',
-            marginLeft: spacing.MEDIUM
+            height: dimensions.fullHeight * .2,
+            alignItems: 'center'
         },
-        loadingTxt: {
+        fjListItem: {
+            paddingRight: spacing.LARGE,
+            paddingLeft: spacing.LARGE,
+            borderRightWidth: 0.7,
+            borderColor: colors.BORDER
+        },
+        influUsername: {
+            fontSize: fonts.SMALL,
+            color: colors.TERTIARY,
             fontFamily: fonts.PRIMARY,
-            fontSize: 15,
-            color: colors.PRIMARY,
-            padding: spacing.LARGE
+            textTransform: 'uppercase',
+            marginTop: spacing.MEDIUM
         },
         listItem: {
             display: 'flex',

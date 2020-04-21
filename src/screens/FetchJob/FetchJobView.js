@@ -20,6 +20,7 @@ import { base, dimensions, colors } from '../../styles/base'
 import { Gradient } from '../../styles/Gradient'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
+import { formatNumber } from '../../actions/base'
 
 class FetchJobView extends React.Component {
     state = {
@@ -98,13 +99,18 @@ class FetchJobView extends React.Component {
         })
     }
 
-
     handleSubmit = () => {
         const { currentJob } = this.state
         const { updateStateFetchJob, navigation } = this.props
         updateStateFetchJob(currentJob)
         updateFetchJob(currentJob)
         navigation.goBack()
+    }
+
+    goToInfluencer = influ => {
+        const { navigation, setCurrentInfluencer } = this.props
+        setCurrentInfluencer(influ)
+        navigation.navigate('ViewInfluencer')
     }
 
     render() {
@@ -123,7 +129,7 @@ class FetchJobView extends React.Component {
                 <View style={base.container}>
                     {!pending && <FetchJobForm goBack={navigation.goBack} fetchJob={currentJob.details}
                         handleChange={this.handleChange} />}
-                    <View style={fetchJobStyle.middle}>
+                    <View style={fetchJobStyle.statusBox}>
                         <Text style={base.title}>Status</Text>
                         <View style={fetchJobStyle.statusView}>
                             {currentJob.details.status !== null && currentJob.details.status == IN_PROGRESS &&
@@ -140,9 +146,16 @@ class FetchJobView extends React.Component {
                                     </View>
                                 </View>}
                             {currentJob.details.status !== IN_PROGRESS &&
-                                <Text style={base.title}>{currentJob.details.status}</Text>}
+                                <Text style={base.text}>{currentJob.details.status}</Text>}
                         </View>
                     </View>
+                    {currentJob.details.status == COMPLETED && <View style={fetchJobStyle.followerBox}>
+                        <Text style={base.title}>Followe Range</Text>
+                        <View style={fetchJobStyle.followerView}>
+                            <Text style={base.text}>
+                                {`${formatNumber(currentJob.details.criteria.followerMin)}  -  ${formatNumber(currentJob.details.criteria.followerMax)}`}</Text>
+                        </View>
+                    </View>}
                     {currentJob.details.status == COMPLETED &&
                         <View style={base.itemViewListContainer}>
                             <View style={base.itemViewListNav}>
@@ -153,7 +166,7 @@ class FetchJobView extends React.Component {
                             </View>
                             {influencer.pending && <LoadingScreen />}
                             {!influencer.pending &&
-                                <InfluencerListFjView influencers={influencer.all_influencers} />}
+                                <InfluencerListFjView goToInfluencer={this.goToInfluencer} influencers={influencer.all_influencers} />}
                             {influencer.error != null &&
                                 <View style={base.centerItems}>
                                     <Text style={base.text}>{influencer.error.message}</Text>
