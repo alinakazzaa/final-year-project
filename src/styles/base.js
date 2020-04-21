@@ -1,5 +1,5 @@
 import { Dimensions } from 'react-native'
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 // import { inputLabel } from './form'
 
 export const dimensions = {
@@ -50,12 +50,6 @@ export const fonts = {
 
 // containers
 
-export const container = {
-    width: dimensions.fullWidth,
-    height: dimensions.fullHeight,
-    backgroundColor: colors.SCREEN
-}
-
 export const formContainer = {
     margin: '3%',
     marginRight: '5%',
@@ -68,11 +62,7 @@ export const formContainer = {
 export const addContainer = {
     ...formContainer,
     borderRadius: 0,
-    marginTop: spacing.MEDIUM,
-    // paddingLeft: 0,
-    // width: dimensions.fullWidth * .9,
-    // margin: 0,
-    // padding: 0
+    marginTop: spacing.MEDIUM
 }
 
 export const infoContainer = {
@@ -81,28 +71,39 @@ export const infoContainer = {
 
 export const base = StyleSheet.create(
     {
-        scrollContainer: {
-            padding: spacing.LARGE
+        container: {
+            width: dimensions.fullWidth,
+            height: dimensions.fullHeight,
+            backgroundColor: colors.SCREEN,
+            paddingLeft: spacing.LARGE,
+            paddingRight: spacing.LARGE
         },
-        slider: {
-            height: 20,
-            justifyContent: 'center',
-            borderWidth: 0.5,
-            borderRadius: 10,
-            padding: spacing.SMALL * 0.5,
-            paddingLeft: 0,
-            paddingRight: 0,
-            borderColor: colors.PRIMARY
+        scrollContainer: {
+            paddingBottom: spacing.LARGE,
+            paddingTop: spacing.LARGE
+        },
+        itemViewListContainer: {
+            maxHeight: dimensions.fullHeight * 0.2,
+            flexDirection: 'column',
+            paddingBottom: spacing.MEDIUM
+        },
+        itemViewListNav: {
+            paddingTop: spacing.LARGE,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingBottom: spacing.MEDIUM
+        },
+        inputStyle: {
+            color: colors.TERTIARY,
+            fontSize: fonts.MEDIUM,
+            fontWeight: fonts.WEIGHT_LIGHT
         },
         title: {
-            // ...inputLabel,
+            fontSize: fonts.SMALL,
+            fontFamily: fonts.PRIMARY,
+            color: colors.TERTIARY,
             fontWeight: fonts.WEIGHT_HEAVY,
-            // fontSize: fonts.SMALL,
-            // fontFamily: fonts.PRIMARY,
-            // color: colors.TERTIARY,
-            // marginBottom: spacing.MEDIUM,
-            // fontWeight: fonts.WEIGHT_HEAVY,
-            // textTransform: 'uppercase',
+            textTransform: 'uppercase'
         },
         text: {
             color: colors.TERTIARY,
@@ -112,16 +113,7 @@ export const base = StyleSheet.create(
             textTransform: 'uppercase',
             fontWeight: fonts.WEIGHT_LEIGHT
         },
-        label: {
-
-        },
-        inputStyle: {
-            color: colors.TERTIARY,
-            fontSize: fonts.MEDIUM,
-            fontWeight: fonts.WEIGHT_LIGHT
-        },
         noneMessage: {
-            // ...inputLabel,
             padding: spacing.LARGE * 2,
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,
@@ -129,7 +121,8 @@ export const base = StyleSheet.create(
         },
         centerItems: {
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
+            justifyContent: 'center'
         },
         searchView: {
             flexDirection: 'row',
@@ -147,4 +140,11 @@ export const base = StyleSheet.create(
             height: spacing.LARGE * 1.5,
             marginBottom: spacing.MEDIUM
         },
+        switchView: {
+            flexDirection: 'row',
+            paddingTop: spacing.MEDIUM,
+            borderBottomWidth: 1,
+            borderColor: colors.BORDER,
+            justifyContent: 'space-between'
+        }
     })

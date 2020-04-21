@@ -8,8 +8,6 @@ export const boolSelect = {
 }
 
 export const inputLabel = {
-    padding: 0,
-    margin: 0,
     color: colors.TERTIARY,
     marginTop: spacing.SMALL,
     marginBottom: spacing.MEDIUM,
@@ -70,6 +68,7 @@ export const form = StyleSheet.create(
     {
         header: {
             paddingTop: spacing.LARGE,
+            paddingBottom: spacing.MEDIUM,
             paddingLeft: 0,
             flexDirection: 'row',
             justifyContent: 'space-between'
