@@ -3,16 +3,16 @@ import PropTypes from 'prop-types'
 import { colors } from '../../styles/base'
 import RangeSlider from 'rn-range-slider'
 import { View } from 'native-base'
-import { base } from '../../styles/base'
+import { sliderStyle } from './styles/slider.styles'
 
 export default class Slider extends React.Component {
 
     render() {
         const { min, max, initial_min, initial_max, step, onChange } = this.props
         return (
-            <View style={base.slider}>
+            <View style={sliderStyle.container}>
                 <RangeSlider
-                    style={{ width: '100%', height: 26 }}
+                    style={sliderStyle.bar}
                     lineWidth={20}
                     labelStyle="none"
                     thumbRadius={13}
