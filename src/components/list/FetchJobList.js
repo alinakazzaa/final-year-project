@@ -33,13 +33,7 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob }) => {
 
     return (
 
-        <View>
-            <View style={fetchJobStyle.listHead}>
-                <Text style={base.title}>Title</Text>
-                <Text style={base.title}>Date</Text>
-                <Text style={base.title}>Hashtag</Text>
-                <Text style={base.title}>Location</Text>
-            </View>
+        <View style={base.scrollContainer}>
             <ScrollView keyboardDismissMode='on-drag'
                 contentContainerStyle={base.scrollContainer}>
                 {fetch_jobs.map((fj, index) => {
