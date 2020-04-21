@@ -13,11 +13,11 @@ import { base } from '../../styles/base'
 class AddFetchJob extends React.Component {
 
     state = {
-        fetch_job: {
+        fetchJob: {
             id: '',
             title: '',
             hashtag: '',
-            criteria: { follower_min: 0, follower_max: 100000 },
+            criteria: { followerMin: 0, followerMax: 100000 },
             status: ''
         },
     }
@@ -27,40 +27,40 @@ class AddFetchJob extends React.Component {
     }
 
     componentDidMount() {
-        const { fetch_job } = this.state
+        const { fetchJob } = this.state
 
         if (this.props.navigation.state.params)
             this.setState({
-                fetch_job: {
-                    ...fetch_job,
+                fetchJob: {
+                    ...fetchJob,
                     hashtag: this.props.navigation.state.params.tag,
                     date_created: DATE_TODAY
                 }
             })
         else
-            this.setState({ fetch_job: { ...fetch_job, date_created: DATE_TODAY } })
+            this.setState({ fetchJob: { ...fetchJob, date_created: DATE_TODAY } })
     }
 
-    handleChange = updated_fetch_job => {
-        this.setState({ fetch_job: updated_fetch_job })
+    handleChange = updatedFetchJob => {
+        this.setState({ fetchJob: updatedFetchJob })
     }
 
     handleSubmit = () => {
-        const { fetch_job } = this.state
+        const { fetchJob } = this.state
         const { user, project, addFetchJob, setCurrentFetchJob, navigation } = this.props
-        fetch_job.title = 'Hashtag search: ' + fetch_job.hashtag
-        addFetchJob(user.current_user.id, project.current_project.id, fetch_job)
-        setCurrentFetchJob({ details: fetch_job })
+        fetchJob.title = 'Hashtag search: ' + fetchJob.hashtag
+        addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
+        setCurrentFetchJob({ details: fetchJob })
         navigation.goBack()
         navigation.navigate('AllFetchJobs')
     }
 
     componentWillUnmount() {
-        this.setState({ fetch_job: {} })
+        this.setState({ fetchJob: {} })
     }
 
     render() {
-        const { fetch_job } = this.state
+        const { fetchJob } = this.state
 
         return (
             <View>
@@ -70,7 +70,7 @@ class AddFetchJob extends React.Component {
                     gradient={true}
                 />
                 <View style={base.container}>
-                    <FetchJobForm fetch_job={fetch_job} handleChange={this.handleChange} />
+                    <FetchJobForm fetchJob={fetchJob} handleChange={this.handleChange} />
                     <View><Text style={base.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
