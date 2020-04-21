@@ -24,15 +24,9 @@ import { SaveButton } from '../../components/buttons/SaveButton'
 class FetchJobView extends React.Component {
 
     state = {
-        fetch_job_value: {
-            details: {
-                id: '',
-                title: '',
-                hashtag: '',
-                criteria: { follower_min: 0, follower_max: 0 },
-                status: ''
-            }
-        },
+        currentJob: {
+            details: { criteria: { followerMin: 0, followerMax: 0 } }
+        }
     }
 
     static navigationOptions = {
@@ -42,11 +36,15 @@ class FetchJobView extends React.Component {
     componentDidMount() {
         const { fetch_job, getAllInfluencers, running_fetch } = this.props
 
+        let job
+
         if (fetch_job.current_fetch_job.details.id == running_fetch.details.id) {
-            this.setState({ fetch_job_value: { ...running_fetch } })
+            job = { ...running_fetch }
         } else {
-            this.setState({ fetch_job_value: { ...fetch_job.current_fetch_job } })
+            job = { ...fetch_job.current_fetch_job }
         }
+
+        this.setState({ currentJob: { ...job } })
 
         if (fetch_job.current_fetch_job.details.status == COMPLETED && fetch_job.current_fetch_job.influencers.success.length > 0) {
             getAllInfluencers(fetch_job.current_fetch_job)
@@ -87,31 +85,29 @@ class FetchJobView extends React.Component {
         navigation.goBack()
     }
 
-    handleChange = updated_fetch_job => {
-        const { fetch_job_value } = this.state
+    handleChange = updatedFetchJob => {
+        const { currentJob } = this.state
         this.setState({
-            fetch_job_value: {
-                ...fetch_job_value,
-                details: {
-                    ...fetch_job_value.details,
-                    ...updated_fetch_job
-                }
+            currentJob: {
+                ...currentJob,
+                details: { ...updatedFetchJob }
             }
         })
     }
 
 
     handleSubmit = () => {
-        const { fetch_job_value } = this.state
+        const { currentJob } = this.state
         const { updateStateFetchJob, navigation } = this.props
-        updateStateFetchJob(fetch_job_value)
-        updateFetchJob(fetch_job_value)
+        updateStateFetchJob(currentJob)
+        updateFetchJob(currentJob)
         navigation.goBack()
     }
 
     render() {
-        const { fetch_job_value } = this.state
+        const { currentJob } = this.state
         const { influencer, navigation, running_fetch } = this.props
+
         const progress_percent = running_fetch.influencers.success.length /
             Number(running_fetch.details.no_profiles) * 100 || 0
         return (
@@ -122,12 +118,12 @@ class FetchJobView extends React.Component {
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <View style={base.container}>
-                    <FetchJobForm goBack={navigation.goBack} fetch_job={{ ...fetch_job_value.details }}
+                    <FetchJobForm goBack={navigation.goBack} fetchJob={currentJob.details}
                         handleChange={this.handleChange} />
                     <View style={fetchJobStyle.middle}>
                         <Text style={base.title}>Status</Text>
                         <View style={fetchJobStyle.statusView}>
-                            {fetch_job_value.details !== null && fetch_job_value.details.status == IN_PROGRESS &&
+                            {currentJob.details.status !== null && currentJob.details.status == IN_PROGRESS &&
                                 <View style={fetchJobStyle.progress}>
                                     <View style={fetchJobStyle.progressView}>
                                         <Gradient style={{ borderRadius: 10 }}>
@@ -140,11 +136,11 @@ class FetchJobView extends React.Component {
                                         </View>
                                     </View>
                                 </View>}
-                            {fetch_job_value.details.status !== IN_PROGRESS &&
-                                <Text style={base.title}>{fetch_job_value.details.status}</Text>}
+                            {currentJob.details.status !== IN_PROGRESS &&
+                                <Text style={base.title}>{currentJob.details.status}</Text>}
                         </View>
                     </View>
-                    {fetch_job_value.details.status == COMPLETED &&
+                    {currentJob.details.status == COMPLETED &&
                         <View style={base.itemViewListContainer}>
                             <View style={base.itemViewListNav}>
                                 <Text style={base.title}>Influencers</Text>
@@ -160,7 +156,7 @@ class FetchJobView extends React.Component {
                                     <Text style={base.text}>{influencer.error.message}</Text>
                                 </View>}
                         </View>}
-                    {fetch_job_value.details.status == PENDING &&
+                    {currentJob.details.status == PENDING &&
                         < View style={base.centerItems}>
                             <TextButton title="Start" containerStyle={fetchJobStyle.startBtn}
                                 buttonText={base.defaultTxt} onPress={() => this.startFetchJob()} />

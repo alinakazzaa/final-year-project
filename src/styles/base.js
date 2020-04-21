@@ -126,7 +126,7 @@ export const base = StyleSheet.create(
         },
         searchView: {
             flexDirection: 'row',
-            marginTop: spacing.MEDIUM
+            alignItems: 'center'
         },
         searchTxt: {
             marginTop: spacing.MEDIUM,
@@ -137,8 +137,7 @@ export const base = StyleSheet.create(
             width: dimensions.fullWidth * 0.60,
             borderColor: colors.TERTIARY,
             borderBottomWidth: 1,
-            height: spacing.LARGE * 1.5,
-            marginBottom: spacing.MEDIUM
+            height: spacing.LARGE * 1.5
         },
         switchView: {
             flexDirection: 'row',

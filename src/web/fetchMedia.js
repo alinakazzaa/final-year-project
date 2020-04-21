@@ -99,7 +99,7 @@ export const extractTags = edges => {
 
 export const likesMin = active => {
 
-    let likes_min = (Number(active.follower_min) * .02)
+    let likesMin = (Number(active.followerMin) * .02)
 
-    return likes_min
+    return likesMin
 }

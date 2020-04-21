@@ -85,7 +85,7 @@ export const getMediaCount = id => {
 export const checkCriteria = (criteria, followers) => {
     let isValid = false
 
-    if (followers >= criteria.follower_min && followers <= criteria.follower_max)
+    if (followers >= criteria.followerMin && followers <= criteria.followerMax)
         isValid = true
 
     return isValid

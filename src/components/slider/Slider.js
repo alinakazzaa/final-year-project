@@ -8,7 +8,7 @@ import { sliderStyle } from './styles/slider.styles'
 export default class Slider extends React.Component {
 
     render() {
-        const { min, max, initial_min, initial_max, step, onChange } = this.props
+        const { min, max, step, onChange } = this.props
         return (<RangeSlider
             style={sliderStyle.bar}
             lineWidth={23}
@@ -19,8 +19,6 @@ export default class Slider extends React.Component {
             thumbBorderWidth={1}
             min={min}
             max={max}
-            initialLowValue={initial_min}
-            initialHighValue={initial_max}
             step={step}
             onValueChanged={(low, high) => {
                 onChange(low, high)
