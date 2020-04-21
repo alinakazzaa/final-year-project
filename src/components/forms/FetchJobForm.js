@@ -10,7 +10,7 @@ import { colors, base } from '../../styles/base'
 import Slider from '../slider/Slider'
 import { criteria } from '../../constants/criteria'
 import { COMPLETED } from '../../constants'
-import { form } from '../../styles/form'
+import { formStyle, form } from '../../styles/form'
 
 const Form = t.form.Form
 
@@ -29,7 +29,7 @@ const FetchJob = t.struct({
 })
 
 const options = {
-    stylesheet: { ...Form.stylesheet, ...form },
+    stylesheet: { ...Form.stylesheet, ...formStyle },
     auto: 'none',
     fields: {
         hashtag: {
@@ -89,9 +89,9 @@ export default class FetchJobForm extends React.Component {
                 </View>
                 <View style={form.detailsBox}>
                     <View style={form.labelsCol}>
-                        <Text style={base.label}>Hashtag</Text>
-                        <Text style={base.label}>Date created</Text>
-                        <Text style={base.label}>No. of Profiles</Text>
+                        <Text style={form.inputViewLabel}>Hashtag</Text>
+                        <Text style={form.inputViewLabel}>Date created</Text>
+                        <Text style={form.inputViewLabel}>No. of Profiles</Text>
                     </View>
                     <View style={form.inputBox}>
                         <Form

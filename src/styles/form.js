@@ -16,7 +16,7 @@ export const inputLabel = {
     fontSize: fonts.SMALL,
     textTransform: 'uppercase',
     fontWeight: fonts.WEIGHT_LEIGHT,
-    fontFamily: fonts.PRIMARY,
+    fontFamily: fonts.PRIMARY
 }
 
 export const input = {

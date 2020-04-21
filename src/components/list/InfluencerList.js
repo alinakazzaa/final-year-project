@@ -5,7 +5,7 @@ import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { formatNumber } from '../../actions/base'
 import { influencer_style } from '../../screens/Influencer/styles/influencer.styles'
-import { colors } from '../../styles/base'
+import { colors, base } from '../../styles/base'
 
 export const InfluencerList = ({ influencers, goToInfluencer, createCollab, removeInfluencer, saveInfluencer }) => {
 
@@ -42,9 +42,9 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                     <View style={influencer_style.middleRight}>
                         <View style={influencer_style.info}>
                             <Text style={base.title}>Followers</Text>
-                            <Text style={influencer_style.infoText}>{formatNumber(influ.followers)}</Text>
+                            <Text style={base.text}>{formatNumber(influ.followers)}</Text>
                             <Text style={base.title}>No of media</Text>
-                            <Text style={influencer_style.infoText}>{formatNumber(influ.media_count)}</Text>
+                            <Text style={base.text}>{formatNumber(influ.media_count)}</Text>
                         </View>
                     </View>
                 </View>

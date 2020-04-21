@@ -139,10 +139,7 @@ class FetchJobView extends React.Component {
                                         </Gradient>
                                         <View style={fetchJobStyle.percentView}><Text style={fetchJobStyle.percent}>{progress_percent.toFixed()} %</Text></View>
                                     </View>
-
-
-                                </View>
-                            }
+                                </View>}
                             {fetch_job_value.details.status !== IN_PROGRESS && <Text style={fetchJobStyle.statusData}>{fetch_job_value.details.status}</Text>}
                         </View>
                     </View>

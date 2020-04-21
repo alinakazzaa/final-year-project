@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native'
 import { StyleSheet } from 'react-native';
-import { inputLabel } from './form';
+// import { inputLabel } from './form'
 
 export const dimensions = {
     fullHeight: Dimensions.get('window').height,
@@ -23,19 +23,19 @@ export const colors = {
 export const spacing = {
     SMALL: 5,
     MEDIUM: 10,
-    LARGE: 20,
+    LARGE: 20
 }
 
 export const width = {
     SMALL: 90,
     MEDIUM: 160,
-    LARGE: 200,
+    LARGE: 200
 }
 
 export const height = {
     SMALL: 30,
     MEDIUM: 40,
-    LARGE: 60,
+    LARGE: 60
 }
 
 export const fonts = {
@@ -59,10 +59,20 @@ export const container = {
 export const formContainer = {
     margin: '3%',
     marginRight: '5%',
-    marginLeft: '5%',
-    padding: 30,
+    marginLeft: '3%',
+    padding: spacing.LARGE,
     borderRadius: 5,
     width: dimensions.fullWidth * .85
+}
+
+export const addContainer = {
+    ...formContainer,
+    borderRadius: 0,
+    marginTop: spacing.MEDIUM,
+    // paddingLeft: 0,
+    // width: dimensions.fullWidth * .9,
+    // margin: 0,
+    // padding: 0
 }
 
 export const infoContainer = {
@@ -85,7 +95,7 @@ export const base = StyleSheet.create(
             borderColor: colors.PRIMARY
         },
         title: {
-            ...inputLabel,
+            // ...inputLabel,
             fontWeight: fonts.WEIGHT_HEAVY,
             // fontSize: fonts.SMALL,
             // fontFamily: fonts.PRIMARY,
@@ -111,7 +121,7 @@ export const base = StyleSheet.create(
             fontWeight: fonts.WEIGHT_LIGHT
         },
         noneMessage: {
-            ...inputLabel,
+            // ...inputLabel,
             padding: spacing.LARGE * 2,
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,

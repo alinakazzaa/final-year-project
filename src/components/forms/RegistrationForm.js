@@ -5,13 +5,13 @@ import { TextButton } from '../../components/buttons/TextButton'
 import { authStyle } from '../../screens/Auth/styles/auth.styles'
 // @ts-ignore
 import t from 'tcomb-form-native'
-import { form } from '../../styles/form'
+import { formStyle } from '../../styles/form'
 import { base } from '../../styles/base'
 
 const Form = t.form.Form;
 
 const formStyles = {
-    ...Form.stylesheet, ...form
+    ...Form.stylesheet, ...formStyle
 }
 
 const User = t.struct({

@@ -5,9 +5,9 @@ import ProjectForm from '../../components/forms/ProjectForm'
 import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
 import { BackButton } from '../../components/buttons/BackButton'
-import { project_style } from './styles/project.styles'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { SaveButton } from '../../components/buttons/SaveButton'
+import { base } from '../../styles/base'
 
 class AddProject extends React.Component {
 
@@ -47,9 +47,7 @@ class AddProject extends React.Component {
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <View style={project_style.addContainer}>
-                    <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
-                </View>
+                <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
             </View>
         )
     }

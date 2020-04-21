@@ -30,7 +30,7 @@ class AddCollab extends React.Component {
         const { influencer } = navigation.state.params
 
         return (
-            <View style={collabStyle.viewContainer}>
+            <View>
                 <AppHeader
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}

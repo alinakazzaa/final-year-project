@@ -18,21 +18,6 @@ export const project_style = StyleSheet.create(
             padding: spacing.SMALL,
             paddingLeft: 0
         },
-        addContainer: {
-            ...formContainer,
-            borderRadius: 0,
-            marginTop: spacing.MEDIUM,
-            paddingLeft: 0,
-            width: dimensions.fullWidth * .9,
-            margin: 0,
-            padding: 0
-        },
-        detailsBox: {
-            flexDirection: 'row',
-            paddingTop: spacing.MEDIUM,
-            borderTopWidth: 1,
-            borderColor: colors.BORDER
-        },
         inputBox: {
             marginRight: spacing.LARGE
         },

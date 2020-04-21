@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
 import { project_style } from '../../screens/Project/styles/project.styles'
 import { Icon } from 'react-native-elements'
-import { colors } from '../../styles/base'
+import { colors, base } from '../../styles/base'
 
 
 export const ProjectList = ({ projects, deleteProject, goToProject }) => {

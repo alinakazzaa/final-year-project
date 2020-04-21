@@ -8,6 +8,7 @@ import { fetchJobStyle } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
+import { base } from '../../styles/base'
 
 class AddFetchJob extends React.Component {
 
@@ -68,7 +69,7 @@ class AddFetchJob extends React.Component {
                     right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />
-                <View style={fetchJobStyle.addContainer}>
+                <View style={base.formContainer}>
                     <View style={fetchJobStyle.info}>
                         <Text style={base.text}>Search users by hashtag</Text>
                     </View>
