@@ -81,6 +81,7 @@ export default class FetchJobForm extends React.Component {
     render() {
         const { fetch_job, handleChange } = this.props
         const { index, min, max } = this.state
+        console.log(min, max)
 
         return (
             <View style={base.formContainer}>

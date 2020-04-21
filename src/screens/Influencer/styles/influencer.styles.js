@@ -63,7 +63,6 @@ export const influencer_style = StyleSheet.create(
             borderTopColor: colors.BORDER
         },
         linkText: {
-            ...inputLabel,
             fontSize: fonts.LARGE,
             paddingTop: spacing.SMALL
         },
@@ -72,7 +71,6 @@ export const influencer_style = StyleSheet.create(
             padding: spacing.LARGE
         },
         infoText: {
-            ...inputLabel,
             fontWeight: fonts.WEIGHT_LIGHT,
             fontSize: fonts.LARGE
         },

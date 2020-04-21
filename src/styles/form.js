@@ -1,4 +1,4 @@
-import { spacing, colors, fonts, width, height, dimensions } from "./base"
+import { spacing, colors, fonts, height, dimensions } from "./base"
 import { StyleSheet } from 'react-native'
 
 
@@ -7,48 +7,28 @@ export const boolSelect = {
     padding: spacing.MEDIUM
 }
 
-export const inputLabel = {
-    color: colors.TERTIARY,
-    marginTop: spacing.SMALL,
-    marginBottom: spacing.MEDIUM,
-    fontSize: fonts.SMALL,
-    textTransform: 'uppercase',
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    fontFamily: fonts.PRIMARY
-}
-
-export const input = {
-    color: colors.TERTIARY,
-    fontSize: fonts.MEDIUM,
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    height: height.MEDIUM,
-    width: width.LARGE,
-    borderColor: colors.BORDER,
-    borderBottomWidth: 1
-}
-
 export const inputView = {
     color: colors.TERTIARY,
     fontWeight: fonts.WEIGHT_LEIGHT,
     width: dimensions.fullWidth * 0.55,
     minHeight: height.MEDIUM,
     borderColor: colors.BORDER,
-    borderWidth: 0,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.7,
     fontSize: fonts.MEDIUM
 }
 
 export const formStyle = {
     textbox: {
         normal: {
-            ...inputView
+            ...inputView,
+            paddingBottom: 5
         },
         error: {
 
         },
         notEditable: {
             ...inputView,
-            opacity: 0.5
+            opacity: 0.6
         }
     },
     select: {
@@ -76,7 +56,7 @@ export const form = StyleSheet.create(
         detailsBox: {
             flexDirection: 'row',
             paddingTop: spacing.MEDIUM,
-            paddingBottom: spacing.MEDIUM,
+            paddingBottom: spacing.LARGE,
             borderTopWidth: 1,
             borderColor: colors.BORDER,
         },
@@ -87,15 +67,12 @@ export const form = StyleSheet.create(
             marginRight: spacing.LARGE
         },
         inputViewLabel: {
+            minHeight: height.MEDIUM * 1.3,
             textTransform: 'uppercase',
+            paddingTop: spacing.SMALL,
             color: colors.TERTIARY,
             fontWeight: fonts.WEIGHT_LEIGHT,
-            marginBottom: spacing.MEDIUM,
-            margin: 0,
             marginRight: spacing.LARGE,
-            minWidth: width.MEDIUM * 0.8,
-            height: height.MEDIUM,
-            fontSize: fonts.SMALL,
-            paddingTop: spacing.MEDIUM * 0.8
+            fontSize: fonts.SMALL
         }
     });

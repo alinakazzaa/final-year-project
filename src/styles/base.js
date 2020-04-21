@@ -142,9 +142,9 @@ export const base = StyleSheet.create(
         },
         switchView: {
             flexDirection: 'row',
-            paddingTop: spacing.MEDIUM,
             borderBottomWidth: 1,
             borderColor: colors.BORDER,
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            width: dimensions.fullWidth * 0.87
         }
     })
