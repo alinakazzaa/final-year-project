@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { colors, fonts, spacing, base } from '../../../styles/base'
+import { colors, fonts, spacing, base, dimensions } from '../../../styles/base'
 import { button } from '../../../components/buttons/styles/button.styles'
 
 export const fetchJobStyle = StyleSheet.create(
@@ -7,17 +7,17 @@ export const fetchJobStyle = StyleSheet.create(
         rangeBox: {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            margin: spacing.LARGE,
-            marginTop: 0
+            // width: dimensions.fullWidth * 0.85
         },
         rangeSlider: {
-            marginRight: spacing.LARGE,
-            marginLeft: spacing.LARGE,
+            marginRight: spacing.SMALL,
+            marginLeft: spacing.SMALL
         },
         middle: {
             display: 'flex',
             justifyContent: 'space-between',
-            paddingBottom: spacing.MEDIUM
+            paddingBottom: spacing.MEDIUM,
+            borderBottomWidth: 0
         },
         progressView: {
             marginBottom: spacing.MEDIUM,
@@ -50,15 +50,13 @@ export const fetchJobStyle = StyleSheet.create(
             paddingBottom: spacing.MEDIUM
         },
         itemRowRange: {
-            display: 'flex',
             flexDirection: 'column',
-            paddingTop: spacing.LARGE,
+            marginTop: spacing.MEDIUM,
             paddingBottom: spacing.MEDIUM,
-            justifyContent: 'space-evenly',
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
+            borderTopWidth: 0.7,
+            borderBottomWidth: 0,
             borderColor: colors.BORDER,
-            marginBottom: spacing.MEDIUM,
+            marginBottom: spacing.MEDIUM
 
         },
         listItem: {
@@ -80,7 +78,7 @@ export const fetchJobStyle = StyleSheet.create(
         startBtn: {
             ...button.borderBtn,
             backgroundColor: colors.PRIMARY,
-            margin: spacing.MEDIUM,
+            marginTop: spacing.LARGE * 1.5
         },
         progressBar: {
             borderRadius: 10,

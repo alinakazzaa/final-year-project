@@ -107,12 +107,13 @@ export default class FetchJobForm extends React.Component {
                 {fetch_job.status != COMPLETED && <View style={fetchJobStyle.middle}>
                     <Text style={base.title}>Follower range</Text>
                     <View style={fetchJobStyle.itemRowRange}>
-                        <TabView index={index} color={colors.SECONDARY} size={dimensions.fullWidth * .25} titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
-                        <View style={fetchJobStyle.rangeBox}>
-                            <Text style={form.inputViewLabel}>{formatNumber(fetch_job.criteria.follower_min)}</Text>
-                            <Text style={form.inputViewLabel}>{formatNumber(fetch_job.criteria.follower_max)}</Text>
-                        </View>
+                        <TabView index={index} color={colors.SECONDARY} size={dimensions.fullWidth * .25}
+                            titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
                         <View style={fetchJobStyle.rangeSlider}>
+                            <View style={fetchJobStyle.rangeBox}>
+                                <Text style={base.title}>{formatNumber(fetch_job.criteria.follower_min)}</Text>
+                                <Text style={base.title}>{formatNumber(fetch_job.criteria.follower_max)}</Text>
+                            </View>
                             {index == 0 && <Slider
                                 min={min}
                                 max={max}

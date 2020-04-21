@@ -9,26 +9,25 @@ export default class Slider extends React.Component {
 
     render() {
         const { min, max, initial_min, initial_max, step, onChange } = this.props
-        return (
-            <View style={sliderStyle.container}>
-                <RangeSlider
-                    style={sliderStyle.bar}
-                    lineWidth={20}
-                    labelStyle="none"
-                    thumbRadius={13}
-                    thumbBorderWidth={1}
-                    min={min}
-                    max={max}
-                    initialLowValue={initial_min}
-                    initialHighValue={initial_max}
-                    step={step}
-                    onValueChanged={(low, high) => {
-                        onChange(low, high)
-                        this.setState({ min: low, max: high })
-                    }}
-                    selectionColor={colors.PRIMARY}
-                />
-            </View>
+        return (<RangeSlider
+            style={sliderStyle.bar}
+            lineWidth={23}
+            thumbBorderColor={colors.SECONDARY}
+            thumbColor={colors.TERTIARY}
+            labelStyle="none"
+            thumbRadius={13}
+            thumbBorderWidth={1}
+            min={min}
+            max={max}
+            initialLowValue={initial_min}
+            initialHighValue={initial_max}
+            step={step}
+            onValueChanged={(low, high) => {
+                onChange(low, high)
+                this.setState({ min: low, max: high })
+            }}
+            selectionColor={colors.SECONDARY}
+        />
         )
     }
 }
