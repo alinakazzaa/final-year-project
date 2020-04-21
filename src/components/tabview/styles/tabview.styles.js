@@ -4,8 +4,8 @@ import { colors, fonts, spacing } from '../../../styles/base';
 export const container = {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: spacing.MEDIUM,
-    // margin: spacing.MEDIUM
+    marginBottom: spacing.MEDIUM,
+    marginTop: spacing.MEDIUM
 }
 
 export const tab = {
@@ -21,8 +21,10 @@ export const tab = {
 export const tabStyle = (color, size) => StyleSheet.create(
     {
         view: {
-            ...container,
-            justifyContent: 'space-between'
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: spacing.LARGE,
+            marginBottom: spacing.LARGE
         },
         tab: {
             ...tab
