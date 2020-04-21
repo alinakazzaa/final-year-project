@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
-import { setCurrentInfluencer } from '../../actions/influencer'
+import { setCurrentInfluencer, clearInfluencerState } from '../../actions/influencer'
 import { connect } from 'react-redux'
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView'
 import { getAllInfluencers } from '../../actions/influencer'
@@ -113,10 +113,15 @@ class FetchJobView extends React.Component {
         navigation.navigate('ViewInfluencer')
     }
 
+    // componentWillUnmount() {
+    //     const { clearInfluencerState } = this.props
+    //     clearInfluencerState()
+    // }
+
     render() {
         const { currentJob, pending } = this.state
         const { influencer, navigation, running_fetch } = this.props
-
+        const criteria = { ...currentJob.details.criteria }
         const progress_percent = running_fetch.influencers.success.length /
             Number(running_fetch.details.no_profiles) * 100 || 0
         return (
@@ -129,6 +134,14 @@ class FetchJobView extends React.Component {
                 <View style={base.container}>
                     {!pending && <FetchJobForm goBack={navigation.goBack} fetchJob={currentJob.details}
                         handleChange={this.handleChange} />}
+                    {currentJob.details.status !== PENDING && <View style={fetchJobStyle.followerBox}>
+                        <Text style={base.title}>Followe Range</Text>
+                        <View style={fetchJobStyle.followerView}>
+                            <Text style={base.text}>
+                                {`${formatNumber(criteria.followerMin)}  -  ${formatNumber(criteria.followerMax)}`}
+                            </Text>
+                        </View>
+                    </View>}
                     <View style={fetchJobStyle.statusBox}>
                         <Text style={base.title}>Status</Text>
                         <View style={fetchJobStyle.statusView}>
@@ -149,13 +162,6 @@ class FetchJobView extends React.Component {
                                 <Text style={base.text}>{currentJob.details.status}</Text>}
                         </View>
                     </View>
-                    {currentJob.details.status == COMPLETED && <View style={fetchJobStyle.followerBox}>
-                        <Text style={base.title}>Followe Range</Text>
-                        <View style={fetchJobStyle.followerView}>
-                            <Text style={base.text}>
-                                {`${formatNumber(currentJob.details.criteria.followerMin)}  -  ${formatNumber(currentJob.details.criteria.followerMax)}`}</Text>
-                        </View>
-                    </View>}
                     {currentJob.details.status == COMPLETED &&
                         <View style={base.itemViewListContainer}>
                             <View style={base.itemViewListNav}>
@@ -198,7 +204,8 @@ const mapDispatchToProps = {
     clearRunningFetchJob,
     fetchPending,
     fetchResponse,
-    updateStateFetchJob
+    updateStateFetchJob,
+    clearInfluencerState
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FetchJobView)

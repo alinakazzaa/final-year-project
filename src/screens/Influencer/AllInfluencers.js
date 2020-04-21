@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 import { InfluencerList } from '../../components/list/InfluencerList'
 import {
     getAllInfluencers, setCurrentInfluencer, filterInfluencers,
-    updateInfluencer, removeInfluencer
+    updateInfluencer, removeInfluencer, removeInfluencerFromFetchJob
 } from '../../actions/influencer'
 import { connect } from 'react-redux'
 import { AppHeader } from '../../layouts/Header'
@@ -56,7 +56,8 @@ class AllInfluencers extends React.Component {
 
     deleteInflu = id => {
         const { fetch_job, removeInfluencer } = this.props
-        removeInfluencer(fetch_job.current_fetch_job, id)
+        removeInfluencer(id)
+        removeInfluencerFromFetchJob(fetch_job, id)
     }
 
     render() {
@@ -86,7 +87,7 @@ class AllInfluencers extends React.Component {
                                 size='46%'
                                 index={index} />
 
-                            {index == 0 ?
+                            {influencer.all_influencers.length > 0 && index == 0 ?
                                 <View>
 
                                     <InfluencerList

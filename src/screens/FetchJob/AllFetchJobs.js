@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs, filterFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
+import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs, filterFetchJobs, clearFetchJobState, removeFetchJobInfluencers } from '../../actions/fetchJob'
 import { connect } from 'react-redux'
 import { AppHeader } from '../../layouts/Header'
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
@@ -41,6 +41,7 @@ class AllFetchJobs extends React.Component {
     deleteFetchJob = fj => {
         const { removeFetchJob } = this.props
         removeFetchJob(fj)
+        removeFetchJobInfluencers(fj)
     }
 
     searchFetchJob = text => {

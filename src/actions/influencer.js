@@ -1,6 +1,6 @@
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
-import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER, UPDATE_INFLUENCER } from '../constants'
+import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER, UPDATE_INFLUENCER, CLEAR_INFLUENCER_STATE, CLEAR_CURRENT_INFLUENCER } from '../constants'
 import { SET_INFLUENCERS_ERROR, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS } from '../constants/response/types'
 import { MSG_NO_INFLUENCERS } from '../constants/response/messages'
 
@@ -77,16 +77,19 @@ export const updateInfluencer = influencer => {
     }
 }
 
-export const removeInfluencer = (fetch_job, influencer_id) => {
+export const removeInfluencer = influencer_id => {
 
     db.ref(`/Influencers/${influencer_id}`).remove()
-    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/ ` +
-        `FetchJobs/${fetch_job.details.id}/influencers/success/influencer_id`).remove()
 
     return {
         type: REMOVE_INFLUENCER,
         id: influencer_id
     }
+}
+
+export const removeInfluencerFromFetchJob = (fetch_job, influencer_id) => {
+    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/ ` +
+        `FetchJobs/${fetch_job.details.id}/influencers/success/${influencer_id}`).remove()
 }
 
 
@@ -105,4 +108,16 @@ export const getInfluByUsername = username => {
 
 export const filterInfluencers = (influencers, status) => {
     return [...influencers.filter(influ => influ.to_do == status)]
+}
+
+export const clearCurrentInfluencer = () => {
+    return {
+        type: CLEAR_CURRENT_INFLUENCER
+    }
+}
+
+export const clearInfluencerState = () => {
+    return {
+        type: CLEAR_INFLUENCER_STATE
+    }
 }
