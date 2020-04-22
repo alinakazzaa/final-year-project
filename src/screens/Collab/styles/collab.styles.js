@@ -1,12 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, container } from '../../../styles/base'
+import { colors, spacing } from '../../../styles/base'
 
 export const collabStyle = StyleSheet.create(
     {
-        allContainer: {
-            ...container,
-            backgroundColor: 'transparent',
-        },
         viewContainer: {
             marginLeft: spacing.LARGE,
             marginRight: spacing.LARGE,

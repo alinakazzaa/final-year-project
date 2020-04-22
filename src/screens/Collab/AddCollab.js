@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { View } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
-import CollabForm from '../../components/forms/CollabForm'
+import { CollabForm } from '../../components/forms/CollabForm'
 import { connect } from 'react-redux'
 import { addCollab } from '../../actions/collab'
 import { BackButton } from '../../components/buttons/BackButton'
-import { collabStyle } from './styles/collab.styles'
 import { SaveButton } from '../../components/buttons/SaveButton'
+import { base } from '../../styles/base'
 
 
 class AddCollab extends React.Component {
@@ -15,19 +15,31 @@ class AddCollab extends React.Component {
         headerShown: false
     }
 
+    state = {
+        collab: {}
+    }
+
+    componentDidMount() {
+        const { influencer } = this.props.navigation.state.params
+        this.setState({ collab: { influencer: influencer.username } })
+    }
+
     handleSubmit = () => {
-        const { user, project, addCollab, navigation } = this.props
-        addCollab(user.current_user.id, project.current_project.id, { ...this.state.collab })
+        const { project, addCollab, navigation } = this.props
+        addCollab(project.current_project.current_user.id, project.current_project.id, { ...this.state.collab })
         navigation.goBack()
     }
 
     handleChange = collab => {
-        this.setState({ collab: collab })
+        this.setState({ collab })
+    }
+
+    toggleSwitch = value => {
+        this.setState({ collab: { ...this.state.collab, active: value } })
     }
 
     render() {
-        const { project, navigation } = this.props
-        const { influencer } = navigation.state.params
+        const { collab } = this.state
 
         return (
             <View>
@@ -36,16 +48,16 @@ class AddCollab extends React.Component {
                     right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />
-                <CollabForm influencer={influencer} current_project={project.current_project} goBack={navigation.goBack} onChange={this.handleChange} />
+                <View style={base.container}>
+                    <CollabForm collab={collab} onChange={this.handleChange} toggleSwitch={this.toggleSwitch} />
+                </View>
             </View>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    user: state.user,
-    project: state.project,
-    collab: state.collab
+    project: state.project
 })
 
 const mapDispatchToProps = {
