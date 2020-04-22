@@ -54,7 +54,7 @@ export const formContainer = {
     margin: '3%',
     marginRight: '5%',
     marginLeft: '3%',
-    padding: spacing.LARGE,
+    // padding: spacing.LARGE,
     borderRadius: 5,
     width: dimensions.fullWidth * .85
 }
@@ -139,9 +139,19 @@ export const base = StyleSheet.create(
         },
         switchView: {
             flexDirection: 'row',
-            borderBottomWidth: 1,
+            borderTopWidth: 0.7,
             borderColor: colors.BORDER,
             justifyContent: 'space-between',
-            width: dimensions.fullWidth * 0.87
+            paddingTop: spacing.MEDIUM
+        },
+        dateView: {
+            padding: 0,
+            margin: 0,
+            flexDirection: 'row',
+            borderTopWidth: 0.7,
+            borderBottomWidth: 0,
+            paddingTop: spacing.MEDIUM,
+            borderColor: colors.BORDER,
+            justifyContent: 'space-between'
         }
     })
