@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
-import ProjectForm from '../../components/forms/ProjectForm'
+import { ProjectForm } from '../../components/forms/ProjectForm'
 import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
 import { BackButton } from '../../components/buttons/BackButton'
@@ -27,15 +27,13 @@ class AddProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user, addProject } = this.props
-        const { project_value } = this.state
-        addProject(user.current_user.id, project_value)
-        this.props.navigation.navigate("AllProjects")
+        const { user, addProject, navigation } = this.props
+        addProject(user.current_user.id, this.state.project_value)
+        navigation.navigate("AllProjects")
     }
 
     toggleSwitch = value => {
-        const { project_value } = this.state
-        this.setState({ project_value: { ...project_value, active: value } })
+        this.setState({ project_value: { ...this.state.project_value, active: value } })
     }
 
     render() {
