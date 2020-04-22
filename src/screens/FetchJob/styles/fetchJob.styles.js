@@ -22,14 +22,12 @@ export const fetchJobStyle = StyleSheet.create(
         followerBox: {
             display: 'flex',
             justifyContent: 'space-between',
-            paddingBottom: spacing.MEDIUM,
             borderBottomWidth: 0
         },
         followerView: {
             flexDirection: 'row',
             justifyContent: 'space-evenly',
             borderTopWidth: 0.7,
-            borderBottomWidth: 0.7,
             borderColor: colors.BORDER,
             marginTop: spacing.MEDIUM,
             paddingTop: spacing.MEDIUM,
