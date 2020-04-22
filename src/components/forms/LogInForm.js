@@ -27,6 +27,12 @@ const options = {
         password: {
             password: true,
             error: 'Password is required',
+            config: {
+                iconType: "material-community",
+                iconName: "lock-outline",
+                password: true,
+                secureTextEntry: true
+            }
 
         },
     },
