@@ -20,6 +20,7 @@ const initialState = {
 const fetchReducer = (state = initialState, action) => {
     let running = { ...state }
     let success
+    let fail
 
     switch (action.type) {
 
@@ -125,7 +126,8 @@ const fetchReducer = (state = initialState, action) => {
             }
 
         case GET_USER_ERROR:
-            success = [...state.influencers.success]
+            fail = [...state.influencers.fail]
+            fail.splice(fail.length, 0, action.id)
 
             running = {
                 ...state,
@@ -136,8 +138,8 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type, message: action.message },
                 influencers: {
                     ...state.influencers,
-                    pending: [...state.influencers.pending.filter(id => id == action.id)],
-                    fail: [...state.influencers.fail, action.id]
+                    pending: [...state.influencers.pending.filter(id => id !== action.id)],
+                    fail
                 }
             }
 
@@ -155,9 +157,21 @@ const fetchReducer = (state = initialState, action) => {
                 ...running
             }
 
+        case COMPLETED_GET_USERS:
+
+            return {
+                ...state,
+                response: { type: action.type },
+                has_next_page: action.has_next_page,
+                end_cursor: action.end_cursor
+            }
+
+
         default:
             return state
     }
 }
+
+export const getIndex = (list, id) => list.map(item => { return item }).indexOf(id)
 
 export default fetchReducer

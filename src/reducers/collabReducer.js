@@ -1,10 +1,11 @@
-import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB } from '../constants'
+import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB, GET_INFLUENCER_BY_USERNAME_ERROR, GET_INFLUENCER_BY_USERNAME_SUCCESS } from '../constants'
 import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR, SET_COLLABS_PENDING, SET_COLLABS_SUCCESS, SET_COLLABS_ERROR } from '../constants/response/types'
 
 const initialState = {
     all_collabs: [],
     current_collab: {
-        publications: []
+        publications: [],
+        influencer: ''
     },
     pending: null,
     error: null,
@@ -57,10 +58,10 @@ const collabReducer = (state = initialState, action) => {
             }
 
         case ADD_COLLAB:
-
+            collabs.splice(collabs.length, 0, action.collab)
             return {
                 ...state,
-                all_collabs: [...collabs, action.collab]
+                all_collabs: [...collabs]
             }
 
         case UPDATE_COLLAB:
@@ -68,7 +69,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_collabs: [...collabs]
+                all_collabs: collabs
 
             }
 
