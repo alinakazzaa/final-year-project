@@ -4,11 +4,11 @@ import FetchJobForm from '../../components/forms/FetchJobForm'
 import { AppHeader } from '../../layouts/Header'
 import { connect } from 'react-redux'
 import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
-import { fetchJobStyle } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { base } from '../../styles/base'
+import { followerRanges } from '../../constants/criteria'
 
 class AddFetchJob extends React.Component {
 
@@ -17,7 +17,7 @@ class AddFetchJob extends React.Component {
             id: '',
             title: '',
             hashtag: '',
-            criteria: { followerMin: 0, followerMax: 100000 },
+            criteria: { followerMin: followerRanges.micro.min, followerMax: followerRanges.micro.max },
             status: ''
         },
     }
@@ -51,8 +51,6 @@ class AddFetchJob extends React.Component {
         fetchJob.title = 'Hashtag search: ' + fetchJob.hashtag
         addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
         setCurrentFetchJob({ details: fetchJob })
-        navigation.goBack()
-        navigation.navigate('AllFetchJobs')
     }
 
     componentWillUnmount() {
