@@ -8,17 +8,14 @@ import { formatNumber } from '../../actions/base'
 import { TabView } from '../tabview/TabView'
 import { colors, base, dimensions } from '../../styles/base'
 import Slider from '../slider/Slider'
-import { criteria } from '../../constants/criteria'
+import { followerRanges, numberOfProfiles } from '../../constants/criteria'
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
 import { formStyle, form } from '../../styles/form'
 
 const Form = t.form.Form
 
 var no_profiles = t.enums({
-    10: '0 - 20',
-    20: '20 - 40',
-    50: '40 - 60',
-    100: '60 - 100'
+    ...numberOfProfiles
 })
 
 const FetchJob = t.struct({
@@ -45,14 +42,15 @@ const options = {
 
 export default class FetchJobForm extends React.Component {
     state = {
-        index: 0
+        index: 0,
+        min: followerRanges.micro.min,
+        max: followerRanges.micro.max
     }
 
     componentDidMount() {
         const { fetchJob } = this.props
         this.setState({ min: fetchJob.criteria.followerMin, max: fetchJob.criteria.followerMax })
     }
-
     onChangeSlider = (min, max) => {
         const { handleChange, fetchJob } = this.props
         const updatedFetchJob = { ...fetchJob, criteria: { followerMin: min, followerMax: max } }
@@ -61,18 +59,22 @@ export default class FetchJobForm extends React.Component {
 
     changeTab = index => {
         let min, max
+        const { handleChange, fetchJob } = this.props
 
         if (index == 0) {
-            min = criteria.micro.min
-            max = criteria.micro.max
+            min = followerRanges.micro.min
+            max = followerRanges.micro.max
         } else if (index == 1) {
-            min = criteria.midi.min
-            max = criteria.midi.max
+            min = followerRanges.midi.min
+            max = followerRanges.midi.max
         } else if (index == 2) {
-            min = criteria.macro.min
-            max = criteria.macro.max
+            min = followerRanges.macro.min
+            max = followerRanges.macro.max
         }
 
+        const updatedFetchJob = { ...fetchJob, criteria: { followerMin: min, followerMax: max } }
+
+        handleChange(updatedFetchJob)
         this.setState({ index, min: min, max: max })
     }
 
@@ -93,7 +95,7 @@ export default class FetchJobForm extends React.Component {
                     </View>
                     <View style={form.inputBox}>
                         <Form
-                            ref={c => this._form = c}
+                            // ref={c => this._form = c}
                             type={FetchJob}
                             options={options}
                             value={fetchJob}
@@ -115,16 +117,22 @@ export default class FetchJobForm extends React.Component {
                             {index == 0 && <Slider
                                 min={min}
                                 max={max}
+                                initialMin={followerRanges.micro.min}
+                                initialMax={followerRanges.micro.max}
                                 step={100}
                                 onChange={this.onChangeSlider} />}
                             {index == 1 && <Slider
                                 min={min}
                                 max={max}
+                                initialMin={followerRanges.midi.min}
+                                initialMax={followerRanges.midi.max}
                                 step={1000}
                                 onChange={this.onChangeSlider} />}
                             {index == 2 && <Slider
                                 min={min}
                                 max={max}
+                                initialMin={followerRanges.macro.min}
+                                initialMax={followerRanges.macro.max}
                                 step={10000}
                                 onChange={this.onChangeSlider} />}
                         </View>

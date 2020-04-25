@@ -1,6 +1,6 @@
 import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from "../constants/insta_endpoints"
 import { fetchInfluencer } from "./fetchInfluencer"
-import { GET_MEDIA_PENDING, GET_MEDIA_ERROR, GET_MEDIA_SUCCESS, COMPLETED_FETCH } from "../constants/response/types"
+import { GET_MEDIA_PENDING, GET_MEDIA_ERROR, GET_MEDIA_SUCCESS, COMPLETED_FETCH, COMPLETED_GET_USERS } from "../constants/response/types"
 import { MSG_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
 
 export const fetchMedia = (fetch_job, pending, fetchResponse) => {
@@ -38,8 +38,8 @@ export const fetchMedia = (fetch_job, pending, fetchResponse) => {
                             related_tags: extractTags(related_tags.edges),
                         }
 
-                        if (ids.length > 0) {
-                            getInfluencers(ids, fetch_job, pending, fetchResponse)
+                        if (ids.length == 0) {
+                            response = { ...response, type: COMPLETED_GET_USERS }
                         }
 
                         if (!response.has_next_page) {
@@ -60,25 +60,15 @@ export const fetchMedia = (fetch_job, pending, fetchResponse) => {
         })
 }
 
-export const getInfluencers = (ids, fetch_job, pending, fetchResponse) => {
-    let i = 0
-
-    let ref = setInterval(() => {
-        fetchInfluencer(ids[i], fetch_job, pending, fetchResponse);
-        ++i
-        if (i == ids.length) clearInterval(ref);
-    }, 6000);
-
-}
-
 export const extractIds = (edges, criteria) => {
     let media_ids = []
 
     if (edges.length > 0) {
         edges.forEach(edge => {
-            if (media_ids.find(id => id == edge.node.owner.id) == null)
-                if (edge.node.edge_liked_by.count >= likesMin(criteria))
-                    media_ids.push(edge.node.owner.id)
+            if (!media_ids.find(id => id == edge.node.owner.id))
+                media_ids.push(edge.node.owner.id)
+            // if (edge.node.edge_liked_by.count >= likesMin(criteria))
+
         })
     }
 

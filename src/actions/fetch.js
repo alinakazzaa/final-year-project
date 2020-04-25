@@ -27,9 +27,10 @@ export const setRunningFetchJob = fetch_job => {
     }
 }
 
-export const clearRunningFetchJob = fetch_job => {
+export const clearRunningFetchJob = () => {
     return {
-        type: CLEAR_RUNNING_FETCH,
-        fetch_job
+        type: CLEAR_RUNNING_FETCH
     }
 }
+
+

@@ -108,8 +108,10 @@ export const updateStateFetchJob = fetch_job => {
 }
 
 export const updateFetchJob = fetch_job => {
+
     db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
-        ...fetch_job
+        ...fetch_job,
+        influencers: { ...fetch_job.influencers, fail: null }
     })
 }
 
@@ -127,7 +129,6 @@ export const removeFetchJobInfluencers = fetch_job => {
         removeInfluencer(id)
     })
 }
-
 
 
 export const filterFetchJobs = (fetch_jobs, status) => {

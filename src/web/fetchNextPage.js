@@ -1,6 +1,6 @@
 import { INSTAGRAM_GET_NEXT_PAGE_MEDIA } from "../constants/insta_endpoints"
-import { extractIds, getInfluencers } from './fetchMedia'
-import { GET_MEDIA_PENDING, GET_MEDIA_ERROR, GET_MEDIA_SUCCESS, COMPLETED_FETCH } from "../constants/response/types"
+import { extractIds } from './fetchMedia'
+import { GET_MEDIA_PENDING, GET_MEDIA_ERROR, GET_MEDIA_SUCCESS, COMPLETED_FETCH, COMPLETED_GET_USERS } from "../constants/response/types"
 import { MSG_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
 
 export const fetchNextPage = (fetch_job, pending, fetchResponse) => {
@@ -31,8 +31,8 @@ export const fetchNextPage = (fetch_job, pending, fetchResponse) => {
                             media_ids: ids
                         }
 
-                        if (ids.length > 0) {
-                            getInfluencers(ids, fetch_job, pending, fetchResponse)
+                        if (ids.length == 0) {
+                            response = { ...response, type: COMPLETED_GET_USERS }
                         }
 
                         if (!response.has_next_page) {
