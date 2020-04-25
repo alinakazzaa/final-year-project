@@ -11,7 +11,7 @@ export const inputView = {
     color: colors.TERTIARY,
     fontWeight: fonts.WEIGHT_LEIGHT,
     width: dimensions.fullWidth * .57,
-    minHeight: height.MEDIUM,
+    minHeight: height.MEDIUM * 0.7,
     borderColor: colors.BORDER,
     borderBottomWidth: 0.7,
     fontSize: fonts.MEDIUM,
@@ -43,12 +43,6 @@ export const formStyle = {
             ...boolSelect
         }
     },
-    datepicker: {
-        normal: {
-            ...inputView,
-            paddingBottom: 5
-        },
-    }
 }
 
 
@@ -64,15 +58,16 @@ export const form = StyleSheet.create(
         },
         detailsBox: {
             flexDirection: 'row',
-            padding: spacing.MEDIUM,
-            paddingTop: spacing.MEDIUM,
+            padding: spacing.LARGE,
+            paddingTop: spacing.SMALL,
             paddingBottom: spacing.LARGE,
             borderTopWidth: 1,
             borderColor: colors.BORDER,
             paddingLeft: 0
         },
         labelsCol: {
-            marginTop: spacing.SMALL
+            marginTop: spacing.LARGE,
+            paddingTop: spacing.SMALL
         },
         inputBox: {
             // marginRight: spacing.LARGE

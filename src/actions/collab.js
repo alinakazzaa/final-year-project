@@ -1,5 +1,5 @@
 import { db } from '../database/config/db';
-import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB } from '../constants';
+import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, GET_INFLUENCER_BY_USERNAME_ERROR, GET_INFLUENCER_BY_USERNAME_SUCCESS, CLEAR_COLLAB_STATE } from '../constants';
 import { DATE_TODAY } from '../constants/TodayDate'
 import { DB_USER_COLLABS_REF } from '../constants/database';
 import { SET_COLLABS_ERROR, SET_COLLABS_SUCCESS, SET_COLLABS_PENDING } from '../constants/response/types';
@@ -62,6 +62,12 @@ export const setCurrentCollab = collab => {
     }
 }
 
+export const clearCollabState = () => {
+    return {
+        type: CLEAR_COLLAB_STATE
+    }
+}
+
 export const addCollab = (user_id, project_id, collab_val) => {
     let collab = {
         ...collab_val,
@@ -100,14 +106,29 @@ export const updateCollab = (user_id, collab) => {
 }
 
 export const removeCollab = collab => {
-    db.ref(`/Users/${collab.user_id}/Collabs`).child(collab.id).remove()
+    db.ref(`/Users/${collab.details.user_id}/Collabs`).child(collab.details.id).remove()
     return {
         type: REMOVE_COLLAB,
-        collab: collab
+        collab
     }
 }
 
 export const filterCollabs = (collabs, active) => {
     return [...collabs.filter(collab => collab.details.active == active)]
+}
+
+export const fetchCollabInfluencer = (collab, pending) => {
+
+    return dispatch => {
+
+        dispatch(pending())
+        db.ref(`Influencers/${collab.details.influencer_id}`)
+            .once('value')
+            .then(snapshot => {
+                console.log(snapshot.val())
+                if (snapshot.val().id)
+                    updateCollab({ details: { ...collab.details, influencer: snapshot.val() } })
+            })
+    }
 }
 

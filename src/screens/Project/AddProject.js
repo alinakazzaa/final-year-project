@@ -27,9 +27,8 @@ class AddProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user, addProject, navigation } = this.props
+        const { user, addProject } = this.props
         addProject(user.current_user.id, this.state.project_value)
-        navigation.navigate("AllProjects")
     }
 
     toggleSwitch = value => {
@@ -38,6 +37,7 @@ class AddProject extends React.Component {
 
     render() {
         const { project_value } = this.state
+
         return (
             <View>
                 <AppHeader

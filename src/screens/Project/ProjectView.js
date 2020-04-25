@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { View, TouchableOpacity, Text, ScrollView } from 'react-native'
+import { View, TouchableOpacity, Text, ScrollView, Animated } from 'react-native'
 import { clearCurrentProject, setCurrentProject, updateProject } from '../../actions/project'
+import { getUserCollabs, setCollabsPending, fetchCollabInfluencer } from '../../actions/collab'
 import { AppHeader } from '../../layouts/Header'
 import { ProjectForm } from '../../components/forms/ProjectForm'
 import { connect } from 'react-redux'
@@ -10,7 +11,11 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { setCurrentFetchJob, getProjectFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
 import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView'
 import { SaveButton } from '../../components/buttons/SaveButton'
-import { base } from '../../styles/base'
+import { base, colors } from '../../styles/base'
+import { Icon } from 'react-native-elements'
+import { CollabListProjectView } from '../../components/list/CollabListProjectView'
+
+const AnimatedIcon = Animated.createAnimatedComponent(Icon)
 
 class ProjectView extends React.Component {
 
@@ -25,12 +30,24 @@ class ProjectView extends React.Component {
     }
 
     componentDidMount() {
-        const { user, project, getProjectFetchJobs } = this.props
+        const { user, project, getProjectFetchJobs, getUserCollabs } = this.props
 
         if (project.current_project.title) {
             getProjectFetchJobs(user.current_user.id, project.current_project.id)
+            getUserCollabs(user.current_user.id)
             this.setState({ projectValue: { ...project.current_project } })
         }
+
+    }
+
+    componentDidUpdate(prev) {
+        const { fetchCollabInfluencer, collab, setCollabsPending } = this.props
+
+        if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0)
+            collab.all_collabs.forEach(collab => {
+                fetchCollabInfluencer(collab.details.influencer, setCollabsPending)
+            })
+
 
     }
 
@@ -45,10 +62,9 @@ class ProjectView extends React.Component {
     }
 
     handleSubmit = () => {
-        const { navigation, updateProject } = this.props
+        const { updateProject } = this.props
         let { projectValue } = this.state
         updateProject(projectValue)
-        navigation.goBack()
     }
 
     toggleSwitch = value => {
@@ -56,8 +72,14 @@ class ProjectView extends React.Component {
         this.setState({ projectValue: { ...projectValue, active: value } })
     }
 
+    componentDidUnmount() {
+        const { clearCollabState, clearFetchJobState } = this.props
+        clearCollabState()
+        clearFetchJobState()
+    }
+
     render() {
-        const { fetch_job, navigation } = this.props
+        const { fetch_job, navigation, collab } = this.props
         const { projectValue } = this.state
 
         return (
@@ -76,9 +98,17 @@ class ProjectView extends React.Component {
                                 <Text style={base.title}>View All</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={base.centerItems}><Text style={base.noneMessage}>No collaborations yet</Text></View>
+                        {collab.pending && <LoadingScreen />}
+                        {collab.all_collabs.length == 0 && <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencer!</Text>
+                            <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} /></View>}
+                        {!collab.error && !collab.pending && <ScrollView
+                            contentContainerStyle={project_style.itemScroll}>
+                            {fetch_job.all_fetch_jobs.length > 0 && <View>
+                                <CollabListProjectView collabs={collab.all_collabs} goToCollab={this.goToCollab} />
+                            </View>}
+                        </ScrollView>}
                     </View>
-                    <View>
+                    <View style={base.itemViewListContainer}>
                         <View style={base.itemViewListNav}>
                             <Text style={base.title}>Searches</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AllFetchJobs')}>
@@ -86,9 +116,12 @@ class ProjectView extends React.Component {
                             </TouchableOpacity>
                         </View>
                         {fetch_job.pending && <LoadingScreen />}
-                        {fetch_job.error && <View style={base.centerItems}><Text style={base.noneMessage}>No searches</Text></View>}
+                        {fetch_job.error && <View style={base.centerItems}>
+                            <Icon name='account-search-outline' type="material-community" size={30} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} />
+                            <Text style={base.noneMessage}>Try first search</Text>
+                        </View>}
                         {!fetch_job.error && !fetch_job.pending && <ScrollView
-                            contentContainerStyle={project_style.fetchScroll}>
+                            contentContainerStyle={project_style.itemScroll}>
                             {fetch_job.all_fetch_jobs.length > 0 && <View>
                                 <FetchJobListProjectView fetch_jobs={fetch_job.all_fetch_jobs} goToFetchJob={this.goToFetchJob} />
                             </View>}
@@ -104,16 +137,19 @@ const mapStateToProps = state => ({
     user: state.user,
     project: state.project,
     fetch_job: state.fetch_job,
-    influencer: state.influencer
+    collab: state.collab
 });
 
 const mapDispatchToProps = {
+    setCollabsPending,
     setCurrentFetchJob,
     getProjectFetchJobs,
     clearCurrentProject,
     setCurrentProject,
     clearFetchJobState,
-    updateProject
+    updateProject,
+    getUserCollabs,
+    fetchCollabInfluencer
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectView)

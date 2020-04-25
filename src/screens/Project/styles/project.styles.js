@@ -4,7 +4,7 @@ import { button } from '../../../components/buttons/styles/button.styles';
 
 export const project_style = StyleSheet.create(
     {
-        fetchScroll: {
+        itemScroll: {
             padding: spacing.SMALL,
             paddingLeft: 0
         },

@@ -54,7 +54,6 @@ export const formContainer = {
     margin: '3%',
     marginRight: '5%',
     marginLeft: '3%',
-    // padding: spacing.LARGE,
     borderRadius: 5,
     width: dimensions.fullWidth * .85
 }
@@ -112,7 +111,6 @@ export const base = StyleSheet.create(
             fontWeight: fonts.WEIGHT_LEIGHT
         },
         noneMessage: {
-            padding: spacing.LARGE * 2,
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,
             alignSelf: 'center'
@@ -120,7 +118,9 @@ export const base = StyleSheet.create(
         centerItems: {
             alignItems: 'center',
             textAlign: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            alignContent: 'center'
         },
         searchView: {
             flexDirection: 'row',
@@ -139,7 +139,7 @@ export const base = StyleSheet.create(
         },
         switchView: {
             flexDirection: 'row',
-            borderTopWidth: 0.7,
+            borderBottomWidth: 0.7,
             borderColor: colors.BORDER,
             justifyContent: 'space-between',
             paddingTop: spacing.MEDIUM
