@@ -80,7 +80,7 @@ class AllCollabs extends React.Component {
                                 collabs={isSearch ? filterCollabs(searched, false) :
                                     filterCollabs(collab.all_collabs, false)} />
                         </View>}
-                    {collab.error &&
+                    {collab.length == 0 &&
                         <View style={base.centerItems}>
                             <Text style={base.noneMessage}>No collaborations yet</Text>
                             <Text style={base.noneMessage}>Run searches and find influencers to collaborate with</Text>

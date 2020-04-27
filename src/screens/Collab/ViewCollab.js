@@ -6,13 +6,13 @@ import { connect } from 'react-redux'
 import { collabStyle } from './styles/collab.styles'
 import { CollabForm } from '../../components/forms/CollabForm'
 import { TagList } from '../../components/list/TagList'
-import { getInfluByUsername } from '../../actions/influencer'
-import { fetchUserMedia } from '../../web/fetchUserMedia'
 import { fetchPending, fetchResponse } from '../../actions/fetch'
 import { PublicationList } from '../../components/list/PublicationList'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { base } from '../../styles/base'
+import { fetchUserMedia } from '../../web/fetchUserMedia'
+import { fetchCollabInfluencer, setCollabsPending, updateCollab } from '../../actions/collab'
 
 
 class ViewCollab extends React.Component {
@@ -22,16 +22,19 @@ class ViewCollab extends React.Component {
     }
 
     state = {
-        tags: [{ name: 'berghain', editable: false }, { name: 'mitte', editable: false }]
+        tags: [{ name: 'berghain', editable: false }, { name: 'mitte', editable: false }],
+        collabValue: { active: false }
     }
 
     componentDidMount() {
-        const { fetchPending, fetchResponse } = this.props
-        let influ = getInfluByUsername('juanchoiregui')
+        const { collab } = this.props
+        this.setState({ collabValue: { ...collab.current_collab.details, influencer: collab.current_collab.details.influencer } })
+        fetchUserMedia(collab.current_collab.details.influencer, ['berghain', 'mitte'], fetchPending, fetchResponse)
+    }
 
-        // if (influ.id) {
-        //     fetchUserMedia(influ.id, ['berghain', 'mitte'], fetchPending, fetchResponse)
-        // }
+    componentDidUpdate(prev) {
+        const { collab, fetchPending, fetchResponse } = this.props
+
     }
 
     goToPublication = pub => {
@@ -39,11 +42,12 @@ class ViewCollab extends React.Component {
     }
 
     handleChange = collab => {
-        // let updatedProject = {
-        //     ...this.state.project_value,
-        //     ...project
-        // }
-        // this.setState({ project: updatedProject })
+        this.setState({ collabValue: collab })
+    }
+
+    toggleSwitch = value => {
+        const { collabValue } = this.state
+        this.setState({ collabValue: { ...collabValue, active: value } })
     }
 
     editTag = (tag, index) => {
@@ -54,9 +58,9 @@ class ViewCollab extends React.Component {
     }
 
     handleSubmit = () => {
-        // const { user, navigation, updateProject } = this.props
-        // let { project_value } = this.state
-        // updateProject(user.id, project_value.id, project_value)
+        const { collab, updateCollab } = this.props
+        const { collabValue } = this.state
+        updateCollab({ details: { ...collab.current_collab.details, ...collabValue } })
         // navigation.goBack()
     }
 
@@ -65,10 +69,8 @@ class ViewCollab extends React.Component {
     }
 
 
-
-
     render() {
-        const { tags } = this.state
+        const { tags, collabValue } = this.state
         const { collab, navigation } = this.props
 
         return (
@@ -79,13 +81,14 @@ class ViewCollab extends React.Component {
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <View style={collabStyle.viewContainer}>
-                    <CollabForm onChange={this.handleChange} collab={collab.current_collab} />
+                    <CollabForm toggleSwitch={this.toggleSwitch} onChange={this.handleChange}
+                        collab={collabValue} />
                     <View style={collabStyle.tagsBox}>
                         <Text style={base.title}>Hashtags</Text>
                         <TagList tags={tags} onPress={this.editTag} />
                     </View>
                     {collab.pending && <LoadingScreen />}
-                    <View style={collabStyle.header}>
+                    <View style={base.title}>
                         <Text style={base.title}>Publications</Text>
                     </View>
                     {collab.current_collab.details.active ?
@@ -105,7 +108,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     fetchPending,
-    fetchResponse
+    fetchResponse,
+    fetchCollabInfluencer,
+    setCollabsPending,
+    updateCollab
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCollab)

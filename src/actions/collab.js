@@ -2,7 +2,7 @@ import { db } from '../database/config/db';
 import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, GET_INFLUENCER_BY_USERNAME_ERROR, GET_INFLUENCER_BY_USERNAME_SUCCESS, CLEAR_COLLAB_STATE } from '../constants';
 import { DATE_TODAY } from '../constants/TodayDate'
 import { DB_USER_COLLABS_REF } from '../constants/database';
-import { SET_COLLABS_ERROR, SET_COLLABS_SUCCESS, SET_COLLABS_PENDING } from '../constants/response/types';
+import { SET_COLLABS_ERROR, SET_COLLABS_SUCCESS, SET_COLLABS_PENDING, GET_COLLAB_INFLUENCER_SUCCESS, GET_COLLAB_INFLUENCER_ERROR } from '../constants/response/types';
 import { MSG_NO_COLLABS } from '../constants/response/messages';
 
 export const getUserCollabs = user_id => {
@@ -94,8 +94,9 @@ export const addCollab = (user_id, project_id, collab_val) => {
     }
 }
 
-export const updateCollab = (user_id, collab) => {
-    db.ref(`/Users/${user_id}/Collabs/${collab.id}/details`).update({
+export const updateCollab = collab => {
+    console.log(collab)
+    db.ref(`/Users/${collab.details.user_id}/Collabs/${collab.details.id}`).update({
         ...collab
     })
 
@@ -118,16 +119,18 @@ export const filterCollabs = (collabs, active) => {
 }
 
 export const fetchCollabInfluencer = (collab, pending) => {
-
     return dispatch => {
-
         dispatch(pending())
-        db.ref(`Influencers/${collab.details.influencer_id}`)
+        db.ref(`Influencers/${collab.details.influencer}`)
             .once('value')
             .then(snapshot => {
-                console.log(snapshot.val())
-                if (snapshot.val().id)
-                    updateCollab({ details: { ...collab.details, influencer: snapshot.val() } })
+                if (snapshot.val().id) {
+                    dispatch(updateCollab({ details: { ...collab.details, influencer: snapshot.val() } }))
+                    dispatch({ type: GET_COLLAB_INFLUENCER_SUCCESS })
+                } else {
+                    dispatch({ type: GET_COLLAB_INFLUENCER_ERROR })
+                }
+
             })
     }
 }
