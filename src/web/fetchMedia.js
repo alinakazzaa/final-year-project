@@ -65,10 +65,9 @@ export const extractIds = (edges, criteria) => {
 
     if (edges.length > 0) {
         edges.forEach(edge => {
-            if (!media_ids.find(id => id == edge.node.owner.id))
+            if (!media_ids.find(id => id == edge.node.owner.id) &&
+                edge.node.edge_liked_by.count >= likesMin(criteria))
                 media_ids.push(edge.node.owner.id)
-            // if (edge.node.edge_liked_by.count >= likesMin(criteria))
-
         })
     }
 

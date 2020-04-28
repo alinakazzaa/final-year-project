@@ -19,9 +19,6 @@ const options = {
     stylesheet: { ...Form.stylesheet, ...formStyle },
     auto: 'none',
     fields: {
-        title: {
-            error: 'Project requires a title!'
-        },
         date_created: {
             editable: false
         },
@@ -47,7 +44,6 @@ export const ProjectForm = ({ project_value, handleChange, toggleSwitch }) => {
                 </View>
                 <View style={form.inputBox}>
                     <Form
-                        ref={c => this._form = c}
                         type={Project}
                         options={options}
                         value={project_value}

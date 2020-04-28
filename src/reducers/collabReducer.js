@@ -1,11 +1,10 @@
-import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB, GET_INFLUENCER_BY_USERNAME_ERROR, GET_INFLUENCER_BY_USERNAME_SUCCESS } from '../constants'
+import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB } from '../constants'
 import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR, SET_COLLABS_PENDING, SET_COLLABS_SUCCESS, SET_COLLABS_ERROR, GET_COLLAB_INFLUENCER_SUCCESS } from '../constants/response/types'
 
 const initialState = {
     all_collabs: [],
     current_collab: {
-        publications: [],
-        influencer: ''
+        publications: []
     },
     pending: null,
     error: null,
@@ -59,13 +58,16 @@ const collabReducer = (state = initialState, action) => {
             }
 
         case ADD_COLLAB:
-            collabs.splice(collabs.length, 0, action.collab)
+
+            collabs.splice(collabs.length, 1, action.collab)
+
             return {
                 ...state,
                 all_collabs: [...collabs]
             }
 
         case UPDATE_COLLAB:
+
             collabs.splice(getIndex(collabs, action.collab), 1, action.collab)
 
             return {
@@ -120,7 +122,7 @@ const collabReducer = (state = initialState, action) => {
     }
 }
 
-export const getIndex = (collabs, collab) => collabs.map(c => { return c }).indexOf(collab.details.id)
+export const getIndex = (collabs, collab) => collabs.map(c => { return c }).indexOf(collab)
 export const searchedCollabs = (state, text) => [...state.all_collabs.filter(collab => collab.details.title.toLowerCase().includes(text.toLowerCase()))]
 
 export default collabReducer
