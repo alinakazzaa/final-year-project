@@ -51,6 +51,7 @@ class AddFetchJob extends React.Component {
         fetchJob.title = 'Hashtag search: ' + fetchJob.hashtag
         addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
         setCurrentFetchJob({ details: fetchJob })
+        this.props.navigation.goBack()
     }
 
     componentWillUnmount() {
