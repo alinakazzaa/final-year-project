@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { ProjectForm } from '../../components/forms/ProjectForm'
 import { addProject } from '../../actions/project'
@@ -8,6 +8,7 @@ import { BackButton } from '../../components/buttons/BackButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { base } from '../../styles/base'
+import { Tooltip } from 'react-native-elements'
 
 class AddProject extends React.Component {
 
@@ -43,7 +44,7 @@ class AddProject extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                    right={<SaveButton onPress={this.handleSubmit} />}
+                    right={<Tooltip popover={<Text>Influencer saved</Text>}><SaveButton onPress={this.handleSubmit} /></Tooltip>}
                 />
                 <View style={base.container}>
                     <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
