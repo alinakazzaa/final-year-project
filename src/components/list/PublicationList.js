@@ -10,7 +10,7 @@ export const PublicationList = ({ publications, onPress }) => {
         return (
             <TouchableOpacity key={index} onPress={() => onPress(pub)}>
                 <View style={collabStyle.listItem}>
-                    <Text style={base.text}># {pub.hashtag}</Text>
+                    <Text style={base.text}># {pub.hashtag.name}</Text>
                     <Image
                         style={collabStyle.thumbnail}
                         source={{
