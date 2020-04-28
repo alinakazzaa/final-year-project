@@ -8,6 +8,7 @@ import { authStyle } from './styles/auth.styles'
 import { AppLogo } from '../../components/logo/AppLogo'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
+import { base } from '../../styles/base'
 
 class RegistrationScreen extends React.Component {
 
@@ -30,7 +31,7 @@ class RegistrationScreen extends React.Component {
                 <Gradient horizontal={true}>
                     <AppHeader transparent={true}
                         left={<View style={authStyle.back}><BackButton onPress={() => this.props.navigation.goBack()} /></View>} />
-                    <View style={authStyle.regContainer}>
+                    <View style={base.centered}>
                         <AppLogo large={true} />
                         <RegistrationForm registerUser={this.registerUser} />
                     </View>
