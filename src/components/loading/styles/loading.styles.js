@@ -15,7 +15,8 @@ export const loading = StyleSheet.create(
             justifyContent: 'center',
             alignItems: 'center',
             height: dimensions.fullHeight,
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
+            marginBottom: dimensions.fullHeight * 0.12
         },
         text: {
             fontFamily: fonts.PRIMARY,

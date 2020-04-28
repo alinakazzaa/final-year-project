@@ -3,11 +3,12 @@ import { View } from 'react-native'
 import LogInForm from '../../components/forms/LogInForm'
 import { connect } from 'react-redux'
 import { setCurrentUserError, setCurrentUserSuccess, setUsersPending, getAllUsers } from '../../actions/user'
-import { auth } from './styles/auth.styles'
+import { authStyle } from './styles/auth.styles'
 import { Gradient } from '../../styles/Gradient'
 import { AppLogo } from '../../components/logo/AppLogo'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { MSG_EMPTY_FIELDS, MSG_INCORRECT_PASSWORD, MSG_NO_USER } from '../../constants/response/messages'
+import { base, dimensions } from '../../styles/base'
 
 class LogInScreen extends React.Component {
 
@@ -53,12 +54,13 @@ class LogInScreen extends React.Component {
 
         return (
             <View>
-                {user.pending ? <LoadingScreen size='large' text="Welcome message or screen with animation" /> : <Gradient horizontal={true}>
-                    <View style={auth.logInContainer}>
-                        <AppLogo large={true} />
-                        <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={user.error} />
-                    </View>
-                </Gradient>}
+                {user.pending ? <LoadingScreen size='large' /> :
+                    <Gradient horizontal={true}>
+                        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: dimensions.fullHeight }}>
+                            <AppLogo large={true} />
+                            <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={user.error} />
+                        </View>
+                    </Gradient>}
 
             </View>
         )

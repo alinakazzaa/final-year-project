@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { View, TouchableOpacity, Text, ScrollView } from 'react-native'
+import { View, TouchableOpacity, Text, ScrollView, Animated } from 'react-native'
 import { clearCurrentProject, setCurrentProject, updateProject } from '../../actions/project'
+import { getUserCollabs, setCollabsPending, fetchCollabInfluencer, clearCollabState, setCurrentCollab } from '../../actions/collab'
 import { AppHeader } from '../../layouts/Header'
-import ProjectForm from '../../components/forms/ProjectForm'
+import { ProjectForm } from '../../components/forms/ProjectForm'
 import { connect } from 'react-redux'
 import { project_style } from './styles/project.styles'
 import { BackButton } from '../../components/buttons/BackButton'
@@ -10,6 +11,11 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { setCurrentFetchJob, getProjectFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
 import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView'
 import { SaveButton } from '../../components/buttons/SaveButton'
+import { base, colors } from '../../styles/base'
+import { Icon } from 'react-native-elements'
+import { CollabListProjectView } from '../../components/list/CollabListProjectView'
+
+const AnimatedIcon = Animated.createAnimatedComponent(Icon)
 
 class ProjectView extends React.Component {
 
@@ -18,20 +24,30 @@ class ProjectView extends React.Component {
     }
 
     state = {
-        project_value: {
+        projectValue: {
             active: false
         }
     }
 
     componentDidMount() {
-        const { user, project, getProjectFetchJobs } = this.props
-
+        const { user, project, getProjectFetchJobs, getUserCollabs } = this.props
         if (project.current_project.title) {
             getProjectFetchJobs(user.current_user.id, project.current_project.id)
-            this.setState({ project_value: { ...project.current_project } })
+            getUserCollabs(user.current_user.id)
+            this.setState({ projectValue: { ...project.current_project } })
         }
 
     }
+
+    // componentDidUpdate(prev) {
+    //     const { fetchCollabInfluencer, collab, setCollabsPending } = this.props
+
+    //     if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0)
+    //         collab.all_collabs.forEach(col => {
+    //             console.log(col)
+    //             // fetchCollabInfluencer(col, setCollabsPending)
+    //         })
+    // }
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
@@ -40,30 +56,35 @@ class ProjectView extends React.Component {
     }
 
     handleChange = updated_project => {
-        this.setState({ project_value: updated_project })
+        this.setState({ projectValue: updated_project })
     }
 
     handleSubmit = () => {
-        const { navigation, updateProject } = this.props
-        let { project_value } = this.state
-        updateProject(project_value)
-        navigation.goBack()
+        const { updateProject } = this.props
+        let { projectValue } = this.state
+        updateProject(projectValue)
     }
 
     toggleSwitch = value => {
-        const { project_value } = this.state
-        this.setState({ project_value: { ...project_value, active: value } })
+        const { projectValue } = this.state
+        this.setState({ projectValue: { ...projectValue, active: value } })
     }
 
-    // componentWillUnmount() {
-    //     const { clearCurrentProject, clearFetchJobState } = this.props
-    //     clearCurrentProject()
-    //     clearFetchJobState()
-    // }
+    goToCollab = collab => {
+        let { setCurrentCollab, navigation } = this.props
+        navigation.navigate('ViewCollab')
+        setCurrentCollab(collab)
+    }
+
+    componentWillUnmount() {
+        const { clearCollabState, clearFetchJobState } = this.props
+        clearCollabState()
+        clearFetchJobState()
+    }
 
     render() {
-        const { fetch_job, navigation } = this.props
-        const { project_value } = this.state
+        const { fetch_job, navigation, collab } = this.props
+        const { projectValue } = this.state
 
         return (
             <View>
@@ -72,28 +93,39 @@ class ProjectView extends React.Component {
                     left={<BackButton onPress={() => navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <View style={project_style.viewContainer}>
-                    <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
-                    <View style={project_style.collabBox}>
-                        <View style={project_style.header}>
-                            <Text style={project_style.title}>Collaborations</Text>
+                <View style={base.container}>
+                    <ProjectForm handleChange={this.handleChange} project_value={projectValue} toggleSwitch={this.toggleSwitch} />
+                    <View style={base.itemViewListContainer}>
+                        <View style={base.itemViewListNav}>
+                            <Text style={base.title}>Collaborations</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AllCollabs')}>
-                                <Text style={project_style.title}>View All</Text>
+                                <Text style={base.title}>View All</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={project_style.listView}><Text style={project_style.noneMsg}>No collaborations yet</Text></View>
+                        {collab.pending && <LoadingScreen />}
+                        {collab.all_collabs.length == 0 && <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencer!</Text>
+                            <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} /></View>}
+                        {!collab.error && !collab.pending && <ScrollView
+                            contentContainerStyle={project_style.itemScroll}>
+                            {collab.all_collabs.length > 0 && <View>
+                                <CollabListProjectView collabs={collab.all_collabs} goToCollab={this.goToCollab} />
+                            </View>}
+                        </ScrollView>}
                     </View>
-                    <View>
-                        <View style={project_style.header}>
-                            <Text style={project_style.title}>Searches</Text>
+                    <View style={base.itemViewListContainer}>
+                        <View style={base.itemViewListNav}>
+                            <Text style={base.title}>Searches</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AllFetchJobs')}>
-                                <Text style={project_style.title}>See All</Text>
+                                <Text style={base.title}>See All</Text>
                             </TouchableOpacity>
                         </View>
                         {fetch_job.pending && <LoadingScreen />}
-                        {fetch_job.error && <View style={project_style.listView}><Text style={project_style.noneMsg}>No searches</Text></View>}
+                        {fetch_job.error && <View style={base.centerItems}>
+                            <Icon name='account-search-outline' type="material-community" size={30} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} />
+                            <Text style={base.noneMessage}>Try first search</Text>
+                        </View>}
                         {!fetch_job.error && !fetch_job.pending && <ScrollView
-                            contentContainerStyle={project_style.fetchScroll}>
+                            contentContainerStyle={project_style.itemScroll}>
                             {fetch_job.all_fetch_jobs.length > 0 && <View>
                                 <FetchJobListProjectView fetch_jobs={fetch_job.all_fetch_jobs} goToFetchJob={this.goToFetchJob} />
                             </View>}
@@ -109,16 +141,22 @@ const mapStateToProps = state => ({
     user: state.user,
     project: state.project,
     fetch_job: state.fetch_job,
-    influencer: state.influencer
+    collab: state.collab,
+    running_fetch: state.running_fetch
 });
 
 const mapDispatchToProps = {
+    setCollabsPending,
     setCurrentFetchJob,
     getProjectFetchJobs,
     clearCurrentProject,
     setCurrentProject,
     clearFetchJobState,
-    updateProject
+    updateProject,
+    getUserCollabs,
+    fetchCollabInfluencer,
+    clearCollabState,
+    setCurrentCollab
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectView)

@@ -1,29 +1,30 @@
 import React from 'react'
 import { TouchableOpacity, View, Text, Image } from 'react-native'
 import PropTypes from 'prop-types'
-import { collab_style } from '../../screens/Collab/styles/collab.styles'
+import { collabStyle } from '../../screens/Collab/styles/collab.styles'
+import { base } from '../../styles/base'
 
 
 export const PublicationList = ({ publications, onPress }) => {
     const publicationList = (pub, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => onPress(pub)}>
-                <View style={collab_style.listItem}>
-                    <Text style={collab_style.text}># {pub.hashtag}</Text>
+                <View style={collabStyle.listItem}>
+                    <Text style={base.text}># {pub.hashtag.name}</Text>
                     <Image
-                        style={collab_style.thumbnail}
+                        style={collabStyle.thumbnail}
                         source={{
                             uri: pub.thumbnail,
                         }} />
-                    <Text style={collab_style.text}>Likes: {pub.likes}</Text>
-                    <Text style={collab_style.text}>Comments: {pub.comments}</Text>
+                    <Text style={base.text}>Likes: {pub.likes}</Text>
+                    <Text style={base.text}>Comments: {pub.comments}</Text>
                 </View>
             </TouchableOpacity>
         )
     }
 
     return (
-        <View style={collab_style.publicationsBox}>
+        <View style={collabStyle.publicationsBox}>
             {
                 publications.length > 0 && publications.map((pub, index) => {
                     return (

@@ -2,13 +2,14 @@ import React from 'react'
 import { TouchableOpacity, Text, View } from 'react-native'
 import PropTypes from 'prop-types'
 import { project_style } from '../../screens/Project/styles/project.styles'
+import { base } from '../../styles/base'
 
 export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
     const FJList = (fj, index) => {
 
         return <TouchableOpacity style={project_style.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
-            <Text style={project_style.text}>{fj.details.hashtag}</Text>
-            <Text style={project_style.text}>{fj.details.date_created}</Text>
+            <Text style={base.text}>{fj.details.hashtag}</Text>
+            <Text style={base.text}>{fj.details.date_created}</Text>
         </TouchableOpacity >
     }
 

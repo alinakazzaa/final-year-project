@@ -1,5 +1,5 @@
 import { GET_MEDIA_PENDING, GET_MEDIA_SUCCESS, GET_MEDIA_ERROR, GET_USER_PENDING, GET_USER_SUCCESS, GET_USER_ERROR, COMPLETED_FETCH, COMPLETED_GET_USERS } from '../constants/response/types'
-import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, USER_FETCH } from '../constants'
+import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, USER_FETCH, CLEAR_RUNNING_FETCH } from '../constants'
 
 const initialState = {
     pending: null,
@@ -20,6 +20,7 @@ const initialState = {
 const fetchReducer = (state = initialState, action) => {
     let running = { ...state }
     let success
+    let fail
 
     switch (action.type) {
 
@@ -104,7 +105,7 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type, message: action.message },
                 influencers: {
                     ...state.influencers,
-                    pending: [...state.influencers.pending.filter(id => id == action.id)],
+                    pending: [...state.influencers.pending.filter(id => id !== action.id)],
                     success: [...success]
                 }
             }
@@ -125,7 +126,8 @@ const fetchReducer = (state = initialState, action) => {
             }
 
         case GET_USER_ERROR:
-            success = [...state.influencers.success]
+            fail = [...state.influencers.fail]
+            fail.splice(fail.length, 0, action.id)
 
             running = {
                 ...state,
@@ -136,8 +138,8 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type, message: action.message },
                 influencers: {
                     ...state.influencers,
-                    pending: [...state.influencers.pending.filter(id => id == action.id)],
-                    fail: [...state.influencers.fail, action.id]
+                    pending: [...state.influencers.pending.filter(id => id !== action.id)],
+                    fail
                 }
             }
 
@@ -155,9 +157,27 @@ const fetchReducer = (state = initialState, action) => {
                 ...running
             }
 
+        case COMPLETED_GET_USERS:
+
+            return {
+                ...state,
+                response: { type: action.type },
+                has_next_page: action.has_next_page,
+                end_cursor: action.end_cursor
+            }
+
+        case CLEAR_RUNNING_FETCH:
+
+            return {
+                ...initialState
+            }
+
+
         default:
             return state
     }
 }
+
+export const getIndex = (list, id) => list.map(item => { return item }).indexOf(id)
 
 export default fetchReducer

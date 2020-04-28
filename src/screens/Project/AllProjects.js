@@ -7,7 +7,7 @@ import { removeProject, setCurrentProject, getUserProjects } from '../../actions
 import { connect } from 'react-redux'
 import { activeProjects, archivedProjects } from '../../reducers/projectReducer'
 import { project_style } from './styles/project.styles'
-import { colors, base } from '../../styles/base'
+import { colors, base, dimensions } from '../../styles/base'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { TabView } from '../../components/tabview/TabView'
 
@@ -56,18 +56,18 @@ class AllProjects extends React.Component {
         const { project } = this.props
 
         return (
-            <View style={{ backgroundColor: colors.SCREEN }}>
+            <View>
                 <AppHeader
                     gradient={true}
-                    left={<View style={base.searchTxt}><Text style={project_style.title}>Search</Text></View>}
+                    left={<View style={base.searchTxt}><Text style={base.title}>Search</Text></View>}
                     center={<View style={base.searchView}>
                         <Input
                             onChangeText={text => this.searchProject(text)}
                             inputStyle={base.inputStyle}
                             inputContainerStyle={base.searchInput} />
                     </View>} />
-                <View style={project_style.allContainer}>
-                    <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
+                <View style={base.container}>
+                    <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size={dimensions.fullWidth * .4} index={index} />
                     {project.pending && <LoadingScreen size='large' />}
                     {!project.pending && !project.error &&
                         index == 0 ?
@@ -100,7 +100,8 @@ class AllProjects extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.user,
-    project: state.project
+    project: state.project,
+    running_fetch: state.running_fetch
 })
 
 const mapDispatchToProps = {

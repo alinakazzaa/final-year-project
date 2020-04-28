@@ -1,13 +1,14 @@
 import * as React from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
-import ProjectForm from '../../components/forms/ProjectForm'
+import { ProjectForm } from '../../components/forms/ProjectForm'
 import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
 import { BackButton } from '../../components/buttons/BackButton'
-import { project_style } from './styles/project.styles'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { SaveButton } from '../../components/buttons/SaveButton'
+import { base } from '../../styles/base'
+import { Tooltip } from 'react-native-elements'
 
 class AddProject extends React.Component {
 
@@ -28,26 +29,24 @@ class AddProject extends React.Component {
 
     handleSubmit = () => {
         const { user, addProject } = this.props
-        const { project_value } = this.state
-        addProject(user.current_user.id, project_value)
-        this.props.navigation.navigate("AllProjects")
+        addProject(user.current_user.id, this.state.project_value)
     }
 
     toggleSwitch = value => {
-        const { project_value } = this.state
-        this.setState({ project_value: { ...project_value, active: value } })
+        this.setState({ project_value: { ...this.state.project_value, active: value } })
     }
 
     render() {
         const { project_value } = this.state
+
         return (
             <View>
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                    right={<SaveButton onPress={this.handleSubmit} />}
+                    right={<Tooltip popover={<Text>Influencer saved</Text>}><SaveButton onPress={this.handleSubmit} /></Tooltip>}
                 />
-                <View style={project_style.addContainer}>
+                <View style={base.container}>
                     <ProjectForm handleChange={this.handleChange} project_value={project_value} toggleSwitch={this.toggleSwitch} />
                 </View>
             </View>

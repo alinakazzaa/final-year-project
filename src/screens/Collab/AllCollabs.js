@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
-import { collab_style } from './styles/collab.styles'
 import { connect } from 'react-redux'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { colors, base } from '../../styles/base'
@@ -58,26 +57,30 @@ class AllCollabs extends React.Component {
             <View>
                 <AppHeader
                     gradient={true}
-                    left={<View style={base.searchTxt}><Text style={collab_style.title}>Search</Text></View>}
+                    left={<View style={base.searchTxt}><Text style={base.title}>Search</Text></View>}
                     center={<View style={base.searchView}>
                         <Input
                             onChangeText={text => this.searchCollab(text)}
                             inputStyle={base.inputStyle}
                             inputContainerStyle={base.searchInput} />
                     </View>} />
-                <View style={collab_style.allContainer}>
+                <View style={base.container}>
                     {collab.pending && <LoadingScreen size='large' />}
-                    <TabView titles={['Active', 'Completed']} onPress={this.setTab} color={colors.TERTIARY} size='46%' index={index} />
-                    {collab.pending && <LoadingScreen />}
+                    <TabView titles={['Active', 'Completed']} onPress={this.setTab}
+                        color={colors.TERTIARY} size='46%' index={index} />
                     {collab.all_collabs.length > 0 &&
                         index == 0 ?
                         <View>
-                            <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, true) : filterCollabs(collab.all_collabs, true)} />
+                            <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab}
+                                collabs={isSearch ? filterCollabs(searched, true) :
+                                    filterCollabs(collab.all_collabs, true)} />
                         </View> :
                         <View>
-                            <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab} collabs={isSearch ? filterCollabs(searched, false) : filterCollabs(collab.all_collabs, false)} />
+                            <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab}
+                                collabs={isSearch ? filterCollabs(searched, false) :
+                                    filterCollabs(collab.all_collabs, false)} />
                         </View>}
-                    {collab.error &&
+                    {collab.all_collabs.length == 0 &&
                         <View style={base.centerItems}>
                             <Text style={base.noneMessage}>No collaborations yet</Text>
                             <Text style={base.noneMessage}>Run searches and find influencers to collaborate with</Text>

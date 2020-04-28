@@ -1,11 +1,17 @@
 import * as React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import { getCurrentInfluencer } from '../../reducers/influencerReducer'
-import { Avatar } from 'react-native-elements'
+import { Avatar, Tooltip } from 'react-native-elements'
 import { IconButton } from '../../components/buttons/IconButton'
 import { AppHeader } from '../../layouts/Header'
 import { formatNumber } from '../../actions/base'
+import { Gradient } from '../../styles/Gradient'
+import { base, fonts, colors, spacing } from '../../styles/base'
+import { BackButton } from '../../components/buttons/BackButton'
+import { form } from '../../styles/form'
+import { influencer_style } from './styles/influencer.styles'
+import { updateInfluencer, removeInfluencer } from '../../actions/influencer'
+import { updateFetchJob, updateStateFetchJob } from '../../actions/fetchJob'
 
 class ViewInfluencer extends React.Component {
 
@@ -13,67 +19,98 @@ class ViewInfluencer extends React.Component {
         headerShown: false
     }
 
+    createCollab = influencer => {
+        this.props.navigation.navigate('AddCollab', { influencer })
+    }
+
+    saveInfluencer = influencer => {
+        const { updateInfluencer } = this.props
+        updateInfluencer({ ...influencer, to_do: false })
+    }
+
+    deleteInflu = id => {
+        const { fetch_job, removeInfluencer, updateStateFetchJob } = this.props
+        const current = { ...fetch_job.current_fetch_job }
+        current.influencers.success = [...current.influencers.success.filter(influ_id => influ_id !== id)]
+        updateStateFetchJob(current)
+        updateFetchJob(current)
+        removeInfluencer(id)
+    }
+
     render() {
-        const { influencer } = this.props
+        const { influencer, navigation, fetch_job } = this.props
 
         return (
-            <View style={styles.main}>
-                <AppHeader
-                    left={
-                        <IconButton color="#493649"
-                            name='angle-left'
-                            size={40}
-                            onPress={() => this.props.navigation.goBack()}
-                        />}
-                />
-                <View style={styles.infoContainer}>
-                    <View style={styles.top}>
-                        <View style={styles.infoBox}>
-                            <View style={styles.itemRow}>
-                                <Text style={styles.title}>Details</Text>
-                            </View>
-                            <View style={styles.itemRow}>
-                                <Text style={styles.lbl}>Followers</Text>
-                                <Text style={styles.data}>{formatNumber(influencer.current_influencer.followers)}</Text>
-                            </View>
-                            {/* <View style={styles.itemRow}>
-                                <Text style={styles.lbl}>Following</Text>
-                                <Text style={styles.data}>{this.formatNumber(current_influencer.following)}</Text>
-                            </View> */}
-                            <View style={styles.itemRow}>
-                                <Text style={styles.lbl}>Media Count</Text>
-                                <Text style={styles.data}>{formatNumber(influencer.current_influencer.media_count)}</Text>
-                            </View>
-                        </View>
+            <View>
+                <Gradient style={base.container}>
+                    <AppHeader
+                        left={<BackButton onPress={() => navigation.goBack()} />}
+                    />
+                    <View style={influencer_style.top}>
                         <Avatar
-                            size={135}
+                            size={200}
                             rounded
                             containerStyle={styles.avatar}
                             source={{
                                 uri: influencer.current_influencer.profile_pic_url,
                             }} />
-                    </View>
-                    <View style={styles.middle}>
-                        <View style={styles.itemRow}>
-                            {/* {current_influencer.is_business_account && <Text style={styles.lbl}>Business Account</Text>}
-                            {current_influencer.is_private && <Text style={styles.lbl}>Private</Text>} */}
+                        <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '100%', marginTop: spacing.LARGE, paddingTop: spacing.LARGE, borderTopWidth: 0.7, borderColor: colors.TERTIARY }}>
+                            <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>Username</Text>
+                            <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{influencer.current_influencer.username}</Text>
                         </View>
                     </View>
-                    <View style={styles.bottomView}>
-                        <View style={styles.itemRow}>
-                            <Text style={styles.lbl}>Username</Text>
-                            <Text style={styles.data}>{influencer.current_influencer.username}</Text>
+
+                    <View style={influencer_style.middle}>
+                        <View style={form.header} >
+                            <Text style={base.title}>Details</Text>
                         </View>
-                        {/* <View style={styles.itemRow}>
-                            <Text style={styles.lbl}>Full Name</Text>
-                            <Text style={styles.data}>{current_influencer.full_name}</Text>
-                        </View> */}
-                        {/* <View style={styles.itemCol}>
-                            <Text style={styles.lbl}>Biography</Text>
-                            <Text style={styles.biography}>{current_influencer.biography}</Text>
-                        </View> */}
+                        <View style={{ ...form.detailsBox, borderColor: colors.TERTIARY }}>
+                            <View style={form.labelsCol}>
+                                <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Followers</Text>
+                                <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Media Count</Text>
+                                <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Date added</Text>
+                            </View>
+                            <View style={form.inputBox}>
+                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.followers)}</Text>
+                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.media_count)}</Text>
+                                {/* <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>{fetch_job.current_fetch_job.details.date_fetch_run}</Text> */}
+                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{fetch_job.current_fetch_job.details.date_created}</Text>
+                            </View>
+                        </View>
                     </View>
-                </View>
+                    <View style={{ ...base.centered, marginTop: spacing.LARGE * 2, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        {/* <Tooltip popover={<Text>Influencer saved</Text>}> */}
+                        <TouchableOpacity>
+                            <IconButton
+                                name='check'
+                                size={60}
+                                color={colors.GREEN}
+                                type='material-icons'
+                                onPress={() => this.saveInfluencer(influencer.current_influencer)}
+                            />
+                        </TouchableOpacity>
+                        {/* </Tooltip> */}
+                        <TouchableOpacity>
+                            <IconButton
+                                name='account-multiple-plus-outline'
+                                size={60}
+                                color={colors.WHITE}
+                                type='material-community'
+                                onPress={() => this.createCollab(influencer.current_influencer)}
+                            /></TouchableOpacity>
+                        <TouchableOpacity>
+                            {/* <Tooltip popover={<Text>Influencer removed</Text>}> */}
+                            <IconButton
+                                name='close'
+                                size={60}
+                                color={colors.RED}
+                                type='material-icons'
+                                onPress={() => this.deleteInflu(influencer.current_influencer.id)}
+                            />
+                            {/* </Tooltip> */}
+                        </TouchableOpacity>
+                    </View>
+                </Gradient>
             </View >
         )
     }
@@ -81,26 +118,7 @@ class ViewInfluencer extends React.Component {
 
 const styles = StyleSheet.create(
     {
-        main:
-        {
-            backgroundColor: '#f4f1f1',
-            flex: 1
 
-        },
-        top: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            borderBottomWidth: 1,
-            borderBottomColor: '#ded4da',
-            paddingBottom: 30
-        },
-        middle: {
-            borderBottomWidth: 1,
-            borderBottomColor: '#ded4da',
-            paddingBottom: 20,
-            paddingTop: 20
-        },
         bottomView: {
             display: 'flex',
             flexDirection: 'column',
@@ -180,11 +198,14 @@ const styles = StyleSheet.create(
     })
 
 const mapStateToProps = state => ({
+    fetch_job: state.fetch_job,
     influencer: state.influencer
 })
 
 const mapDispatchToProps = {
-    getCurrentInfluencer
+    updateInfluencer,
+    removeInfluencer,
+    updateStateFetchJob
 }
 
 

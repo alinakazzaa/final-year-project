@@ -1,5 +1,6 @@
 import { Dimensions } from 'react-native'
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
+// import { inputLabel } from './form'
 
 export const dimensions = {
     fullHeight: Dimensions.get('window').height,
@@ -22,19 +23,19 @@ export const colors = {
 export const spacing = {
     SMALL: 5,
     MEDIUM: 10,
-    LARGE: 20,
+    LARGE: 20
 }
 
 export const width = {
     SMALL: 90,
     MEDIUM: 160,
-    LARGE: 200,
+    LARGE: 200
 }
 
 export const height = {
     SMALL: 30,
     MEDIUM: 40,
-    LARGE: 60,
+    LARGE: 60
 }
 
 export const fonts = {
@@ -49,144 +50,85 @@ export const fonts = {
 
 // containers
 
-export const container = {
-    width: dimensions.fullWidth,
-    height: dimensions.fullHeight,
-    backgroundColor: colors.SCREEN
-}
-
-
-
 export const formContainer = {
     margin: '3%',
     marginRight: '5%',
-    marginLeft: '5%',
-    padding: 30,
+    marginLeft: '3%',
     borderRadius: 5,
     width: dimensions.fullWidth * .85
+}
+
+export const addContainer = {
+    ...formContainer,
+    borderRadius: 0,
+    marginTop: spacing.MEDIUM
 }
 
 export const infoContainer = {
     margin: '3%',
 }
 
-// components
-
-export const input = {
-    color: colors.TERTIARY,
-    fontSize: fonts.MEDIUM,
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    height: height.MEDIUM,
-    width: width.LARGE,
-    borderColor: colors.BORDER,
-    borderBottomWidth: 1
-}
-
-export const inputView = {
-    color: colors.TERTIARY,
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    width: dimensions.fullWidth * 0.55,
-    minHeight: height.MEDIUM,
-    borderColor: colors.BORDER,
-    borderWidth: 0,
-    borderBottomWidth: 1,
-    fontSize: fonts.MEDIUM
-}
-
-export const inputLabel = {
-    padding: 0,
-    margin: 0,
-    color: colors.TERTIARY,
-    marginTop: spacing.SMALL,
-    marginBottom: spacing.MEDIUM,
-    fontSize: fonts.SMALL,
-    textTransform: 'uppercase',
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    fontFamily: fonts.PRIMARY,
-}
-
-export const inputViewLabel = {
-
-    textTransform: 'uppercase',
-    color: colors.TERTIARY,
-    fontWeight: fonts.WEIGHT_LEIGHT,
-    marginBottom: spacing.MEDIUM,
-    margin: 0,
-    marginRight: spacing.LARGE,
-    minWidth: width.MEDIUM * 0.8,
-    height: height.MEDIUM,
-    fontSize: fonts.SMALL,
-    paddingTop: spacing.MEDIUM * 0.8
-}
-
-export const boolSelect = {
-    height: 100,
-    padding: spacing.MEDIUM
-}
-
-export const select = {
-    height: 100,
-    color: colors.PRIMARY
-}
-
-
-export const form = {
-    textbox: {
-        normal: {
-            ...inputView
-        },
-        error: {
-
-        },
-        notEditable: {
-            ...inputView,
-            opacity: 0.5
-        }
-    },
-    select: {
-        normal: {
-            ...inputView
-        },
-    },
-    checkbox: {
-        normal: {
-            ...boolSelect
-        }
-    }
-}
-
-
 export const base = StyleSheet.create(
     {
-        slider: {
-            height: 20,
-            justifyContent: 'center',
-            borderWidth: 0.5,
-            borderRadius: 10,
-            padding: spacing.SMALL * 0.5,
-            paddingLeft: 0,
-            paddingRight: 0,
-            borderColor: colors.PRIMARY
+        container: {
+            width: dimensions.fullWidth,
+            height: dimensions.fullHeight,
+            backgroundColor: colors.SCREEN,
+            paddingLeft: spacing.LARGE,
+            paddingRight: spacing.LARGE
+        },
+        scrollContainer: {
+            paddingTop: spacing.MEDIUM,
+            paddingBottom: spacing.LARGE
+        },
+        itemViewListContainer: {
+            // maxHeight: dimensions.fullHeight * 0.2,
+            flexDirection: 'column',
+            marginBottom: spacing.LARGE
+        },
+        itemViewListNav: {
+            paddingTop: spacing.LARGE,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingBottom: spacing.MEDIUM
         },
         inputStyle: {
             color: colors.TERTIARY,
             fontSize: fonts.MEDIUM,
             fontWeight: fonts.WEIGHT_LIGHT
         },
+        title: {
+            fontSize: fonts.SMALL,
+            fontFamily: fonts.PRIMARY,
+            color: colors.TERTIARY,
+            fontWeight: fonts.WEIGHT_HEAVY,
+            textTransform: 'uppercase'
+        },
+        text: {
+            color: colors.TERTIARY,
+            fontSize: fonts.MEDIUM,
+            padding: spacing.MEDIUM,
+            marginBottom: spacing.MEDIUM,
+            textTransform: 'uppercase',
+            fontWeight: fonts.WEIGHT_LEIGHT
+        },
         noneMessage: {
-            ...inputLabel,
-            padding: spacing.LARGE * 2,
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,
-            alignSelf: 'center'
+            alignSelf: 'center',
+            textAlign: 'center',
+            marginBottom: spacing.MEDIUM
         },
         centerItems: {
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            alignContent: 'center'
         },
         searchView: {
             flexDirection: 'row',
-            marginTop: spacing.MEDIUM
+            alignItems: 'center'
         },
         searchTxt: {
             marginTop: spacing.MEDIUM,
@@ -197,7 +139,23 @@ export const base = StyleSheet.create(
             width: dimensions.fullWidth * 0.60,
             borderColor: colors.TERTIARY,
             borderBottomWidth: 1,
-            height: spacing.LARGE * 1.5,
-            marginBottom: spacing.MEDIUM
+            height: spacing.LARGE * 1.5
         },
-    });
+        switchView: {
+            flexDirection: 'row',
+            borderBottomWidth: 0.7,
+            borderColor: colors.BORDER,
+            justifyContent: 'space-between',
+            paddingTop: spacing.MEDIUM
+        },
+        dateView: {
+            padding: 0,
+            margin: 0,
+            flexDirection: 'row',
+            borderTopWidth: 0.7,
+            borderBottomWidth: 0,
+            paddingTop: spacing.MEDIUM,
+            borderColor: colors.BORDER,
+            justifyContent: 'space-between'
+        }
+    })

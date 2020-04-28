@@ -1,54 +1,29 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, container, inputLabel, dimensions, input, formContainer, form, select, height, inputView, boolSelect, width, inputViewLabel } from '../../../styles/base';
-import { button } from '../../../components/buttons/styles/button.styles';
+import { colors, spacing } from '../../../styles/base'
 
-export const collab_style = StyleSheet.create(
+export const collabStyle = StyleSheet.create(
     {
-        allContainer: {
-            ...container,
-            backgroundColor: 'transparent',
-        },
         viewContainer: {
             marginLeft: spacing.LARGE,
             marginRight: spacing.LARGE,
         },
-        scrollContainer: {
-            padding: spacing.LARGE
-        },
+
         publicationsBox: {
             flexDirection: 'row',
             flexWrap: 'wrap',
 
         },
-        addContainer: {
-            ...formContainer,
-            borderRadius: 0,
-            marginTop: spacing.MEDIUM,
-            paddingLeft: 0,
-            width: dimensions.fullWidth * .9,
-            margin: 0,
-            padding: 0
-        },
         listView: {
             alignItems: 'center',
             justifyContent: 'center',
-        },
-        detailsBox: {
-            flexDirection: 'row',
-            paddingTop: spacing.MEDIUM,
-            paddingBottom: spacing.MEDIUM,
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
-            borderColor: colors.BORDER
-        },
-        inputBox: {
-            marginRight: spacing.LARGE
         },
         tagsBox: {
             paddingBottom: spacing.LARGE,
             marginTop: spacing.LARGE,
             borderBottomColor: colors.BORDER,
-            borderBottomWidth: 1
+            borderBottomWidth: 0.7,
+            alignContent: 'flex-start',
+            justifyContent: 'flex-start'
         },
         listItem: {
             // display: 'flex',
@@ -62,33 +37,6 @@ export const collab_style = StyleSheet.create(
             // justifyContent: 'space-between',
             // marginBottom: spacing.MEDIUM,
         },
-        header: {
-            paddingTop: spacing.MEDIUM,
-            paddingLeft: 0,
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-        },
-        labelsCol: {
-
-        },
-        label: {
-            ...inputViewLabel
-        },
-        labelActive: {
-            ...inputViewLabel,
-            marginBottom: spacing.MEDIUM,
-
-        },
-        title: {
-            ...inputLabel,
-            fontWeight: fonts.WEIGHT_HEAVY
-        },
-        text: {
-            ...inputLabel,
-            color: colors.TERTIARY,
-            fontWeight: fonts.WEIGHT_MEDIUM,
-            fontSize: fonts.SMALL,
-        },
         left: {
             display: 'flex',
             width: '50%'
@@ -100,27 +48,22 @@ export const collab_style = StyleSheet.create(
             display: 'flex',
             width: '10%'
         },
+        bottom: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignItems: 'center',
+        },
         thumbnail: {
             height: 100,
             width: 100,
             margin: spacing.MEDIUM,
             marginBottom: 0
-        }
-    })
-
-export const projectForm = {
-    ...form,
-    textbox: {
-        normal: {
-            ...inputView
         },
-        error: {
+        collabView: {
+            borderBottomWidth: 0.5,
+            borderColor: colors.BORDER,
+            margin: 0
+        }
 
-        }
-    },
-    checkbox: {
-        normal: {
-            ...boolSelect
-        }
-    }
-}
+    })

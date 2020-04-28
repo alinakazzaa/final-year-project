@@ -8,7 +8,7 @@ import { getProjectFetchJobs } from '../../actions/fetchJob'
 import { COMPLETED } from '../../constants'
 import { logOutUser } from '../../actions/user'
 import { home } from './styles/home.styles'
-import { colors } from '../../styles/base'
+import { colors, base } from '../../styles/base'
 import { TagList } from '../../components/list/TagList'
 import { Divider } from 'react-native-elements'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
@@ -84,10 +84,10 @@ class HomeScreen extends React.Component {
                     {project.pending || fetch_job.pending && <LoadingScreen />}
                     <View style={home.top}>
                         {(project.error !== null || fetch_job.error !== null) &&
-                            <View><Text style={home.title}>Create campaigns and find influencers to match your marketing needs!</Text>
-                                <Text style={home.title}>Run instagram profile searches by hashtags you associate with your product</Text></View>}
-                        {recent_tags.length > 0 && <View><Text style={home.title}>Based on your previous searches</Text>
-                            <Text style={home.text}>Consider these hashtags</Text>
+                            <View><Text style={base.title}>Create campaigns and find influencers to match your marketing needs!</Text>
+                                <Text style={base.title}>Run instagram profile searches by hashtags you associate with your product</Text></View>}
+                        {recent_tags.length > 0 && <View><Text style={base.title}>Based on your previous searches</Text>
+                            <Text style={base.text}>Consider these hashtags</Text>
                             <View style={home.itemRow}>
                                 <TagList onPress={this.onTagPress} tags={recent_tags} />
                             </View></View>}
@@ -96,7 +96,7 @@ class HomeScreen extends React.Component {
                         <Text style={home.largeTitle}>Recent collaborations....</Text>
                     </View>
                     <Divider />
-                    <View style={home.logInMsg}>
+                    <View style={base.text}>
                         <Text style={home.largeTitle}>Influencers to do....</Text>
                     </View>
                 </View>

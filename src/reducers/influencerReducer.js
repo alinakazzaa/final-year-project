@@ -1,5 +1,5 @@
 import { SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS, SET_INFLUENCERS_ERROR } from "../constants/response/types"
-import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER, UPDATE_INFLUENCER } from "../constants"
+import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER, UPDATE_INFLUENCER, CLEAR_CURRENT_INFLUENCER, CLEAR_INFLUENCER_STATE, GET_INFLUENCER_BY_USERNAME } from "../constants"
 
 const initialState = {
     all_influencers: [],
@@ -59,6 +59,19 @@ const influencerReducer = (state = initialState, action) => {
                 all_influencers: [...influencers.filter(influ => influ.id !== action.id)],
                 pending: false
             }
+
+        case CLEAR_CURRENT_INFLUENCER:
+
+            return {
+                ...state,
+                current_influencer: {}
+            }
+        case CLEAR_INFLUENCER_STATE:
+
+            return {
+                ...initialState
+            }
+
         default:
             return state
     }

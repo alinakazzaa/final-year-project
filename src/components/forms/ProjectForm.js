@@ -3,9 +3,9 @@ import { View, Keyboard, Text } from 'react-native'
 import PropTypes from 'prop-types'
 // @ts-ignore
 import t from 'tcomb-form-native'
-import { project_style, projectForm } from '../../screens/Project/styles/project.styles'
 import { SwitchItem } from '../switch/Switch'
-import { inputView, form } from '../../styles/base'
+import { formStyle, form } from '../../styles/form'
+import { base } from '../../styles/base'
 
 const Form = t.form.Form
 
@@ -16,12 +16,9 @@ const Project = t.struct({
 })
 
 const options = {
-    stylesheet: { ...Form.stylesheet, ...form },
+    stylesheet: { ...Form.stylesheet, ...formStyle },
     auto: 'none',
     fields: {
-        title: {
-            error: 'Project requires a title!'
-        },
         date_created: {
             editable: false
         },
@@ -32,46 +29,38 @@ const options = {
 }
 
 
-export default class ProjectForm extends React.Component {
+export const ProjectForm = ({ project_value, handleChange, toggleSwitch }) => {
 
-    render() {
-        const { project_value, handleChange, toggleSwitch } = this.props
-
-        return (
-            <View>
-                <View>
-                    <View style={project_style.header}>
-                        <Text style={project_style.title}>Details</Text>
-                    </View>
-                    <View style={project_style.detailsBox}>
-                        <View style={project_style.labelsCol}>
-                            <Text style={project_style.label}>Title</Text>
-                            <Text style={project_style.label}>Date created</Text>
-                            <Text style={project_style.label}>Description</Text>
-                        </View>
-                        <View style={project_style.inputBox}>
-                            <Form
-                                ref={c => this._form = c}
-                                type={Project}
-                                options={options}
-                                value={project_value}
-                                onChange={(value) => handleChange(value)}
-                                onBlur={Keyboard.dismiss}
-                            />
-                        </View>
-                    </View>
-                    <View style={project_style.switchView}>
-                        <Text style={project_style.labelActive}>Active</Text>
-                        <SwitchItem value={project_value.active} onChange={value => toggleSwitch(value)} />
-                    </View>
-                </View>
-
+    return (
+        <View style={base.formContainer}>
+            <View style={form.header}>
+                <Text style={base.title}>Details</Text>
             </View>
-        )
-    }
+            <View style={form.detailsBox}>
+                <View style={base.labelsCol}>
+                    <Text style={form.inputViewLabel}>Title</Text>
+                    <Text style={form.inputViewLabel}>Date created</Text>
+                    <Text style={form.inputViewLabel}>Description</Text>
+                </View>
+                <View style={form.inputBox}>
+                    <Form
+                        type={Project}
+                        options={options}
+                        value={project_value}
+                        onChange={(value) => handleChange(value)}
+                        onBlur={Keyboard.dismiss}
+                    />
+                </View>
+            </View>
+            <View style={base.switchView}>
+                <Text style={form.inputViewLabel}>Active</Text>
+                <SwitchItem value={project_value.active} onChange={value => toggleSwitch(value)} />
+            </View>
+        </View>
+    )
 }
 
-ProjectForm.propTypes = {
+ProjectForm.PropTypes = {
     project: PropTypes.object
 }
 

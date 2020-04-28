@@ -4,19 +4,20 @@ import FetchJobForm from '../../components/forms/FetchJobForm'
 import { AppHeader } from '../../layouts/Header'
 import { connect } from 'react-redux'
 import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
-import { fetch_job_style } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
+import { base } from '../../styles/base'
+import { followerRanges } from '../../constants/criteria'
 
 class AddFetchJob extends React.Component {
 
     state = {
-        fetch_job: {
+        fetchJob: {
             id: '',
             title: '',
             hashtag: '',
-            criteria: { follower_min: 0, follower_max: 100000 },
+            criteria: { followerMin: followerRanges.micro.min, followerMax: followerRanges.micro.max },
             status: ''
         },
     }
@@ -26,40 +27,39 @@ class AddFetchJob extends React.Component {
     }
 
     componentDidMount() {
-        const { fetch_job } = this.state
+        const { fetchJob } = this.state
 
         if (this.props.navigation.state.params)
             this.setState({
-                fetch_job: {
-                    ...fetch_job,
+                fetchJob: {
+                    ...fetchJob,
                     hashtag: this.props.navigation.state.params.tag,
                     date_created: DATE_TODAY
                 }
             })
         else
-            this.setState({ fetch_job: { ...fetch_job, date_created: DATE_TODAY } })
+            this.setState({ fetchJob: { ...fetchJob, date_created: DATE_TODAY } })
     }
 
-    handleChange = updated_fetch_job => {
-        this.setState({ fetch_job: updated_fetch_job })
+    handleChange = updatedFetchJob => {
+        this.setState({ fetchJob: updatedFetchJob })
     }
 
     handleSubmit = () => {
-        const { fetch_job } = this.state
+        const { fetchJob } = this.state
         const { user, project, addFetchJob, setCurrentFetchJob, navigation } = this.props
-        fetch_job.title = 'Hashtag search: ' + fetch_job.hashtag
-        addFetchJob(user.current_user.id, project.current_project.id, fetch_job)
-        setCurrentFetchJob({ details: fetch_job })
-        navigation.goBack()
-        navigation.navigate('AllFetchJobs')
+        fetchJob.title = 'Hashtag search: ' + fetchJob.hashtag
+        addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
+        setCurrentFetchJob({ details: fetchJob })
+        this.props.navigation.goBack()
     }
 
     componentWillUnmount() {
-        this.setState({ fetch_job: {} })
+        this.setState({ fetchJob: {} })
     }
 
     render() {
-        const { fetch_job } = this.state
+        const { fetchJob } = this.state
 
         return (
             <View>
@@ -68,14 +68,9 @@ class AddFetchJob extends React.Component {
                     right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />
-                <View style={fetch_job_style.addContainer}>
-                    <View style={fetch_job_style.info}>
-                        <Text style={fetch_job_style.text}>Search users by hashtag</Text>
-                    </View>
-                    {fetch_job.hashtag == null && <View style={fetch_job_style.info}>
-                        <Text style={fetch_job_style.text}>Avoid overly specific tags</Text></View>}
-                    <FetchJobForm fetch_job={fetch_job} handleChange={this.handleChange} />
-                    <View style={fetch_job_style.info}><Text style={fetch_job_style.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
+                <View style={base.container}>
+                    <FetchJobForm fetchJob={fetchJob} handleChange={this.handleChange} />
+                    <View><Text style={base.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         )

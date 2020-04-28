@@ -16,14 +16,6 @@ export const home = StyleSheet.create(
             marginTop: spacing.MEDIUM,
             marginBottom: spacing.MEDIUM
         },
-        title: {
-            fontSize: fonts.SMALL,
-            fontFamily: fonts.PRIMARY,
-            color: colors.TERTIARY,
-            marginBottom: spacing.MEDIUM,
-            fontWeight: fonts.WEIGHT_HEAVY,
-            textTransform: 'uppercase',
-        },
         text: {
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,

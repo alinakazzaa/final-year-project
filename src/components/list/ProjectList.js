@@ -3,8 +3,7 @@ import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
 import { project_style } from '../../screens/Project/styles/project.styles'
 import { Icon } from 'react-native-elements'
-import { colors } from '../../styles/base'
-
+import { colors, base } from '../../styles/base'
 
 export const ProjectList = ({ projects, deleteProject, goToProject }) => {
     const projList = (proj, index) => {
@@ -12,10 +11,10 @@ export const ProjectList = ({ projects, deleteProject, goToProject }) => {
             <TouchableOpacity key={index} onPress={() => goToProject(proj)}>
                 <View style={project_style.listItem}>
                     <View style={project_style.left}>
-                        <Text style={project_style.title}>{proj.title}</Text>
+                        <Text style={base.title}>{proj.title}</Text>
                     </View>
                     <View style={project_style.middle}>
-                        <Text style={project_style.title}>{proj.date_created}</Text>
+                        <Text style={base.title}>{proj.date_created}</Text>
                     </View>
                     <View style={project_style.right}>
                         <Icon name='delete-outline' type="material-community" size={25} color={colors.TERTIARY} onPress={() => deleteProject(proj)} />
@@ -27,7 +26,7 @@ export const ProjectList = ({ projects, deleteProject, goToProject }) => {
 
     return (
         <ScrollView keyboardDismissMode='on-drag'
-            contentContainerStyle={project_style.scrollContainer}
+            contentContainerStyle={base.scrollContainer}
         >
             <View>
                 {

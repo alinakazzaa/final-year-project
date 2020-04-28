@@ -3,15 +3,16 @@ import { View, Text, Linking } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 import { connect } from 'react-redux'
-import { collab_style } from './styles/collab.styles'
-import CollabForm from '../../components/forms/CollabForm'
-import { TagList } from '../../components/list/TagList'
-import { getInfluByUsername } from '../../actions/influencer'
-import { fetchUserMedia } from '../../web/fetchUserMedia'
+import { collabStyle } from './styles/collab.styles'
+import { CollabForm } from '../../components/forms/CollabForm'
 import { fetchPending, fetchResponse } from '../../actions/fetch'
 import { PublicationList } from '../../components/list/PublicationList'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
+import { base } from '../../styles/base'
+import { fetchUserMedia } from '../../web/fetchUserMedia'
+import { fetchCollabInfluencer, setCollabsPending, updateCollab, clearCurrentCollab } from '../../actions/collab'
+import { ScrollView } from 'react-native-gesture-handler'
 
 
 class ViewCollab extends React.Component {
@@ -21,53 +22,99 @@ class ViewCollab extends React.Component {
     }
 
     state = {
-        tags: [{ name: 'berghain', editable: false }, { name: 'mitte', editable: false }]
+        collabValue: { tags: [], active: false }
     }
 
     componentDidMount() {
-        const { fetchPending, fetchResponse } = this.props
-        let influ = getInfluByUsername('juanchoiregui')
+        const { collab, fetchUserMedia } = this.props
+        let collabValue = {
+            ...collab.current_collab.details,
+            influencer: collab.current_collab.details.influencer.username
+        }
 
-        // if (influ.id) {
-        //     fetchUserMedia(influ.id, ['berghain', 'mitte'], fetchPending, fetchResponse)
-        // }
+        // if (collab.current_collab.details.tags && collab.current_collab.details.tags.length > 0)
+        collabValue = {
+            ...collabValue,
+            tags: [...collab.current_collab.details.tags || [], { name: '+', editable: false }]
+        }
+
+        this.setState({ collabValue })
+
+        if (collab.current_collab.details.active && collab.current_collab.details.tags &&
+            collab.current_collab.details.tags.length > 0)
+            fetchUserMedia(collab.current_collab.details.influencer.id, collab.current_collab.details.tags)
+
     }
+
+    // componentDidUpdate(prev) {
+    //     const { collab, fetchPending, fetchResponse } = this.props
+    //     if (collab.current_collab.details.influencer !== prev.collab.current_collab.details.influecer)
+    //        
+    // }
 
     goToPublication = pub => {
 
     }
 
     handleChange = collab => {
-        // let updatedProject = {
-        //     ...this.state.project_value,
-        //     ...project
-        // }
-        // this.setState({ project: updatedProject })
+        this.setState({ collabValue: collab })
     }
 
-    editTag = (tag, index) => {
-        const hashtags = [...this.state.tags]
-        const hashtag = { ...hashtags[index], editable: !hashtags[index].editable }
-        hashtags.splice(index, 1, hashtag)
-        this.setState({ tags: hashtags })
+    toggleSwitch = value => {
+        const { collabValue } = this.state
+        this.setState({ collabValue: { ...collabValue, active: value } })
     }
 
     handleSubmit = () => {
-        // const { user, navigation, updateProject } = this.props
-        // let { project_value } = this.state
-        // updateProject(user.id, project_value.id, project_value)
-        // navigation.goBack()
+        const { collab, updateCollab } = this.props
+        updateCollab({
+            details: {
+                ...collab.current_collab.details,
+                influencer: collab.current_collab.details.influencer
+            }
+        })
     }
 
     onThumbnailPress = () => {
         Linking.openURL('instagram://user?username=alinakazzaa')
     }
 
+    editTag = (tag, index) => {
+        let updatedTags = [...this.state.collabValue.tags]
+        let editTag = { name: tag, index, editable: true }
 
+        if (editTag.name == '+') {
+            editTag = { ...editTag, name: '' }
+        }
 
+        updatedTags.splice(index, 1, editTag)
+        this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
+    }
+
+    onEndTagEdit = index => {
+        const updatedTags = [...this.state.collabValue.tags]
+        const editTag = { ...updatedTags[index], editable: false }
+
+        updatedTags.splice(index, 1, editTag)
+        updatedTags.push({ name: '+', editable: false })
+
+        this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
+    }
+
+    onTagTextChange = (text, index) => {
+        const { collabValue } = this.state
+        const updatedTags = [...collabValue.tags]
+        updatedTags[index] = { ...updatedTags[index], name: text }
+        this.setState({ collabValue: { ...collabValue, tags: updatedTags } })
+    }
+
+    componentWillUnmount() {
+        const { clearCurrentCollab } = this.props
+        clearCurrentCollab()
+    }
 
     render() {
-        const { tags } = this.state
+        const { collabValue } = this.state
         const { collab, navigation } = this.props
 
         return (
@@ -77,39 +124,27 @@ class ViewCollab extends React.Component {
                     left={<BackButton onPress={() => navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <View style={collab_style.viewContainer}>
-                    <View>
-                        <View style={collab_style.header}>
-                            <Text style={collab_style.title}>Details</Text>
-                        </View>
-                        <View style={collab_style.detailsBox}>
-                            <View style={collab_style.labelsCol}>
-                                <Text style={collab_style.label}>Title</Text>
-                                {/* <Text style={collab_style.label}>Date created</Text> */}
-                                {/* <Text style={collab_style.label}>Date Start</Text> */}
-                                <Text style={collab_style.label}>Campaign</Text>
-                                <Text style={collab_style.label}>Influencer</Text>
-                                <Text style={collab_style.label}>Compensation</Text>
-                                <Text style={collab_style.label}>Description</Text>
+                <ScrollView style={{ marginBottom: 100 }}>
+                    <View style={collabStyle.viewContainer}>
+                        {collabValue.tags && collabValue.tags.length > 0 &&
+                            <CollabForm editTag={this.editTag} onEndTagEdit={this.onEndTagEdit}
+                                onTagTextChange={this.onTagTextChange} tags={collabValue.tags}
+                                toggleSwitch={this.toggleSwitch} onChange={this.handleChange}
+                                collab={collabValue} />
+                        }
+                        {collab.pending && <LoadingScreen />}
+                        {collabValue.active && <View>
+                            <View style={{ marginTop: 20 }}>
+                                <Text style={base.title}>Publications</Text>
                             </View>
-                            <CollabForm onChange={this.handleChange} collab={collab.current_collab} />
-                        </View>
+                            {collab.current_collab.publications && collab.current_collab.publications.length > 0 ?
+                                <PublicationList publications={collab.current_collab.publications}
+                                    onPress={this.onThumbnailPress} /> :
+                                <View style={base.centered}><Text style={base.noneMessage}>No publications yet</Text></View>}
+                        </View>}
                     </View>
-                    <View style={collab_style.tagsBox}>
-                        <Text style={collab_style.title}>Hashtags</Text>
-                        <TagList tags={tags} onPress={this.editTag} />
-                    </View>
-                    {collab.pending && <LoadingScreen />}
-                    <View style={collab_style.header}>
-                        <Text style={collab_style.title}>Publications</Text>
-                    </View>
-                    {collab.current_collab.details.active ?
-                        <PublicationList publications={collab.current_collab.publications}
-                            onPress={this.onThumbnailPress} /> :
-                        <View style={collab_style.listView}><Text style={collab_style.noneMsg}>No publications yet</Text></View>}
-                </View>
+                </ScrollView>
             </View>
-
         )
     }
 }
@@ -121,7 +156,12 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     fetchPending,
-    fetchResponse
+    fetchResponse,
+    fetchCollabInfluencer,
+    setCollabsPending,
+    updateCollab,
+    fetchUserMedia,
+    clearCurrentCollab
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCollab)

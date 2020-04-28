@@ -61,8 +61,7 @@ const projectReducer = (state = initialState, action) => {
                 all_projects
             }
         case UPDATE_PROJECT:
-            let index = all_projects.findIndex(proj => proj.id == action.project.id)
-            all_projects.splice(index, 1, action.project)
+            all_projects.splice(getIndex(all_projects, action.project), 1, action.project)
 
             return {
                 ...state,
@@ -83,5 +82,6 @@ const projectReducer = (state = initialState, action) => {
 
 export const activeProjects = state => [...state.all_projects.filter(proj => proj.active == true)]
 export const archivedProjects = state => [...state.all_projects.filter(proj => proj.active == false)]
+export const getIndex = (projects, project) => projects.map(p => { return p }).indexOf(project.id)
 
 export default projectReducer

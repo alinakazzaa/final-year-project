@@ -1,3 +1,3 @@
-let date = new Date()
+let today = new Date()
 
-export const DATE_TODAY = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+export const DATE_TODAY = ("0" + today.getDate()).slice(-2) + "/" + ("0" + (today.getMonth() + 1)).slice(-2) + "/" + today.getFullYear()

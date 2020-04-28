@@ -1,125 +1,44 @@
 import React from 'react'
 import { Avatar } from 'react-native-elements'
-import { StyleSheet, TouchableOpacity, Text, View, ScrollView } from 'react-native'
+import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
-import { spacing } from '../../styles/base'
+import { base } from '../../styles/base'
+import { influencer_style } from '../../screens/Influencer/styles/influencer.styles'
 
 export const InfluencerListFjView = ({ influencers, goToInfluencer }) => {
     let COUNT = 0
     const influList = (influ, index) => {
         return (
-            <View style={styles.listItem} key={index}>
+            <View style={influencer_style.fjListItem} key={index}>
                 <TouchableOpacity key={index} onPress={() => goToInfluencer(influ)}>
                     <Avatar
-                        size="large"
+                        size={110}
                         rounded
+                        containerStyle={{ alignSelf: 'center' }}
                         source={{
                             uri: influ.profile_pic_url,
                         }} />
-                    <Text style={styles.userName}>{influ.username}</Text>
+                    <Text style={influencer_style.influUsername}>{influ.username}</Text>
                 </TouchableOpacity></View>
         )
     }
 
     return (
-
-        <View>
-            <ScrollView
-                horizontal
-                keyboardDismissMode='on-drag'
-                contentContainerStyle={styles.scrollContainer}>
-
+        <ScrollView
+            keyboardDismissMode='on-drag'
+            horizontal
+            contentContainerStyle={base.scrollContainer}>
+            <View style={influencer_style.influList}>
                 {influencers.length > 0 && influencers.map((i, index) => {
                     COUNT++
                     return COUNT < 5 && influList(i, index)
                 })}
-            </ScrollView>
-        </View>
+            </View>
+        </ScrollView>
+
     )
 
 }
-
-const styles = StyleSheet.create(
-    {
-        listHead: {
-            // display: 'flex',
-            // flexDirection: 'row',
-            // color: '#5d4d50',
-            // justifyContent: 'space-around',
-        },
-        scrollContainer: {
-            paddingTop: spacing.LARGE,
-            paddingBottom: spacing.LARGE
-
-        },
-        listItem: {
-            display: 'flex',
-            borderLeftWidth: 0.5,
-            borderColor: '#ded4da',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            alignContent: 'center',
-            paddingLeft: 10,
-            fontFamily: 'ArialRoundedMTBold',
-        },
-        headerTitle: {
-            // color: '#0B0033',
-            // fontSize: 14,
-            // textTransform: 'uppercase',
-            // fontWeight: '700',
-            // fontFamily: 'ArialRoundedMTBold',
-            // width: '25%'
-        },
-        title: {
-            // fontSize: 13,
-            // textAlign: 'left',
-            // padding: 5,
-            // color: '#0B0033',
-            // fontFamily: 'ArialRoundedMTBold',
-        },
-        userName: {
-            fontSize: 11,
-            textAlign: 'left',
-            padding: 5,
-            fontFamily: 'ArialRoundedMTBold',
-            color: '#0B0033',
-        },
-        hashtag: {
-            // fontSize: 13,
-            // textAlign: 'left',
-            // padding: 5,
-            // fontFamily: 'ArialRoundedMTBold',
-            // color: '#0B0033',
-        },
-        location: {
-            // fontSize: 13,
-            // textAlign: 'left',
-            // padding: 5,
-            // fontFamily: 'ArialRoundedMTBold',
-            // color: '#0B0033',
-        },
-        startBtn: {
-            fontSize: 15,
-            // textAlign: 'left',
-            // width: '25%'
-        },
-        addIcon: {
-            // alignSelf: 'center',
-            // backgroundColor: 'transparent',
-            // marginTop: '3%'
-        },
-        left: {
-            // display: 'flex',
-            // flexDirection: 'column',
-        },
-        middle: {
-            // display: 'flex',
-        },
-        right: {
-            // display: 'flex',
-        }
-    });
 
 InfluencerListFjView.propTypes = {
     influencers: PropTypes.array.isRequired,

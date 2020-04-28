@@ -1,7 +1,7 @@
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
-import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER, UPDATE_INFLUENCER } from '../constants'
-import { SET_INFLUENCERS_ERROR, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS } from '../constants/response/types'
+import { SET_CURRENT_INFLUENCER, REMOVE_INFLUENCER, UPDATE_INFLUENCER, CLEAR_INFLUENCER_STATE, CLEAR_CURRENT_INFLUENCER, GET_INFLUENCER_BY_USERNAME } from '../constants'
+import { SET_INFLUENCERS_ERROR, SET_INFLUENCERS_PENDING, SET_INFLUENCERS_SUCCESS, REMOVE_INFLUENCER_FROM_FETCH_JOB } from '../constants/response/types'
 import { MSG_NO_INFLUENCERS } from '../constants/response/messages'
 
 export const getAllInfluencers = fetch_job => {
@@ -12,18 +12,16 @@ export const getAllInfluencers = fetch_job => {
 
         fetch_job.influencers.success.forEach(id => {
             db.ref(`Influencers/${id}`).once('value', snapshot => {
-                influencers.push(snapshot.val())
-
-                if (influencers.length == fetch_job.influencers.success.length)
-                    if (influencers.length > 0) {
-                        dispatch(setInfluencersSuccess(influencers))
-                    } else {
-                        dispatch(setInfluencersError())
-                    }
+                if (snapshot !== null)
+                    influencers.push(snapshot.val())
+            }).then(() => {
+                if (influencers.length > 0) {
+                    dispatch(setInfluencersSuccess(influencers))
+                } else {
+                    dispatch(setInfluencersError())
+                }
             })
         })
-
-
     }
 }
 
@@ -77,11 +75,9 @@ export const updateInfluencer = influencer => {
     }
 }
 
-export const removeInfluencer = (fetch_job, influencer_id) => {
+export const removeInfluencer = influencer_id => {
 
     db.ref(`/Influencers/${influencer_id}`).remove()
-    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/ ` +
-        `FetchJobs/${fetch_job.details.id}/influencers/success/influencer_id`).remove()
 
     return {
         type: REMOVE_INFLUENCER,
@@ -89,20 +85,18 @@ export const removeInfluencer = (fetch_job, influencer_id) => {
     }
 }
 
-
-export const getInfluByUsername = username => {
-    let influ_obj = {}
-    db.ref('/Influencers').on('value', (influ_snapshot) => {
-        influ_snapshot.forEach(influ_snap => {
-            if (influ_snap.val().username == username) {
-                influ_obj = { ...influ_snap.val() }
-            }
-        })
-    })
-
-    return influ_obj
-}
-
 export const filterInfluencers = (influencers, status) => {
     return [...influencers.filter(influ => influ.to_do == status)]
+}
+
+export const clearCurrentInfluencer = () => {
+    return {
+        type: CLEAR_CURRENT_INFLUENCER
+    }
+}
+
+export const clearInfluencerState = () => {
+    return {
+        type: CLEAR_INFLUENCER_STATE
+    }
 }

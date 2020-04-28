@@ -1,31 +1,33 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, container, dimensions, inputLabel } from '../../../styles/base';
+import { colors, fonts, spacing, dimensions } from '../../../styles/base'
 
 export const influencer_style = StyleSheet.create(
     {
-        container: {
-            ...container,
-            paddingRight: spacing.MEDIUM,
-            paddingLeft: spacing.MEDIUM,
-            backgroundColor: 'transparent'
-        },
-        scrollContainer: {
-            padding: spacing.LARGE
-        },
-        listHead: {
+        influList: {
             flexDirection: 'row',
-            marginLeft: spacing.MEDIUM
+            height: dimensions.fullHeight * .2,
+            alignItems: 'center'
         },
-        title: {
-            ...inputLabel,
-            fontWeight: fonts.WEIGHT_MEDIUM,
-            fontSize: fonts.MEDIUM
+        top: {
+            display: 'flex',
+            alignItems: 'center'
         },
-        loadingTxt: {
+        middle: {
+            borderBottomWidth: 0.5,
+            borderColor: colors.TERTIARY
+        },
+        fjListItem: {
+            paddingRight: spacing.LARGE,
+            paddingLeft: spacing.LARGE,
+            borderRightWidth: 0.7,
+            borderColor: colors.BORDER
+        },
+        influUsername: {
+            fontSize: fonts.SMALL,
+            color: colors.TERTIARY,
             fontFamily: fonts.PRIMARY,
-            fontSize: 15,
-            color: colors.PRIMARY,
-            padding: spacing.LARGE
+            textTransform: 'uppercase',
+            marginTop: spacing.MEDIUM
         },
         listItem: {
             display: 'flex',
@@ -40,11 +42,6 @@ export const influencer_style = StyleSheet.create(
             padding: spacing.MEDIUM,
             flexDirection: 'row',
             justifyContent: 'flex-end'
-        },
-        middle: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: spacing.LARGE
         },
         middleRight: {
         },
@@ -67,7 +64,6 @@ export const influencer_style = StyleSheet.create(
             borderTopColor: colors.BORDER
         },
         linkText: {
-            ...inputLabel,
             fontSize: fonts.LARGE,
             paddingTop: spacing.SMALL
         },
@@ -76,7 +72,6 @@ export const influencer_style = StyleSheet.create(
             padding: spacing.LARGE
         },
         infoText: {
-            ...inputLabel,
             fontWeight: fonts.WEIGHT_LIGHT,
             fontSize: fonts.LARGE
         },
