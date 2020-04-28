@@ -8,6 +8,7 @@ import { Gradient } from '../../styles/Gradient'
 import { AppLogo } from '../../components/logo/AppLogo'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { MSG_EMPTY_FIELDS, MSG_INCORRECT_PASSWORD, MSG_NO_USER } from '../../constants/response/messages'
+import { base, dimensions } from '../../styles/base'
 
 class LogInScreen extends React.Component {
 
@@ -55,7 +56,7 @@ class LogInScreen extends React.Component {
             <View>
                 {user.pending ? <LoadingScreen size='large' /> :
                     <Gradient horizontal={true}>
-                        <View style={authStyle.logInContainer}>
+                        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: dimensions.fullHeight }}>
                             <AppLogo large={true} />
                             <LogInForm logIn={this.logIn} goToRegister={this.goToRegister} error={user.error} />
                         </View>
