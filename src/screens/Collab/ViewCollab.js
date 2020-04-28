@@ -11,7 +11,7 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { base } from '../../styles/base'
 import { fetchUserMedia } from '../../web/fetchUserMedia'
-import { fetchCollabInfluencer, setCollabsPending, updateCollab } from '../../actions/collab'
+import { fetchCollabInfluencer, setCollabsPending, updateCollab, clearCurrentCollab } from '../../actions/collab'
 import { ScrollView } from 'react-native-gesture-handler'
 
 
@@ -22,20 +22,27 @@ class ViewCollab extends React.Component {
     }
 
     state = {
-        collabValue: {}
+        collabValue: { tags: [], active: false }
     }
 
     componentDidMount() {
-        const { collab, setCollabsPending } = this.props
-        this.setState({
-            collabValue: {
-                ...collab.current_collab.details,
-                tags: [...collab.current_collab.details.tags, { name: '+', editable: false }],
-                influencer: collab.current_collab.details.influencer
-            }
-        })
-        // if (collab.current_collab.details.active)
-        //     fetchUserMedia(collab.current_collab.details.influencer, collab.current_collab.details.hashtags.split(','), fetchPending, fetchResponse)
+        const { collab, fetchUserMedia } = this.props
+        let collabValue = {
+            ...collab.current_collab.details,
+            influencer: collab.current_collab.details.influencer.username
+        }
+
+        // if (collab.current_collab.details.tags && collab.current_collab.details.tags.length > 0)
+        collabValue = {
+            ...collabValue,
+            tags: [...collab.current_collab.details.tags || [], { name: '+', editable: false }]
+        }
+
+        this.setState({ collabValue })
+
+        if (collab.current_collab.details.active && collab.current_collab.details.tags &&
+            collab.current_collab.details.tags.length > 0)
+            fetchUserMedia(collab.current_collab.details.influencer.id, collab.current_collab.details.tags)
 
     }
 
@@ -60,9 +67,12 @@ class ViewCollab extends React.Component {
 
     handleSubmit = () => {
         const { collab, updateCollab } = this.props
-        const { collabValue } = this.state
-        updateCollab({ details: { ...collab.current_collab.details, ...collabValue, influencer: collab.current_collab.details.influencer } })
-        // navigation.goBack()
+        updateCollab({
+            details: {
+                ...collab.current_collab.details,
+                influencer: collab.current_collab.details.influencer
+            }
+        })
     }
 
     onThumbnailPress = () => {
@@ -98,8 +108,13 @@ class ViewCollab extends React.Component {
         this.setState({ collabValue: { ...collabValue, tags: updatedTags } })
     }
 
+    componentWillUnmount() {
+        const { clearCurrentCollab } = this.props
+        clearCurrentCollab()
+    }
+
     render() {
-        const { tags, collabValue } = this.state
+        const { collabValue } = this.state
         const { collab, navigation } = this.props
 
         return (
@@ -111,19 +126,22 @@ class ViewCollab extends React.Component {
                 />
                 <ScrollView style={{ marginBottom: 100 }}>
                     <View style={collabStyle.viewContainer}>
-                        {collabValue.tags &&
+                        {collabValue.tags && collabValue.tags.length > 0 &&
                             <CollabForm editTag={this.editTag} onEndTagEdit={this.onEndTagEdit}
                                 onTagTextChange={this.onTagTextChange} tags={collabValue.tags}
                                 toggleSwitch={this.toggleSwitch} onChange={this.handleChange}
-                                collab={collabValue} />}
+                                collab={collabValue} />
+                        }
                         {collab.pending && <LoadingScreen />}
-                        <View style={{ marginTop: 20 }}>
-                            <Text style={base.title}>Publications</Text>
-                        </View>
-                        {/* {collab.current_collab.publications.length > 0 ?
-                            <PublicationList publications={collab.current_collab.publications}
-                                onPress={this.onThumbnailPress} /> :
-                            <View style={collabStyle.listView}><Text style={base.noneMessage}>No publications yet</Text></View>} */}
+                        {collabValue.active && <View>
+                            <View style={{ marginTop: 20 }}>
+                                <Text style={base.title}>Publications</Text>
+                            </View>
+                            {collab.current_collab.publications && collab.current_collab.publications.length > 0 ?
+                                <PublicationList publications={collab.current_collab.publications}
+                                    onPress={this.onThumbnailPress} /> :
+                                <View style={base.centered}><Text style={base.noneMessage}>No publications yet</Text></View>}
+                        </View>}
                     </View>
                 </ScrollView>
             </View>
@@ -141,7 +159,9 @@ const mapDispatchToProps = {
     fetchResponse,
     fetchCollabInfluencer,
     setCollabsPending,
-    updateCollab
+    updateCollab,
+    fetchUserMedia,
+    clearCurrentCollab
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCollab)

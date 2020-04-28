@@ -17,7 +17,7 @@ class AddCollab extends React.Component {
     }
 
     state = {
-        collab: { tags: [{ name: '+', editable: false }] }
+        collab: { active: false, tags: [{ name: '+', editable: false }] }
     }
 
     componentDidMount() {
@@ -40,8 +40,8 @@ class AddCollab extends React.Component {
         const { influencer } = this.props.navigation.state.params
         const newCollab = {
             ...collab,
-            influencer_id:
-                influencer.id,
+            influencer:
+                { id: influencer.id, username: influencer.username },
             tags: [...collab.tags.filter(tag => tag.name !== '+')]
         }
 
