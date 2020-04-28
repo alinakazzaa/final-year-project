@@ -24,7 +24,7 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob }) => {
                     </View>}
                     <View>
                         {fj.details.status == IN_PROGRESS &&
-                            <PulseIndicator size={20} color="green" />}
+                            <PulseIndicator size={20} color={colors.GREEN} />}
                     </View>
                 </View>
             </TouchableOpacity>
