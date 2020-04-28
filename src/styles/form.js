@@ -58,19 +58,23 @@ export const form = StyleSheet.create(
         },
         detailsBox: {
             flexDirection: 'row',
-            padding: spacing.LARGE,
-            paddingTop: spacing.SMALL,
-            paddingBottom: spacing.LARGE,
-            borderTopWidth: 1,
+            // padding: spacing.LARGE,
+            // paddingTop: spacing.SMALL,
+            margin: 0,
+            paddingBottom: spacing.MEDIUM,
+            borderTopWidth: 0.7,
             borderColor: colors.BORDER,
-            paddingLeft: 0
+            paddingLeft: 0,
+            justifyContent: 'space-between'
         },
         labelsCol: {
             marginTop: spacing.LARGE,
             paddingTop: spacing.SMALL
         },
         inputBox: {
-            // marginRight: spacing.LARGE
+            marginTop: spacing.LARGE,
+            paddingTop: spacing.SMALL,
+            borderWidth: 0
         },
         inputViewLabel: {
             minHeight: height.MEDIUM * 1.3,

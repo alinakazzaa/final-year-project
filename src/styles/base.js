@@ -78,11 +78,13 @@ export const base = StyleSheet.create(
             paddingRight: spacing.LARGE
         },
         scrollContainer: {
-            paddingTop: spacing.MEDIUM
+            paddingTop: spacing.MEDIUM,
+            paddingBottom: spacing.LARGE
         },
         itemViewListContainer: {
-            minHeight: dimensions.fullHeight * 0.2,
-            flexDirection: 'column'
+            // maxHeight: dimensions.fullHeight * 0.2,
+            flexDirection: 'column',
+            marginBottom: spacing.LARGE
         },
         itemViewListNav: {
             paddingTop: spacing.LARGE,
@@ -113,7 +115,9 @@ export const base = StyleSheet.create(
         noneMessage: {
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,
-            alignSelf: 'center'
+            alignSelf: 'center',
+            textAlign: 'center',
+            marginBottom: spacing.MEDIUM
         },
         centerItems: {
             alignItems: 'center',
