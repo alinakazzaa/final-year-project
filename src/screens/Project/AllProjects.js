@@ -100,7 +100,8 @@ class AllProjects extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.user,
-    project: state.project
+    project: state.project,
+    running_fetch: state.running_fetch
 })
 
 const mapDispatchToProps = {
