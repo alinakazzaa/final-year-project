@@ -8,6 +8,14 @@ export const influencer_style = StyleSheet.create(
             height: dimensions.fullHeight * .2,
             alignItems: 'center'
         },
+        top: {
+            display: 'flex',
+            alignItems: 'center'
+        },
+        middle: {
+            borderBottomWidth: 0.5,
+            borderColor: colors.TERTIARY
+        },
         fjListItem: {
             paddingRight: spacing.LARGE,
             paddingLeft: spacing.LARGE,
@@ -34,11 +42,6 @@ export const influencer_style = StyleSheet.create(
             padding: spacing.MEDIUM,
             flexDirection: 'row',
             justifyContent: 'flex-end'
-        },
-        middle: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: spacing.LARGE
         },
         middleRight: {
         },
