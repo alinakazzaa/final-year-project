@@ -81,9 +81,7 @@ class AllFetchJobs extends React.Component {
                         size='32%'
                         index={index}
                         three />
-                    {fetch_job.pending &&
-                        <LoadingScreen />
-                    }
+                    {fetch_job.pending && <LoadingScreen />}
                     {fetch_job.error &&
                         <View style={base.centerItems}>
                             <Text style={base.noneMessage}>Create your first influencer search</Text>
