@@ -1,10 +1,7 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
 import { InfluencerList } from '../../components/list/InfluencerList'
-import {
-    getAllInfluencers, setCurrentInfluencer, filterInfluencers,
-    updateInfluencer, removeInfluencer, removeInfluencerFromFetchJob
-} from '../../actions/influencer'
+import { getAllInfluencers, setCurrentInfluencer, filterInfluencers, updateInfluencer, removeInfluencer } from '../../actions/influencer'
 import { connect } from 'react-redux'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
@@ -14,6 +11,7 @@ import { Input } from 'react-native-elements'
 import { influencer_style } from './styles/influencer.styles'
 import { TabView } from '../../components/tabview/TabView'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
+import { updateFetchJob, updateStateFetchJob } from '../../actions/fetchJob'
 
 class AllInfluencers extends React.Component {
 
@@ -55,9 +53,12 @@ class AllInfluencers extends React.Component {
     }
 
     deleteInflu = id => {
-        const { fetch_job, removeInfluencer } = this.props
+        const { fetch_job, removeInfluencer, updateStateFetchJob } = this.props
+        const current = { ...fetch_job.current_fetch_job }
+        current.influencers.success = [...current.influencers.success.filter(influ_id => influ_id !== id)]
+        updateStateFetchJob(current)
+        updateFetchJob(current)
         removeInfluencer(id)
-        removeInfluencerFromFetchJob(fetch_job, id)
     }
 
     render() {
@@ -65,8 +66,8 @@ class AllInfluencers extends React.Component {
         let { index } = this.state
 
         return (
-            <View style={influencer.container}>
-                <Gradient style={{ height: dimensions.fullHeight }}>
+            <View>
+                <Gradient style={base.container}>
                     <AppHeader
                         left={<BackButton onPress={() => this.props.navigation.goBack()} />}
                         center={<View style={base.searchView}>
@@ -77,9 +78,10 @@ class AllInfluencers extends React.Component {
                                 inputContainerStyle={base.searchInput} />
                         </View>}
                     />
-                    {influencer.pending && <LoadingScreen size='large' />}
+                    {influencer.pending && <LoadingScreen />}
                     {!influencer.pending && !influencer.error &&
                         <View>
+                            {influencer.pending && <LoadingScreen size='large' />}
                             <TabView
                                 titles={['To do', 'Saved']}
                                 color={colors.TERTIARY}
@@ -89,7 +91,6 @@ class AllInfluencers extends React.Component {
 
                             {influencer.all_influencers.length > 0 && index == 0 ?
                                 <View>
-
                                     <InfluencerList
                                         saveInfluencer={this.saveInfluencer}
                                         influencers={filterInfluencers(influencer.all_influencers, true)}
@@ -123,7 +124,8 @@ const mapDispatchToProps = {
     setCurrentInfluencer,
     getAllInfluencers,
     updateInfluencer,
-    removeInfluencer
+    removeInfluencer,
+    updateStateFetchJob
 }
 
 
