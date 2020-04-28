@@ -57,7 +57,6 @@ class FetchJobView extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { currentFetch } = this.props
         const { running_fetch, updateStateFetchJob, fetchPending, fetchResponse, clearRunningFetchJob } = this.props
 
         if (prev.running_fetch.details.status !== running_fetch.details.status) {
@@ -65,33 +64,33 @@ class FetchJobView extends React.Component {
         }
 
         if (running_fetch.details.status == COMPLETED) {
-            updateFetchJob(running_fetch)
-            clearRunningFetchJob()
+            const job = { ...running_fetch }
+            updateFetchJob(job)
         }
 
-        if (running_fetch.response !== null) {
-            if (running_fetch.response.type == COMPLETED_GET_USERS && running_fetch.has_next_page &&
-                running_fetch.progress.total == running_fetch.progress.done) {
-                if (running_fetch.influencers.success.length < Number(running_fetch.details.no_profiles)) {
+        if (prev.running_fetch.response !== running_fetch.response && running_fetch.response !== null) {
+            if (running_fetch.influencers.success.length >= Number(running_fetch.details.no_profiles)) {
+                fetchResponse({
+                    type: COMPLETED_FETCH
+                })
+            } else {
+                if (running_fetch.response.type == COMPLETED_GET_USERS && running_fetch.has_next_page &&
+                    running_fetch.progress.total == running_fetch.progress.done) {
 
-                    fetchNextPage(running_fetch, fetchPending, fetchResponse)
+                    let ref = setInterval(() => {
+                        fetchNextPage(running_fetch, fetchPending, fetchResponse)
+                        clearInterval(ref)
+                    }, 4000)
 
-                } else {
-                    fetchResponse({
-                        type: COMPLETED_FETCH
-                    })
+                } else if (running_fetch.response.type == GET_MEDIA_SUCCESS ||
+                    running_fetch.response.type == GET_USER_ERROR ||
+                    running_fetch.response.type == GET_USER_SUCCESS) {
+                    let ref = setInterval(() => {
+                        fetchInfluencer(running_fetch.influencers.pending[running_fetch.influencers.pending.length - 1], running_fetch,
+                            fetchPending, fetchResponse)
+                        clearInterval(ref)
+                    }, 6000)
                 }
-            } else if (running_fetch.response.type == GET_MEDIA_SUCCESS ||
-                running_fetch.response.type == GET_USER_ERROR ||
-                running_fetch.response.type == GET_USER_SUCCESS &&
-                running_fetch.influencers.pending.length > 0 &&
-                running_fetch.influencers.success.length <= Number(running_fetch.details.no_profiles)) {
-                console.log()
-                let ref = setInterval(() => {
-                    fetchInfluencer(running_fetch.influencers.pending[running_fetch.influencers.pending.length - 1], running_fetch,
-                        fetchPending, fetchResponse)
-                    clearInterval(ref)
-                }, 6000)
             }
         }
     }
@@ -185,7 +184,9 @@ class FetchJobView extends React.Component {
                                     {running_fetch.stage == MEDIA_NEXT_PAGE && <Text style={base.text}>Scrolling through the numerous media pages...</Text>}
                                 </View>}
                             {job.details.status !== IN_PROGRESS &&
-                                <Text style={base.text}>{job.details.status}</Text>}
+                                <View><Text style={base.text}>{job.details.status}</Text>
+                                    {job.details.status == COMPLETED &&
+                                        <Text style={base.text}>{`Found ${job.influencers.success.length} profiles`}</Text>}</View>}
                         </View>
                     </View>
                     {job.details.status == COMPLETED &&
