@@ -1,5 +1,5 @@
 import { GET_MEDIA_PENDING, GET_MEDIA_SUCCESS, GET_MEDIA_ERROR, GET_USER_PENDING, GET_USER_SUCCESS, GET_USER_ERROR, COMPLETED_FETCH, COMPLETED_GET_USERS } from '../constants/response/types'
-import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, USER_FETCH } from '../constants'
+import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, USER_FETCH, CLEAR_RUNNING_FETCH } from '../constants'
 
 const initialState = {
     pending: null,
@@ -105,7 +105,7 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type, message: action.message },
                 influencers: {
                     ...state.influencers,
-                    pending: [...state.influencers.pending.filter(id => id == action.id)],
+                    pending: [...state.influencers.pending.filter(id => id !== action.id)],
                     success: [...success]
                 }
             }
@@ -164,6 +164,12 @@ const fetchReducer = (state = initialState, action) => {
                 response: { type: action.type },
                 has_next_page: action.has_next_page,
                 end_cursor: action.end_cursor
+            }
+
+        case CLEAR_RUNNING_FETCH:
+
+            return {
+                ...initialState
             }
 
 
