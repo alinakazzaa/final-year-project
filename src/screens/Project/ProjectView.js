@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, TouchableOpacity, Text, ScrollView, Animated } from 'react-native'
 import { clearCurrentProject, setCurrentProject, updateProject } from '../../actions/project'
-import { getUserCollabs, setCollabsPending, fetchCollabInfluencer } from '../../actions/collab'
+import { getUserCollabs, setCollabsPending, fetchCollabInfluencer, clearCollabState, setCurrentCollab } from '../../actions/collab'
 import { AppHeader } from '../../layouts/Header'
 import { ProjectForm } from '../../components/forms/ProjectForm'
 import { connect } from 'react-redux'
@@ -31,7 +31,6 @@ class ProjectView extends React.Component {
 
     componentDidMount() {
         const { user, project, getProjectFetchJobs, getUserCollabs } = this.props
-
         if (project.current_project.title) {
             getProjectFetchJobs(user.current_user.id, project.current_project.id)
             getUserCollabs(user.current_user.id)
@@ -40,16 +39,15 @@ class ProjectView extends React.Component {
 
     }
 
-    componentDidUpdate(prev) {
-        const { fetchCollabInfluencer, collab, setCollabsPending } = this.props
+    // componentDidUpdate(prev) {
+    //     const { fetchCollabInfluencer, collab, setCollabsPending } = this.props
 
-        if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0)
-            collab.all_collabs.forEach(collab => {
-                fetchCollabInfluencer(collab.details.influencer, setCollabsPending)
-            })
-
-
-    }
+    //     if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0)
+    //         collab.all_collabs.forEach(col => {
+    //             console.log(col)
+    //             // fetchCollabInfluencer(col, setCollabsPending)
+    //         })
+    // }
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
@@ -72,7 +70,13 @@ class ProjectView extends React.Component {
         this.setState({ projectValue: { ...projectValue, active: value } })
     }
 
-    componentDidUnmount() {
+    goToCollab = collab => {
+        let { setCurrentCollab, navigation } = this.props
+        navigation.navigate('ViewCollab')
+        setCurrentCollab(collab)
+    }
+
+    componentWillUnmount() {
         const { clearCollabState, clearFetchJobState } = this.props
         clearCollabState()
         clearFetchJobState()
@@ -103,7 +107,7 @@ class ProjectView extends React.Component {
                             <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} /></View>}
                         {!collab.error && !collab.pending && <ScrollView
                             contentContainerStyle={project_style.itemScroll}>
-                            {fetch_job.all_fetch_jobs.length > 0 && <View>
+                            {collab.all_collabs.length > 0 && <View>
                                 <CollabListProjectView collabs={collab.all_collabs} goToCollab={this.goToCollab} />
                             </View>}
                         </ScrollView>}
@@ -137,7 +141,8 @@ const mapStateToProps = state => ({
     user: state.user,
     project: state.project,
     fetch_job: state.fetch_job,
-    collab: state.collab
+    collab: state.collab,
+    running_fetch: state.running_fetch
 });
 
 const mapDispatchToProps = {
@@ -149,7 +154,9 @@ const mapDispatchToProps = {
     clearFetchJobState,
     updateProject,
     getUserCollabs,
-    fetchCollabInfluencer
+    fetchCollabInfluencer,
+    clearCollabState,
+    setCurrentCollab
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectView)
