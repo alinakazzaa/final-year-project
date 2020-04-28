@@ -1,12 +1,15 @@
 import React from 'react'
 import { View, Text, Keyboard } from 'react-native'
-// import PropTypes from 'prop-types'
 // @ts-ignore
 import t from 'tcomb-form-native'
 import { formStyle, form } from '../../styles/form'
-import { base, spacing } from '../../styles/base'
+import { base } from '../../styles/base'
 import { SwitchItem } from '../switch/Switch'
-import DatePickerInput from '../datepicker/DatePickerInput'
+import { DatePickerInput } from '../datepicker/DatePickerInput'
+import { collabStyle } from '../../screens/Collab/styles/collab.styles'
+import { TagList } from '../list/TagList'
+import { Input } from 'react-native-elements'
+import { tag } from '../../styles/tag'
 
 const Form = t.form.Form
 
@@ -21,19 +24,24 @@ const Collab = t.struct({
 const options = {
     stylesheet: { ...Form.stylesheet, ...formStyle },
     auto: 'none',
-    influencer: {
-        editable: false
-    },
-    description: {
-        multiline: true
-    },
-    compensation: {
-        multiline: true
+    fields: {
+        influencer: {
+            editable: false
+        },
+        campaign: {
+            editable: false
+        },
+        description: {
+            multiline: true
+        },
+        compensation: {
+            multiline: true
+        }
     }
+
 }
 
-export const CollabForm = ({ collab, onChange, toggleSwitch }) => {
-
+export const CollabForm = ({ collab, onChange, onTagTextChange, toggleSwitch, tags, editTag, onEndTagEdit }) => {
     return (
         <View style={base.formContainer}>
             <View style={form.header}>
@@ -46,6 +54,7 @@ export const CollabForm = ({ collab, onChange, toggleSwitch }) => {
                     <Text style={form.inputViewLabel}>Influencer</Text>
                     <Text style={form.inputViewLabel}>Compensation</Text>
                     <Text style={form.inputViewLabel}>Description</Text>
+
                 </View>
                 <View style={form.inputBox}>
                     <Form
@@ -59,23 +68,19 @@ export const CollabForm = ({ collab, onChange, toggleSwitch }) => {
             </View>
             <View style={base.dateView}>
                 <Text style={{ ...form.inputViewLabel, marginRight: 55 }}>Date Start</Text>
-                <DatePickerInput />
+                <DatePickerInput handleChange={date => onChange({ ...collab, date_start: date })} date={collab.date_start} />
             </View>
             <View style={base.switchView}>
                 <Text style={form.inputViewLabel}>Active</Text>
                 <SwitchItem value={collab.active} onChange={value => toggleSwitch(value)} />
             </View>
+            <View style={collabStyle.tagsBox}>
+                <Text style={base.title}>Hashtags</Text>
+                <TagList onSubmit={onEndTagEdit} onChangeText={onTagTextChange} tags={tags} onPress={editTag} />
+            </View>
         </View>
     )
 }
-
-// CollabForm.PropTypes = {
-
-// }
-
-// CollabForm.defaultProps = {
-
-// }
 
 
 

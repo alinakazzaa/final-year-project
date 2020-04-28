@@ -2,19 +2,29 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { tag } from '../../styles/tag'
+import { tagStyles } from './styles/tag.styles'
 import { Gradient } from '../../styles/Gradient'
 import { Input } from 'react-native-elements'
+import { colors, fonts } from '../../styles/base'
 
 
-export const Tag = ({ title, onPress, editable, index }) => {
+export const Tag = ({ title, onPress, editable, index, onChangeText, onSubmit }) => {
 
-    return editable ? <View style={tag.container}><Input autoFocus={true} containerStyle={tag.input} inputStyle={tag.inputStyle} /></View> : <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => index !== null ? onPress(title, index) : onPress(title)}
-        containerStyle={tag.container}>
-        {<Text style={tag.title}># {title}</Text>}
-    </TouchableOpacity>
+    return editable ?
+        <Input
+            value={title}
+            autoFocus={true}
+            inputStyle={tagStyles.inputStyle}
+            onChangeText={text => onChangeText(text, index)}
+            onEndEditing={() => onSubmit(index)}
+            inputContainerStyle={tagStyles.editContainer}
+        />
+        : <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => index !== null ? onPress(title, index) : onPress(title)}
+            style={tagStyles.container}>
+            <Text style={tagStyles.title}>{title == '+' ? title : `#${title}`}</Text>
+        </TouchableOpacity >
     // <Gradient horizontal={true} style={tag.container}>
     //    </Gradient>
 }
@@ -22,6 +32,7 @@ export const Tag = ({ title, onPress, editable, index }) => {
 Tag.propTypes = {
     title: PropTypes.string,
     onPress: PropTypes.func.isRequired,
+    onChangeTag: PropTypes.func,
     editable: PropTypes.bool,
     index: PropTypes.number
 }
@@ -29,6 +40,7 @@ Tag.propTypes = {
 Tag.defaultProps = {
     title: '',
     editable: false,
-    index: null
+    index: null,
+    onChangeTag: null
 }
 

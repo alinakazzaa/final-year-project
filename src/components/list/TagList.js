@@ -5,10 +5,10 @@ import { Tag } from '../../components/tag/Tag'
 import { tag } from '../../styles/tag'
 
 
-export const TagList = ({ tags, onPress }) => {
+export const TagList = ({ tags, onPress, onChangeText, onSubmit }) => {
     const tagList = (tag, index) => {
         return (
-            <Tag key={index} title={tag.name} editable={tag.editable} onPress={onPress} index={index} />
+            <Tag key={index} title={tag.name} onSubmit={onSubmit} editable={tag.editable} onChangeText={onChangeText} onPress={onPress} index={index} />
         )
     }
 

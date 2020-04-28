@@ -21,7 +21,9 @@ export const collabStyle = StyleSheet.create(
             paddingBottom: spacing.LARGE,
             marginTop: spacing.LARGE,
             borderBottomColor: colors.BORDER,
-            borderBottomWidth: 1
+            borderBottomWidth: 0.7,
+            alignContent: 'flex-start',
+            justifyContent: 'flex-start'
         },
         listItem: {
             // display: 'flex',
@@ -58,5 +60,10 @@ export const collabStyle = StyleSheet.create(
             margin: spacing.MEDIUM,
             marginBottom: 0
         },
+        collabView: {
+            borderBottomWidth: 0.5,
+            borderColor: colors.BORDER,
+            margin: 0
+        }
 
     })

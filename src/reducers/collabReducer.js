@@ -1,5 +1,5 @@
 import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB, GET_INFLUENCER_BY_USERNAME_ERROR, GET_INFLUENCER_BY_USERNAME_SUCCESS } from '../constants'
-import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR, SET_COLLABS_PENDING, SET_COLLABS_SUCCESS, SET_COLLABS_ERROR } from '../constants/response/types'
+import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR, SET_COLLABS_PENDING, SET_COLLABS_SUCCESS, SET_COLLABS_ERROR, GET_COLLAB_INFLUENCER_SUCCESS } from '../constants/response/types'
 
 const initialState = {
     all_collabs: [],
@@ -14,6 +14,7 @@ const initialState = {
 
 const collabReducer = (state = initialState, action) => {
     let collabs = [...state.all_collabs]
+
     switch (action.type) {
 
         case SET_COLLABS_PENDING:
@@ -102,6 +103,14 @@ const collabReducer = (state = initialState, action) => {
             return {
                 ...state,
                 response: { type: action.type, message: action.message },
+                pending: false,
+                error: true
+            }
+
+        case GET_COLLAB_INFLUENCER_SUCCESS:
+
+            return {
+                ...state,
                 pending: false,
                 error: true
             }

@@ -1,26 +1,25 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing, height, width } from './base';
+import { colors, fonts, spacing, height, width, dimensions } from './base';
 
 export const tag = StyleSheet.create(
     {
         container: {
+            display: 'flex',
             backgroundColor: colors.TERTIARY,
             borderRadius: 12,
-            padding: spacing.MEDIUM * 0.7,
-            margin: spacing.SMALL,
-            height: 30
-        },
-        input: {
-            height: 30
-            // flexWrap: 'wrap',
-            // borderBottomWidth: 0,
-            // height: fonts.SMALL,
-            // backgroundColor: colors.TERTIARY
+            width: dimensions.fullWidth * 0.2,
+            alignItems: 'center',
+            textAlignVertical: 'center',
+            flexWrap: 'wrap',
+            borderWidth: 0
+            // padding: 2
+            // margin: spacing.SMALL,
         },
         inputStyle: {
-            // fontSize: fonts.SMALL * 0.8,
+            fontSize: fonts.SMALL,
+
             // fontFamily: fonts.PRIMARY,
-            color: colors.TERTIARY,
+            color: colors.WHITE,
             // borderBottomWidth: 0
             // fontWeight: fonts.WEIGHT_MEDIUM
         },
@@ -32,6 +31,8 @@ export const tag = StyleSheet.create(
         },
         list: {
             flexDirection: 'row',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            justifyContent: 'space-evenly',
+            marginTop: spacing.MEDIUM
         }
     });
