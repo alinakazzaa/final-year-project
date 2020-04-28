@@ -95,7 +95,6 @@ export default class FetchJobForm extends React.Component {
                     </View>
                     <View style={form.inputBox}>
                         <Form
-                            // ref={c => this._form = c}
                             type={FetchJob}
                             options={options}
                             value={fetchJob}
