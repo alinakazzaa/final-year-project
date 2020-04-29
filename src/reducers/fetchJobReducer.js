@@ -86,6 +86,6 @@ const fetchJobReducer = (state = initialState, action) => {
     }
 }
 
-export const getIndex = (fetchJobs, job) => fetchJobs.map(j => { return j }).indexOf(job.details.id)
+export const getIndex = (fetchJobs, job) => fetchJobs.map(j => { return j.details.id }).indexOf(job.details.id)
 
 export default fetchJobReducer
