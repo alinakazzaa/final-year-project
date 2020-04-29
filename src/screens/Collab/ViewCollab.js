@@ -75,8 +75,15 @@ class ViewCollab extends React.Component {
         })
     }
 
-    onThumbnailPress = () => {
-        Linking.openURL('instagram://user?username=alinakazzaa')
+    onThumbnailPress = publication => {
+        const url = `https://www.instagram.com/p/${publication.shortcode}/`
+        Linking.canOpenURL(url).then(supported => {
+            if (supported) {
+                Linking.openURL(url)
+            } else {
+                console.log("Don't know how to open URI: " + url)
+            }
+        })
     }
 
     editTag = (tag, index) => {

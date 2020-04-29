@@ -28,7 +28,7 @@ export const PublicationList = ({ publications, onPress }) => {
                         />
                         <Text style={{ ...base.title, fontSize: 18 }}>{pub.likes}</Text>
                     </View>
-                    <View style={{ display: 'flex', marginTop: spacing.SMALL, flexDirection: 'row', alignItems: 'center', paddingLeft: spacing.SMALL }}>
+                    <View style={{ display: 'flex', marginTop: spacing.SMALL, flexDirection: 'row', paddingLeft: spacing.SMALL }}>
                         <IconButton
                             name='comment'
                             size={25}
@@ -40,6 +40,7 @@ export const PublicationList = ({ publications, onPress }) => {
                     </View>
                     <View><Text style={{ ...base.text, fontSize: 20, marginTop: spacing.MEDIUM }}># {pub.hashtag.name}</Text></View>
                 </View>
+                <Text style={{ paddingLeft: spacing.SMALL, color: colors.TERTIARY }}>{pub.comment}</Text>
             </View>
         )
     }

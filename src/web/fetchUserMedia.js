@@ -52,7 +52,9 @@ export const extractMedia = (edges, hashtags) => {
                         hashtag: tag,
                         comments: edge.node.edge_media_to_comment.count,
                         thumbnail: edge.node.thumbnail_src,
-                        likes: edge.node.edge_media_preview_like.count
+                        likes: edge.node.edge_media_preview_like.count,
+                        shortcode: edge.node.shortcode,
+                        comment: edge.node.edge_media_to_caption.edges[0].node.text
                     }
                     media.push(media_item)
                 }

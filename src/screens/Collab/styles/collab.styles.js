@@ -24,7 +24,8 @@ export const collabStyle = StyleSheet.create(
             justifyContent: 'flex-start'
         },
         listItem: {
-            display: 'flex'
+            display: 'flex',
+            marginBottom: spacing.MEDIUM
         },
         left: {
             display: 'flex',
