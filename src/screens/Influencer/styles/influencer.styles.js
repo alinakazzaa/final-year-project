@@ -8,13 +8,33 @@ export const influencer_style = StyleSheet.create(
             height: dimensions.fullHeight * .2,
             alignItems: 'center'
         },
-        top: {
+        topView: {
             display: 'flex',
             alignItems: 'center'
         },
+        middleView: {
+            borderBottomWidth: 0.7,
+            borderColor: colors.TERTIARY
+        },
+        top: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: 10,
+            paddingTop: 20
+        },
         middle: {
             borderBottomWidth: 0.5,
-            borderColor: colors.TERTIARY
+            borderColor: colors.BORDER,
+            marginBottom: 10,
+            paddingBottom: 30
+        },
+        infoBox: {
+            marginTop: 30,
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+        },
+        info: {
+            alignItems: 'center'
         },
         fjListItem: {
             paddingRight: spacing.LARGE,
@@ -34,7 +54,8 @@ export const influencer_style = StyleSheet.create(
             backgroundColor: colors.SCREEN,
             borderRadius: 15,
             flexDirection: 'column',
-            marginBottom: 30
+            marginBottom: 30,
+            padding: 20
         },
         header: {
             borderBottomWidth: 0.5,
@@ -43,37 +64,18 @@ export const influencer_style = StyleSheet.create(
             flexDirection: 'row',
             justifyContent: 'flex-end'
         },
-        middleRight: {
-        },
-        middleLeft: {
-            justifyContent: 'space-between',
-            marginTop: spacing.MEDIUM
+        linkViewInflu: {
+            display: 'flex',
+            flexDirection: 'row'
         },
         linkView: {
             display: 'flex',
             marginTop: spacing.LARGE,
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            alignItems: 'center'
+            flexDirection: 'row'
         },
         footer: {
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            borderTopWidth: 0.4,
-            padding: spacing.MEDIUM,
-            borderTopColor: colors.BORDER
-        },
-        linkText: {
-            fontSize: fonts.LARGE,
-            paddingTop: spacing.SMALL
-        },
-        info: {
-            justifyContent: 'space-between',
-            padding: spacing.LARGE
-        },
-        infoText: {
-            fontWeight: fonts.WEIGHT_LIGHT,
-            fontSize: fonts.LARGE
+            justifyContent: 'space-between'
         },
         voteOption: {
             borderRightWidth: 0.4,

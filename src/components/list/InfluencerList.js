@@ -22,31 +22,36 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                             onPress={() => goToInfluencer(influ)}
                         />
                     </View>
-                    <View style={influencer_style.middle}>
-                        <View style={influencer_style.middleLeft}>
+                    <View>
+                        <View style={influencer_style.top}>
                             <Avatar
-                                size={160}
+                                size={170}
                                 rounded
                                 source={{
                                     uri: influ.profile_pic_url,
                                 }} />
-                            <TouchableOpacity style={influencer_style.linkView} onPress={() => goToProfile(influ.profile_url)}>
-                                <Text style={influencer_style.linkText}>Instagram</Text>
+                            <Text style={{ ...base.title, fontSize: 20, marginTop: 20 }}>{influ.username}</Text>
+                        </View>
+                        <View style={influencer_style.middle}>
+                            <View style={influencer_style.infoBox}>
+                                <View style={influencer_style.info}>
+                                    <Text style={{ ...base.title, fontSize: 20 }}>Followers</Text>
+                                    <Text style={{ ...base.text, fontSize: 20 }}>{formatNumber(influ.followers)}</Text>
+                                </View>
+                                <View style={influencer_style.info}>
+                                    <Text style={{ ...base.title, fontSize: 20 }}>Media count</Text>
+                                    <Text style={{ ...base.text, fontSize: 20 }}>{formatNumber(influ.media_count)}</Text>
+                                </View>
+                            </View>
+                            <View><TouchableOpacity style={{ ...influencer_style.linkView, alignSelf: 'center' }} onPress={() => goToProfile(influ.profile_url)}>
+                                <Text style={{ ...base.title, fontSize: 20 }}>Instagram profile</Text>
                                 <IconButton
                                     name='launch'
                                     size={22}
                                     color={colors.TERTIARY}
                                     type='material-icons'
                                 />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={influencer_style.middleRight}>
-                            <View style={influencer_style.info}>
-                                <Text style={base.title}>Followers</Text>
-                                <Text style={base.text}>{formatNumber(influ.followers)}</Text>
-                                <Text style={base.title}>No of media</Text>
-                                <Text style={base.text}>{formatNumber(influ.media_count)}</Text>
-                            </View>
+                            </TouchableOpacity></View>
                         </View>
                     </View>
                     <View style={influencer_style.footer}>
@@ -75,7 +80,7 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                                 onPress={() => removeInfluencer(influ.id)}
                             /></TouchableOpacity>
                     </View>
-                </View>
+                </View >
             )
     }
 

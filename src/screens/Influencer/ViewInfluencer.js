@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
 import { Avatar, Tooltip } from 'react-native-elements'
 import { IconButton } from '../../components/buttons/IconButton'
@@ -35,6 +35,17 @@ class ViewInfluencer extends React.Component {
         updateStateFetchJob(current)
         updateFetchJob(current)
         removeInfluencer(id)
+        this.props.navigation.goBack()
+    }
+
+    goToProfile = url => {
+        Linking.canOpenURL(url).then(supported => {
+            if (supported) {
+                Linking.openURL(url)
+            } else {
+                console.log("Don't know how to open URI: " + url)
+            }
+        })
     }
 
     render() {
@@ -46,70 +57,81 @@ class ViewInfluencer extends React.Component {
                     <AppHeader
                         left={<BackButton onPress={() => navigation.goBack()} />}
                     />
-                    <View style={influencer_style.top}>
-                        <Avatar
-                            size={200}
-                            rounded
-                            containerStyle={styles.avatar}
-                            source={{
-                                uri: influencer.current_influencer.profile_pic_url,
-                            }} />
-                        <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '100%', marginTop: spacing.LARGE, paddingTop: spacing.LARGE, borderTopWidth: 0.7, borderColor: colors.TERTIARY }}>
-                            <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>Username</Text>
-                            <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{influencer.current_influencer.username}</Text>
+                    <ScrollView>
+                        <View style={influencer_style.topView}>
+                            <Avatar
+                                size={200}
+                                rounded
+                                containerStyle={styles.avatar}
+                                source={{
+                                    uri: influencer.current_influencer.profile_pic_url,
+                                }} />
+                            <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '100%', marginTop: spacing.LARGE, paddingTop: spacing.LARGE, borderTopWidth: 0.7, borderColor: colors.TERTIARY }}>
+                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>Username</Text>
+                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{influencer.current_influencer.username}</Text>
+                            </View>
+                            <View><TouchableOpacity style={{ ...influencer_style.linkViewInflu, alignSelf: 'center' }} onPress={() => this.goToProfile(influencer.current_influencer.profile_url)}>
+                                <Text style={{ ...base.title, fontSize: 25 }}>Instagram profile</Text>
+                                <IconButton
+                                    name='launch'
+                                    size={30}
+                                    color={colors.TERTIARY}
+                                    type='material-icons'
+                                />
+                            </TouchableOpacity></View>
                         </View>
-                    </View>
 
-                    <View style={influencer_style.middle}>
-                        <View style={form.header} >
-                            <Text style={base.title}>Details</Text>
-                        </View>
-                        <View style={{ ...form.detailsBox, borderColor: colors.TERTIARY }}>
-                            <View style={form.labelsCol}>
-                                <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Followers</Text>
-                                <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Media Count</Text>
-                                <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Date added</Text>
+                        <View style={influencer_style.middleView}>
+                            <View style={form.header} >
+                                <Text style={base.title}>Details</Text>
                             </View>
-                            <View style={form.inputBox}>
-                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.followers)}</Text>
-                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.media_count)}</Text>
-                                {/* <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>{fetch_job.current_fetch_job.details.date_fetch_run}</Text> */}
-                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{fetch_job.current_fetch_job.details.date_created}</Text>
+                            <View style={{ ...form.detailsBox, borderColor: colors.TERTIARY }}>
+                                <View style={form.labelsCol}>
+                                    <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Followers</Text>
+                                    <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Media Count</Text>
+                                    <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Date added</Text>
+                                </View>
+                                <View style={form.inputBox}>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.followers)}</Text>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.media_count)}</Text>
+                                    {/* <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>{fetch_job.current_fetch_job.details.date_fetch_run}</Text> */}
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{fetch_job.current_fetch_job.details.date_created}</Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                    <View style={{ ...base.centered, marginTop: spacing.LARGE * 2, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        {/* <Tooltip popover={<Text>Influencer saved</Text>}> */}
-                        <TouchableOpacity>
-                            <IconButton
-                                name='check'
-                                size={60}
-                                color={colors.GREEN}
-                                type='material-icons'
-                                onPress={() => this.saveInfluencer(influencer.current_influencer)}
-                            />
-                        </TouchableOpacity>
-                        {/* </Tooltip> */}
-                        <TouchableOpacity>
-                            <IconButton
-                                name='account-multiple-plus-outline'
-                                size={60}
-                                color={colors.WHITE}
-                                type='material-community'
-                                onPress={() => this.createCollab(influencer.current_influencer)}
-                            /></TouchableOpacity>
-                        <TouchableOpacity>
-                            {/* <Tooltip popover={<Text>Influencer removed</Text>}> */}
-                            <IconButton
-                                name='close'
-                                size={60}
-                                color={colors.RED}
-                                type='material-icons'
-                                onPress={() => this.deleteInflu(influencer.current_influencer.id)}
-                            />
+                        <View style={{ ...base.centered, display: 'flex', marginTop: spacing.MEDIUM, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            {/* <Tooltip popover={<Text>Influencer saved</Text>}> */}
+                            <TouchableOpacity>
+                                <IconButton
+                                    name='check'
+                                    size={60}
+                                    color={colors.GREEN}
+                                    type='material-icons'
+                                    onPress={() => this.saveInfluencer(influencer.current_influencer)}
+                                />
+                            </TouchableOpacity>
                             {/* </Tooltip> */}
-                        </TouchableOpacity>
-                    </View>
+                            <TouchableOpacity>
+                                <IconButton
+                                    name='account-multiple-plus-outline'
+                                    size={60}
+                                    color={colors.WHITE}
+                                    type='material-community'
+                                    onPress={() => this.createCollab(influencer.current_influencer)}
+                                /></TouchableOpacity>
+                            <TouchableOpacity>
+                                {/* <Tooltip popover={<Text>Influencer removed</Text>}> */}
+                                <IconButton
+                                    name='close'
+                                    size={60}
+                                    color={colors.RED}
+                                    type='material-icons'
+                                    onPress={() => this.deleteInflu(influencer.current_influencer.id)}
+                                />
+                                {/* </Tooltip> */}
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
                 </Gradient>
             </View >
         )
