@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import { InfluencerList } from '../../components/list/InfluencerList'
 import { getAllInfluencers, setCurrentInfluencer, filterInfluencers, updateInfluencer, removeInfluencer } from '../../actions/influencer'
 import { connect } from 'react-redux'
@@ -61,6 +61,16 @@ class AllInfluencers extends React.Component {
         removeInfluencer(id)
     }
 
+    goToProfile = url => {
+        Linking.canOpenURL(url).then(supported => {
+            if (supported) {
+                Linking.openURL(url)
+            } else {
+                console.log("Don't know how to open URI: " + url)
+            }
+        })
+    }
+
     render() {
         const { influencer, project } = this.props
         let { index } = this.state
@@ -92,6 +102,7 @@ class AllInfluencers extends React.Component {
                             {influencer.all_influencers.length > 0 && index == 0 ?
                                 <View>
                                     <InfluencerList
+                                        goToProfile={this.goToProfile}
                                         saveInfluencer={this.saveInfluencer}
                                         influencers={filterInfluencers(influencer.all_influencers, true)}
                                         current_project={project.current_project}

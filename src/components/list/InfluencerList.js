@@ -7,7 +7,7 @@ import { formatNumber } from '../../actions/base'
 import { influencer_style } from '../../screens/Influencer/styles/influencer.styles'
 import { colors, base } from '../../styles/base'
 
-export const InfluencerList = ({ influencers, goToInfluencer, createCollab, removeInfluencer, saveInfluencer }) => {
+export const InfluencerList = ({ influencers, goToInfluencer, createCollab, removeInfluencer, saveInfluencer, goToProfile }) => {
 
     const influList = (influ, index) => {
         if (influ !== null)
@@ -30,7 +30,7 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                                 source={{
                                     uri: influ.profile_pic_url,
                                 }} />
-                            <TouchableOpacity style={influencer_style.linkView} onPress={() => console.log("Go to user profile....")}>
+                            <TouchableOpacity style={influencer_style.linkView} onPress={() => goToProfile(influ.profile_url)}>
                                 <Text style={influencer_style.linkText}>Instagram</Text>
                                 <IconButton
                                     name='launch'
