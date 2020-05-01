@@ -1,4 +1,4 @@
-import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR } from '../constants'
+import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR, UPDATE_USER } from '../constants'
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
 import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types'
@@ -101,22 +101,14 @@ export const updateUser = (user, user_id) => {
             ...user
         }
     })
+
+    return {
+        type: UPDATE_USER,
+        user
+    }
 }
 
 export const removeUser = user => {
     db.ref(`/Users`).child(user.id).remove()
 }
-
-// export const getUserByUsername = username => {
-//     let user_obj = {}
-//     DB_USER_REF.on('value', user_snapshot => {
-//         user_snapshot.forEach(user => {
-//             if (user.val().details.username == username) {
-//                 user_obj = { ...user.val().details }
-//             }
-//         })
-//     })
-
-//     return user_obj
-// }
 

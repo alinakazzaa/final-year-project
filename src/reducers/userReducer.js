@@ -1,4 +1,4 @@
-import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR } from '../constants'
+import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR, UPDATE_USER } from '../constants'
 import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types'
 
 const initialState = {
@@ -54,6 +54,16 @@ const userReducer = (state = initialState, action) => {
                 pending: false,
                 error: { type: action.type, message: action.message }
             }
+
+
+        case UPDATE_USER:
+
+            return {
+                ...state,
+                current_user: { ...action.user }
+            }
+
+
         default:
             return state
     }
