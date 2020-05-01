@@ -1,5 +1,5 @@
 import { db } from '../database/config/db';
-import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, GET_INFLUENCER_BY_USERNAME_ERROR, GET_INFLUENCER_BY_USERNAME_SUCCESS, CLEAR_COLLAB_STATE } from '../constants';
+import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, CLEAR_COLLAB_STATE } from '../constants';
 import { DATE_TODAY } from '../constants/TodayDate'
 import { DB_USER_COLLABS_REF } from '../constants/database';
 import { SET_COLLABS_ERROR, SET_COLLABS_SUCCESS, SET_COLLABS_PENDING, GET_COLLAB_INFLUENCER_SUCCESS, GET_COLLAB_INFLUENCER_ERROR } from '../constants/response/types';
@@ -68,13 +68,13 @@ export const clearCollabState = () => {
     }
 }
 
-export const addCollab = (user_id, project_id, collab_val) => {
+export const addCollab = (user_id, project_id, collabValue) => {
+
     let collab = {
-        ...collab_val,
-        description: collab_val.description || '',
+        ...collabValue,
         date_created: DATE_TODAY,
         id: '',
-        influencer: collab_val.influencer,
+        influencer: collabValue.influencer,
         user_id: user_id,
         project_id: project_id
     }

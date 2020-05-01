@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { Avatar, Tooltip } from 'react-native-elements'
 import { IconButton } from '../../components/buttons/IconButton'
@@ -12,6 +12,7 @@ import { form } from '../../styles/form'
 import { influencer_style } from './styles/influencer.styles'
 import { updateInfluencer, removeInfluencer } from '../../actions/influencer'
 import { updateFetchJob, updateStateFetchJob } from '../../actions/fetchJob'
+import { setCurrentCollab } from '../../actions/collab'
 
 class ViewInfluencer extends React.Component {
 
@@ -25,6 +26,7 @@ class ViewInfluencer extends React.Component {
 
     saveInfluencer = influencer => {
         const { updateInfluencer } = this.props
+        Alert.alert("Influencer has been saved")
         updateInfluencer({ ...influencer, to_do: false })
     }
 
@@ -35,6 +37,7 @@ class ViewInfluencer extends React.Component {
         updateStateFetchJob(current)
         updateFetchJob(current)
         removeInfluencer(id)
+        Alert.alert("Influencer deleted")
         this.props.navigation.goBack()
     }
 
@@ -43,19 +46,28 @@ class ViewInfluencer extends React.Component {
             if (supported) {
                 Linking.openURL(url)
             } else {
-                console.log("Don't know how to open URI: " + url)
+                Alert.alert("Opps! Cannot open page")
             }
         })
     }
 
-    render() {
-        const { influencer, navigation, fetch_job } = this.props
+    goToCollab = () => {
+        const { setCurrentCollab, navigation, collab, influencer } = this.props
+        setCurrentCollab(collab.all_collabs.find(c =>
+            c.details.influencer.username == influencer.current_influencer.username))
 
+        navigation.navigate('ViewCollab')
+    }
+
+    render() {
+        const { influencer, navigation, fetch_job, collab } = this.props
+        const has_collab = collab.all_collabs.find(c => c.details.influencer.username == influencer.current_influencer.username) ? true : false
         return (
             <View>
                 <Gradient style={base.container}>
                     <AppHeader
                         left={<BackButton onPress={() => navigation.goBack()} />}
+                        center={<View />}
                     />
                     <ScrollView>
                         <View style={influencer_style.topView}>
@@ -67,18 +79,24 @@ class ViewInfluencer extends React.Component {
                                     uri: influencer.current_influencer.profile_pic_url,
                                 }} />
                             <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '100%', marginTop: spacing.LARGE, paddingTop: spacing.LARGE, borderTopWidth: 0.7, borderColor: colors.TERTIARY }}>
-                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>Username</Text>
-                                <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{influencer.current_influencer.username}</Text>
+                                <View style={form.labelsCol}>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>Username</Text>
+                                </View>
+                                <View style={form.inputBox}>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{influencer.current_influencer.username}</Text>
+                                </View>
                             </View>
-                            <View><TouchableOpacity style={{ ...influencer_style.linkViewInflu, alignSelf: 'center' }} onPress={() => this.goToProfile(influencer.current_influencer.profile_url)}>
-                                <Text style={{ ...base.title, fontSize: 25 }}>Instagram profile</Text>
-                                <IconButton
-                                    name='launch'
-                                    size={30}
-                                    color={colors.TERTIARY}
-                                    type='material-icons'
-                                />
-                            </TouchableOpacity></View>
+                            <View style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <TouchableOpacity style={{ ...influencer_style.linkViewInflu, alignSelf: 'center' }} onPress={() => this.goToProfile(influencer.current_influencer.profile_url)}>
+                                    <Text style={{ ...base.title, fontSize: 20 }}>Instagram profile</Text>
+                                    <IconButton
+                                        name='launch'
+                                        size={30}
+                                        color={colors.TERTIARY}
+                                        type='material-icons'
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
                         <View style={influencer_style.middleView}>
@@ -100,7 +118,6 @@ class ViewInfluencer extends React.Component {
                             </View>
                         </View>
                         <View style={{ ...base.centered, display: 'flex', marginTop: spacing.MEDIUM, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            {/* <Tooltip popover={<Text>Influencer saved</Text>}> */}
                             <TouchableOpacity>
                                 <IconButton
                                     name='check'
@@ -110,17 +127,24 @@ class ViewInfluencer extends React.Component {
                                     onPress={() => this.saveInfluencer(influencer.current_influencer)}
                                 />
                             </TouchableOpacity>
-                            {/* </Tooltip> */}
-                            <TouchableOpacity>
+                            {has_collab ? <TouchableOpacity onPress={() => this.goToCollab()}>
                                 <IconButton
-                                    name='account-multiple-plus-outline'
-                                    size={60}
+                                    name='account-arrow-right'
+                                    size={30}
                                     color={colors.WHITE}
                                     type='material-community'
-                                    onPress={() => this.createCollab(influencer.current_influencer)}
-                                /></TouchableOpacity>
-                            <TouchableOpacity>
-                                {/* <Tooltip popover={<Text>Influencer removed</Text>}> */}
+                                />
+                                <Text style={{ ...base.title, color: colors.WHITE, fontSize: 18 }}>See collaboration</Text>
+                            </TouchableOpacity> : <TouchableOpacity onPress={() => this.createCollab(influencer.current_influencer)}>
+                                    <IconButton
+                                        name='account-multiple-plus-outline'
+                                        size={40}
+                                        color={colors.WHITE}
+                                        type='material-community'
+                                    />
+                                    <Text style={{ ...base.title, color: colors.WHITE, fontSize: 18 }}>New collaboration</Text>
+                                </TouchableOpacity>}
+                            <Tooltip popover={<Text>Influencer removed</Text>}><TouchableOpacity>
                                 <IconButton
                                     name='close'
                                     size={60}
@@ -128,8 +152,7 @@ class ViewInfluencer extends React.Component {
                                     type='material-icons'
                                     onPress={() => this.deleteInflu(influencer.current_influencer.id)}
                                 />
-                                {/* </Tooltip> */}
-                            </TouchableOpacity>
+                            </TouchableOpacity></Tooltip>
                         </View>
                     </ScrollView>
                 </Gradient>
@@ -157,7 +180,7 @@ const styles = StyleSheet.create(
             marginTop: 20
         },
         avatar: {
-            marginTop: 30
+            marginTop: 10
         },
         title: {
             fontSize: 13,
@@ -221,13 +244,15 @@ const styles = StyleSheet.create(
 
 const mapStateToProps = state => ({
     fetch_job: state.fetch_job,
-    influencer: state.influencer
+    influencer: state.influencer,
+    collab: state.collab
 })
 
 const mapDispatchToProps = {
     updateInfluencer,
     removeInfluencer,
-    updateStateFetchJob
+    updateStateFetchJob,
+    setCurrentCollab
 }
 
 

@@ -50,11 +50,11 @@ class AddCollab extends React.Component {
         if (!collab.all_collabs.find(c => c.details.influencer.id == influencer.id)) {
             addCollab(project.current_project.user_id, project.current_project.id, newCollab)
             Alert.alert("Collaboration added!")
+            navigation.goBack()
         } else {
             Alert.alert("Collaboration already exists!")
             navigation.goBack()
         }
-
     }
 
     handleChange = collabValue => {
@@ -69,7 +69,7 @@ class AddCollab extends React.Component {
     }
 
     toggleSwitch = value => {
-        this.setState({ collab: { ...this.state.collab, active: value } })
+        this.setState({ collabValue: { ...this.state.collabValue, active: value } })
     }
 
     editTag = (tag, index) => {

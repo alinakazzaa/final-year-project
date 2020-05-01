@@ -17,8 +17,7 @@ const Collab = t.struct({
     title: t.String,
     campaign: t.String,
     influencer: t.String,
-    compensation: t.maybe(t.String),
-    description: t.maybe(t.String)
+    compensation: t.maybe(t.String)
 })
 
 const options = {
@@ -30,9 +29,6 @@ const options = {
         },
         campaign: {
             editable: false
-        },
-        description: {
-            multiline: true
         },
         compensation: {
             multiline: true
@@ -53,8 +49,6 @@ export const CollabForm = ({ collab, onChange, removeTag, onTagTextChange, toggl
                     <Text style={form.inputViewLabel}>Campaign</Text>
                     <Text style={form.inputViewLabel}>Influencer</Text>
                     <Text style={form.inputViewLabel}>Compensation</Text>
-                    <Text style={form.inputViewLabel}>Description</Text>
-
                 </View>
                 <View style={form.inputBox}>
                     <Form

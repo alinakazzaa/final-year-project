@@ -6,7 +6,7 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { colors, base } from '../../styles/base'
 import { TabView } from '../../components/tabview/TabView'
 import { Input } from 'react-native-elements'
-import { getUserCollabs, setCollabsPending, setCurrentCollab, removeCollab, filterCollabs } from '../../actions/collab'
+import { getUserCollabs, setCurrentCollab, removeCollab, filterCollabs } from '../../actions/collab'
 import { searchedCollabs } from '../../reducers/collabReducer'
 import { CollabList } from '../../components/list/CollabList'
 
@@ -23,25 +23,24 @@ class AllCollabs extends React.Component {
     }
 
     componentDidMount() {
-        let { user, setCollabsPending, getUserCollabs } = this.props
-        setCollabsPending()
+        const { user, getUserCollabs } = this.props
         getUserCollabs(user.current_user.id)
     }
 
     goToCollab = collab => {
-        let { setCurrentCollab, navigation } = this.props
+        const { setCurrentCollab, navigation } = this.props
         navigation.navigate('ViewCollab')
         setCurrentCollab(collab)
     }
 
     deleteCollab = collab => {
-        let { removeCollab } = this.props
+        const { removeCollab } = this.props
         removeCollab(collab)
     }
 
     searchCollab = text => {
         const { collab } = this.props
-        let filtered_collabs = searchedCollabs(collab, text)
+        const filtered_collabs = searchedCollabs(collab, text)
         this.setState({ searched: filtered_collabs, isSearch: true })
     }
 
@@ -98,7 +97,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     getUserCollabs,
-    setCollabsPending,
     setCurrentCollab,
     removeCollab
 }

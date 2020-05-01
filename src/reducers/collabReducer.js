@@ -63,7 +63,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_collabs: [...collabs]
+                all_collabs: collabs
             }
 
         case UPDATE_COLLAB:
@@ -79,7 +79,7 @@ const collabReducer = (state = initialState, action) => {
         case REMOVE_COLLAB:
             return {
                 ...state,
-                all_collabs: [...collabs.filter(c => c.details.id == action.collab.details.id)]
+                all_collabs: [...collabs.filter(c => c.details.id !== action.collab.details.id)]
             }
 
 
@@ -121,7 +121,10 @@ const collabReducer = (state = initialState, action) => {
     }
 }
 
-export const getIndex = (collabs, collab) => collabs.map(c => { return c }).indexOf(collab)
-export const searchedCollabs = (state, text) => [...state.all_collabs.filter(collab => collab.details.title.toLowerCase().includes(text.toLowerCase()))]
+export const getIndex = (collabs, collab) => collabs.map(c => { return c.details.id }).indexOf(collab.details.id)
+export const searchedCollabs = (state, text) => [...state.all_collabs.filter(collab => {
+    collab.details.title.toLowerCase().includes(text.toLowerCase()) ||
+        collab.details.influencer.username.toLowerCase().includes(text.toLowerCase())
+})]
 
 export default collabReducer
