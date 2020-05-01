@@ -22,7 +22,6 @@ const fetchJobReducer = (state = initialState, action) => {
                 all_fetch_jobs: fetch_jobs
             }
 
-
         case REMOVE_FETCH_JOB:
             return {
                 ...state,

@@ -10,7 +10,7 @@ import { clearCurrentFetchJob, updateFetchJob, updateStateFetchJob } from '../..
 import { fetchMedia } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress'
 import { COMPLETED, PENDING, IN_PROGRESS, MEDIA_FETCH, USER_FETCH, MEDIA_NEXT_PAGE } from '../../constants'
-import { fetchPending, fetchResponse, clearRunningFetchJob } from '../../actions/fetch'
+import { fetchPending, fetchResponse } from '../../actions/fetch'
 import { fetchNextPage } from '../../web/fetchNextPage'
 import { COMPLETED_GET_USERS, COMPLETED_FETCH, GET_MEDIA_SUCCESS, GET_USER_ERROR, GET_USER_SUCCESS } from '../../constants/response/types'
 import { fetchJobStyle } from './styles/fetchJob.styles'
@@ -57,7 +57,7 @@ class FetchJobView extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { fetch_job, running_fetch, updateStateFetchJob, fetchPending, fetchResponse, clearRunningFetchJob } = this.props
+        const { fetch_job, running_fetch, updateStateFetchJob, fetchPending, fetchResponse } = this.props
 
         if (fetch_job.current_fetch_job.details.status == COMPLETED && fetch_job.current_fetch_job.influencers.success.length > 0) {
             getAllInfluencers(fetch_job.current_fetch_job)
@@ -65,15 +65,16 @@ class FetchJobView extends React.Component {
 
         if (prev.running_fetch.details.status !== running_fetch.details.status) {
             updateStateFetchJob(running_fetch)
+
+            if (running_fetch.details.status == COMPLETED) {
+                updateFetchJob(running_fetch)
+            }
         }
 
-        if (running_fetch.details.status == COMPLETED) {
-            const job = { ...running_fetch }
-            updateFetchJob(job)
-        }
 
-        if (prev.running_fetch.response !== running_fetch.response && running_fetch.response !== null) {
-            if (running_fetch.influencers.success.length >= Number(running_fetch.details.no_profiles) && running_fetch.response.type != COMPLETED_FETCH) {
+
+        if (running_fetch.pending && running_fetch.response !== null) {
+            if (running_fetch.influencers.success.length >= Number(running_fetch.details.no_profiles) && running_fetch.response.type !== COMPLETED_FETCH) {
                 fetchResponse({
                     type: COMPLETED_FETCH
                 })
@@ -186,8 +187,8 @@ class FetchJobView extends React.Component {
                                     {running_fetch.stage == MEDIA_FETCH && <Text style={base.text}>Searching hashtags...</Text>}
                                     {running_fetch.stage == USER_FETCH && <Text style={base.text}>Found profile...checking criteria</Text>}
                                     {running_fetch.stage == USER_FETCH && running_fetch.response !== null && running_fetch.response.type == GET_USER_ERROR && <Text style={base.text}>No match</Text>}
-                                    {running_fetch.stage == USER_FETCH && running_fetch.response !== null && running_fetch.response.type == GET_USER_SUCCESS && <Text style={base.text}>Is a match</Text>}
-                                    {running_fetch.response !== null && running_fetch.response.type == COMPLETED_GET_USERS && <Text style={base.text}>Scrolling through hashtag pages...</Text>}
+                                    {running_fetch.stage == USER_FETCH && running_fetch.response !== null && running_fetch.response.type == GET_USER_SUCCESS && <Text style={base.text}>Found matching profile</Text>}
+                                    {running_fetch.response !== null && running_fetch.response.type == COMPLETED_GET_USERS && <Text style={base.text}>No matching profiles</Text>}
                                 </View>}
                             {job.details.status !== IN_PROGRESS &&
                                 <View><Text style={base.text}>{job.details.status}</Text>
@@ -238,7 +239,6 @@ const mapDispatchToProps = {
     getAllInfluencers,
     setCurrentInfluencer,
     clearCurrentFetchJob,
-    clearRunningFetchJob,
     fetchPending,
     fetchResponse,
     updateStateFetchJob,

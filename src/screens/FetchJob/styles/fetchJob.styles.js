@@ -44,7 +44,7 @@ export const fetchJobStyle = StyleSheet.create(
             borderTopWidth: 0.7,
             borderColor: colors.BORDER,
             marginTop: spacing.MEDIUM,
-            paddingTop: spacing.MEDIUM
+            paddingTop: spacing.LARGE
         },
         listHead: {
             flexDirection: 'row',

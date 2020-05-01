@@ -1,5 +1,4 @@
 import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from "../constants/insta_endpoints"
-import { fetchInfluencer } from "./fetchInfluencer"
 import { GET_MEDIA_PENDING, GET_MEDIA_ERROR, GET_MEDIA_SUCCESS, COMPLETED_FETCH, COMPLETED_GET_USERS } from "../constants/response/types"
 import { MSG_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
 
@@ -10,12 +9,12 @@ export const fetchMedia = (fetch_job, pending, fetchResponse) => {
 
     fetch(INSTAGRAM_GET_MEDIA_BY_HASHTAG(fetch_job.details.hashtag))
         .then(result => {
-
             if (!result.ok || result.ok == null) {
                 response = {
                     type: GET_MEDIA_ERROR,
                     message: 'error: no hashtag media'
                 }
+                fetchResponse(response)
             }
             else {
                 result.json().then(res => {
@@ -50,7 +49,6 @@ export const fetchMedia = (fetch_job, pending, fetchResponse) => {
                     fetchResponse(response)
                 })
             }
-
         }).catch(error => {
             response = {
                 type: GET_MEDIA_ERROR,

@@ -9,43 +9,81 @@ export const fetchInfluencer = (id, fetch_job, pending, fetchResponse) => {
     pending(GET_USER_PENDING)
 
     fetch(INSTAGRAM_GET_USER_BY_ID(id))
-        .then(result => result.json())
-        .then(resp => {
-            if (resp.data.user !== null) {
-                influ_obj = { ...resp.data.user.reel.user, followers: 0, media_count: 0 }
-
-                fetch(INSTAGRAM_GET_USER_FOLLOWED_BY(id))
-                    .then(result => result.json())
-                    .then(resp => {
-                        if (resp.status == 'ok') {
-                            influ_obj.followers = resp.data.user.edge_followed_by.count
-
-                            fetch(INSTAGRAM_GET_USER_MEDIA_COUNT(id))
-                                .then(result => result.json())
-                                .then(resp => {
-                                    if (resp.status == 'ok') {
-                                        influ_obj.media_count = resp.data.user.edge_owner_to_timeline_media.count
-
-                                        if (checkCriteria(fetch_job.details.criteria, influ_obj.followers)) {
-                                            response = { type: GET_USER_SUCCESS, message: 'success: user within range', id: id }
-                                            addInfluencer(influ_obj)
-                                            fetchResponse(response)
-
-                                        } else {
-                                            response = { type: GET_USER_ERROR, message: 'fail: user not within range', id: id }
-                                            fetchResponse(response)
-                                        }
-                                    }
-                                })
-                        }
-                    })
-                    .catch(err => {
-                        response = { type: GET_USER_ERROR, message: String(err), id: id }
-                        fetchResponse(response)
-                    })
-            } else {
+        .then(result => {
+            if (!result.ok || result.ok == null) {
                 response = { type: GET_USER_ERROR, message: 'fail: user by ID', id: id }
                 fetchResponse(response)
+            } else {
+                result.json().then(resp => {
+                    if (resp.data.user !== null) {
+                        influ_obj = { ...resp.data.user.reel.user, followers: 0, media_count: 0 }
+                        if (influ_obj) {
+                            fetch(INSTAGRAM_GET_USER_FOLLOWED_BY(id))
+                                .then(result => {
+                                    if (!result.ok || result.ok == null) {
+                                        response = { type: GET_USER_ERROR, message: 'fail: user followers', id: id }
+                                        fetchResponse(response)
+                                    } else {
+                                        result.json().then(resp => {
+                                            if (resp.status == 'ok') {
+                                                influ_obj.followers = resp.data.user.edge_followed_by.count
+
+                                                if (influ_obj.followers) {
+                                                    fetch(INSTAGRAM_GET_USER_MEDIA_COUNT(id))
+                                                        .then(result => {
+                                                            if (!result.ok || result.ok == null) {
+                                                                response = { type: GET_USER_ERROR, message: 'fail: user media', id: id }
+                                                                fetchResponse(response)
+                                                            } else {
+                                                                result.json().then(resp => {
+                                                                    if (resp.status == 'ok') {
+                                                                        influ_obj.media_count = resp.data.user.edge_owner_to_timeline_media.count
+                                                                        if (influ_obj.media_count) {
+                                                                            if (checkCriteria(fetch_job.details.criteria, influ_obj.followers)) {
+                                                                                response = { type: GET_USER_SUCCESS, message: 'success: user within range', id: id }
+                                                                                addInfluencer(influ_obj)
+                                                                                fetchResponse(response)
+
+                                                                            } else {
+                                                                                response = { type: GET_USER_ERROR, message: 'fail: user not within range', id: id }
+                                                                                fetchResponse(response)
+                                                                            }
+                                                                        } else {
+                                                                            response = { type: GET_USER_ERROR, message: 'fail: user media count', id: id }
+                                                                            fetchResponse(response)
+                                                                        }
+
+                                                                    } else {
+                                                                        response = { type: GET_USER_ERROR, message: 'fail: user media count', id: id }
+                                                                        fetchResponse(response)
+                                                                    }
+                                                                })
+                                                            }
+                                                        })
+                                                } else {
+                                                    response = { type: GET_USER_ERROR, message: 'fail: user media count', id: id }
+                                                    fetchResponse(response)
+                                                }
+                                            } else {
+                                                response = { type: GET_USER_ERROR, message: 'fail: user follower count', id: id }
+                                                fetchResponse(response)
+                                            }
+                                        })
+                                    }
+                                })
+                                .catch(err => {
+                                    response = { type: GET_USER_ERROR, message: String(err), id: id }
+                                    fetchResponse(response)
+                                })
+                        } else {
+                            response = { type: GET_USER_ERROR, message: 'fail: user by ID', id: id }
+                            fetchResponse(response)
+                        }
+                    } else {
+                        response = { type: GET_USER_ERROR, message: 'fail: user by ID', id: id }
+                        fetchResponse(response)
+                    }
+                })
             }
         })
 }
@@ -77,16 +115,15 @@ export const getMediaCount = id => {
         })
 }
 
-
-
-
-
-
 export const checkCriteria = (criteria, followers) => {
     let isValid = false
-
-    if (followers >= criteria.followerMin && followers <= criteria.followerMax)
-        isValid = true
+    if (criteria.followerMin == 500000) {
+        if (followers >= criteria.followerMin)
+            isValid = true
+    } else {
+        if (followers >= criteria.followerMin && followers <= criteria.followerMax)
+            isValid = true
+    }
 
     return isValid
 }

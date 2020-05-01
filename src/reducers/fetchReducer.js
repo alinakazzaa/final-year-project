@@ -70,15 +70,8 @@ const fetchReducer = (state = initialState, action) => {
 
         case COMPLETED_FETCH:
 
-            running = {
-                ...state,
-                response: { type: action.type },
-                details: { ...state.details, status: COMPLETED },
-                pending: false
-            }
-
             return {
-                ...running
+                ...initialState
             }
 
         case GET_USER_PENDING:
@@ -113,8 +106,6 @@ const fetchReducer = (state = initialState, action) => {
             if (running.progress.total == running.progress.done) {
                 running = {
                     ...running,
-                    details: { ...state.details },
-                    pending: false,
                     response: {
                         type: COMPLETED_GET_USERS
                     }
@@ -139,14 +130,13 @@ const fetchReducer = (state = initialState, action) => {
                 influencers: {
                     ...state.influencers,
                     pending: [...state.influencers.pending.filter(id => id !== action.id)],
-                    fail
+                    fail: [...fail]
                 }
             }
 
             if (running.progress.total == running.progress.done) {
                 running = {
                     ...running,
-                    pending: false,
                     response: {
                         type: COMPLETED_GET_USERS
                     }
