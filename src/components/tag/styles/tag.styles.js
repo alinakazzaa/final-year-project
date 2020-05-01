@@ -31,7 +31,7 @@ export const tagStyles = StyleSheet.create(
             paddingBottom: 10,
             borderBottomWidth: 0,
             padding: 5,
-            marginBottom: 5
+            marginBottom: 5,
         },
         inputStyle: {
             fontSize: fonts.SMALL * 0.9,
@@ -41,12 +41,6 @@ export const tagStyles = StyleSheet.create(
             fontWeight: fonts.WEIGHT_MEDIUM,
             paddingBottom: 10,
             textTransform: 'lowercase'
-        },
-        title: {
-            fontSize: fonts.SMALL * 0.9,
-            fontFamily: fonts.PRIMARY,
-            color: colors.WHITE,
-            fontWeight: fonts.WEIGHT_MEDIUM
         },
         list: {
             flexDirection: 'row',

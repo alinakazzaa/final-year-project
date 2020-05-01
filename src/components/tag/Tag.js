@@ -5,26 +5,37 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { tagStyles } from './styles/tag.styles'
 import { Gradient } from '../../styles/Gradient'
 import { Input } from 'react-native-elements'
-import { colors, fonts } from '../../styles/base'
+import { colors, fonts, base, spacing } from '../../styles/base'
+import { IconButton } from '../buttons/IconButton'
 
 
-export const Tag = ({ title, onPress, editable, index, onChangeText, onSubmit }) => {
+export const Tag = ({ title, onPress, editable, index, onChangeText, onSubmit, removeTag }) => {
 
     return editable ?
         <Input
             value={title}
             autoFocus={true}
+            style={{ textTransform: 'lowercase' }}
             inputStyle={tagStyles.inputStyle}
             onChangeText={text => onChangeText(text, index)}
             onEndEditing={() => onSubmit(index)}
             inputContainerStyle={tagStyles.editContainer}
         />
-        : <TouchableOpacity
+        : <View style={tagStyles.container}><TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => index !== null ? onPress(title, index) : onPress(title)}
-            style={tagStyles.container}>
-            <Text style={tagStyles.title}>{title == '+' ? title : `#${title}`}</Text>
+            onPress={() => index !== null ? onPress(title, index) : onPress(title)}>
+            <Text style={{ ...base.title, color: colors.WHITE }}>{title == '+' ? title : `# ${title}`}</Text>
         </TouchableOpacity >
+            {title !== '+' && <IconButton
+                name='window-close'
+                size={19}
+                color={colors.WHITE}
+                type='material-community'
+                onPress={() => removeTag(title)}
+                style={{ marginLeft: 3, marginTop: 1 }}
+            />}
+        </View>
+
     // <Gradient horizontal={true} style={tag.container}>
     //    </Gradient>
 }

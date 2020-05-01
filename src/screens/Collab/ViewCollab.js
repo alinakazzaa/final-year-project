@@ -98,12 +98,18 @@ class ViewCollab extends React.Component {
         this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
     }
 
+    removeTag = name => {
+        let updatedTags = [...this.state.collabValue.tags.filter(t => t.name !== name)]
+        this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
+    }
+
     onEndTagEdit = index => {
         const updatedTags = [...this.state.collabValue.tags]
         const editTag = { ...updatedTags[index], editable: false }
 
         updatedTags.splice(index, 1, editTag)
-        updatedTags.push({ name: '+', editable: false })
+        if (!updatedTags.find(tag => tag.title == '+'))
+            updatedTags.push({ name: '+', editable: false })
 
         this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
     }
@@ -137,7 +143,8 @@ class ViewCollab extends React.Component {
                             <CollabForm editTag={this.editTag} onEndTagEdit={this.onEndTagEdit}
                                 onTagTextChange={this.onTagTextChange} tags={collabValue.tags}
                                 toggleSwitch={this.toggleSwitch} onChange={this.handleChange}
-                                collab={collabValue} />
+                                collab={collabValue}
+                                removeTag={this.removeTag} />
                         }
                         {collab.pending && <LoadingScreen />}
                         {collabValue.active && <View>

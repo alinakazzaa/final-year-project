@@ -41,7 +41,7 @@ const options = {
 
 }
 
-export const CollabForm = ({ collab, onChange, onTagTextChange, toggleSwitch, tags, editTag, onEndTagEdit }) => {
+export const CollabForm = ({ collab, onChange, removeTag, onTagTextChange, toggleSwitch, tags, editTag, onEndTagEdit }) => {
     return (
         <View style={base.formContainer}>
             <View style={form.header}>
@@ -76,7 +76,7 @@ export const CollabForm = ({ collab, onChange, onTagTextChange, toggleSwitch, ta
             </View>
             <View style={collabStyle.tagsBox}>
                 <Text style={base.title}>Hashtags</Text>
-                <TagList onSubmit={onEndTagEdit} onChangeText={onTagTextChange} tags={tags} onPress={editTag} />
+                <TagList removeTag={removeTag} onSubmit={onEndTagEdit} onChangeText={onTagTextChange} tags={tags} onPress={editTag} />
             </View>
         </View>
     )
