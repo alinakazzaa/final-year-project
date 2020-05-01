@@ -59,7 +59,7 @@ const collabReducer = (state = initialState, action) => {
 
         case ADD_COLLAB:
 
-            collabs.splice(collabs.length, 1, action.collab)
+            collabs.splice(collabs.length, 0, action.collab)
 
             return {
                 ...state,
@@ -77,10 +77,9 @@ const collabReducer = (state = initialState, action) => {
             }
 
         case REMOVE_COLLAB:
-
             return {
                 ...state,
-                all_collabs: [...collabs.filter(c => c.details.id !== action.collab.details.id)]
+                all_collabs: [...collabs.filter(c => c.details.id == action.collab.details.id)]
             }
 
 

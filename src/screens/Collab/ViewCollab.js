@@ -46,18 +46,8 @@ class ViewCollab extends React.Component {
 
     }
 
-    // componentDidUpdate(prev) {
-    //     const { collab, fetchPending, fetchResponse } = this.props
-    //     if (collab.current_collab.details.influencer !== prev.collab.current_collab.details.influecer)
-    //        
-    // }
-
-    goToPublication = pub => {
-
-    }
-
-    handleChange = collab => {
-        this.setState({ collabValue: collab })
+    handleChange = collabValue => {
+        this.setState({ collabValue })
     }
 
     toggleSwitch = value => {
@@ -66,11 +56,11 @@ class ViewCollab extends React.Component {
     }
 
     handleSubmit = () => {
-        const { collab, updateCollab } = this.props
+        const { collabValue } = this.state
+        const { updateCollab } = this.props
         updateCollab({
             details: {
-                ...collab.current_collab.details,
-                influencer: collab.current_collab.details.influencer
+                ...collabValue
             }
         })
     }
@@ -141,7 +131,7 @@ class ViewCollab extends React.Component {
                     <View style={collabStyle.viewContainer}>
                         {collabValue.tags && collabValue.tags.length > 0 &&
                             <CollabForm editTag={this.editTag} onEndTagEdit={this.onEndTagEdit}
-                                onTagTextChange={this.onTagTextChange} tags={collabValue.tags}
+                                onTagTextChange={this.onTagTextChange}
                                 toggleSwitch={this.toggleSwitch} onChange={this.handleChange}
                                 collab={collabValue}
                                 removeTag={this.removeTag} />

@@ -29,37 +29,37 @@ class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        const { user, getUserProjects } = this.props
-        getUserProjects(user.current_user.id)
+        // const { user, getUserProjects } = this.props
+        // getUserProjects(user.current_user.id)
     }
 
     componentDidUpdate(prev) {
-        const { user, project, fetch_job, getProjectFetchJobs, getUserCollabs, collab } = this.props
+        // const { user, project, fetch_job, getProjectFetchJobs, getUserCollabs, collab } = this.props
 
-        if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
-            getProjectFetchJobs(user.current_user.id, project.all_projects[0].id)
-        }
+        // if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
+        //     getProjectFetchJobs(user.current_user.id, project.all_projects[0].id)
+        // }
 
-        if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
-            const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
-            if (completed_fetch_jobs.length > 0) {
-                const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
-                this.setState({ recent_tags: tags })
-                getUserCollabs(user.current_user.id)
-            }
+        // if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
+        //     const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
+        //     if (completed_fetch_jobs.length > 0) {
+        //         const tags = [...completed_fetch_jobs[completed_fetch_jobs.length - 1].related_tags]
+        //         this.setState({ recent_tags: tags })
+        //         getUserCollabs(user.current_user.id)
+        //     }
 
-        }
+        // }
 
-        const recent_collabs = []
-        const collab_length = collab.all_collabs.length
+        // const recent_collabs = []
+        // const collab_length = collab.all_collabs.length
 
-        if (prev.collab.all_collabs !== collab.all_collabs && collab_length > 0) {
+        // if (prev.collab.all_collabs !== collab.all_collabs && collab_length > 0) {
 
-            for (var i = length; i > length - 3; i--) {
-                recent_collabs.push(collab.all_collabs[i])
-            }
-            this.setState({ ...this.state, recent_collabs })
-        }
+        //     for (var i = length; i > length - 3; i--) {
+        //         recent_collabs.push(collab.all_collabs[i])
+        //     }
+        //     this.setState({ ...this.state, recent_collabs })
+        // }
     }
 
     onTagPress = tag => {
@@ -82,7 +82,7 @@ class HomeScreen extends React.Component {
                 />
                 <View style={home.container}>
                     {project.pending || fetch_job.pending && <LoadingScreen />}
-                    <View style={home.top}>
+                    {/* <View style={home.top}>
                         {(project.error !== null || fetch_job.error !== null) &&
                             <View><Text style={base.title}>Create campaigns and find influencers to match your marketing needs!</Text>
                                 <Text style={base.title}>Run instagram profile searches by hashtags you associate with your product</Text></View>}
@@ -91,7 +91,7 @@ class HomeScreen extends React.Component {
                             <View style={home.itemRow}>
                                 <TagList onPress={this.onTagPress} tags={recent_tags} />
                             </View></View>}
-                    </View>
+                    </View> */}
                     <View style={home.middle}>
                         <Text style={home.largeTitle}>Recent collaborations....</Text>
                     </View>
