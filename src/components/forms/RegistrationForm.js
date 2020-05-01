@@ -6,16 +6,11 @@ import { authStyle } from '../../screens/Auth/styles/auth.styles'
 // @ts-ignore
 import t from 'tcomb-form-native'
 import { formStyle } from '../../styles/form'
-import { base } from '../../styles/base'
+import { base, colors, fonts } from '../../styles/base'
 
 const Form = t.form.Form;
 
-const formStyles = {
-    ...Form.stylesheet, ...formStyle
-}
-
 const User = t.struct({
-    email: t.String,
     username: t.String,
     password: t.String,
     confirm_password: t.String
@@ -23,14 +18,6 @@ const User = t.struct({
 
 const options = {
     fields: {
-        email: {
-            error: "Email is required",
-            title: "Email *"
-        },
-        username: {
-            error: 'Username is required',
-            title: "Username *"
-        },
         password: {
             error: 'Password is required',
             title: "Password *",
@@ -42,7 +29,21 @@ const options = {
             password: true
         }
     },
-    stylesheet: formStyles,
+    stylesheet: {
+        ...Form.stylesheet, ...formStyle, textbox: {
+            normal: {
+                ...formStyle.textbox.normal,
+                borderColor: colors.TERTIARY,
+                color: colors.TERTIARY,
+                borderBottomWidth: 1,
+                fontSize: 22
+            },
+
+        },
+        controlLabel: { normal: { fontWeight: fonts.WEIGHT_MEDIUM, color: colors.TERTIARY, fontSize: 15, marginTop: 10 } }
+    },
+
+
 };
 
 
