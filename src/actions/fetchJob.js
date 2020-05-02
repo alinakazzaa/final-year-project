@@ -74,59 +74,66 @@ export const clearFetchJobState = () => {
 
 //DB
 export const addFetchJob = (user_id, project_id, fetchJobVal) => {
-    let fetch_job = {
-        details: {
-            ...fetchJobVal,
-            status: PENDING,
-            user_id: user_id,
-            project_id: project_id,
-            id: ''
+    return dispatch => {
+        let fetch_job = {
+            details: {
+                ...fetchJobVal,
+                status: PENDING,
+                user_id: user_id,
+                project_id: project_id,
+                id: ''
+            }
         }
 
-    }
+        db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
+            ...fetch_job
+        }).then(data => {
+            fetch_job.details.id = data.key
+            db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${data.key}/details`).update({
+                id: data.key
+            }).then(() => {
+                dispatch({
+                    type: ADD_FETCH_JOB,
+                    fetch_job
+                })
 
-    db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs`).push({
-        ...fetch_job
-    }).then(data => {
-        fetch_job.details.id = data.key
-
-        db.ref(`/Users/${user_id}/Projects/${project_id}/FetchJobs/${data.key}/details`).update({
-            id: data.key
+                dispatch(setCurrentFetchJob(fetch_job))
+            })
         })
-    })
 
-    return {
-        type: ADD_FETCH_JOB,
-        fetch_job
-    }
-}
 
-export const updateStateFetchJob = fetch_job => {
-    return {
-        type: UPDATE_FETCH_JOB,
-        fetch_job
     }
+
 }
 
 export const updateFetchJob = fetch_job => {
-    console.log(fetch_job)
-    // return dispatch => {
-    db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
-        ...fetch_job,
-        progress: null,
-        stage: null,
-        end_cursor: null,
-        has_next_page: null,
-        response: null,
-        influencers: { success: fetch_job.influencers.success }
-    }).then(() => {
-        console.log('saved')
-        if (fetch_job.response && fetch_job.response.type == COMPLETED_FETCH)
-            console.log("should clear state")
-        // dispatch(clearRunningFetchJob())
-    })
+    return dispatch => {
+        db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
+            ...fetch_job,
+            progress: null,
+            stage: null,
+            end_cursor: null,
+            has_next_page: null,
+            response: null,
+            influencers: { ...fetch_job.influencers, fail: null, pending: null }
+        }).then(() => {
+            if (fetch_job.details.status == COMPLETED) {
+                dispatch({
+                    type: UPDATE_FETCH_JOB,
+                    fetch_job
+                }).then(() => {
+                    dispatch(clearRunningFetchJob())
+                })
+            } else {
+                dispatch({
+                    type: UPDATE_FETCH_JOB,
+                    fetch_job
+                })
+            }
+        })
 
-    // }
+    }
+
 }
 
 export const removeFetchJob = fetch_job => {

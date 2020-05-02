@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
 import FetchJobForm from '../../components/forms/FetchJobForm'
 import { AppHeader } from '../../layouts/Header'
 import { connect } from 'react-redux'
@@ -8,7 +8,7 @@ import { BackButton } from '../../components/buttons/BackButton'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { base } from '../../styles/base'
-import { followerRanges } from '../../constants/criteria'
+import { followerRanges } from '../../constants/Criteria'
 
 class AddFetchJob extends React.Component {
 
@@ -47,11 +47,17 @@ class AddFetchJob extends React.Component {
 
     handleSubmit = () => {
         const { fetchJob } = this.state
-        const { user, project, addFetchJob, setCurrentFetchJob, navigation } = this.props
+        const { user, project, addFetchJob, setCurrentFetchJob, navigation, fetch_job } = this.props
         fetchJob.title = 'Hashtag search: ' + fetchJob.hashtag
-        addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
-        setCurrentFetchJob({ details: fetchJob })
-        this.props.navigation.goBack()
+
+        if (fetch_job.all_fetch_jobs.find(job => job.details.hashtag == fetchJob.hashtag)) {
+            Alert.alert("Search with hashtag already exists.\n\nTry something different.")
+        } else {
+            Alert.alert("Search added")
+            addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
+            navigation.goBack()
+            navigation.navigate("FetchJobView")
+        }
     }
 
     componentWillUnmount() {
@@ -79,7 +85,8 @@ class AddFetchJob extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.user,
-    project: state.project
+    project: state.project,
+    fetch_job: state.fetch_job
 })
 
 const mapDispatchToProps = {
