@@ -8,8 +8,6 @@ import { SwitchItem } from '../switch/Switch'
 import { DatePickerInput } from '../datepicker/DatePickerInput'
 import { collabStyle } from '../../screens/Collab/styles/collab.styles'
 import { TagList } from '../list/TagList'
-import { Input } from 'react-native-elements'
-import { tag } from '../../styles/tag'
 
 const Form = t.form.Form
 
@@ -71,6 +69,7 @@ export const CollabForm = ({ collab, onChange, removeTag, onTagTextChange, toggl
             <View style={collabStyle.tagsBox}>
                 <Text style={base.title}>Hashtags</Text>
                 <TagList removeTag={removeTag} onSubmit={onEndTagEdit} onChangeText={onTagTextChange} tags={collab.tags} onPress={editTag} />
+                {collab.tags.length == 1 && <Text style={{ ...base.text, fontSize: 14 }}>Add hashtags to see publication live activity</Text>}
             </View>
         </View>
     )

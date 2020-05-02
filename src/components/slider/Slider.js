@@ -4,7 +4,7 @@ import { colors } from '../../styles/base'
 import RangeSlider from 'rn-range-slider'
 import { View } from 'native-base'
 import { sliderStyle } from './styles/slider.styles'
-import { followerRanges } from '../../constants/criteria'
+import { followerRanges } from '../../constants/Criteria'
 
 export default class Slider extends React.Component {
 

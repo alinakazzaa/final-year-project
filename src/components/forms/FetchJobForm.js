@@ -8,7 +8,7 @@ import { formatNumber } from '../../actions/base'
 import { TabView } from '../tabview/TabView'
 import { colors, base, dimensions } from '../../styles/base'
 import Slider from '../slider/Slider'
-import { followerRanges, numberOfProfiles } from '../../constants/criteria'
+import { followerRanges, numberOfProfiles } from '../../constants/Criteria'
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
 import { formStyle, form } from '../../styles/form'
 
