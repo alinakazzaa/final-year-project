@@ -56,12 +56,12 @@ const fetchJobReducer = (state = initialState, action) => {
         case SET_CURRENT_FETCH_JOB:
             return {
                 ...state,
-                current_fetch_job: { ...action.fetch_job }
+                current_fetch_job: action.fetch_job
             }
 
         case UPDATE_FETCH_JOB:
 
-            fetch_jobs.splice(getIndex(fetch_jobs, action.fetch_job), 1, action.fetch_job)
+            fetch_jobs.splice(getIndex(fetch_jobs, { ...action.fetch_job }), 1, { ...action.fetch_job })
 
             return {
                 ...state,

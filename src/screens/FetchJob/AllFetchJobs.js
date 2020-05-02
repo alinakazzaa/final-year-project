@@ -9,7 +9,6 @@ import { BackButton } from '../../components/buttons/BackButton'
 import { TabView } from '../../components/tabview/TabView'
 import { colors, base } from '../../styles/base'
 import { Input, Icon } from 'react-native-elements'
-import { fetchJobStyle } from './styles/fetchJob.styles'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 
 class AllFetchJobs extends React.Component {
@@ -52,11 +51,6 @@ class AllFetchJobs extends React.Component {
     setTab = index => {
         this.setState({ index })
     }
-
-    // componentWillUnmount() {
-    //     const { clearFetchJobState } = this.props
-    //     clearFetchJobState()
-    // }
 
     render() {
         const { index, isSearch, searched } = this.state

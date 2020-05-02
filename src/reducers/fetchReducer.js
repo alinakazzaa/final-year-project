@@ -59,7 +59,7 @@ const fetchReducer = (state = initialState, action) => {
         case GET_MEDIA_ERROR:
             running = {
                 ...state,
-                response: { type: action.type, message: action.message },
+                response: { type: COMPLETED_FETCH, message: action.message },
                 pending: false,
                 details: { ...state.details, status: COMPLETED }
             }
@@ -71,7 +71,10 @@ const fetchReducer = (state = initialState, action) => {
         case COMPLETED_FETCH:
 
             return {
-                ...initialState
+                ...state,
+                pending: false,
+                response: { type: action.type },
+                details: { ...state.details, status: COMPLETED }
             }
 
         case GET_USER_PENDING:

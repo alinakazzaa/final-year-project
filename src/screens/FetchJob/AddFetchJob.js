@@ -47,7 +47,7 @@ class AddFetchJob extends React.Component {
 
     handleSubmit = () => {
         const { fetchJob } = this.state
-        const { user, project, addFetchJob, setCurrentFetchJob, navigation, fetch_job } = this.props
+        const { user, project, addFetchJob, navigation, fetch_job } = this.props
         fetchJob.title = 'Hashtag search: ' + fetchJob.hashtag
 
         if (fetch_job.all_fetch_jobs.find(job => job.details.hashtag == fetchJob.hashtag)) {
@@ -90,8 +90,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    addFetchJob,
-    setCurrentFetchJob
+    addFetchJob
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)
