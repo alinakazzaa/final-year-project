@@ -83,8 +83,14 @@ export const fetchInfluencer = (id, fetch_job, pending, fetchResponse) => {
                         response = { type: GET_USER_ERROR, message: 'fail: user by ID', id: id }
                         fetchResponse(response)
                     }
+                }).catch(err => {
+                    response = { type: GET_USER_ERROR, message: String(err), id: id }
+                    fetchResponse(response)
                 })
             }
+        }).catch(err => {
+            response = { type: GET_USER_ERROR, message: String(err), id: id }
+            fetchResponse(response)
         })
 }
 

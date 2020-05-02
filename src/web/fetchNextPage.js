@@ -53,6 +53,9 @@ export const fetchNextPage = (fetch_job, pending, fetchResponse) => {
                         fetchResponse(response)
                     }
 
+                }).catch(error => {
+                    response = { type: GET_MEDIA_ERROR, message: error }
+                    fetchResponse(response)
                 })
             }
         }).catch(error => {

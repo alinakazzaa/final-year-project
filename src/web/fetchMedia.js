@@ -15,17 +15,11 @@ export const fetchMedia = (fetch_job, pending, fetchResponse) => {
                     message: 'error: no hashtag media'
                 }
                 fetchResponse(response)
-            }
-            else {
+            } else {
                 result.json().then(res => {
-                    const edge_hashtag_to_media = { ...res.graphql.hashtag.edge_hashtag_to_media }
+                    if (res.graphql.hashtag.edge_hashtag_to_media.count > 0) {
+                        const edge_hashtag_to_media = { ...res.graphql.hashtag.edge_hashtag_to_media }
 
-                    if (edge_hashtag_to_media.count == 0) {
-                        response = {
-                            type: GET_MEDIA_ERROR,
-                            message: MSG_HASHTAG_MEDIA_ERROR
-                        }
-                    } else {
                         const related_tags = { ...res.graphql.hashtag.edge_hashtag_to_related_tags }
                         const ids = [...extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria)]
 
@@ -44,8 +38,22 @@ export const fetchMedia = (fetch_job, pending, fetchResponse) => {
                         if (!response.has_next_page) {
                             response = { ...response, type: COMPLETED_FETCH }
                         }
+
+
+                        fetchResponse(response)
+                    } else {
+                        response = {
+                            type: GET_MEDIA_ERROR,
+                            message: 'error: no hashtag media'
+                        }
+                        fetchResponse(response)
                     }
 
+                }).catch(error => {
+                    response = {
+                        type: GET_MEDIA_ERROR,
+                        message: String(error)
+                    }
                     fetchResponse(response)
                 })
             }
