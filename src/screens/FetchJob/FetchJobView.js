@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView'
 import { getAllInfluencers } from '../../actions/influencer'
 import { TextButton } from '../../components/buttons/TextButton'
-import { updateFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
+import { updateFetchJob, setCurrentFetchJob, removeFetchJob } from '../../actions/fetchJob'
 import { fetchMedia } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress'
 import { COMPLETED, PENDING, IN_PROGRESS, MEDIA_FETCH, USER_FETCH } from '../../constants'
@@ -22,6 +22,7 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { formatNumber } from '../../actions/base'
 import { fetchInfluencer } from '../../web/fetchInfluencer'
+import { IconButton } from '../../components/buttons/IconButton'
 
 class FetchJobView extends React.Component {
     state = {
@@ -42,34 +43,33 @@ class FetchJobView extends React.Component {
 
     componentDidMount() {
         const { fetch_job, getAllInfluencers, running_fetch, clearRunningFetchJob } = this.props
-        let job
+        this.setState({ currentJob: { ...this.state.currentJob, details: { ...fetch_job.current_fetch_job.details } } })
 
-        if (running_fetch.details.id && fetch_job.current_fetch_job.details.id == running_fetch.details.id) {
-            job = { ...this.state.currentJob, ...running_fetch }
-        } else {
-            job = { ...this.state.currentJob, ...fetch_job.current_fetch_job }
-        }
-
-        this.setState({ currentJob: { ...job } })
-
-        if (job.details.status == COMPLETED && job.influencers.success.length > 0) {
+        if (fetch_job.current_fetch_job.details.status == COMPLETED &&
+            fetch_job.current_fetch_job.influencers &&
+            fetch_job.current_fetch_job.influencers.success.length > 0) {
             getAllInfluencers(fetch_job.current_fetch_job)
         }
     }
 
     componentDidUpdate(prev) {
         const { currentJob } = this.state
-        const { clearRunningFetchJob, running_fetch, updateFetchJob, fetchPending, fetchResponse } = this.props
+        const { fetch_job, running_fetch, clearRunningFetchJob, updateFetchJob, fetchPending, fetchResponse } = this.props
+        let job
+
+        if (prev.fetch_job.current_fetch_job !== fetch_job.current_fetch_job) {
+            this.setState({ currentJob: { ...this.state.currentJob, ...fetch_job.current_fetch_job } })
+        }
 
 
-        // if (running_fetch.pending == false &&
-        //     running_fetch.response !== null &&
-        //     running_fetch.response.type == COMPLETED_FETCH &&
-        //     currentJob.details.status == PENDING) {
-        //     clearRunningFetchJob()
-        // }
+        if (running_fetch.pending == false &&
+            running_fetch.response !== null &&
+            running_fetch.response.type == COMPLETED_FETCH) {
+            console.log('clear fetch job')
+            // clearRunningFetchJob()
+        }
 
-        if (currentJob.details.status == COMPLETED && currentJob.influencers.success.length > 0) {
+        if (fetch_job.current_fetch_job.details.status == COMPLETED && fetch_job.current_fetch_job.influencers && fetch_job.current_fetch_job.influencers.success.length > 0) {
             getAllInfluencers(currentJob)
         }
 
@@ -145,14 +145,20 @@ class FetchJobView extends React.Component {
             Number(running_fetch.details.no_profiles) * 100).toFixed() || 0
     }
 
+    deleteFetchJob = () => {
+        const { removeFetchJob, fetch_job, navigation } = this.props
+        removeFetchJob(fetch_job.current_fetch_job)
+        Alert.alert("Search deleted")
+        navigation.goBack()
+    }
+
     render() {
         const { currentJob } = this.state
         const { influencer, navigation, running_fetch, fetch_job } = this.props
 
-        const job = running_fetch.details.id == currentJob.details.id ? running_fetch : currentJob
+        const job = running_fetch.details.id == currentJob.details.id ? { ...running_fetch } : currentJob
         const criteria = { ...job.details.criteria }
         const successLen = job.influencers.success.length || 0
-
         console.log(job)
         // show number of influencers fetched
         return (
@@ -199,7 +205,16 @@ class FetchJobView extends React.Component {
                                         <Text style={base.text}>{`Found ${successLen} ${successLen == 1 ? `profile` : `profiles`}`}</Text>}</View>}
                         </View>
                     </View>
-                    {currentJob.details.status == COMPLETED && successLen > 0 &&
+                    {job.details.status == COMPLETED && successLen == 0 &&
+                        <View style={base.centerItems}><IconButton
+                            name='close'
+                            size={60}
+                            color={colors.RED}
+                            type='material-icons'
+                            onPress={() => this.deleteFetchJob()}
+                        />
+                            <Text style={base.title}>Delete</Text></View>}
+                    {job.details.status == COMPLETED && successLen > 0 &&
                         <View style={base.itemViewListContainer}>
                             <View style={base.itemViewListNav}>
                                 <Text style={base.title}>Influencers</Text>
@@ -246,7 +261,8 @@ const mapDispatchToProps = {
     clearInfluencerState,
     setCurrentFetchJob,
     updateFetchJob,
-    clearRunningFetchJob
+    clearRunningFetchJob,
+    removeFetchJob
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FetchJobView)

@@ -89,7 +89,6 @@ export const addFetchJob = (user_id, project_id, fetchJobVal) => {
             ...fetch_job
         }).then(data => {
             fetch_job = { details: { ...fetch_job.details, id: data.key } }
-            dispatch(setCurrentFetchJob(fetch_job))
             dispatch({
                 type: ADD_FETCH_JOB,
                 fetch_job

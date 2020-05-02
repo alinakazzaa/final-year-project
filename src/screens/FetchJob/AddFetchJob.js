@@ -56,7 +56,6 @@ class AddFetchJob extends React.Component {
             Alert.alert("Search added")
             addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
             navigation.goBack()
-            navigation.navigate("FetchJobView")
         }
     }
 
