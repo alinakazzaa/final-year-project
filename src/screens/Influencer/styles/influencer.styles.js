@@ -6,7 +6,7 @@ export const influencer_style = StyleSheet.create(
         influList: {
             flexDirection: 'row',
             maxHeight: dimensions.fullHeight * .2,
-            alignItems: 'center'
+            paddingTop: spacing.MEDIUM
         },
         topView: {
             display: 'flex',
@@ -37,14 +37,16 @@ export const influencer_style = StyleSheet.create(
             alignItems: 'center'
         },
         fjListItem: {
-            paddingRight: spacing.LARGE,
+            display: 'flex',
+            marginRight: spacing.LARGE
         },
         influUsername: {
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,
             fontFamily: fonts.PRIMARY,
             textTransform: 'uppercase',
-            marginTop: spacing.MEDIUM
+            marginTop: spacing.MEDIUM,
+            alignSelf: 'center'
         },
         listItem: {
             display: 'flex',

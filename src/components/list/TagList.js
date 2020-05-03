@@ -13,7 +13,9 @@ export const TagList = ({ tags, onPress, onChangeText, onSubmit, removeTag }) =>
     }
 
     return (
-        <View style={tag.list}>
+        <View
+            style={tag.list}
+        >
             {
                 tags.length > 0 && tags.map((tag, index) => {
                     return (

@@ -2,10 +2,10 @@ import React from 'react'
 import { Avatar } from 'react-native-elements'
 import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
-import { base } from '../../styles/base'
+import { base, fonts } from '../../styles/base'
 import { influencer_style } from '../../screens/Influencer/styles/influencer.styles'
 
-export const InfluencerListFjView = ({ influencers, goToInfluencer }) => {
+export const InfluencerListFjView = ({ influencers, goToInfluencer, isHome }) => {
     let COUNT = 0
     const influList = (influ, index) => {
         return (
@@ -19,6 +19,7 @@ export const InfluencerListFjView = ({ influencers, goToInfluencer }) => {
                             uri: influ.profile_pic_url,
                         }} />
                     <Text style={influencer_style.influUsername}>{influ.username}</Text>
+                    {isHome && <Text style={{ ...base.title, fontSize: fonts.SMALL * .7, alignSelf: 'center', marginTop: 10 }}>{`added on ${influ.date_added}`}</Text>}
                 </TouchableOpacity></View>
         )
     }

@@ -137,11 +137,11 @@ class HomeScreen extends React.Component {
                             <Text style={{
                                 ...base.title,
                                 fontSize: 13
-                            }}>Some of your recent collaborations</Text></View>
+                            }}>Recent collaborations</Text></View>
                         <View style={{
-                            ...form.detailsBox, flexDirection: 'column'
+                            ...form.detailsBox, flexDirection: 'row', paddingTop: 10
                         }}>
-                            <CollabListProjectView collabs={recentCollabs} goToCollab={this.goToCollab} />
+                            <CollabListProjectView isHome={true} collabs={recentCollabs} goToCollab={this.goToCollab} />
                         </View>
                     </View>
                     <View>

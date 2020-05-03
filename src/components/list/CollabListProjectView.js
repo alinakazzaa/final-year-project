@@ -1,24 +1,35 @@
 import React from 'react'
-import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
+import { TouchableOpacity, Text, View, ScrollView, Image } from 'react-native'
 import { collabStyle } from '../../screens/Collab/styles/collab.styles'
 import { base, colors, fonts } from '../../styles/base'
-import { Avatar } from 'react-native-elements'
+import { Avatar, Divider } from 'react-native-elements'
 import { PulseIndicator } from 'react-native-indicators'
+import { Gradient } from '../../styles/Gradient'
 
-export const CollabListProjectView = ({ collabs, goToCollab }) => {
+export const CollabListProjectView = ({ collabs, goToCollab, isHome }) => {
     const collabList = (collab, index) => {
 
-        return <TouchableOpacity style={collabStyle.collabView} key={index} onPress={() => goToCollab(collab)}><Avatar
-            size={75}
-            rounded
-            source={{
-                uri: collab.details.influencer.profile_pic_url,
-            }} />
-            <Text style={{ ...base.text, fontSize: 13 }}>{`${collab.details.title} \nadded ${collab.details.date_created}`}</Text>
-            {collab.details.active && <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <Text style={{ ...base.text, padding: 0, fontSize: 13 }}>Live</Text>
-                <PulseIndicator size={20} color={colors.GREEN} /></View>}
+        return <Gradient style={collabStyle.collabView}><TouchableOpacity key={index} onPress={() => goToCollab(collab)}>
+            <Avatar
+                size={90}
+                rounded
+                containerStyle={{ alignSelf: 'center', marginBottom: 10 }}
+                source={{
+                    uri: collab.details.influencer.profile_pic_url,
+                }} />
+            <Divider />
+            <Text style={{ ...base.title, color: colors.WHITE, alignSelf: 'center', fontSize: 12, padding: 5 }}>{`${collab.details.title}`}</Text>
+            <Divider />
+            {collab.details.active ?
+                <View style={{
+                    display: 'flex', flexDirection: 'row'
+                }}>
+                    <Text style={{ ...base.text, color: colors.WHITE, paddingTop: 18, fontSize: 13, margin: 0 }}>Live</Text>
+                    <PulseIndicator size={20} color={colors.GREEN} />
+                </View> : <Text style={{ ...base.text, color: colors.WHITE, paddingTop: 18, fontSize: 13, margin: 0 }}>{`start ${collab.details.date_start}`}</Text>
+            }
         </TouchableOpacity >
+        </Gradient>
     }
 
     return (

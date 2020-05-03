@@ -15,6 +15,7 @@ export const Tag = ({ title, onPress, editable, index, onChangeText, onSubmit, r
         <Input
             value={title}
             autoFocus={true}
+            autoCapitalize='none'
             style={{ textTransform: 'lowercase' }}
             inputStyle={tagStyles.inputStyle}
             onChangeText={text => onChangeText(text, index)}
@@ -24,15 +25,15 @@ export const Tag = ({ title, onPress, editable, index, onChangeText, onSubmit, r
         : <View style={tagStyles.container}><TouchableOpacity
             activeOpacity={0.8}
             onPress={() => index !== null ? onPress(title, index) : onPress(title)}>
-            <Text style={{ ...base.title, color: colors.WHITE }}>{title == '+' ? title : `# ${title}`}</Text>
+            <Text style={{ ...base.title, textTransform: 'lowercase', fontSize: fonts.SMALL * 0.8, color: colors.WHITE }}>{title == '+' ? title : `# ${title}`}</Text>
         </TouchableOpacity >
-            {title !== '+' && <IconButton
+            {title !== '+' && removeTag !== null && <IconButton
                 name='window-close'
-                size={19}
+                size={16}
                 color={colors.WHITE}
                 type='material-community'
                 onPress={() => removeTag(title)}
-                style={{ marginLeft: 3, marginTop: 1 }}
+                style={{ marginLeft: 2 }}
             />}
         </View>
 
@@ -44,6 +45,8 @@ Tag.propTypes = {
     title: PropTypes.string,
     onPress: PropTypes.func.isRequired,
     onChangeTag: PropTypes.func,
+    removeTag: PropTypes.func,
+    onSubmit: PropTypes.func,
     editable: PropTypes.bool,
     index: PropTypes.number
 }
@@ -52,6 +55,8 @@ Tag.defaultProps = {
     title: '',
     editable: false,
     index: null,
-    onChangeTag: null
+    onChangeTag: null,
+    onSubmit: null,
+    removeTag: null
 }
 

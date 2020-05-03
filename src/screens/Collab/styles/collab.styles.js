@@ -51,9 +51,15 @@ export const collabStyle = StyleSheet.create(
             marginBottom: 0
         },
         collabView: {
-            borderBottomWidth: 0.5,
+            margin: 5,
+            padding: 10,
+            paddingTop: 15,
+            paddingBottom: 5,
+            borderWidth: 0.7,
             borderColor: colors.BORDER,
-            margin: 0
+            borderRadius: 10,
+            marginRight: 10,
+            minWidth: dimensions.fullWidth * 0.4
         }
 
     })
