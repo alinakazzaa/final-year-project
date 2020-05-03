@@ -27,7 +27,6 @@ class HomeScreen extends React.Component {
 
     state = {
         recent_tags: [],
-        recent_collabs: [],
         recent_job: ''
     }
 
@@ -40,25 +39,26 @@ class HomeScreen extends React.Component {
     componentDidUpdate(prev) {
         const { user, project, fetch_job, getProjectFetchJobs, collab, getAllInfluencers } = this.props
         const activeProjects = project.all_projects.filter(proj => proj.active)
+        let index
 
         if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
             getProjectFetchJobs(user.current_user.id, activeProjects[activeProjects.length - 1].id)
+
         }
 
-        if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
+        if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs) {
 
-            const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
-            if (completed_fetch_jobs.length > 0) {
-                const latestJob = { ...completed_fetch_jobs[completed_fetch_jobs.length - 1] }
-                const tags = latestJob.related_tags ? latestJob.related_tags : []
-                tags.forEach((tag, index) => {
-                    tag = { name: tag, editable: false, index }
-                    tags[index] = tag
-                })
-                this.setState({ recent_tags: tags, recent_job: completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag })
+            if (fetch_job.all_fetch_jobs.length > 0) {
+                const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
+                if (completed_fetch_jobs.length > 0) {
+                    const latestJob = { ...completed_fetch_jobs[completed_fetch_jobs.length - 1] }
 
-                if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0) {
-                    getAllInfluencers(latestJob)
+                    const tags = latestJob.related_tags ? latestJob.related_tags : []
+                    this.setState({ recent_tags: tags, recent_job: completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag })
+
+                    if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0) {
+                        getAllInfluencers(latestJob)
+                    }
                 }
             }
         }
@@ -69,7 +69,8 @@ class HomeScreen extends React.Component {
     }
 
     goToCollab = collab => {
-        let { setCurrentCollab, navigation } = this.props
+
+        const { setCurrentCollab, navigation } = this.props
         navigation.navigate('ViewCollab')
         setCurrentCollab(collab)
     }
@@ -83,7 +84,7 @@ class HomeScreen extends React.Component {
 
     render() {
         const { logOutUser, fetch_job, project, collab, influencer } = this.props
-        const { recent_tags, recent_collabs, recent_job } = this.state
+        const { recent_tags, recent_job } = this.state
         const recentCollabs = [...collab.all_collabs.sort((a, b) => {
             if (a.details.date_start > b.details.date_start) {
                 return -1
@@ -91,6 +92,7 @@ class HomeScreen extends React.Component {
                 return 1
             }
         })]
+
         const toDoInfluencers = [...influencer.all_influencers.filter(influ => influ.to_do)]
         return (
             <View>
@@ -110,38 +112,51 @@ class HomeScreen extends React.Component {
                 <ScrollView style={base.container} contentContainerStyle={base.scrollContainer}>
                     {project.pending || fetch_job.pending && <LoadingScreen />}
                     <View>
-                        {(project.error !== null || fetch_job.error !== null) &&
-                            <View><Text style={{ ...base.text, fontSize: 14 }}>Create campaigns and find influencers to match your marketing needs!</Text></View>}
-                        {recent_tags.length > 0 ?
-                            <View>
-                                <View style={form.header}>
-                                    <Text style={{ ...base.title, fontSize: 13 }}>
-                                        {`Because you searched # ${recent_job}`}</Text>
-                                </View>
-                                <View style={{
-                                    ...form.detailsBox,
-                                    flexDirection: 'column',
-                                    padding: 0, margin: 0
-                                }}>
-                                    <Text style={{
-                                        ...base.text, fontSize: 14
-                                    }}>Try these hashtags...</Text>
-                                    <TagList onPress={this.onTagPress} tags={recent_tags} />
-                                    <Text style={{
-                                        ...base.text, paddingTop: 10, padding: 0,
-                                        alignSelf: 'center', fontSize: 14
-                                    }}>Click tag to add new search</Text>
-                                </View>
-                            </View> : <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencers!</Text>
-                                <Text style={base.noneMessage}>...or get in touch with existing profiles</Text>
-                                <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate("AddFetchJob")} /></View>}
+                        <View style={form.header}>
+                            <Text style={{ ...base.title, fontSize: 13 }}>
+                                WELCOME</Text>
+                        </View>
+                        <View style={{
+                            ...form.detailsBox,
+                            flexDirection: 'column',
+                            paddingTop: 20
+                        }}>
+                            {project.error !== null &&
+                                <View><Text style={{ ...base.text, fontSize: 14 }}>Create campaigns and find influencers to match your marketing needs!</Text></View>}
+                            {fetch_job.error !== null && <View><Text style={base.noneMessage}>Run a search and find the right influencers!</Text></View>}
+                            {recent_tags.length > 0 &&
+                                <View>
+                                    <View style={form.header}>
+                                        <Text style={{ ...base.title, fontSize: 13 }}>
+                                            {`Because you searched # ${recent_job}`}</Text>
+                                    </View>
+                                    <View style={{
+                                        ...form.detailsBox,
+                                        flexDirection: 'column',
+
+                                    }}>
+                                        <Text style={{
+                                            ...base.text, fontSize: 14
+                                        }}>Try these hashtags...</Text>
+                                        <TagList onPress={this.onTagPress} tags={recent_tags} />
+                                        <Text style={{
+                                            ...base.text, paddingTop: 10, padding: 0,
+                                            alignSelf: 'center', fontSize: 14
+                                        }}>Click tag to add new search</Text>
+                                    </View>
+                                </View>}
+                            {recentCollabs.length > 0 && <View style={base.centerItems}>
+                                <Text style={base.noneMessage}>Get in touch with recent influencers</Text>
+                                <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} />
+                            </View>}
+                        </View>
                     </View>
                     <View>
                         <View style={form.header}>
                             <Text style={{
                                 ...base.title,
                                 fontSize: 13
-                            }}>Recent collaborations</Text></View>
+                            }}>Your recent collaborations</Text></View>
                         <View style={{
                             ...form.detailsBox, flexDirection: 'row', paddingTop: 10
                         }}>
@@ -153,11 +168,18 @@ class HomeScreen extends React.Component {
                             <Text style={{
                                 ...base.title,
                                 fontSize: 13
-                            }}>Recent influencers to check out</Text></View>
+                            }}>Check out your recent influencers</Text></View>
                         <View style={{ ...form.detailsBox, flexDirection: 'column' }}>
                             {influencer.pending && <LoadingScreen />}
-                            {influencer.error && <View style={base.centerItems}>
-                                <Text style={base.text}>{influencer.error.message}</Text>
+                            {influencer.error || influencer.all_influencers.length == 0 && <View style={{ marginTop: 20, ...base.centerItems }}>
+                                <Text style={base.noneMessage}>Start a search to find the perfect brand ambassador</Text>
+                                <IconButton
+                                    name='account-search-outline'
+                                    size={45}
+                                    color={colors.SECONDARY}
+                                    style={{ alignSelf: 'center' }}
+                                    type='material-community'
+                                    onPress={() => this.props.navigation.navigate("AddFetchJob")} />
                             </View>}
                             {influencer.pending == false && !influencer.error &&
                                 <InfluencerListFjView goToInfluencer={this.goToInfluencer} isHome={true}
