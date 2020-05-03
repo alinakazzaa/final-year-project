@@ -32,8 +32,10 @@ export const tabStyle = (color, size) => StyleSheet.create(
         tabItem: {
             width: size,
             justifyContent: 'center',
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
+            borderBottomWidth: 0.7,
+            borderRightWidth: 0.7,
+            borderTopWidth: 0.5,
+            borderLeftWidth: 0.5,
             borderColor: colors.BORDER,
         },
         selectedTab: {
