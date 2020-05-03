@@ -54,7 +54,7 @@ const projectReducer = (state = initialState, action) => {
             }
 
         case ADD_PROJECT:
-            all_projects.splice(all_projects.length, 1, action.project)
+            all_projects.splice(all_projects.length, 0, action.project)
 
             return {
                 ...state,

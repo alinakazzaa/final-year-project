@@ -11,7 +11,7 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { setCurrentFetchJob, getProjectFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
 import { FetchJobListProjectView } from '../../components/list/FetchJobListProjectView'
 import { SaveButton } from '../../components/buttons/SaveButton'
-import { base, colors } from '../../styles/base'
+import { base, colors, dimensions } from '../../styles/base'
 import { Icon } from 'react-native-elements'
 import { CollabListProjectView } from '../../components/list/CollabListProjectView'
 
@@ -26,7 +26,8 @@ class ProjectView extends React.Component {
     state = {
         projectValue: {
             active: false
-        }
+        },
+        projectCollabs: []
     }
 
     componentDidMount() {
@@ -39,15 +40,15 @@ class ProjectView extends React.Component {
 
     }
 
-    // componentDidUpdate(prev) {
-    //     const { fetchCollabInfluencer, collab, setCollabsPending } = this.props
+    componentDidUpdate(prev) {
+        const { project, collab } = this.props
+        let projectCollabs
+        if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0) {
+            projectCollabs = [...collab.all_collabs.filter(c => c.details.project_id == project.current_project.id)]
 
-    //     if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0)
-    //         collab.all_collabs.forEach(col => {
-    //             console.log(col)
-    //             // fetchCollabInfluencer(col, setCollabsPending)
-    //         })
-    // }
+            this.setState({ projectCollabs })
+        }
+    }
 
     goToFetchJob = fj => {
         const { setCurrentFetchJob } = this.props
@@ -77,14 +78,13 @@ class ProjectView extends React.Component {
     }
 
     componentWillUnmount() {
-        const { clearCollabState, clearFetchJobState } = this.props
+        const { clearCollabState } = this.props
         clearCollabState()
-        clearFetchJobState()
     }
 
     render() {
         const { fetch_job, navigation, collab } = this.props
-        const { projectValue } = this.state
+        const { projectValue, projectCollabs } = this.state
 
         return (
             <View>
@@ -93,45 +93,42 @@ class ProjectView extends React.Component {
                     left={<BackButton onPress={() => navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                <View style={base.container}>
-                    <ProjectForm handleChange={this.handleChange} project_value={projectValue} toggleSwitch={this.toggleSwitch} />
-                    <View style={base.itemViewListContainer}>
-                        <View style={base.itemViewListNav}>
-                            <Text style={base.title}>Collaborations</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('AllCollabs')}>
-                                <Text style={base.title}>View All</Text>
-                            </TouchableOpacity>
+                <ScrollView contentContainerStyle={base.scrollContainer}>
+                    <View style={base.container}>
+                        <ProjectForm handleChange={this.handleChange} project_value={projectValue} toggleSwitch={this.toggleSwitch} />
+                        <View style={{ ...base.itemViewListContainer, borderBottomWidth: 0.7, borderColor: colors.BORDER }}>
+                            <View style={base.itemViewListNav}>
+                                <Text style={base.title}>{`Collaborations (${projectCollabs.length})`}</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate('AllCollabs')}>
+                                    <Text style={base.title}>View All</Text>
+                                </TouchableOpacity>
+                            </View>
+                            {collab.pending && <LoadingScreen />}
+                            {projectCollabs.length == 0 && <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencer!</Text>
+                                <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} /></View>}
+                            {!collab.error && !collab.pending && collab.all_collabs.length > 0 &&
+                                <CollabListProjectView collabs={projectCollabs} goToCollab={this.goToCollab} />}
                         </View>
-                        {collab.pending && <LoadingScreen />}
-                        {collab.all_collabs.length == 0 && <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencer!</Text>
-                            <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} /></View>}
-                        {!collab.error && !collab.pending && <ScrollView
-                            contentContainerStyle={project_style.itemScroll}>
-                            {collab.all_collabs.length > 0 && <View>
-                                <CollabListProjectView collabs={collab.all_collabs} goToCollab={this.goToCollab} />
+                        <View style={base.itemViewListContainer}>
+                            <View style={base.itemViewListNav}>
+                                <Text style={base.title}>{`Searches (${fetch_job.all_fetch_jobs.length})`}</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate('AllFetchJobs')}>
+                                    <Text style={base.title}>See All</Text>
+                                </TouchableOpacity>
+                            </View>
+                            {fetch_job.pending && <LoadingScreen />}
+                            {fetch_job.error && <View style={base.centerItems}>
+                                <Icon name='account-search-outline' type="material-community" size={30} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} />
+                                <Text style={base.noneMessage}>Try first search</Text>
                             </View>}
-                        </ScrollView>}
-                    </View>
-                    <View style={base.itemViewListContainer}>
-                        <View style={base.itemViewListNav}>
-                            <Text style={base.title}>Searches</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('AllFetchJobs')}>
-                                <Text style={base.title}>See All</Text>
-                            </TouchableOpacity>
+                            {!fetch_job.error && !fetch_job.pending && <ScrollView
+                                contentContainerStyle={project_style.itemScroll}>
+                                {fetch_job.all_fetch_jobs.length > 0 && <FetchJobListProjectView
+                                    fetch_jobs={fetch_job.all_fetch_jobs} goToFetchJob={this.goToFetchJob} />}
+                            </ScrollView>}
                         </View>
-                        {fetch_job.pending && <LoadingScreen />}
-                        {fetch_job.error && <View style={base.centerItems}>
-                            <Icon name='account-search-outline' type="material-community" size={30} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} />
-                            <Text style={base.noneMessage}>Try first search</Text>
-                        </View>}
-                        {!fetch_job.error && !fetch_job.pending && <ScrollView
-                            contentContainerStyle={project_style.itemScroll}>
-                            {fetch_job.all_fetch_jobs.length > 0 && <View>
-                                <FetchJobListProjectView fetch_jobs={fetch_job.all_fetch_jobs} goToFetchJob={this.goToFetchJob} />
-                            </View>}
-                        </ScrollView>}
                     </View>
-                </View>
+                </ScrollView>
             </View>
         )
     }

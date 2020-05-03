@@ -1,28 +1,43 @@
 import React from 'react'
-import { TouchableOpacity, Text, View } from 'react-native'
+import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
 import { project_style } from '../../screens/Project/styles/project.styles'
-import { base } from '../../styles/base'
+import { base, colors } from '../../styles/base'
+import { COMPLETED } from '../../constants'
+import { IconButton } from '../buttons/IconButton'
 
 export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
     const FJList = (fj, index) => {
+        let status = () => {
+            if (fj.details.status == "IN_PROGRESS") {
+                return "In progress"
+            }
+
+            return fj.details.status
+        }
 
         return <TouchableOpacity style={project_style.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
-            <Text style={base.text}>{fj.details.hashtag}</Text>
-            <Text style={base.text}>{fj.details.date_created}</Text>
+            <Text style={{ ...base.text, padding: 0, fontSize: 13, color: colors.SECONDARY }}>{`# ${fj.details.hashtag}`}</Text>
+            <Text style={{ ...base.text, padding: 0, fontSize: 13 }}>{status()}</Text>
+            {fj.details.status == COMPLETED ? <Text style={{ ...base.text, padding: 0, fontSize: 13 }}>
+                {`found ${fj.influencers && fj.influencers.success.length || 0} influencers`}
+            </Text> : <IconButton
+                    name='account-search-outline'
+                    size={30}
+                    color={colors.TERTIARY}
+                    type='material-community' />}
         </TouchableOpacity >
     }
 
     return (
 
-        <View>
+        <ScrollView horizontal>
             {fetch_jobs.length > 0 && fetch_jobs.map((fj, index) => {
                 if (index < 5)
                     return FJList(fj, index)
                 return
             })}
-
-        </View>
+        </ScrollView>
     )
 
 }

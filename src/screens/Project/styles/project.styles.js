@@ -6,7 +6,8 @@ export const project_style = StyleSheet.create(
     {
         itemScroll: {
             padding: spacing.SMALL,
-            paddingLeft: 0
+            paddingLeft: 0,
+
         },
         listItem: {
             display: 'flex',
@@ -22,11 +23,13 @@ export const project_style = StyleSheet.create(
         },
         fetchJob: {
             display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: spacing.SMALL,
-            borderBottomWidth: 0.5,
-            borderColor: colors.BORDER
+            padding: spacing.MEDIUM,
+            margin: 5,
+            marginBottom: 10,
+            borderWidth: 0.5,
+            borderRadius: 10,
+            borderColor: colors.BORDER,
+            paddingBottom: 5
         },
         left: {
             display: 'flex',

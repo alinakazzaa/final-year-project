@@ -16,7 +16,7 @@ export const CollabListProjectView = ({ collabs, goToCollab }) => {
             }} />
             <Text style={{ ...base.text, fontSize: 13 }}>{`${collab.details.title} \nadded ${collab.details.date_created}`}</Text>
             {collab.details.active && <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <Text style={{ ...base.text, fontSize: 13 }}>Live</Text>
+                <Text style={{ ...base.text, padding: 0, fontSize: 13 }}>Live</Text>
                 <PulseIndicator size={20} color={colors.GREEN} /></View>}
         </TouchableOpacity >
     }
