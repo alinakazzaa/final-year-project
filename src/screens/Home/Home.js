@@ -160,7 +160,12 @@ class HomeScreen extends React.Component {
                         <View style={{
                             ...form.detailsBox, flexDirection: 'row', paddingTop: 10
                         }}>
-                            <CollabListProjectView isHome={true} collabs={recentCollabs} goToCollab={this.goToCollab} />
+                            {collab.pending && <LoadingScreen />}
+                            {collab.pending == false && recentCollabs.length > 0 && <CollabListProjectView isHome={true} collabs={recentCollabs} goToCollab={this.goToCollab} />}
+                            {collab.error !== null && <View style={{ marginTop: 20, ...base.centerItems }}>
+                                <Text style={base.noneMessage}>You haven't collaborated with any influencers yet.</Text>
+                                {fetch_job.pending == false && fetch_job.error == null && <Text style={base.noneMessage}>Check out your recent searches to find potential brand ambassadors</Text>}
+                            </View>}
                         </View>
                     </View>
                     <View>
