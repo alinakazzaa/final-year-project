@@ -78,7 +78,7 @@ export const base = StyleSheet.create(
             paddingRight: spacing.LARGE
         },
         scrollContainer: {
-            paddingBottom: dimensions.fullHeight * 0.13
+            paddingBottom: dimensions.fullHeight * 0.17
         },
         itemViewListContainer: {
             flexDirection: 'column'

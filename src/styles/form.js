@@ -10,7 +10,7 @@ export const boolSelect = {
 export const inputView = {
     color: colors.TERTIARY,
     fontWeight: fonts.WEIGHT_LEIGHT,
-    width: dimensions.fullWidth * .55,
+    width: dimensions.fullWidth * .49,
     minHeight: height.MEDIUM * 0.6,
     borderColor: colors.BORDER,
     borderBottomWidth: 0.7,
@@ -49,7 +49,6 @@ export const formStyle = {
 export const form = StyleSheet.create(
     {
         header: {
-            marginTop: spacing.MEDIUM,
             paddingTop: spacing.LARGE,
             paddingBottom: spacing.MEDIUM,
             paddingLeft: 0,
@@ -61,12 +60,11 @@ export const form = StyleSheet.create(
             paddingBottom: spacing.MEDIUM,
             borderTopWidth: 0.5,
             borderColor: colors.BORDER,
+            borderBottomWidth: 0,
             paddingLeft: 0,
-            justifyContent: 'space-between'
         },
         labelsCol: {
-            marginTop: spacing.MEDIUM,
-            // paddingTop: spacing.SMALL
+            marginTop: spacing.MEDIUM
         },
         inputBox: {
             borderWidth: 0,
