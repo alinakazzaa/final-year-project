@@ -104,7 +104,7 @@ class ProjectView extends React.Component {
                                 </TouchableOpacity>
                             </View>
                             {collab.pending && <LoadingScreen />}
-                            {projectCollabs.length == 0 && <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencer!</Text>
+                            {projectCollabs.length == 0 && <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencers!</Text>
                                 <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} /></View>}
                             {!collab.error && !collab.pending && collab.all_collabs.length > 0 &&
                                 <CollabListProjectView isHome={false} collabs={projectCollabs} goToCollab={this.goToCollab} />}

@@ -11,15 +11,16 @@ export const project_style = StyleSheet.create(
         },
         listItem: {
             display: 'flex',
-            flexDirection: 'row',
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderRadius: 5,
+            borderWidth: 0.7,
+            borderRadius: 10,
             borderColor: colors.BORDER,
-            padding: spacing.LARGE,
+            padding: spacing.MEDIUM,
+            paddingRight: spacing.LARGE,
+            paddingLeft: spacing.LARGE,
             fontFamily: fonts.PRIMARY,
-            justifyContent: 'space-between',
-            marginBottom: spacing.MEDIUM
+            // justifyContent: 'space-between',
+            marginBottom: 30,
+            backgroundColor: colors.SCREEN
         },
         fetchJob: {
             display: 'flex',
@@ -31,15 +32,19 @@ export const project_style = StyleSheet.create(
             borderColor: colors.BORDER,
             paddingBottom: 5
         },
-        left: {
+        top: {
             display: 'flex',
-            width: '50%'
+            paddingTop: 10,
+            justifyContent: 'space-evenly',
+            minHeight: dimensions.fullHeight * 0.2
         },
         middle: {
             display: 'flex',
+            flexDirection: 'row',
+            paddingTop: 10
         },
-        right: {
+        bottom: {
             display: 'flex',
-            width: '10%'
+            paddingTop: 10
         }
     })
