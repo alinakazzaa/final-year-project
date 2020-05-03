@@ -12,7 +12,7 @@ const initialState = {
 }
 
 const collabReducer = (state = initialState, action) => {
-    let collabs = [...state.all_collabs]
+    let all_collabs = [...state.all_collabs]
 
     switch (action.type) {
 
@@ -59,27 +59,28 @@ const collabReducer = (state = initialState, action) => {
 
         case ADD_COLLAB:
 
-            collabs.splice(collabs.length, 0, action.collab)
+            all_collabs.splice(all_collabs.length, 0, action.collab)
 
             return {
                 ...state,
-                all_collabs: collabs
+                all_collabs
             }
 
         case UPDATE_COLLAB:
 
-            collabs.splice(getIndex(collabs, action.collab), 1, action.collab)
+            all_collabs.splice(getIndex(all_collabs, action.collab), 1, action.collab)
 
             return {
                 ...state,
-                all_collabs: collabs
+                all_collabs
 
             }
 
         case REMOVE_COLLAB:
+
             return {
                 ...state,
-                all_collabs: [...collabs.filter(c => c.details.id !== action.collab.details.id)]
+                all_collabs: [...state.all_collabs.filter(c => c.details.id !== action.collabId)]
             }
 
 

@@ -52,6 +52,7 @@ export const collabStyle = StyleSheet.create(
         },
         collabView: {
             margin: 5,
+            marginBottom: 10,
             padding: 10,
             paddingTop: 15,
             paddingBottom: 5,

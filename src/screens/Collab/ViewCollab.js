@@ -58,13 +58,15 @@ class ViewCollab extends React.Component {
 
     handleSubmit = () => {
         const { collabValue } = this.state
-        const { updateCollab } = this.props
-        updateCollab({
+        const { updateCollab, collab } = this.props
+        const updatedCollab = {
             details: {
-                ...collabValue
+                ...collab.current_collab.details,
+                ...collabValue, influencer: { ...collab.current_collab.details.influencer }
             }
-        })
+        }
 
+        updateCollab(updatedCollab)
         Alert.alert("Collaboration updated")
     }
 
@@ -114,11 +116,6 @@ class ViewCollab extends React.Component {
         this.setState({ collabValue: { ...collabValue, tags: updatedTags } })
     }
 
-    componentWillUnmount() {
-        const { clearCurrentCollab } = this.props
-        clearCurrentCollab()
-    }
-
     render() {
         const { collabValue } = this.state
         const { collab, navigation } = this.props
@@ -130,28 +127,30 @@ class ViewCollab extends React.Component {
                     left={<BackButton onPress={() => navigation.goBack()} />}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
-                {collab.pending ? <LoadingScreen size='large' /> :
-                    <ScrollView style={{ marginBottom: 100 }}>
-                        <View style={collabStyle.viewContainer}>
-                            {collabValue.tags && collabValue.tags.length > 0 &&
-                                <CollabForm editTag={this.editTag} onEndTagEdit={this.onEndTagEdit}
-                                    onTagTextChange={this.onTagTextChange}
-                                    toggleSwitch={this.toggleSwitch} onChange={this.handleChange}
-                                    collab={collabValue}
-                                    removeTag={this.removeTag} />
-                            }
-                            {collabValue.active && <View>
-                                <View style={{ marginTop: 20 }}>
-                                    <Text style={base.title}>Publications</Text>
-                                </View>
-                                {collab.current_collab.publications && collab.current_collab.publications.length > 0 ?
-                                    <PublicationList publications={collab.current_collab.publications}
-                                        onPress={this.onThumbnailPress} /> :
-                                    <View style={base.centered}><Text style={base.noneMessage}>No publications yet</Text></View>}
-                            </View>}
-                        </View>
-                    </ScrollView>}
-            </View>
+                {
+                    collab.pending ? <LoadingScreen size='large' /> :
+                        <ScrollView style={{ marginBottom: 100 }}>
+                            <View style={collabStyle.viewContainer}>
+                                {collabValue.tags && collabValue.tags.length > 0 &&
+                                    <CollabForm editTag={this.editTag} onEndTagEdit={this.onEndTagEdit}
+                                        onTagTextChange={this.onTagTextChange}
+                                        toggleSwitch={this.toggleSwitch} onChange={this.handleChange}
+                                        collab={collabValue}
+                                        removeTag={this.removeTag} />
+                                }
+                                {collabValue.active && <View>
+                                    <View style={{ marginTop: 20 }}>
+                                        <Text style={base.title}>Publications</Text>
+                                    </View>
+                                    {collab.current_collab.publications && collab.current_collab.publications.length > 0 ?
+                                        <PublicationList publications={collab.current_collab.publications}
+                                            onPress={this.onThumbnailPress} /> :
+                                        <View style={base.centered}><Text style={base.noneMessage}>No publications yet</Text></View>}
+                                </View>}
+                            </View>
+                        </ScrollView>
+                }
+            </View >
         )
     }
 }

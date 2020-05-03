@@ -37,22 +37,26 @@ class AddCollab extends React.Component {
         const { collabValue } = this.state
         const { collab, project, addCollab, navigation } = this.props
         const { influencer } = navigation.state.params
+
         const newCollab = {
-            ...collabValue,
-            influencer:
-                { id: influencer.id, username: influencer.username, profile_pic_url: influencer.profile_pic_url }
+            details: {
+                ...collabValue, influencer: {
+                    id: influencer.id,
+                    username: influencer.username, profile_pic_url: influencer.profile_pic_url
+                }
+            }
         }
 
         if (collabValue.tags)
-            newCollab.tags = [...collabValue.tags.filter(tag => tag.name !== '+')]
+            newCollab.details.tags = [...collabValue.tags.filter(tag => tag.name !== '+')]
 
         // no same influencer & campaign
         if (!collab.all_collabs.find(c => c.details.influencer.id == influencer.id)) {
             addCollab(project.current_project.user_id, project.current_project.id, newCollab)
-            Alert.alert("Collaboration added!")
+            Alert.alert("Collaboration added")
             navigation.goBack()
         } else {
-            Alert.alert("Collaboration already exists!")
+            Alert.alert("Collaboration already exists.\n\nTry a different influencer.")
             navigation.goBack()
         }
     }
@@ -62,10 +66,10 @@ class AddCollab extends React.Component {
     }
 
     onTagTextChange = (text, index) => {
-        const { collab } = this.state
-        const updatedTags = [...this.state.collab.tags]
+        const { collabValue } = this.state
+        const updatedTags = [...this.state.collabValue.tags]
         updatedTags[index] = { ...updatedTags[index], name: text }
-        this.setState({ collab: { ...collab, tags: updatedTags } })
+        this.setState({ collabValue: { ...collabValue, tags: updatedTags } })
     }
 
     toggleSwitch = value => {
@@ -81,7 +85,7 @@ class AddCollab extends React.Component {
         }
 
         updatedTags.splice(index, 1, editTag)
-        this.setState({ collab: { ...this.state.collabValue, tags: updatedTags } })
+        this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
     }
 
     onEndTagEdit = index => {
