@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { ProjectForm } from '../../components/forms/ProjectForm'
 import { addProject } from '../../actions/project'
@@ -28,8 +28,10 @@ class AddProject extends React.Component {
     }
 
     handleSubmit = () => {
-        const { user, addProject } = this.props
+        const { user, addProject, navigation } = this.props
         addProject(user.current_user.id, this.state.project_value)
+        Alert.alert("Campaign created")
+        navigation.goBack()
     }
 
     toggleSwitch = value => {
