@@ -1,5 +1,6 @@
 import { GET_MEDIA_PENDING, GET_MEDIA_SUCCESS, GET_MEDIA_ERROR, GET_USER_PENDING, GET_USER_SUCCESS, GET_USER_ERROR, COMPLETED_FETCH, COMPLETED_GET_USERS } from '../constants/response/types'
 import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, USER_FETCH, CLEAR_RUNNING_FETCH } from '../constants'
+import { DATE_TODAY } from '../constants/TodayDate'
 
 const initialState = {
     pending: null,
@@ -74,7 +75,7 @@ const fetchReducer = (state = initialState, action) => {
                 ...state,
                 pending: false,
                 response: { type: action.type },
-                details: { ...state.details, status: COMPLETED }
+                details: { ...state.details, status: COMPLETED, date_fetch_run: DATE_TODAY }
             }
 
         case GET_USER_PENDING:
