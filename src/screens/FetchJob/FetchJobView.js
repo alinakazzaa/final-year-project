@@ -42,45 +42,40 @@ class FetchJobView extends React.Component {
     }
 
     componentDidMount() {
-        const { fetch_job, getAllInfluencers } = this.props
+        const { fetch_job, getAllInfluencers, clearRunningFetchJob } = this.props
         this.setState({ currentJob: { ...fetch_job.current_fetch_job } })
 
-        if (fetch_job.current_fetch_job.details.status == COMPLETED &&
-            fetch_job.current_fetch_job.influencers &&
-            fetch_job.current_fetch_job.influencers.success.length > 0) {
-            getAllInfluencers(fetch_job.current_fetch_job)
-        }
+        // if (fetch_job.current_fetch_job.details.status == COMPLETED &&
+        //     fetch_job.current_fetch_job.influencers &&
+        //     fetch_job.current_fetch_job.influencers.success.length > 0) {
+        //     getAllInfluencers(fetch_job.current_fetch_job)
+        // }
     }
 
     componentDidUpdate(prev) {
         const { currentJob } = this.state
         const { fetch_job, influencer, running_fetch, getAllInfluencers, updateFetchJob, fetchPending, fetchResponse } = this.props
 
-        // if (prev.fetch_job.current_fetch_job !== fetch_job.current_fetch_job) {
-        //     this.setState({ currentJob: { ...this.state.currentJob, ...fetch_job.current_fetch_job } })
-        // }
-
-
-        if (running_fetch.pending == false &&
-            running_fetch.response !== null &&
-            running_fetch.response.type == COMPLETED_FETCH) {
-            console.log('clear fetch job')
-            // clearRunningFetchJob()
+        if (currentJob.details.status == COMPLETED &&
+            currentJob.influencers &&
+            currentJob.influencers.success.length > 0 &&
+            influencer.pending == null) {
+            getAllInfluencers(currentJob)
         }
 
-        // if (currentJob.details.status == COMPLETED &&
-        //     currentJob.influencers &&
-        //     currentJob.influencers.success.length > 0 &&
-        //     influencer.pending == null) {
-        //     getAllInfluencers(currentJob)
-        // }
-
         if (prev.running_fetch.details.status !== running_fetch.details.status) {
-            setCurrentFetchJob(running_fetch)
-            updateFetchJob(running_fetch)
+            setCurrentFetchJob({ ...running_fetch })
+            updateFetchJob({ ...running_fetch })
         }
 
         if (running_fetch.response !== null) {
+
+            // if (running_fetch.pending == false &&
+            //     running_fetch.response.type == COMPLETED_FETCH) {
+            //     setCurrentFetchJob(fetch_job.fetch_jobs.find(job => job.details.id == running_fetch.details.id))
+            //     // clearRunningFetchJob()
+            // }
+
             if (running_fetch.details.status == IN_PROGRESS) {
                 if (running_fetch.influencers.success.length >= Number(running_fetch.details.no_profiles) && running_fetch.response.type !== COMPLETED_FETCH) {
                     fetchResponse({
@@ -162,7 +157,7 @@ class FetchJobView extends React.Component {
         const job = running_fetch.details.id == currentJob.details.id ? { ...running_fetch } : currentJob
         const criteria = { ...job.details.criteria }
         const successLen = job.influencers ? job.influencers.success.length : 0
-        console.log(job)
+
         // show number of influencers fetched
         return (
             <View>
@@ -231,7 +226,7 @@ class FetchJobView extends React.Component {
                                 </View>}
                             {influencer.pending && <LoadingScreen />}
                             {influencer.pending == false && !influencer.error &&
-                                <InfluencerListFjView goToInfluencer={this.goToInfluencer} influencers={influencer.all_influencers} />}
+                                <InfluencerListFjView isHome={false} goToInfluencer={this.goToInfluencer} influencers={influencer.all_influencers} />}
                         </View>}
                     {running_fetch.details.id && running_fetch.details.id !== job.details.id && running_fetch.pending &&
                         < View style={base.centerItems}>
