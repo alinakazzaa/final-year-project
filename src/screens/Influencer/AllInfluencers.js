@@ -11,7 +11,7 @@ import { Input } from 'react-native-elements'
 import { influencer_style } from './styles/influencer.styles'
 import { TabView } from '../../components/tabview/TabView'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
-import { updateFetchJob, updateStateFetchJob } from '../../actions/fetchJob'
+import { updateFetchJob } from '../../actions/fetchJob'
 
 class AllInfluencers extends React.Component {
 
@@ -53,10 +53,9 @@ class AllInfluencers extends React.Component {
     }
 
     deleteInflu = id => {
-        const { fetch_job, removeInfluencer, updateStateFetchJob } = this.props
+        const { fetch_job, removeInfluencer, updateFetchJob } = this.props
         const current = { ...fetch_job.current_fetch_job }
         current.influencers.success = [...current.influencers.success.filter(influ_id => influ_id !== id)]
-        updateStateFetchJob(current)
         updateFetchJob(current)
         removeInfluencer(id)
     }
@@ -136,7 +135,7 @@ const mapDispatchToProps = {
     getAllInfluencers,
     updateInfluencer,
     removeInfluencer,
-    updateStateFetchJob
+    updateFetchJob
 }
 
 

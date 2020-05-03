@@ -11,7 +11,7 @@ import { BackButton } from '../../components/buttons/BackButton'
 import { form } from '../../styles/form'
 import { influencer_style } from './styles/influencer.styles'
 import { updateInfluencer, removeInfluencer } from '../../actions/influencer'
-import { updateFetchJob, updateStateFetchJob } from '../../actions/fetchJob'
+import { updateFetchJob } from '../../actions/fetchJob'
 import { setCurrentCollab } from '../../actions/collab'
 
 class ViewInfluencer extends React.Component {
@@ -31,10 +31,9 @@ class ViewInfluencer extends React.Component {
     }
 
     deleteInflu = id => {
-        const { fetch_job, removeInfluencer, updateStateFetchJob } = this.props
+        const { fetch_job, removeInfluencer, updateFetchJob } = this.props
         const current = { ...fetch_job.current_fetch_job }
         current.influencers.success = [...current.influencers.success.filter(influ_id => influ_id !== id)]
-        updateStateFetchJob(current)
         updateFetchJob(current)
         removeInfluencer(id)
         Alert.alert("Influencer deleted")
@@ -72,18 +71,18 @@ class ViewInfluencer extends React.Component {
                     <ScrollView>
                         <View style={influencer_style.topView}>
                             <Avatar
-                                size={200}
+                                size={170}
                                 rounded
                                 containerStyle={styles.avatar}
                                 source={{
                                     uri: influencer.current_influencer.profile_pic_url,
                                 }} />
                             <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '100%', marginTop: spacing.LARGE, paddingTop: spacing.LARGE, borderTopWidth: 0.7, borderColor: colors.TERTIARY }}>
-                                <View style={form.labelsCol}>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>Username</Text>
+                                <View>
+                                    <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE, fontWeight: '700' }}>Username</Text>
                                 </View>
-                                <View style={form.inputBox}>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{influencer.current_influencer.username}</Text>
+                                <View>
+                                    <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE, fontWeight: '700' }}>{influencer.current_influencer.username}</Text>
                                 </View>
                             </View>
                             <View style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -103,17 +102,16 @@ class ViewInfluencer extends React.Component {
                             <View style={form.header} >
                                 <Text style={base.title}>Details</Text>
                             </View>
-                            <View style={{ ...form.detailsBox, borderColor: colors.TERTIARY }}>
-                                <View style={form.labelsCol}>
-                                    <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Followers</Text>
-                                    <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Media Count</Text>
-                                    <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE }}>Date added</Text>
+                            <View style={{ ...form.detailsBox, paddingTop: spacing.MEDIUM, borderColor: colors.TERTIARY }}>
+                                <View>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>Followers</Text>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>Media Count</Text>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>Date added</Text>
                                 </View>
                                 <View style={form.inputBox}>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.followers)}</Text>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.media_count)}</Text>
-                                    {/* <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>{fetch_job.current_fetch_job.details.date_fetch_run}</Text> */}
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, color: colors.WHITE, fontWeight: '700' }}>{fetch_job.current_fetch_job.details.date_created}</Text>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.followers)}</Text>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.media_count)}</Text>
+                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{fetch_job.current_fetch_job.details.date_fetch_run || fetch_job.current_fetch_job.details.date_created}</Text>
                                 </View>
                             </View>
                         </View>
@@ -142,7 +140,7 @@ class ViewInfluencer extends React.Component {
                                         color={colors.WHITE}
                                         type='material-community'
                                     />
-                                    <Text style={{ ...base.title, color: colors.WHITE, fontSize: 18 }}>New collaboration</Text>
+                                    <Text style={{ ...base.title, color: colors.WHITE, fontSize: 18 }}>New collab</Text>
                                 </TouchableOpacity>}
                             <Tooltip popover={<Text>Influencer removed</Text>}><TouchableOpacity>
                                 <IconButton
@@ -251,8 +249,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     updateInfluencer,
     removeInfluencer,
-    updateStateFetchJob,
-    setCurrentCollab
+    setCurrentCollab,
+    updateFetchJob
 }
 
 

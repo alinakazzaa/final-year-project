@@ -12,7 +12,7 @@ export const InfluencerListFjView = ({ influencers, goToInfluencer }) => {
             <View style={influencer_style.fjListItem} key={index}>
                 <TouchableOpacity key={index} onPress={() => goToInfluencer(influ)}>
                     <Avatar
-                        size={110}
+                        size={100}
                         rounded
                         containerStyle={{ alignSelf: 'center' }}
                         source={{

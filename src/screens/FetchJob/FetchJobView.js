@@ -32,7 +32,7 @@ class FetchJobView extends React.Component {
                 status: "", stage: "",
                 id: ""
             },
-            influencers: { success: [], pending: [], fail: [] }
+            influencers: { success: [], fail: [], pending: [] }
         }
     }
 
@@ -42,8 +42,8 @@ class FetchJobView extends React.Component {
     }
 
     componentDidMount() {
-        const { fetch_job, getAllInfluencers, running_fetch, clearRunningFetchJob } = this.props
-        this.setState({ currentJob: { ...this.state.currentJob, details: { ...fetch_job.current_fetch_job.details } } })
+        const { fetch_job, getAllInfluencers } = this.props
+        this.setState({ currentJob: { ...fetch_job.current_fetch_job } })
 
         if (fetch_job.current_fetch_job.details.status == COMPLETED &&
             fetch_job.current_fetch_job.influencers &&
@@ -54,12 +54,11 @@ class FetchJobView extends React.Component {
 
     componentDidUpdate(prev) {
         const { currentJob } = this.state
-        const { fetch_job, running_fetch, clearRunningFetchJob, updateFetchJob, fetchPending, fetchResponse } = this.props
-        let job
+        const { fetch_job, influencer, running_fetch, getAllInfluencers, updateFetchJob, fetchPending, fetchResponse } = this.props
 
-        if (prev.fetch_job.current_fetch_job !== fetch_job.current_fetch_job) {
-            this.setState({ currentJob: { ...this.state.currentJob, ...fetch_job.current_fetch_job } })
-        }
+        // if (prev.fetch_job.current_fetch_job !== fetch_job.current_fetch_job) {
+        //     this.setState({ currentJob: { ...this.state.currentJob, ...fetch_job.current_fetch_job } })
+        // }
 
 
         if (running_fetch.pending == false &&
@@ -69,11 +68,15 @@ class FetchJobView extends React.Component {
             // clearRunningFetchJob()
         }
 
-        if (fetch_job.current_fetch_job.details.status == COMPLETED && fetch_job.current_fetch_job.influencers && fetch_job.current_fetch_job.influencers.success.length > 0) {
-            getAllInfluencers(currentJob)
-        }
+        // if (currentJob.details.status == COMPLETED &&
+        //     currentJob.influencers &&
+        //     currentJob.influencers.success.length > 0 &&
+        //     influencer.pending == null) {
+        //     getAllInfluencers(currentJob)
+        // }
 
         if (prev.running_fetch.details.status !== running_fetch.details.status) {
+            setCurrentFetchJob(running_fetch)
             updateFetchJob(running_fetch)
         }
 
@@ -112,6 +115,7 @@ class FetchJobView extends React.Component {
         let running = {
             ...running_fetch, details: { ...fetch_job.current_fetch_job.details }
         }
+        updateFetchJob(running)
         fetchMedia(running, fetchPending, fetchResponse)
     }
 
@@ -155,10 +159,9 @@ class FetchJobView extends React.Component {
     render() {
         const { currentJob } = this.state
         const { influencer, navigation, running_fetch, fetch_job } = this.props
-
         const job = running_fetch.details.id == currentJob.details.id ? { ...running_fetch } : currentJob
         const criteria = { ...job.details.criteria }
-        const successLen = job.influencers.success.length || 0
+        const successLen = job.influencers ? job.influencers.success.length : 0
         console.log(job)
         // show number of influencers fetched
         return (
@@ -227,7 +230,7 @@ class FetchJobView extends React.Component {
                                     <Text style={base.text}>{influencer.error.message}</Text>
                                 </View>}
                             {influencer.pending && <LoadingScreen />}
-                            {influencer.pending == false && successLen > 0 && job.influencers.success &&
+                            {influencer.pending == false && !influencer.error &&
                                 <InfluencerListFjView goToInfluencer={this.goToInfluencer} influencers={influencer.all_influencers} />}
                         </View>}
                     {running_fetch.details.id && running_fetch.details.id !== job.details.id && running_fetch.pending &&

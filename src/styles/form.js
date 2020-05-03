@@ -59,8 +59,7 @@ export const form = StyleSheet.create(
         detailsBox: {
             flexDirection: 'row',
             paddingBottom: spacing.MEDIUM,
-            paddingTop: spacing.LARGE,
-            borderTopWidth: 0.7,
+            borderTopWidth: 0.5,
             borderColor: colors.BORDER,
             paddingLeft: 0,
             justifyContent: 'space-between'
