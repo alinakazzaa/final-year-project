@@ -11,7 +11,7 @@ import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { base } from '../../styles/base'
 import { fetchUserMedia } from '../../web/fetchUserMedia'
-import { fetchCollabInfluencer, setCollabsPending, updateCollab, clearCurrentCollab } from '../../actions/collab'
+import { fetchCollabInfluencer, setCollabsPending, updateCollab, clearCurrentCollab, setCurrentCollab } from '../../actions/collab'
 import { ScrollView } from 'react-native-gesture-handler'
 
 
@@ -22,7 +22,7 @@ class ViewCollab extends React.Component {
     }
 
     state = {
-        collabValue: { tags: [], active: false }
+        collabValue: { tags: [{ name: '+', editable: false }], active: false }
     }
 
     componentDidMount() {
@@ -30,13 +30,16 @@ class ViewCollab extends React.Component {
 
         if (collab.pending === false) {
             let collabValue = {
+                ...this.state.collabValue,
                 ...collab.current_collab.details,
                 influencer: collab.current_collab.details.influencer.username
             }
+            let updatedTags = [...this.state.collabValue.tags]
+            updatedTags = collabValue.tags ? updatedTags = [...collabValue.tags, ...updatedTags] : [...updatedTags]
 
             collabValue = {
                 ...collabValue,
-                tags: [...collab.current_collab.details.tags || [], { name: '+', editable: false }]
+                tags: [...updatedTags]
             }
 
             this.setState({ collabValue })
@@ -58,14 +61,16 @@ class ViewCollab extends React.Component {
 
     handleSubmit = () => {
         const { collabValue } = this.state
-        const { updateCollab, collab } = this.props
+        const { updateCollab, collab, setCurrentCollab } = this.props
+
         const updatedCollab = {
             details: {
                 ...collab.current_collab.details,
-                ...collabValue, influencer: { ...collab.current_collab.details.influencer }
+                ...collabValue, influencer: { ...collab.current_collab.details.influencer },
+                tags: [...collabValue.tags.filter(tag => tag.name !== '+')] || []
             }
         }
-
+        setCurrentCollab(updatedCollab)
         updateCollab(updatedCollab)
         Alert.alert("Collaboration updated")
     }
@@ -103,7 +108,8 @@ class ViewCollab extends React.Component {
         const editTag = { ...updatedTags[index], editable: false }
 
         updatedTags.splice(index, 1, editTag)
-        if (!updatedTags.find(tag => tag.title == '+'))
+
+        if (!updatedTags.find(tag => tag.name == '+'))
             updatedTags.push({ name: '+', editable: false })
 
         this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
@@ -114,6 +120,10 @@ class ViewCollab extends React.Component {
         const updatedTags = [...collabValue.tags]
         updatedTags[index] = { ...updatedTags[index], name: text }
         this.setState({ collabValue: { ...collabValue, tags: updatedTags } })
+    }
+
+    componentWillUnmount() {
+        this.setState({})
     }
 
     render() {
@@ -167,7 +177,8 @@ const mapDispatchToProps = {
     setCollabsPending,
     updateCollab,
     fetchUserMedia,
-    clearCurrentCollab
+    clearCurrentCollab,
+    setCurrentCollab
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewCollab)

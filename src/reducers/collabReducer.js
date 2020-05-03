@@ -63,7 +63,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_collabs
+                all_collabs: [...all_collabs]
             }
 
         case UPDATE_COLLAB:
@@ -72,7 +72,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_collabs
+                all_collabs: [...all_collabs]
 
             }
 
@@ -80,7 +80,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_collabs: [...state.all_collabs.filter(c => c.details.id !== action.collabId)]
+                all_collabs: [...all_collabs.filter(c => c.details.id !== action.collabId)]
             }
 
 

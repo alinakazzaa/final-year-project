@@ -42,7 +42,8 @@ class AddCollab extends React.Component {
             details: {
                 ...collabValue, influencer: {
                     id: influencer.id,
-                    username: influencer.username, profile_pic_url: influencer.profile_pic_url
+                    username: influencer.username, profile_pic_url: influencer.profile_pic_url,
+                    tags: [...collabValue.tags.filter(tag => tag.name !== '+')] || []
                 }
             }
         }
@@ -94,7 +95,7 @@ class AddCollab extends React.Component {
 
         updatedTags.splice(index, 1, editTag)
 
-        if (!updatedTags.find(tag => tag.title == '+'))
+        if (!updatedTags.find(tag => tag.name == '+'))
             updatedTags.push({ name: '+', editable: false })
 
 
@@ -104,6 +105,10 @@ class AddCollab extends React.Component {
     removeTag = name => {
         let updatedTags = [...this.state.collabValue.tags.filter(t => t.name !== name)]
         this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
+    }
+
+    componentWillUnmount() {
+        this.setState({})
     }
 
     render() {
