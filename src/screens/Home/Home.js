@@ -15,6 +15,7 @@ import { getUserCollabs, setCurrentCollab } from '../../actions/collab'
 import { form } from '../../styles/form'
 import { CollabListProjectView } from '../../components/list/CollabListProjectView'
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView'
+import { Icon } from 'react-native-elements'
 
 
 
@@ -31,7 +32,7 @@ class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        const { user, getUserProjects } = this.props
+        const { user, getUserProjects, getUserCollabs } = this.props
         getUserProjects(user.current_user.id)
         getUserCollabs(user.current_user.id)
     }
@@ -39,11 +40,13 @@ class HomeScreen extends React.Component {
     componentDidUpdate(prev) {
         const { user, project, fetch_job, getProjectFetchJobs, collab, getAllInfluencers } = this.props
         const activeProjects = project.all_projects.filter(proj => proj.active)
+
         if (prev.project.all_projects !== project.all_projects && project.all_projects.length > 0) {
             getProjectFetchJobs(user.current_user.id, activeProjects[activeProjects.length - 1].id)
         }
 
         if (prev.fetch_job.all_fetch_jobs !== fetch_job.all_fetch_jobs && fetch_job.all_fetch_jobs.length > 0) {
+
             const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
             if (completed_fetch_jobs.length > 0) {
                 const latestJob = { ...completed_fetch_jobs[completed_fetch_jobs.length - 1] }
@@ -108,9 +111,8 @@ class HomeScreen extends React.Component {
                     {project.pending || fetch_job.pending && <LoadingScreen />}
                     <View>
                         {(project.error !== null || fetch_job.error !== null) &&
-                            <View><Text style={base.title}>Create campaigns and find influencers to match your marketing needs!</Text>
-                                <Text style={base.title}>Run instagram profile searches by hashtags you associate with your product</Text></View>}
-                        {recent_tags.length > 0 &&
+                            <View><Text style={{ ...base.text, fontSize: 14 }}>Create campaigns and find influencers to match your marketing needs!</Text></View>}
+                        {recent_tags.length > 0 ?
                             <View>
                                 <View style={form.header}>
                                     <Text style={{ ...base.title, fontSize: 13 }}>
@@ -130,7 +132,9 @@ class HomeScreen extends React.Component {
                                         alignSelf: 'center', fontSize: 14
                                     }}>Click tag to add new search</Text>
                                 </View>
-                            </View>}
+                            </View> : <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencers!</Text>
+                                <Text style={base.noneMessage}>...or get in touch with existing profiles</Text>
+                                <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => this.props.navigation.navigate("AddFetchJob")} /></View>}
                     </View>
                     <View>
                         <View style={form.header}>
@@ -152,12 +156,12 @@ class HomeScreen extends React.Component {
                             }}>Recent influencers to check out</Text></View>
                         <View style={{ ...form.detailsBox, flexDirection: 'column' }}>
                             {influencer.pending && <LoadingScreen />}
-                            {influencer.pending == false && !influencer.error ?
+                            {influencer.error && <View style={base.centerItems}>
+                                <Text style={base.text}>{influencer.error.message}</Text>
+                            </View>}
+                            {influencer.pending == false && !influencer.error &&
                                 <InfluencerListFjView goToInfluencer={this.goToInfluencer} isHome={true}
-                                    influencers={toDoInfluencers} /> :
-                                <View style={base.centerItems}>
-                                    <Text style={base.text}>{influencer.error.message}</Text>
-                                </View>}
+                                    influencers={toDoInfluencers} />}
                         </View>
                     </View>
                 </ScrollView>
