@@ -9,7 +9,7 @@ export const AppLogo = ({ small, medium, large }) => {
         <Image style={small && logo.small || medium && logo.medium || large && logo.large} source={require(
             // @ts-ignore
             '../../assets/resources/images/logo-white.png')} />
-        <Text style={logo.title}>Influence Me</Text>
+        {!small && <Text style={logo.title}>Influence Me</Text>}
     </View>
 }
 
