@@ -75,7 +75,11 @@ class AllProjects extends React.Component {
                         </View>
                         <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size={dimensions.fullWidth * .4} index={index} />
                         {project.pending && <LoadingScreen size='large' />}
-                        <IconButton name='plus' type='material-community' size={50} color={colors.WHITE}
+                        {project.error &&
+                            <View style={base.centerItems}>
+                                <Text style={{ ...base.text, color: colors.WHITE, fontSize: 20, padding: 0, margin: 0, alignSelf: 'center', textAlign: 'center' }}>Click + to start new marketing campaign</Text>
+                            </View>}
+                        <IconButton name='plus' type='material-community' size={55} color={colors.TERTIARY}
                             onPress={() => this.props.navigation.navigate('AddProject')} />
                         {!project.pending && !project.error &&
                             index == 0 ?
@@ -92,11 +96,6 @@ class AllProjects extends React.Component {
                                     deleteProject={this.deleteProject}
                                     projects={isSearch ? [...searched.filter(proj => proj.active == false)] :
                                         archivedProjects(project)} />
-                            </View>}
-
-                        {project.error &&
-                            <View style={base.centerItems}>
-                                <Text style={base.noneMessage}>Start your first campaign</Text>
                             </View>}
                     </View>
                 </Gradient>

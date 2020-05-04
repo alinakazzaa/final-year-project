@@ -71,6 +71,11 @@ class AllCollabs extends React.Component {
                         </View>
                         <TabView titles={['Active', 'Archived']} onPress={this.setTab}
                             color={colors.TERTIARY} size='46%' index={index} />
+                        {collab.error &&
+                            <View style={base.centerItems}>
+                                <Text style={{ ...base.text, color: colors.WHITE, fontSize: 20, padding: 0, margin: 0, alignSelf: 'center', textAlign: 'center' }}>No collaborations</Text>
+                                <Text style={{ ...base.text, color: colors.WHITE, fontSize: 14, padding: 0, margin: 0, alignSelf: 'center', textAlign: 'center' }}>Hint: create collaboration with influencers from your search</Text>
+                            </View>}
                         {collab.all_collabs.length > 0 &&
                             index == 0 ?
                             <View>
@@ -82,11 +87,6 @@ class AllCollabs extends React.Component {
                                 <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab}
                                     collabs={isSearch ? filterCollabs(searched, false) :
                                         filterCollabs(collab.all_collabs, false)} />
-                            </View>}
-                        {collab.all_collabs.length == 0 &&
-                            <View style={base.centerItems}>
-                                <Text style={base.noneMessage}>No collaborations yet</Text>
-                                <Text style={base.noneMessage}>Run searches and find influencers to collaborate with</Text>
                             </View>}
                     </View>
                 </Gradient>
