@@ -3,12 +3,12 @@ import { View, Text, Alert } from 'react-native'
 import FetchJobForm from '../../components/forms/FetchJobForm'
 import { AppHeader } from '../../layouts/Header'
 import { connect } from 'react-redux'
-import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
+import { addFetchJob } from '../../actions/fetchJob'
 import { BackButton } from '../../components/buttons/BackButton'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { base, colors } from '../../styles/base'
-import { followerRanges } from '../../constants/Criteria'
+import { followerRanges, numberOfProfiles } from '../../constants/Criteria'
 import { PENDING } from '../../constants'
 
 class AddFetchJob extends React.Component {
@@ -18,6 +18,7 @@ class AddFetchJob extends React.Component {
             id: '',
             title: '',
             hashtag: '',
+            no_profiles: numberOfProfiles[10],
             criteria: { followerMin: followerRanges.micro.min, followerMax: followerRanges.micro.max },
             status: PENDING
         },
