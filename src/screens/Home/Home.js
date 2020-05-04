@@ -173,13 +173,12 @@ class HomeScreen extends React.Component {
                                 {fetch_job.error !== null && <View><Text style={base.noneMessage}>Run a search and find the right influencers!</Text></View>}
                                 {recent_tags.length > 0 &&
                                     <View>
-                                        <View style={form.header}>
-                                            <Text style={{ ...base.title, fontSize: 13 }}>
-                                                {`Because you searched # ${recent_job}`}</Text>
-                                        </View>
+                                        <Text style={{ ...base.text, fontSize: 13, padding: 0 }}>
+                                            {`Because you searched # ${recent_job}`}</Text>
                                         <View style={{
                                             ...form.detailsBox,
-                                            flexDirection: 'column'
+                                            flexDirection: 'column',
+                                            borderTopWidth: 0
 
                                         }}>
                                             <Text style={{
