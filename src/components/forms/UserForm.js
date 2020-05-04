@@ -1,9 +1,9 @@
 import React from 'react'
-import { View, Keyboard } from 'react-native'
+import { View, Keyboard, Text } from 'react-native'
 // @ts-ignore
 import t from 'tcomb-form-native'
 import { formStyle } from '../../styles/form'
-import { base, colors, fonts } from '../../styles/base'
+import { base, colors, fonts, dimensions } from '../../styles/base'
 
 const Form = t.form.Form
 
@@ -37,7 +37,7 @@ const options = {
             },
 
         },
-        controlLabel: { normal: { fontWeight: fonts.WEIGHT_MEDIUM, color: colors.TERTIARY, fontSize: 15, marginTop: 10 } }
+        controlLabel: { normal: { textTransform: 'uppercase', fontWeight: fonts.WEIGHT_MEDIUM, color: colors.TERTIARY, fontSize: 15, marginTop: 10 } }
     },
 };
 
@@ -45,7 +45,14 @@ const options = {
 export const UserForm = ({ userValue, handleChange }) => {
 
     return (
-        <View style={{ ...base.formContainer, marginTop: 50, marginBottom: 50 }}>
+        <View style={{
+            ...base.formContainer,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 10,
+            height: dimensions.fullHeight * 0.5, width: dimensions.fullWidth * 0.8, marginTop: 50, marginBottom: 20, backgroundColor: colors.SCREEN
+        }}>
+            <Text style={{ marginBottom: 30, ...base.title }}>Update your details</Text>
             <Form
                 type={User}
                 options={options}

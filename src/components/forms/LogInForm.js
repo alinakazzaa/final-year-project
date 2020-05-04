@@ -64,7 +64,7 @@ export default class LogInForm extends React.Component {
                     onChange={(value) => this.onChange(value)}
                     onBlur={Keyboard.dismiss}
                 />
-                {error && <Text style={{ ...base.title, maxWidth: dimensions.fullWidth * 0.58, alignSelf: 'center', color: colors.WHITE }}>{error.message}</Text>}
+                {error && <Text style={{ ...base.title, maxWidth: dimensions.fullWidth * 0.58, fontSize: 13, alignSelf: 'center', color: colors.WHITE }}>{error.message}</Text>}
                 <View style={authStyle.btnView}><TextButton title="Log In" onPress={() => logIn(value)} buttonText={base.defaultTxt} containerStyle={authStyle.logInButton} />
                     <TextButton title="Registration" style={authStyle.regButton} buttonText={base.defaultTxt} containerStyle={authStyle.regButton} onPress={goToRegister} />
                 </View>
