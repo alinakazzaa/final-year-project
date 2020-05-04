@@ -5,7 +5,7 @@ import { authStyle } from '../Auth/styles/auth.styles';
 import { connect } from 'react-redux';
 import { updateUser } from '../../actions/user'
 import { UserForm } from '../../components/forms/UserForm';
-import { base, dimensions } from '../../styles/base';
+import { base, dimensions, colors } from '../../styles/base';
 import { Gradient } from '../../styles/Gradient';
 import { AppHeader } from '../../layouts/Header';
 import { AppLogo } from '../../components/logo/AppLogo';
@@ -24,7 +24,7 @@ class SettingsScreen extends React.Component {
 
     componentDidMount() {
         const { user } = this.props
-        this.setState({ userValue: { ...user.current_user.details } })
+        this.setState({ userValue: { ...user.current_user } })
     }
 
     handleChange = updatedUser => {
@@ -43,12 +43,11 @@ class SettingsScreen extends React.Component {
         return (
             <View>
                 <Gradient horizontal={true}>
-                    <AppHeader transparent={true} />
+                    <AppHeader transparent={true}
+                        left={<AppLogo small={true} />} />
                     <View style={{ display: 'flex', marginTop: 50, alignItems: 'center', height: dimensions.fullHeight }}>
-                        <AppLogo large={true} />
-                        <Text style={base.title}>Update your details</Text>
                         <UserForm handleChange={this.handleChange} userValue={userValue} />
-                        <TextButton title="Save" onPress={this.handleSubmit} containerStyle={authStyle.regButton} />
+                        <TextButton title="Save" containerStyle={{ backgroundColor: colors.PRIMARY }} onPress={this.handleSubmit} containerStyle={authStyle.regButton} />
                     </View>
                 </Gradient>
             </View>
