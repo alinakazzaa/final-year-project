@@ -20,9 +20,8 @@ class Router extends Component {
 
     componentDidUpdate(prev) {
         const { fetch_job, running_fetch, fetchPending, fetchResponse, setCurrentFetchJob, updateFetchJob } = this.props
-        const job = fetch_job.all_fetch_jobs.find(fj => fj.details.id == running_fetch.details.id)
 
-        if (prev.running_fetch.details.status !== running_fetch.details.status) {
+        if (prev.running_fetch.details.status != running_fetch.details.status) {
             setCurrentFetchJob(running_fetch)
             updateFetchJob(running_fetch)
         }
