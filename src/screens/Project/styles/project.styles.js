@@ -33,7 +33,6 @@ export const project_style = StyleSheet.create(
         },
         top: {
             display: 'flex',
-            paddingTop: 10,
             justifyContent: 'space-evenly',
             minHeight: dimensions.fullHeight * 0.2
         },
