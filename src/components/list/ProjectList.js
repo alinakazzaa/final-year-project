@@ -11,14 +11,14 @@ export const ProjectList = ({ projects, deleteProject, goToProject }) => {
         return (
             <TouchableOpacity key={index} onPress={() => goToProject(proj)}>
                 <View style={project_style.listItem}>
-                    <IconButton
+                    <View><IconButton
                         name='chevron-right'
-                        size={60}
+                        size={50}
                         color={colors.TERTIARY}
                         type='material-icons'
                         style={{ display: 'flex', alignSelf: 'flex-end' }}
                         onPress={() => goToProject(proj)}
-                    />
+                    /></View>
                     <Divider />
                     <View style={project_style.top}>
                         <View>
