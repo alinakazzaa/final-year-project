@@ -65,12 +65,11 @@ class FetchJobView extends React.Component {
     }
 
     startFetchJob = () => {
-        const { clearRunningFetchJob, fetch_job, fetchPending, fetchResponse, setCurrentFetchJob } = this.props
-        let running = {
+        const { clearRunningFetchJob, fetch_job, fetchPending, fetchResponse } = this.props
+        const running = {
             ...initial(), details: { ...fetch_job.current_fetch_job.details, status: IN_PROGRESS }
         }
         clearRunningFetchJob()
-        // setCurrentFetchJob(running)
         fetchMedia(running, fetchPending, fetchResponse)
     }
 
