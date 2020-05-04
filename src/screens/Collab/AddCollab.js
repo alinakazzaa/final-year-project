@@ -42,8 +42,7 @@ class AddCollab extends React.Component {
             details: {
                 ...collabValue, influencer: {
                     id: influencer.id,
-                    username: influencer.username, profile_pic_url: influencer.profile_pic_url,
-                    tags: [...collabValue.tags.filter(tag => tag.name !== '+')] || []
+                    username: influencer.username, profile_pic_url: influencer.profile_pic_url
                 }
             }
         }
