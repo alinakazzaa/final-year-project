@@ -14,12 +14,8 @@ export const logo = StyleSheet.create(
             fontWeight: fonts.WEIGHT_LEIGHT,
         },
         small: {
-            width: 40,
-            height: 40
-        },
-        medium: {
             width: 50,
-            height: 50,
+            height: 50
         },
         large: {
             width: 100,
