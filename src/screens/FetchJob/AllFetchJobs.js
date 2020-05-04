@@ -69,14 +69,14 @@ class AllFetchJobs extends React.Component {
 
     render() {
         const { index, isSearch, searched } = this.state
-        const { fetch_job, navigation } = this.props
+        const { fetch_job, navigation, project } = this.props
 
         return (
             <View>
                 <Gradient style={base.container}>
                     <AppHeader
                         left={<BackButton onPress={() => navigation.goBack()} />}
-                        center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 20 }}>Your searches</Text>}
+                        center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 15 }}>{`${project.current_project.title} searches`}</Text>}
                     />
                     <View>
                         <View style={base.searchView}>

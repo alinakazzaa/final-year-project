@@ -15,14 +15,14 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
             <View key={index}>
                 <View style={fetchJobStyle.listItem}>
                     <View style={fetchJobStyle.top}>
-                        <Text style={{ ...base.title, marginBottom: 10, fontSize: 20, color: colors.PRIMARY }}>
+                        <Text style={{ ...base.text, marginBottom: 10, fontSize: 20, color: colors.PRIMARY }}>
                             {`# ${fj.details.hashtag}`}</Text>
                         <IconButton
                             name='chevron-right'
-                            size={50}
+                            size={55}
                             color={colors.TERTIARY}
                             type='material-icons'
-                            style={{ alignSelf: 'flex-end' }}
+                            style={{ display: 'flex', alignSelf: 'flex-end' }}
                             onPress={() => goToFetchJob(fj)}
                         />
                     </View>
