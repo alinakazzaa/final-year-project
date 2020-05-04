@@ -173,5 +173,6 @@ const fetchReducer = (state = initialState, action) => {
 }
 
 export const getIndex = (list, id) => list.map(item => { return item }).indexOf(id)
+export const initial = () => { return { ...initialState } }
 
 export default fetchReducer

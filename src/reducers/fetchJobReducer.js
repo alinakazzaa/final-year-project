@@ -73,7 +73,7 @@ const fetchJobReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                current_fetch_job: { ...state.initialState.current_fetch_job }
+                current_fetch_job: state.initialState.current_fetch_job
             }
         case CLEAR_FETCH_JOB_STATE:
 

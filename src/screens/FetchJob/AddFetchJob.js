@@ -9,6 +9,7 @@ import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { base, colors } from '../../styles/base'
 import { followerRanges } from '../../constants/Criteria'
+import { PENDING } from '../../constants'
 
 class AddFetchJob extends React.Component {
 
@@ -18,7 +19,7 @@ class AddFetchJob extends React.Component {
             title: '',
             hashtag: '',
             criteria: { followerMin: followerRanges.micro.min, followerMax: followerRanges.micro.max },
-            status: ''
+            status: PENDING
         },
     }
 

@@ -11,8 +11,7 @@ import { fetchMedia } from '../../web/fetchMedia'
 import { Bar } from 'react-native-progress'
 import { COMPLETED, PENDING, IN_PROGRESS, MEDIA_FETCH, USER_FETCH } from '../../constants'
 import { fetchPending, fetchResponse, clearRunningFetchJob } from '../../actions/fetch'
-import { fetchNextPage } from '../../web/fetchNextPage'
-import { COMPLETED_GET_USERS, COMPLETED_FETCH, GET_MEDIA_SUCCESS, GET_USER_ERROR, GET_USER_SUCCESS } from '../../constants/response/types'
+import { GET_USER_ERROR, GET_USER_SUCCESS } from '../../constants/response/types'
 import { fetchJobStyle } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import FetchJobForm from '../../components/forms/FetchJobForm'
@@ -21,7 +20,6 @@ import { Gradient } from '../../styles/Gradient'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { formatNumber } from '../../actions/base'
-import { fetchInfluencer } from '../../web/fetchInfluencer'
 import { IconButton } from '../../components/buttons/IconButton'
 import { initial } from '../../reducers/fetchReducer'
 
@@ -46,6 +44,8 @@ class FetchJobView extends React.Component {
         const { fetch_job, getAllInfluencers, clearInfluencerState } = this.props
         this.setState({ currentJob: { ...fetch_job.current_fetch_job } })
 
+        clearInfluencerState()
+
         if (fetch_job.current_fetch_job.details.status == COMPLETED &&
             fetch_job.current_fetch_job.influencers &&
             fetch_job.current_fetch_job.influencers.success.length > 0) {
@@ -54,75 +54,23 @@ class FetchJobView extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { currentJob } = this.state
-        const { fetch_job, influencer, running_fetch, getAllInfluencers, updateFetchJob, fetchPending, fetchResponse } = this.props
-        const job = fetch_job.all_fetch_jobs.find(fj => fj.details.id == running_fetch.details.id)
+        const { fetch_job, getAllInfluencers } = this.props
 
-        if (currentJob.details.status == COMPLETED &&
-            currentJob.influencers &&
-            currentJob.influencers.success.length > 0 &&
-            influencer.pending == null) {
-
-            getAllInfluencers(currentJob)
-        }
-        // if (running_fetch.pending == false && running_fetch.influencers.success == currentJob.influencers.success) {
-        //     clearRunningFetchJob()
-        // }
-
-        // if (running_fetch.pending == false &&
-        //     job.influencers && job.influencers.success && job.influencers.success == running_fetch.influencers.success) {
-        //     clearInfluencerState()
-        // }
-
-        if (running_fetch.pending && prev.running_fetch.details.status != running_fetch.details.status) {
-            setCurrentFetchJob(running_fetch)
-            updateFetchJob(running_fetch)
-        }
-
-        if (running_fetch.response !== null) {
-
-            // if (running_fetch.pending == false &&
-            //     running_fetch.response.type == COMPLETED_FETCH) {
-            //     setCurrentFetchJob(fetch_job.fetch_jobs.find(job => job.details.id == running_fetch.details.id))
-            //     // clearRunningFetchJob()
-            // }
-
-            if (running_fetch.details.status == IN_PROGRESS) {
-                if (running_fetch.influencers.success.length >= Number(running_fetch.details.no_profiles) && running_fetch.response.type !== COMPLETED_FETCH) {
-                    fetchResponse({
-                        type: COMPLETED_FETCH
-                    })
-
-                } else {
-                    if (running_fetch.response.type == COMPLETED_GET_USERS && running_fetch.has_next_page &&
-                        running_fetch.progress.total == running_fetch.progress.done) {
-
-                        let ref = setInterval(() => {
-                            fetchNextPage(running_fetch, fetchPending, fetchResponse)
-                            clearInterval(ref)
-                        }, 5000)
-
-                    } else if (running_fetch.response.type == GET_MEDIA_SUCCESS ||
-                        running_fetch.response.type == GET_USER_ERROR ||
-                        running_fetch.response.type == GET_USER_SUCCESS) {
-                        let ref = setInterval(() => {
-                            fetchInfluencer(running_fetch.influencers.pending[running_fetch.influencers.pending.length - 1], running_fetch,
-                                fetchPending, fetchResponse)
-                            clearInterval(ref)
-                        }, 8000)
-                    }
-                }
-            }
+        if (prev.fetch_job.current_fetch_job != fetch_job.current_fetch_job &&
+            fetch_job.current_fetch_job.details.status == COMPLETED &&
+            fetch_job.current_fetch_job.influencers &&
+            fetch_job.current_fetch_job.influencers.success.length > 0) {
+            getAllInfluencers(fetch_job.current_fetch_job)
         }
     }
 
     startFetchJob = () => {
         const { clearRunningFetchJob, fetch_job, fetchPending, fetchResponse, setCurrentFetchJob } = this.props
         let running = {
-            ...initial(), details: { ...fetch_job.current_fetch_job.details }
+            ...initial(), details: { ...fetch_job.current_fetch_job.details, status: IN_PROGRESS }
         }
         clearRunningFetchJob()
-        setCurrentFetchJob(running)
+        // setCurrentFetchJob(running)
         fetchMedia(running, fetchPending, fetchResponse)
     }
 
@@ -166,7 +114,7 @@ class FetchJobView extends React.Component {
     render() {
         const { currentJob } = this.state
         const { influencer, navigation, running_fetch, fetch_job } = this.props
-        const job = running_fetch.details.id == currentJob.details.id ? { ...running_fetch } : currentJob
+        const job = running_fetch.details.id == currentJob.details.id ? running_fetch : currentJob
         const criteria = { ...job.details.criteria }
         const successLen = job.influencers ? job.influencers.success.length : 0
 
@@ -182,7 +130,7 @@ class FetchJobView extends React.Component {
                 <View style={base.container}>
                     <FetchJobForm goBack={navigation.goBack} fetchJob={job.details}
                         handleChange={this.handleChange} />
-                    {job.details.status !== PENDING && <View style={fetchJobStyle.followerBox}>
+                    {job.details.status != PENDING && <View style={fetchJobStyle.followerBox}>
                         <Text style={base.title}>Follower Range</Text>
                         <View style={fetchJobStyle.followerView}>
                             <Text style={base.text}>

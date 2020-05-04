@@ -104,7 +104,7 @@ export const fetchJobStyle = StyleSheet.create(
         startBtn: {
             ...button.borderBtn,
             backgroundColor: colors.PRIMARY,
-            marginTop: spacing.LARGE * 1.5
+            marginTop: spacing.SMALL
         },
         progressBar: {
             borderRadius: 10,

@@ -56,7 +56,7 @@ class AllFetchJobs extends React.Component {
     startFetchJob = (fj) => {
         const { fetchPending, clearRunningFetchJob, fetchResponse } = this.props
         const running = {
-            ...initial(), details: { ...fj.details }
+            ...initial(), details: { ...fj.details, status: IN_PROGRESS }
         }
         clearRunningFetchJob()
         this.goToFetchJob(running)

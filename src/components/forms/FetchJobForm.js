@@ -101,10 +101,10 @@ export default class FetchJobForm extends React.Component {
                             onChange={(value) => handleChange(value)}
                             onBlur={Keyboard.dismiss}
                         />
-                        {fetchJob.status.pending && <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>To consider: the more influencers you fetch, the longer it will take</Text>}
+                        {fetchJob.status == PENDING && <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>To consider: the more influencers you fetch, the longer it will take</Text>}
                     </View>
                 </View>
-                {fetchJob.status !== COMPLETED && fetchJob.status !== IN_PROGRESS && <View style={fetchJobStyle.middle}>
+                {fetchJob.status != COMPLETED && fetchJob.status != IN_PROGRESS && <View style={fetchJobStyle.middle}>
                     <Text style={base.title}>Follower range</Text>
                     <View style={fetchJobStyle.itemRowRange}>
                         <TabView index={index} color={colors.SECONDARY} size={dimensions.fullWidth * .25}
