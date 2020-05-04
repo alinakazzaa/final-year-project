@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing, dimensions } from '../../../styles/base'
+import { colors, spacing, dimensions, fonts } from '../../../styles/base'
 
 export const collabStyle = StyleSheet.create(
     {
@@ -25,24 +25,34 @@ export const collabStyle = StyleSheet.create(
         },
         listItem: {
             display: 'flex',
-            marginBottom: spacing.MEDIUM
+            borderWidth: 0.7,
+            borderRadius: 10,
+            borderColor: colors.BORDER,
+            padding: spacing.MEDIUM,
+            paddingRight: spacing.LARGE,
+            paddingLeft: spacing.LARGE,
+            fontFamily: fonts.PRIMARY,
+            marginBottom: 30,
+            backgroundColor: colors.SCREEN
         },
-        left: {
+        top: {
             display: 'flex',
-            width: '50%'
+            borderTopWidth: 0.7,
+            borderColor: colors.BORDER
         },
         middle: {
             display: 'flex',
-        },
-        right: {
-            display: 'flex',
-            width: '10%'
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 20
         },
         bottom: {
             display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderTopWidth: 0.7,
+            borderColor: colors.BORDER,
+            alignItems: 'center'
         },
         thumbnail: {
             height: dimensions.fullWidth * .8,

@@ -51,11 +51,16 @@ export const fonts = {
 // containers
 
 export const formContainer = {
+    display: 'flex',
     margin: '3%',
     borderRadius: 5,
     width: dimensions.fullWidth * .7,
     padding: spacing.LARGE,
-    paddingTop: spacing.SMALL
+    paddingTop: spacing.SMALL,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignSelf: 'center'
 }
 
 export const addContainer = {
@@ -78,7 +83,7 @@ export const base = StyleSheet.create(
             paddingRight: spacing.LARGE
         },
         scrollContainer: {
-            paddingBottom: dimensions.fullHeight * 0.17
+            paddingBottom: dimensions.fullHeight * 0.02
         },
         itemViewListContainer: {
             flexDirection: 'column'

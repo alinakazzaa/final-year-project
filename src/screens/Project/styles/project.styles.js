@@ -18,7 +18,6 @@ export const project_style = StyleSheet.create(
             paddingRight: spacing.LARGE,
             paddingLeft: spacing.LARGE,
             fontFamily: fonts.PRIMARY,
-            // justifyContent: 'space-between',
             marginBottom: 30,
             backgroundColor: colors.SCREEN
         },

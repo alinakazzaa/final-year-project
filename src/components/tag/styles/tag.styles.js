@@ -11,10 +11,10 @@ export const tagStyles = StyleSheet.create(
             minWidth: dimensions.fullWidth * 0.1,
             justifyContent: 'center',
             borderWidth: 0,
-            padding: 5,
+            alignItems: 'center',
             paddingRight: 7,
             paddingLeft: 7,
-            marginBottom: 4,
+            marginBottom: 5,
             flexDirection: 'row',
             alignSelf: 'flex-start',
         },
@@ -28,7 +28,8 @@ export const tagStyles = StyleSheet.create(
             borderWidth: 0,
             paddingRight: 7,
             paddingLeft: 7,
-            marginBottom: 4,
+            marginBottom: 5,
+            alignItems: 'center',
             alignContent: 'center'
         },
         inputStyle: {
