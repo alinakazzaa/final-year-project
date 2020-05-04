@@ -1,6 +1,7 @@
 import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from "../constants/insta_endpoints"
 import { GET_MEDIA_PENDING, GET_MEDIA_ERROR, GET_MEDIA_SUCCESS, COMPLETED_FETCH, COMPLETED_GET_USERS } from "../constants/response/types"
 import { MSG_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
+import { connect } from "react-redux"
 
 export const fetchMedia = (fetch_job, pending, fetchResponse) => {
     let response

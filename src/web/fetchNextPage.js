@@ -18,7 +18,7 @@ export const fetchNextPage = (fetch_job, pending, fetchResponse) => {
                 fetchResponse(response)
             } else {
                 result.json().then(res => {
-                    if (res.status = 'ok') {
+                    if (res.status = 'ok' && res.data.hashtag.edge_hashtag_to_media.count > 0) {
                         const edge_hashtag_to_media = { ...res.data.hashtag.edge_hashtag_to_media }
 
                         if (edge_hashtag_to_media.count == 0) {
