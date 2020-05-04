@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView, Alert } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Linking, ScrollView, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { Avatar, Tooltip } from 'react-native-elements'
 import { IconButton } from '../../components/buttons/IconButton'
 import { AppHeader } from '../../layouts/Header'
 import { formatNumber } from '../../actions/base'
 import { Gradient } from '../../styles/Gradient'
-import { base, fonts, colors, spacing } from '../../styles/base'
+import { base, fonts, colors, spacing, dimensions } from '../../styles/base'
 import { BackButton } from '../../components/buttons/BackButton'
 import { form } from '../../styles/form'
 import { influencer_style } from './styles/influencer.styles'
@@ -71,14 +71,16 @@ class ViewInfluencer extends React.Component {
                     />
                     <ScrollView>
                         <View style={influencer_style.topView}>
-                            <Avatar
-                                size={170}
-                                rounded
-                                // containerStyle={styles.avatar}
-                                source={{
-                                    uri: influencer.current_influencer.profile_pic_url,
-                                }} />
-                            <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '100%', marginTop: spacing.LARGE, paddingTop: spacing.LARGE, borderTopWidth: 0.7, borderColor: colors.TERTIARY }}>
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', width: dimensions.fullWidth * 0.9 }}>
+                                <Avatar
+                                    size={170}
+                                    rounded
+                                    // containerStyle={styles.avatar}
+                                    source={{
+                                        uri: influencer.current_influencer.profile_pic_url,
+                                    }} />
+                            </View>
+                            <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '100%', marginTop: spacing.LARGE, paddingTop: spacing.LARGE, borderTopWidth: 0.7, borderColor: colors.WHITE }}>
                                 <View>
                                     <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE, fontWeight: '700' }}>Username</Text>
                                 </View>
@@ -86,33 +88,28 @@ class ViewInfluencer extends React.Component {
                                     <Text style={{ ...form.inputViewLabel, color: colors.WHITE, fontSize: fonts.LARGE, fontWeight: '700' }}>{influencer.current_influencer.username}</Text>
                                 </View>
                             </View>
-                            <View style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <TouchableOpacity style={{ ...influencer_style.linkViewInflu, alignSelf: 'center' }} onPress={() => this.goToProfile(influencer.current_influencer.profile_url)}>
-                                    <Text style={{ ...base.title, fontSize: 20 }}>Instagram profile</Text>
-                                    <IconButton
-                                        name='launch'
-                                        size={30}
-                                        color={colors.TERTIARY}
-                                        type='material-icons'
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
 
+                            <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => this.goToProfile(influencer.current_influencer.profile_url)}>
+                                <Image style={{ height: 80, width: 80 }} source={require(
+                                    // @ts-ignore
+                                    '../../assets/resources/images/instagram-logo.png')} />
+                                <Text style={{ ...base.text, color: colors.WHITE, fontSize: 14, padding: 0, margin: 0 }}>Instagram</Text>
+                            </TouchableOpacity>
+                        </View>
                         <View style={influencer_style.middleView}>
                             <View style={form.header} >
-                                <Text style={base.title}>Details</Text>
+                                <Text style={{ ...base.title, color: colors.WHITE }}>Details</Text>
                             </View>
-                            <View style={{ ...form.detailsBox, paddingTop: spacing.MEDIUM, borderColor: colors.TERTIARY }}>
+                            <View style={{ ...form.detailsBox, justifyContent: 'space-between', paddingTop: spacing.MEDIUM, borderColor: colors.WHITE }}>
                                 <View>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>Followers</Text>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>Media Count</Text>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE }}>Date added</Text>
+                                    <Text style={{ ...base.title, color: colors.WHITE, fontSize: fonts.MEDIUM, marginBottom: spacing.MEDIUM * 1.2, marginTop: spacing.MEDIUM * 1.2 }}>Followers</Text>
+                                    <Text style={{ ...base.title, color: colors.WHITE, fontSize: fonts.MEDIUM, marginBottom: spacing.MEDIUM * 1.2, marginTop: spacing.MEDIUM * 1.2 }}>Media Count</Text>
+                                    <Text style={{ ...base.title, color: colors.WHITE, fontSize: fonts.MEDIUM, marginBottom: spacing.MEDIUM * 1.2, marginTop: spacing.MEDIUM * 1.2 }}>Date added</Text>
                                 </View>
-                                <View style={form.inputBox}>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.followers)}</Text>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{formatNumber(influencer.current_influencer.media_count)}</Text>
-                                    <Text style={{ ...form.inputViewLabel, fontSize: fonts.LARGE, fontWeight: '700' }}>{fetch_job.current_fetch_job.details.date_fetch_run || fetch_job.current_fetch_job.details.date_created}</Text>
+                                <View>
+                                    <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.LARGE, padding: 0, marginBottom: spacing.MEDIUM, marginTop: spacing.MEDIUM }}>{formatNumber(influencer.current_influencer.followers)}</Text>
+                                    <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.LARGE, padding: 0, marginBottom: spacing.MEDIUM, marginTop: spacing.MEDIUM }}>{formatNumber(influencer.current_influencer.media_count)}</Text>
+                                    <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.LARGE, padding: 0, marginBottom: spacing.MEDIUM, marginTop: spacing.MEDIUM }}>{fetch_job.current_fetch_job.details.date_fetch_run || fetch_job.current_fetch_job.details.date_created}</Text>
                                 </View>
                             </View>
                         </View>
@@ -139,7 +136,7 @@ class ViewInfluencer extends React.Component {
                                         color={colors.WHITE}
                                         type='material-community'
                                     />
-                                    <Text style={{ ...base.title, color: colors.WHITE, fontSize: 18 }}>New collab</Text>
+                                    <Text style={{ ...base.text, color: colors.WHITE, fontSize: 16, padding: 0 }}>New collab</Text>
                                 </TouchableOpacity>}
                             <Tooltip popover={<Text>Influencer removed</Text>}><TouchableOpacity>
                                 <IconButton

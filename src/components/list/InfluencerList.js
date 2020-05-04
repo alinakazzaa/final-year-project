@@ -48,7 +48,7 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                                 <Image style={{ height: 60, width: 60 }} source={require(
                                     // @ts-ignore
                                     '../../assets/resources/images/instagram-logo.png')} />
-                                <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>Go to profile</Text>
+                                <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>Instagram</Text>
                             </TouchableOpacity></View>
                         </View>
                     </View>
