@@ -11,6 +11,8 @@ import { colors, base, dimensions } from '../../styles/base'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { TabView } from '../../components/tabview/TabView'
 import { Gradient } from '../../styles/Gradient'
+import { AppLogo } from '../../components/logo/AppLogo'
+import { IconButton } from '../../components/buttons/IconButton'
 
 class AllProjects extends React.Component {
 
@@ -60,17 +62,20 @@ class AllProjects extends React.Component {
             <View>
                 <Gradient style={base.container}>
                     <AppHeader
-                        left={<View style={base.searchTxt}><Text style={base.title}>Search</Text></View>}
-                        center={<View style={base.searchView}>
+                        left={<AppLogo small={true} />}
+                        center={<Text style={{ ...base.title, color: colors.WHITE, ontSize: 20 }}>Your Campaigns</Text>}
+                    />
+                    <View style={{ marginBottom: dimensions.fullHeight * 0.2 }}>
+                        <View style={base.searchView}>
+                            <Text style={base.title}>Search</Text>
                             <Input
                                 onChangeText={text => this.searchProject(text)}
                                 inputStyle={base.inputStyle}
                                 inputContainerStyle={base.searchInput} />
-                        </View>} />
-                    <View>
+                        </View>
                         <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size={dimensions.fullWidth * .4} index={index} />
                         {project.pending && <LoadingScreen size='large' />}
-                        <Icon name='plus' type='material-community' size={50} color={colors.WHITE}
+                        <IconButton name='plus' type='material-community' size={50} color={colors.WHITE}
                             onPress={() => this.props.navigation.navigate('AddProject')} />
                         {!project.pending && !project.error &&
                             index == 0 ?

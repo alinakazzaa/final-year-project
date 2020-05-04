@@ -31,7 +31,9 @@ class ProjectView extends React.Component {
     }
 
     componentDidMount() {
-        const { user, project, getProjectFetchJobs, getUserCollabs } = this.props
+        const { user, project, getProjectFetchJobs, getUserCollabs, clearCollabState, clearFetchJobState } = this.props
+        clearCollabState()
+        clearFetchJobState()
         if (project.current_project.title) {
             getProjectFetchJobs(user.current_user.id, project.current_project.id)
             getUserCollabs(user.current_user.id)
@@ -41,11 +43,11 @@ class ProjectView extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { project, collab } = this.props
+        const { user, project, fetch_job, collab, getUserCollabs, getProjectFetchJobs } = this.props
         let projectCollabs
+
         if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0) {
             projectCollabs = [...collab.all_collabs.filter(c => c.details.project_id == project.current_project.id)]
-
             this.setState({ projectCollabs })
         }
     }
@@ -77,11 +79,6 @@ class ProjectView extends React.Component {
         setCurrentCollab(collab)
     }
 
-    componentWillUnmount() {
-        const { clearCollabState } = this.props
-        clearCollabState()
-    }
-
     render() {
         const { fetch_job, navigation, collab } = this.props
         const { projectValue, projectCollabs } = this.state
@@ -91,25 +88,14 @@ class ProjectView extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => navigation.goBack()} />}
+                    center={<Text style={{ ...base.title, color: colors.WHITE, ontSize: 20 }}>{projectValue.title}</Text>}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <ScrollView contentContainerStyle={base.scrollContainer}>
-                    <View style={base.container}>
+                    <View style={{ ...base.container, marginBottom: dimensions.fullHeight * 0.1 }}>
                         <ProjectForm handleChange={this.handleChange} project_value={projectValue} toggleSwitch={this.toggleSwitch} />
+
                         <View style={{ ...base.itemViewListContainer, borderBottomWidth: 0.7, borderColor: colors.BORDER }}>
-                            <View style={base.itemViewListNav}>
-                                <Text style={base.title}>{`Collaborations (${projectCollabs.length})`}</Text>
-                                <TouchableOpacity onPress={() => navigation.navigate('AllCollabs')}>
-                                    <Text style={base.title}>View All</Text>
-                                </TouchableOpacity>
-                            </View>
-                            {collab.pending && <LoadingScreen />}
-                            {projectCollabs.length == 0 && <View style={base.centerItems}><Text style={base.noneMessage}>Run a search and find the right influencers!</Text>
-                                <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} /></View>}
-                            {!collab.error && !collab.pending && collab.all_collabs.length > 0 &&
-                                <CollabListProjectView isHome={false} collabs={projectCollabs} goToCollab={this.goToCollab} />}
-                        </View>
-                        <View style={base.itemViewListContainer}>
                             <View style={base.itemViewListNav}>
                                 <Text style={base.title}>{`Searches (${fetch_job.all_fetch_jobs.length})`}</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate('AllFetchJobs')}>
@@ -127,6 +113,21 @@ class ProjectView extends React.Component {
                                     fetch_jobs={fetch_job.all_fetch_jobs} goToFetchJob={this.goToFetchJob} />}
                             </ScrollView>}
                         </View>
+                        <View style={base.itemViewListContainer}>
+                            <View style={base.itemViewListNav}>
+                                <Text style={base.title}>{`Collaborations (${projectCollabs.length})`}</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate('AllCollabs')}>
+                                    <Text style={base.title}>View All</Text>
+                                </TouchableOpacity>
+                            </View>
+                            {collab.pending && <LoadingScreen />}
+                            {projectCollabs.length == 0 && <View style={base.centerItems}><Icon name='arrow-upward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} />
+                                <Text style={base.noneMessage}>Run a search and find the right influencers!</Text>
+                            </View>}
+                            {!collab.error && !collab.pending && collab.all_collabs.length > 0 &&
+                                <CollabListProjectView isHome={false} collabs={projectCollabs} goToCollab={this.goToCollab} />}
+                        </View>
+
                     </View>
                 </ScrollView>
             </View>

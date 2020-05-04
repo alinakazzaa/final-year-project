@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { BackButton } from '../../components/buttons/BackButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { SaveButton } from '../../components/buttons/SaveButton'
-import { base } from '../../styles/base'
+import { base, colors } from '../../styles/base'
 import { Tooltip } from 'react-native-elements'
 
 class AddProject extends React.Component {
@@ -31,7 +31,8 @@ class AddProject extends React.Component {
         const { user, addProject, navigation } = this.props
         addProject(user.current_user.id, this.state.project_value)
         Alert.alert("Campaign created")
-        navigation.goBack()
+        navigation.navigate("AllProjects")
+
     }
 
     toggleSwitch = value => {
@@ -46,6 +47,7 @@ class AddProject extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
+                    center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 20 }}>New Campaign</Text>}
                     right={<Tooltip popover={<Text>Influencer saved</Text>}><SaveButton onPress={this.handleSubmit} /></Tooltip>}
                 />
                 <View style={base.container}>

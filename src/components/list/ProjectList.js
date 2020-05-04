@@ -13,21 +13,21 @@ export const ProjectList = ({ projects, deleteProject, goToProject }) => {
                 <View style={project_style.listItem}>
                     <IconButton
                         name='chevron-right'
-                        size={50}
+                        size={60}
                         color={colors.TERTIARY}
                         type='material-icons'
-                        style={{ alignSelf: 'flex-end' }}
+                        style={{ display: 'flex', alignSelf: 'flex-end' }}
                         onPress={() => goToProject(proj)}
                     />
                     <Divider />
                     <View style={project_style.top}>
                         <View>
-                            <Text style={{ ...base.text, fontSize: 12, padding: 0 }}>Title</Text>
-                            <Text style={{ ...base.title, fontSize: 14 }}>{proj.title}</Text>
+                            <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Title</Text>
+                            <Text style={{ ...base.title, fontSize: 16 }}>{proj.title}</Text>
                         </View>
                         <View>
-                            <Text style={{ ...base.text, fontSize: 12, padding: 0 }}>Date added</Text>
-                            <Text style={{ ...base.title, fontSize: 14 }}>{proj.date_created}</Text>
+                            <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Date added</Text>
+                            <Text style={{ ...base.title, fontSize: 16 }}>{proj.date_created}</Text>
                         </View>
                     </View>
                     <Divider />
