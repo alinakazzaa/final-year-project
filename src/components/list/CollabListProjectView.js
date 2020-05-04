@@ -10,24 +10,25 @@ export const CollabListProjectView = ({ collabs, goToCollab, isHome }) => {
     const collabList = (collab, index) => {
 
         return <Gradient style={collabStyle.collabView}><TouchableOpacity key={index} onPress={() => goToCollab(collab)}>
-            <Avatar
+            <View><Avatar
                 size={90}
                 rounded
                 containerStyle={{ alignSelf: 'center', marginBottom: 10 }}
                 source={{
                     uri: collab.details.influencer.profile_pic_url,
-                }} />
-            <Divider />
-            <Text style={{ ...base.title, color: colors.WHITE, alignSelf: 'center', fontSize: 12, padding: 5 }}>{`${collab.details.title}`}</Text>
-            <Divider />
-            {collab.details.active ?
-                <View style={{
-                    display: 'flex', flexDirection: 'row'
-                }}>
-                    <Text style={{ ...base.text, color: colors.WHITE, paddingTop: 18, fontSize: 13, margin: 0 }}>Live</Text>
-                    <PulseIndicator size={20} color={colors.GREEN} />
-                </View> : <Text style={{ ...base.text, color: colors.WHITE, paddingTop: 18, fontSize: 13, margin: 0 }}>{`start ${collab.details.date_start}`}</Text>
-            }
+                }} /></View>
+            <View><Divider />
+                <Text style={{ ...base.title, color: colors.WHITE, alignSelf: 'center', fontSize: 12, padding: 5 }}>{`${collab.details.title}`}</Text>
+                <Divider />
+                {collab.details.active ?
+                    <View style={{
+                        display: 'flex', flexDirection: 'row'
+                    }}>
+                        <Text style={{ ...base.text, color: colors.WHITE, paddingTop: 18, fontSize: 13, margin: 0 }}>Live</Text>
+                        <PulseIndicator size={20} color={colors.GREEN} />
+                    </View> : <Text style={{ ...base.text, color: colors.WHITE, paddingTop: 18, fontSize: 13, margin: 0 }}>{`start ${collab.details.date_start}`}</Text>
+                }
+            </View>
         </TouchableOpacity >
         </Gradient>
     }

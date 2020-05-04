@@ -62,6 +62,7 @@ export const CollabForm = ({ collab, onChange, removeTag, onTagTextChange, toggl
                 <Text style={{ ...form.inputViewLabel, marginRight: 55 }}>Date Start</Text>
                 <DatePickerInput handleChange={date => onChange({ ...collab, date_start: date })} date={collab.date_start} />
             </View>
+            <Text style={{ ...base.text, marginBottom: 0, padding: 0, marginTop: 20, fontSize: 12 }}>Note: active collaborations will fetch instagram hashtag media</Text>
             <View style={base.switchView}>
                 <Text style={form.inputViewLabel}>Active</Text>
                 <SwitchItem value={collab.active} onChange={value => toggleSwitch(value)} />
