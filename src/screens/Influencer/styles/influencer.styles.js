@@ -30,8 +30,9 @@ export const influencer_style = StyleSheet.create(
             paddingBottom: 30
         },
         infoBox: {
+            alignSelf: 'flex-start',
             justifyContent: 'space-evenly',
-            minHeight: 170
+            minHeight: 150
         },
         info: {
             alignItems: 'center'

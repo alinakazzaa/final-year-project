@@ -25,7 +25,7 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                     <View>
                         <View style={influencer_style.top}>
                             <View><Avatar
-                                size={170}
+                                size={150}
                                 rounded
                                 source={{
                                     uri: influ.profile_pic_url,
@@ -64,7 +64,7 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                         <TouchableOpacity style={influencer_style.createCollab}>
                             <IconButton
                                 name='account-multiple-plus-outline'
-                                size={50}
+                                size={35}
                                 color={colors.TERTIARY}
                                 type='material-community'
                                 onPress={() => createCollab(influ)}
