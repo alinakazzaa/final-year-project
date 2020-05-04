@@ -1,4 +1,4 @@
-import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB } from '../constants'
+import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB, CLEAR_COLLAB_STATE } from '../constants'
 import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR, SET_COLLABS_PENDING, SET_COLLABS_SUCCESS, SET_COLLABS_ERROR, GET_COLLAB_INFLUENCER_SUCCESS } from '../constants/response/types'
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
 }
 
 const collabReducer = (state = initialState, action) => {
-    let all_collabs = [...state.all_collabs]
+    const collabs = [...state.all_collabs]
 
     switch (action.type) {
 
@@ -45,7 +45,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                current_collab: { ...action.collab },
+                current_collab: action.collab,
                 pending: false
             }
 
@@ -59,20 +59,20 @@ const collabReducer = (state = initialState, action) => {
 
         case ADD_COLLAB:
 
-            all_collabs.splice(all_collabs.length, 0, action.collab)
+            collabs.splice(collabs.length, 0, action.collab)
 
             return {
                 ...state,
-                all_collabs: [...all_collabs]
+                all_collabs: [...collabs]
             }
 
         case UPDATE_COLLAB:
 
-            all_collabs.splice(getIndex(all_collabs, action.collab), 1, action.collab)
+            collabs.splice(getIndex(collabs, action.collab), 1, action.collab)
 
             return {
                 ...state,
-                all_collabs: [...all_collabs]
+                all_collabs: [...collabs]
 
             }
 
@@ -80,7 +80,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_collabs: [...all_collabs.filter(c => c.details.id !== action.collabId)]
+                all_collabs: [...state.all_collabs.filter(c => c.details.id != action.collabId)]
             }
 
 
@@ -115,6 +115,11 @@ const collabReducer = (state = initialState, action) => {
                 ...state,
                 pending: false,
                 error: true
+            }
+
+        case CLEAR_COLLAB_STATE:
+            return {
+                ...initialState
             }
 
         default:
