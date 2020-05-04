@@ -17,8 +17,8 @@ export const FetchJobListProjectView = ({ fetch_jobs, goToFetchJob }) => {
         }
 
         return <TouchableOpacity style={project_style.fetchJob} key={index} onPress={() => goToFetchJob(fj)}>
-            <Text style={{ ...base.text, padding: 0, fontSize: 13, color: colors.SECONDARY }}>{`# ${fj.details.hashtag}`}</Text>
-            <Text style={{ ...base.text, padding: 0, fontSize: 13 }}>{status()}</Text>
+            <Text style={{ ...base.text, padding: 0, fontSize: 13, color: colors.PRIMARY }}>{`# ${fj.details.hashtag}`}</Text>
+            <Text style={{ ...base.text, padding: 0, fontSize: 15, color: colors.SECONDARY }}>{status()}</Text>
             {fj.details.status == COMPLETED ? <Text style={{ ...base.text, padding: 0, fontSize: 13 }}>
                 {`found ${fj.influencers && fj.influencers.success.length || 0} influencers`}
             </Text> : <IconButton
