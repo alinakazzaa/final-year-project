@@ -18,8 +18,9 @@ export const influencer_style = StyleSheet.create(
         },
         top: {
             display: 'flex',
+            flexDirection: 'row',
             alignItems: 'center',
-            padding: 10,
+            justifyContent: 'space-evenly',
             paddingTop: 20
         },
         middle: {
@@ -29,9 +30,8 @@ export const influencer_style = StyleSheet.create(
             paddingBottom: 30
         },
         infoBox: {
-            marginTop: 30,
-            flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-evenly',
+            minHeight: 170
         },
         info: {
             alignItems: 'center'
@@ -59,9 +59,10 @@ export const influencer_style = StyleSheet.create(
         header: {
             borderBottomWidth: 0.5,
             borderColor: colors.BORDER,
-            padding: spacing.MEDIUM,
             flexDirection: 'row',
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
+            padding: 0,
+            margin: 0
         },
         linkViewInflu: {
             display: 'flex',
@@ -69,22 +70,17 @@ export const influencer_style = StyleSheet.create(
         },
         linkView: {
             display: 'flex',
-            marginTop: spacing.LARGE,
-            flexDirection: 'row'
+            marginTop: spacing.LARGE
         },
         footer: {
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            alignItems: 'center'
         },
         voteOption: {
-            borderRightWidth: 0.4,
-            borderColor: colors.BORDER,
-            width: '30%'
+            minWidth: '30%'
         },
         createCollab: {
-            width: '40%',
-            paddingTop: '2%',
-            borderRightWidth: 0.4,
-            borderRightColor: colors.BORDER
+            alignSelf: 'center'
         }
     });

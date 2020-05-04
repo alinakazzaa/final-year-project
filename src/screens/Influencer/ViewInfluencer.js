@@ -10,7 +10,7 @@ import { base, fonts, colors, spacing } from '../../styles/base'
 import { BackButton } from '../../components/buttons/BackButton'
 import { form } from '../../styles/form'
 import { influencer_style } from './styles/influencer.styles'
-import { updateInfluencer, removeInfluencer } from '../../actions/influencer'
+import { updateInfluencer, removeInfluencer, setCurrentInfluencer } from '../../actions/influencer'
 import { updateFetchJob } from '../../actions/fetchJob'
 import { setCurrentCollab } from '../../actions/collab'
 
@@ -25,9 +25,10 @@ class ViewInfluencer extends React.Component {
     }
 
     saveInfluencer = influencer => {
-        const { updateInfluencer } = this.props
-        Alert.alert("Influencer has been saved")
+        const { updateInfluencer, setCurrentInfluencer } = this.props
+        Alert.alert("Influencer saved")
         updateInfluencer({ ...influencer, to_do: false })
+        setCurrentInfluencer({ ...influencer, to_do: false })
     }
 
     deleteInflu = id => {
@@ -73,7 +74,7 @@ class ViewInfluencer extends React.Component {
                             <Avatar
                                 size={170}
                                 rounded
-                                containerStyle={styles.avatar}
+                                // containerStyle={styles.avatar}
                                 source={{
                                     uri: influencer.current_influencer.profile_pic_url,
                                 }} />
@@ -115,16 +116,14 @@ class ViewInfluencer extends React.Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={{ ...base.centered, display: 'flex', marginTop: spacing.MEDIUM, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity>
-                                <IconButton
-                                    name='check'
-                                    size={60}
-                                    color={colors.GREEN}
-                                    type='material-icons'
-                                    onPress={() => this.saveInfluencer(influencer.current_influencer)}
-                                />
-                            </TouchableOpacity>
+                        <View style={{ ...base.centered, display: 'flex', marginTop: spacing.MEDIUM, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            {influencer.current_influencer.to_do && <IconButton
+                                name='check'
+                                size={60}
+                                color={colors.GREEN}
+                                type='material-icons'
+                                onPress={() => this.saveInfluencer(influencer.current_influencer)}
+                            />}
                             {has_collab ? <TouchableOpacity onPress={() => this.goToCollab()}>
                                 <IconButton
                                     name='account-arrow-right'
@@ -159,87 +158,6 @@ class ViewInfluencer extends React.Component {
     }
 }
 
-const styles = StyleSheet.create(
-    {
-
-        bottomView: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        listHead: {
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-        },
-        infoContainer: {
-            margin: 20,
-        },
-        infoBox: {
-            flexDirection: 'column',
-            marginTop: 20
-        },
-        avatar: {
-            marginTop: 10
-        },
-        title: {
-            fontSize: 13,
-            color: '#493649',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            textAlign: 'left',
-
-        },
-        itemRow: {
-            display: 'flex',
-            flexDirection: 'row',
-            borderBottomWidth: 0.2,
-            borderBottomColor: '#b3b3cc',
-            padding: 10,
-            justifyContent: 'space-between',
-        },
-        itemCol: {
-            display: 'flex',
-            flexDirection: 'column',
-            borderBottomWidth: 0.2,
-            borderBottomColor: '#b3b3cc',
-            padding: 10,
-        },
-        checkInfo: {
-            flexDirection: 'row',
-            justifyContent: 'flex-start'
-        },
-        lbl: {
-            fontSize: 15,
-            color: '#5d4d50',
-            textTransform: 'uppercase',
-        },
-        data: {
-            fontSize: 15,
-            color: '#826478',
-            fontWeight: '700',
-            paddingLeft: '10%'
-        },
-        biography: {
-            fontSize: 15,
-            color: '#826478',
-            paddingTop: 20
-        },
-        influName: {
-            color: '#846284',
-            textTransform: 'uppercase',
-            fontSize: 14,
-        },
-        fjData: {
-            color: '#846284',
-            textTransform: 'uppercase',
-            fontSize: 14,
-            width: '40%'
-        },
-        viewAllBtn: {
-            alignSelf: 'center',
-            flexWrap: 'wrap'
-        }
-    })
-
 const mapStateToProps = state => ({
     fetch_job: state.fetch_job,
     influencer: state.influencer,
@@ -250,7 +168,8 @@ const mapDispatchToProps = {
     updateInfluencer,
     removeInfluencer,
     setCurrentCollab,
-    updateFetchJob
+    updateFetchJob,
+    setCurrentInfluencer
 }
 
 
