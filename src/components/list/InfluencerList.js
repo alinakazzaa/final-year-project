@@ -34,12 +34,12 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                             </View>
                             <View style={influencer_style.infoBox}>
                                 <View style={influencer_style.info}>
-                                    <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>Followers</Text>
-                                    <Text style={{ ...base.title, fontSize: 16, padding: 0, margin: 0 }}>{formatNumber(influ.followers)}</Text>
+                                    <Text style={{ ...base.text, fontSize: 16, padding: 0, margin: 0 }}>Followers</Text>
+                                    <Text style={{ ...base.title, fontSize: 18, padding: 0, margin: 0 }}>{formatNumber(influ.followers)}</Text>
                                 </View>
                                 <View style={influencer_style.info}>
-                                    <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>Media count</Text>
-                                    <Text style={{ ...base.title, fontSize: 16, padding: 0, margin: 0 }}>{formatNumber(influ.media_count)}</Text>
+                                    <Text style={{ ...base.text, fontSize: 16, padding: 0, margin: 0 }}>Media count</Text>
+                                    <Text style={{ ...base.title, fontSize: 18, padding: 0, margin: 0 }}>{formatNumber(influ.media_count)}</Text>
                                 </View>
                             </View>
                         </View>
