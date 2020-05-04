@@ -70,7 +70,11 @@ export const collabStyle = StyleSheet.create(
             borderColor: colors.BORDER,
             borderRadius: 10,
             marginRight: 10,
-            minWidth: dimensions.fullWidth * 0.4
+            justifyContent: 'space-evenly',
+            minWidth: dimensions.fullWidth * 0.4,
+            maxWidth: dimensions.fullWidth * 0.6,
+            minHeight: dimensions.fullHeight * 0.25,
+            maxHeight: dimensions.fullHeight * 0.3
         }
 
     })

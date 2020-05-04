@@ -55,10 +55,9 @@ class AddCollab extends React.Component {
         if (!collab.all_collabs.find(c => c.details.influencer.id == influencer.id)) {
             addCollab(project.current_project.user_id, project.current_project.id, newCollab)
             Alert.alert("Collaboration added")
-            navigation.goBack()
+            navigation.navigate("AllCollabs")
         } else {
             Alert.alert("Collaboration already exists.\n\nTry a different influencer.")
-            navigation.goBack()
         }
     }
 
