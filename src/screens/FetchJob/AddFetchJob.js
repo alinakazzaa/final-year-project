@@ -7,7 +7,7 @@ import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
 import { BackButton } from '../../components/buttons/BackButton'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
-import { base } from '../../styles/base'
+import { base, colors } from '../../styles/base'
 import { followerRanges } from '../../constants/Criteria'
 
 class AddFetchJob extends React.Component {
@@ -55,7 +55,7 @@ class AddFetchJob extends React.Component {
         } else {
             Alert.alert("Search added")
             addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
-            navigation.goBack()
+            navigation.navigate("AllFetchJobs")
         }
     }
 
@@ -64,12 +64,14 @@ class AddFetchJob extends React.Component {
     }
 
     render() {
+        const { project } = this.props
         const { fetchJob } = this.state
 
         return (
             <View>
                 <AppHeader
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
+                    center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 13 }}>{`${project.current_project.title} # search`}</Text>}
                     right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />

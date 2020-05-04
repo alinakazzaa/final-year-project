@@ -25,7 +25,7 @@ const fetchJobReducer = (state = initialState, action) => {
         case REMOVE_FETCH_JOB:
             return {
                 ...state,
-                all_fetch_jobs: [...fetch_jobs.filter(fj => fj.details.id !== action.fetch_job.details.id)]
+                all_fetch_jobs: [...fetch_jobs.filter(fj => fj.details.id != action.fetch_job.details.id)]
             }
 
         case SET_FETCH_JOBS_PENDING:
@@ -42,7 +42,8 @@ const fetchJobReducer = (state = initialState, action) => {
             return {
                 ...state,
                 all_fetch_jobs: [...action.fetch_jobs],
-                pending: false
+                pending: false,
+                error: null
             }
 
         case SET_FETCH_JOBS_ERROR:

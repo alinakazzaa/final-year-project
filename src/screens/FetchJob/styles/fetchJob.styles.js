@@ -73,19 +73,34 @@ export const fetchJobStyle = StyleSheet.create(
         },
         listItem: {
             display: 'flex',
-            flexDirection: 'row',
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderRadius: 5,
+            borderWidth: 0.7,
+            borderRadius: 10,
             borderColor: colors.BORDER,
-            padding: spacing.LARGE,
+            padding: spacing.MEDIUM,
+            paddingRight: spacing.LARGE,
+            paddingLeft: spacing.LARGE,
             fontFamily: fonts.PRIMARY,
-            justifyContent: 'space-between',
-            marginBottom: spacing.MEDIUM,
+            marginBottom: 30,
+            backgroundColor: colors.SCREEN
         },
-        left: {
+        top: {
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+        },
+        middle: {
+            display: 'flex',
+            paddingTop: 10,
+            justifyContent: 'space-evenly',
+            minHeight: dimensions.fullHeight * 0.2
+        },
+        bottom: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: 10
         },
         startBtn: {
             ...button.borderBtn,
