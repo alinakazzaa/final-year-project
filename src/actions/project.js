@@ -1,5 +1,5 @@
 import { db } from '../database/config/db';
-import { SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, UPDATE_PROJECT, REMOVE_PROJECT } from '../constants';
+import { SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, UPDATE_PROJECT, REMOVE_PROJECT, CLEAR_PROJECT_STATE } from '../constants';
 import { SET_PROJECTS_ERROR, SET_PROJECTS_SUCCESS, SET_PROJECTS_PENDING } from '../constants/response/types';
 import { MSG_NO_PROJECTS } from '../constants/response/messages';
 import { DB_USER_PROJECTS_REF } from '../constants/database';
@@ -53,6 +53,12 @@ export const setUserProjectsError = () => {
 export const clearCurrentProject = () => {
     return {
         type: CLEAR_CURRENT_PROJECT
+    }
+}
+
+export const clearProjectState = () => {
+    return {
+        type: CLEAR_PROJECT_STATE
     }
 }
 
