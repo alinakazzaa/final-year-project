@@ -15,7 +15,7 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
             <View key={index}>
                 <View style={fetchJobStyle.listItem}>
                     <View style={fetchJobStyle.top}>
-                        <Text style={{ ...base.title, marginBottom: 10, fontSize: 20, color: colors.SECONDARY }}>
+                        <Text style={{ ...base.title, marginBottom: 10, fontSize: 20, color: colors.PRIMARY }}>
                             {`# ${fj.details.hashtag}`}</Text>
                         <IconButton
                             name='chevron-right'
@@ -30,16 +30,16 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
                     <View style={fetchJobStyle.middle}>
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View>
-                                <Text style={{ ...base.text, fontSize: 12, padding: 0 }}>Title</Text>
-                                <Text style={{ ...base.title, fontSize: 14 }}>{fj.details.title}</Text>
+                                <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Title</Text>
+                                <Text style={{ ...base.title, fontSize: 16 }}>{fj.details.title}</Text>
                             </View>
                             {fj.details.status == IN_PROGRESS &&
                                 <PulseIndicator size={20} color={colors.GREEN} />}
                         </View>
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View>
-                                <Text style={{ ...base.text, fontSize: 12, padding: 0 }}>Date added</Text>
-                                <Text style={{ ...base.title, fontSize: 14 }}>{fj.details.date_created}</Text>
+                                <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Date added</Text>
+                                <Text style={{ ...base.title, fontSize: 16 }}>{fj.details.date_created}</Text>
                             </View>
                             {fj.details.status == COMPLETED &&
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -57,16 +57,18 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
                     <Divider />
                     {fj.details.status != IN_PROGRESS && <View style={fetchJobStyle.bottom}>
                         <View />
-                        {fj.details.status == PENDING && <IconButton
+
+                        {fj.details.status == PENDING && <View><IconButton
                             name='account-search-outline'
                             size={45}
-                            color={colors.PRIMARY}
+                            color={colors.SECONDARY}
                             style={{ alignSelf: 'center' }}
                             type='material-community'
-                            onPress={() => startFetchJob(fj)} />}
+                            onPress={() => startFetchJob(fj)} />
+                            <Text style={{ ...base.text, color: colors.SECONDARY, padding: 0, fontSize: 15 }}>Start</Text></View>}
                         <IconButton
                             name='delete-outline'
-                            size={40}
+                            size={35}
                             color={colors.TERTIARY}
                             type='material-community'
                             style={{ display: 'flex', alignSelf: 'flex-end' }}

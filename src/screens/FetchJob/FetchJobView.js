@@ -23,6 +23,7 @@ import { SaveButton } from '../../components/buttons/SaveButton'
 import { formatNumber } from '../../actions/base'
 import { fetchInfluencer } from '../../web/fetchInfluencer'
 import { IconButton } from '../../components/buttons/IconButton'
+import { initial } from '../../reducers/fetchReducer'
 
 class FetchJobView extends React.Component {
     state = {
@@ -42,30 +43,40 @@ class FetchJobView extends React.Component {
     }
 
     componentDidMount() {
-        const { fetch_job, getAllInfluencers, clearRunningFetchJob } = this.props
+        const { fetch_job, getAllInfluencers, clearInfluencerState } = this.props
         this.setState({ currentJob: { ...fetch_job.current_fetch_job } })
 
-        // if (fetch_job.current_fetch_job.details.status == COMPLETED &&
-        //     fetch_job.current_fetch_job.influencers &&
-        //     fetch_job.current_fetch_job.influencers.success.length > 0) {
-        //     getAllInfluencers(fetch_job.current_fetch_job)
-        // }
+        if (fetch_job.current_fetch_job.details.status == COMPLETED &&
+            fetch_job.current_fetch_job.influencers &&
+            fetch_job.current_fetch_job.influencers.success.length > 0) {
+            getAllInfluencers(fetch_job.current_fetch_job)
+        }
     }
 
     componentDidUpdate(prev) {
         const { currentJob } = this.state
         const { fetch_job, influencer, running_fetch, getAllInfluencers, updateFetchJob, fetchPending, fetchResponse } = this.props
+        const job = fetch_job.all_fetch_jobs.find(fj => fj.details.id == running_fetch.details.id)
 
         if (currentJob.details.status == COMPLETED &&
             currentJob.influencers &&
             currentJob.influencers.success.length > 0 &&
             influencer.pending == null) {
+
             getAllInfluencers(currentJob)
         }
+        // if (running_fetch.pending == false && running_fetch.influencers.success == currentJob.influencers.success) {
+        //     clearRunningFetchJob()
+        // }
 
-        if (prev.running_fetch.details.status !== running_fetch.details.status) {
-            setCurrentFetchJob({ ...running_fetch })
-            updateFetchJob({ ...running_fetch })
+        // if (running_fetch.pending == false &&
+        //     job.influencers && job.influencers.success && job.influencers.success == running_fetch.influencers.success) {
+        //     clearInfluencerState()
+        // }
+
+        if (running_fetch.pending && prev.running_fetch.details.status != running_fetch.details.status) {
+            setCurrentFetchJob(running_fetch)
+            updateFetchJob(running_fetch)
         }
 
         if (running_fetch.response !== null) {
@@ -106,11 +117,12 @@ class FetchJobView extends React.Component {
     }
 
     startFetchJob = () => {
-        const { running_fetch, fetch_job, fetchPending, fetchResponse } = this.props
+        const { clearRunningFetchJob, fetch_job, fetchPending, fetchResponse, setCurrentFetchJob } = this.props
         let running = {
-            ...running_fetch, details: { ...fetch_job.current_fetch_job.details }
+            ...initial(), details: { ...fetch_job.current_fetch_job.details }
         }
-        updateFetchJob(running)
+        clearRunningFetchJob()
+        setCurrentFetchJob(running)
         fetchMedia(running, fetchPending, fetchResponse)
     }
 
@@ -164,6 +176,7 @@ class FetchJobView extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => navigation.goBack()} />}
+                    center={<Text style={{ ...base.title, color: colors.WHITE }}>{`search # ${currentJob.details.hashtag || ""}`}</Text>}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <View style={base.container}>
@@ -192,10 +205,10 @@ class FetchJobView extends React.Component {
                                             <Text style={base.title}>{this.getProgressPercent()} %</Text>
                                         </View>
                                     </View>
-                                    {job.stage == MEDIA_FETCH && <Text style={base.text}>Searching through hashtag publications...</Text>}
-                                    {job.stage == USER_FETCH && <Text style={base.text}>Found profile...checking criteria</Text>}
-                                    {job.stage == USER_FETCH && job.response !== null && job.response.type == GET_USER_ERROR && <Text style={base.text}>No match</Text>}
-                                    {job.stage == USER_FETCH && job.response !== null && job.response.type == GET_USER_SUCCESS && <Text style={base.text}>Matching profile</Text>}
+                                    {job.stage == MEDIA_FETCH && <Text style={base.text}>Searching hashtag media</Text>}
+                                    {job.stage == USER_FETCH && job.response === null && <Text style={base.text}>Found profile...checking criteria...</Text>}
+                                    {job.stage == USER_FETCH && job.response !== null && job.response.type == GET_USER_ERROR && <Text style={base.text}>Doesn't match, moving on...</Text>}
+                                    {job.stage == USER_FETCH && job.response !== null && job.response.type == GET_USER_SUCCESS && <Text style={base.text}>Criteria match. Saving profile...</Text>}
                                 </View>}
                             {job.details.status !== IN_PROGRESS &&
                                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}><Text style={base.text}>{job.details.status}</Text>

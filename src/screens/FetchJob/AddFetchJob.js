@@ -71,13 +71,12 @@ class AddFetchJob extends React.Component {
             <View>
                 <AppHeader
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                    center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 13 }}>{`${project.current_project.title} # search`}</Text>}
+                    center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 15 }}>{`${project.current_project.title} # search`}</Text>}
                     right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />
                 <View style={base.container}>
                     <FetchJobForm fetchJob={fetchJob} handleChange={this.handleChange} />
-                    <View><Text style={base.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         )

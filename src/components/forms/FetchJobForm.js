@@ -101,6 +101,7 @@ export default class FetchJobForm extends React.Component {
                             onChange={(value) => handleChange(value)}
                             onBlur={Keyboard.dismiss}
                         />
+                        <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>To consider: the more influencers you fetch, the longer it will take</Text>
                     </View>
                 </View>
                 {fetchJob.status !== COMPLETED && fetchJob.status !== IN_PROGRESS && <View style={fetchJobStyle.middle}>
