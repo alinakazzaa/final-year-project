@@ -26,6 +26,7 @@ const influencerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 all_influencers: [...action.influencers],
+                error: null,
                 pending: false
             }
         case SET_INFLUENCERS_ERROR:
@@ -56,7 +57,7 @@ const influencerReducer = (state = initialState, action) => {
         case REMOVE_INFLUENCER:
             return {
                 ...state,
-                all_influencers: [...influencers.filter(influ => influ.id !== action.id)],
+                all_influencers: [...influencers.filter(influ => influ.id != action.id)],
                 pending: false
             }
 
