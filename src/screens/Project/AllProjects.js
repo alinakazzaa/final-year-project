@@ -63,7 +63,7 @@ class AllProjects extends React.Component {
                 <Gradient style={base.container}>
                     <AppHeader
                         left={<AppLogo small={true} />}
-                        center={<Text style={{ ...base.title, color: colors.WHITE, ontSize: 20 }}>Your Campaigns</Text>}
+                        center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 20 }}>Your Campaigns</Text>}
                     />
                     <View style={{ marginBottom: dimensions.fullHeight * 0.2 }}>
                         <View style={base.searchView}>
