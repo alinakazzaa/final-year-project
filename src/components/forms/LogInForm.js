@@ -54,8 +54,8 @@ export default class LogInForm extends React.Component {
         const { value } = this.state
 
         return (
-            <View style={base.formContainer}>
-                <Text style={{ color: colors.WHITE, ...base.text }}>Please log in</Text>
+            <View style={{ ...base.formContainer, alignItems: 'center' }}>
+                <Text style={{ ...base.text, color: colors.WHITE }}>Please log in</Text>
                 <Form
                     ref={c => this._form = c}
                     type={User}
