@@ -67,6 +67,12 @@ class AllFetchJobs extends React.Component {
         this.setState({ index })
     }
 
+    getProgressPercent = () => {
+        const { running_fetch } = this.props
+        return (running_fetch.influencers.success.length /
+            Number(running_fetch.details.no_profiles) * 100).toFixed() || 0
+    }
+
     render() {
         const { index, isSearch, searched } = this.state
         const { fetch_job, navigation, project, running_fetch } = this.props
@@ -114,7 +120,8 @@ class AllFetchJobs extends React.Component {
                                             startFetchJob={null}
                                             fetch_jobs={isSearch ? filterFetchJobs(searched, IN_PROGRESS) : filterFetchJobs(fetch_job.all_fetch_jobs, IN_PROGRESS)}
                                             goToFetchJob={this.goToFetchJob}
-                                            deleteFetchJob={this.deleteFetchJob} />
+                                            deleteFetchJob={this.deleteFetchJob}
+                                            progress={this.getProgressPercent()} />
                                     </View>}
                                 {index == 2 && <View>
                                     <FetchJobList
