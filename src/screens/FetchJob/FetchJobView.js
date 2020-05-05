@@ -117,14 +117,15 @@ class FetchJobView extends React.Component {
         const criteria = { ...job.details.criteria }
         const successLen = job.influencers ? job.influencers.success.length : 0
         const influencersLength = `Influencers (${fetch_job.current_fetch_job.influencers ? fetch_job.current_fetch_job.influencers.success.length : 0})`
+
         // show number of influencers fetched
         return (
             <View>
                 <AppHeader
                     gradient={true}
-                    left={job.details.status != PENDING && <BackButton onPress={() => navigation.goBack()} />}
+                    left={<BackButton onPress={() => navigation.goBack()} />}
                     center={<Text style={{ ...base.title, color: colors.WHITE }}>{`search # ${currentJob.details.hashtag || ""}`}</Text>}
-                    right={<SaveButton onPress={this.handleSubmit} />}
+                    right={job.details.status == PENDING ? <SaveButton onPress={this.handleSubmit} /> : null}
                 />
                 <View style={base.container}>
                     <FetchJobForm goBack={navigation.goBack} fetchJob={job.details}
