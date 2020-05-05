@@ -89,22 +89,22 @@ export const registerUser = userVal => {
             }
 
         }).then(data => {
-
+            userVal.id = data.key
             db.ref(`/Users/${data.key}/details`).update({
                 id: data.key
             })
             dispatch(setCurrentUserSuccess({
-                ...userVal,
-                id: data.key
+                ...userVal
             }))
         })
     }
 }
 
-export const updateUser = (user, user_id) => {
-    db.ref(`/Users/${user_id}`).update({
+export const updateUser = user => {
+    db.ref(`/Users/${user.id}`).update({
         details: {
-            ...user
+            ...user,
+            confirmPassword: null
         }
     })
 
