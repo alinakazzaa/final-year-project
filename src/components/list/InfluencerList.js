@@ -30,7 +30,6 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                                 source={{
                                     uri: influ.profile_pic_url,
                                 }} />
-                                <Text style={{ ...base.text, fontSize: 20, padding: 0, margin: 0, paddingTop: 20 }}>{influ.username}</Text>
                             </View>
                             <View style={influencer_style.infoBox}>
                                 <View style={influencer_style.info}>
@@ -43,12 +42,13 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                                 </View>
                             </View>
                         </View>
+                        <Text style={{ ...base.text, fontSize: 20, padding: 0, margin: 0, alignSelf: 'center', paddingTop: 20 }}>{influ.username}</Text>
                         <View style={influencer_style.middle}>
                             <View><TouchableOpacity style={{ ...influencer_style.linkView, alignSelf: 'center', alignItems: 'center' }} onPress={() => goToProfile(influ.profile_url)}>
                                 <Image style={{ height: 60, width: 60 }} source={require(
                                     // @ts-ignore
                                     '../../assets/resources/images/instagram-logo.png')} />
-                                <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>Instagram</Text>
+                                <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>Go to profile</Text>
                             </TouchableOpacity></View>
                         </View>
                     </View>
