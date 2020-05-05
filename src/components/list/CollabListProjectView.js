@@ -4,7 +4,7 @@ import { collabStyle } from '../../screens/Collab/styles/collab.styles'
 import { base, colors, fonts } from '../../styles/base'
 import { Avatar, Divider } from 'react-native-elements'
 import { PulseIndicator } from 'react-native-indicators'
-import { Gradient } from '../../styles/Gradient'
+import { Gradient } from '../../layouts/Gradient/Gradient'
 
 export const CollabListProjectView = ({ collabs, goToCollab, isHome }) => {
     const collabList = (collab, index) => {

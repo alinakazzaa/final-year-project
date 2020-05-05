@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Text, TouchableOpacity, Alert } from 'react-native'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { setCurrentInfluencer, clearInfluencerState } from '../../actions/influencer'
 import { connect } from 'react-redux'
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView'
@@ -16,7 +16,7 @@ import { fetchJobStyle } from './styles/fetchJob.styles'
 import { BackButton } from '../../components/buttons/BackButton'
 import FetchJobForm from '../../components/forms/FetchJobForm'
 import { base, dimensions, colors } from '../../styles/base'
-import { Gradient } from '../../styles/Gradient'
+import { Gradient } from '../../layouts/Gradient/Gradient'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { formatNumber } from '../../actions/base'
@@ -116,13 +116,13 @@ class FetchJobView extends React.Component {
         const job = running_fetch.details.id == currentJob.details.id ? running_fetch : currentJob
         const criteria = { ...job.details.criteria }
         const successLen = job.influencers ? job.influencers.success.length : 0
-
+        const influencersLength = `Influencers (${fetch_job.current_fetch_job.influencers ? fetch_job.current_fetch_job.influencers.success.length : 0})`
         // show number of influencers fetched
         return (
             <View>
                 <AppHeader
                     gradient={true}
-                    left={<BackButton onPress={() => navigation.goBack()} />}
+                    left={job.details.status != PENDING && <BackButton onPress={() => navigation.goBack()} />}
                     center={<Text style={{ ...base.title, color: colors.WHITE }}>{`search # ${currentJob.details.hashtag || ""}`}</Text>}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
@@ -175,7 +175,7 @@ class FetchJobView extends React.Component {
                     {job.details.status == COMPLETED && successLen > 0 &&
                         <View style={base.itemViewListContainer}>
                             <View style={base.itemViewListNav}>
-                                <Text style={base.title}>Influencers</Text>
+                                <Text style={base.title}>{influencersLength}</Text>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('AllInfluencers')}>
                                     <Text style={base.title}>View All</Text>
                                 </TouchableOpacity>

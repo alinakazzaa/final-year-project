@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import { Tag } from '../../components/tag/Tag'
-import { tag } from '../../styles/tag'
+import { tagStyles } from '../tag/styles/tag.styles'
 
 
 export const TagList = ({ tags, onPress, onChangeText, onSubmit, removeTag }) => {
@@ -14,7 +14,7 @@ export const TagList = ({ tags, onPress, onChangeText, onSubmit, removeTag }) =>
 
     return (
         <View
-            style={tag.list}
+            style={tagStyles.list}
         >
             {
                 tags.length > 0 && tags.map((tag, index) => {
@@ -30,7 +30,15 @@ export const TagList = ({ tags, onPress, onChangeText, onSubmit, removeTag }) =>
 
 TagList.propTypes = {
     tags: PropTypes.array.isRequired,
-    onPress: PropTypes.func.isRequired
+    onPress: PropTypes.func.isRequired,
+    onChangeText: PropTypes.func,
+    onSubmit: PropTypes.func,
+    removeTag: PropTypes.func
 }
 
-
+TagList.defaultProps = {
+    tags: '',
+    onChangeText: null,
+    onSubmit: null,
+    removeTag: null
+}

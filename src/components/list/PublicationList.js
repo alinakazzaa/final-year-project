@@ -9,7 +9,7 @@ import { IconButton } from '../buttons/IconButton'
 export const PublicationList = ({ publications, onPress }) => {
     const publicationList = (pub, index) => {
         return (
-            <View style={collabStyle.listItem}>
+            <View key={index}>
                 <TouchableOpacity key={index} onPress={() => onPress(pub)}>
                     <Image
                         style={collabStyle.thumbnail}

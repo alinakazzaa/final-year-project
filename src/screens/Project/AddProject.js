@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Text, Alert } from 'react-native'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { ProjectForm } from '../../components/forms/ProjectForm'
 import { addProject } from '../../actions/project'
 import { connect } from 'react-redux'
@@ -18,7 +18,7 @@ class AddProject extends React.Component {
 
     state = {
         project_value: {
-            active: false,
+            active: true,
             date_created: DATE_TODAY
         }
     }

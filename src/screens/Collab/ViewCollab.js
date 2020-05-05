@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Text, Linking, Alert } from 'react-native'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 import { connect } from 'react-redux'
 import { collabStyle } from './styles/collab.styles'
@@ -28,7 +28,7 @@ class ViewCollab extends React.Component {
     componentDidMount() {
         const { collab, fetchUserMedia } = this.props
 
-        if (collab.pending === false) {
+        if (collab.pending == false) {
             let collabValue = {
                 ...this.state.collabValue,
                 ...collab.current_collab.details,
@@ -65,13 +65,14 @@ class ViewCollab extends React.Component {
 
         const updatedCollab = {
             details: {
-                ...collab.current_collab.details,
-                ...collabValue, influencer: { ...collab.current_collab.details.influencer },
+                ...collabValue,
+                influencer: { ...collab.current_collab.details.influencer },
                 tags: [...collabValue.tags.filter(tag => tag.name !== '+')] || []
             }
         }
-        setCurrentCollab(updatedCollab)
-        updateCollab(updatedCollab)
+
+        // setCurrentCollab(updatedCollab)
+        // updateCollab(updatedCollab)
         Alert.alert("Collaboration updated")
     }
 
@@ -148,7 +149,7 @@ class ViewCollab extends React.Component {
                                         collab={collabValue}
                                         removeTag={this.removeTag} />
                                 }
-                                {collabValue.active && <View>
+                                {collab.current_collab.details.active && <View>
                                     <View style={{ marginTop: 20 }}>
                                         <Text style={base.title}>Publications</Text>
                                     </View>

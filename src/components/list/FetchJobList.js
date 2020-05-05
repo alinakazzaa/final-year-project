@@ -8,7 +8,7 @@ import { colors, base, dimensions } from '../../styles/base'
 import { fetchJobStyle } from '../../screens/FetchJob/styles/fetchJob.styles'
 import { IconButton } from '../buttons/IconButton'
 
-export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFetchJob }) => {
+export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFetchJob, hasRunningFetch }) => {
     const FJList = (fj, index) => {
         const success = fj.influencers ? fj.influencers.success.length : 0
         return (
@@ -58,7 +58,7 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
                     {fj.details.status != IN_PROGRESS && <View style={fetchJobStyle.bottom}>
                         <View />
 
-                        {fj.details.status == PENDING && <View><IconButton
+                        {fj.details.status == PENDING && !hasRunningFetch && <View><IconButton
                             name='account-search-outline'
                             size={45}
                             color={colors.SECONDARY}
