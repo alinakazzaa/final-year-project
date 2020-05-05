@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, spacing } from '../../../styles/base'
+import { colors, spacing, dimensions, fonts } from '../../../styles/base'
 
 export const collabStyle = StyleSheet.create(
     {
@@ -9,9 +9,7 @@ export const collabStyle = StyleSheet.create(
         },
 
         publicationsBox: {
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-
+            margin: spacing.MEDIUM
         },
         listView: {
             alignItems: 'center',
@@ -26,44 +24,57 @@ export const collabStyle = StyleSheet.create(
             justifyContent: 'flex-start'
         },
         listItem: {
-            // display: 'flex',
-            // flexDirection: 'row',
-            // borderBottomWidth: 1,
-            // borderRightWidth: 1,
-            // borderRadius: 5,
-            // borderColor: colors.BORDER,
-            // padding: spacing.LARGE,
-            // fontFamily: fonts.PRIMARY,
-            // justifyContent: 'space-between',
-            // marginBottom: spacing.MEDIUM,
-        },
-        left: {
             display: 'flex',
-            width: '50%'
+            borderWidth: 0.7,
+            borderRadius: 10,
+            borderColor: colors.BORDER,
+            padding: spacing.MEDIUM,
+            paddingRight: spacing.LARGE,
+            paddingLeft: spacing.LARGE,
+            fontFamily: fonts.PRIMARY,
+            marginBottom: 30,
+            backgroundColor: colors.SCREEN
+        },
+        top: {
+            display: 'flex',
+            borderTopWidth: 0.7,
+            borderColor: colors.BORDER
         },
         middle: {
             display: 'flex',
-        },
-        right: {
-            display: 'flex',
-            width: '10%'
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 20
         },
         bottom: {
             display: 'flex',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderTopWidth: 0.7,
+            borderColor: colors.BORDER,
+            alignItems: 'center'
         },
         thumbnail: {
-            height: 100,
-            width: 100,
+            height: dimensions.fullWidth * .8,
+            width: dimensions.fullWidth * .8,
             margin: spacing.MEDIUM,
             marginBottom: 0
         },
         collabView: {
-            borderBottomWidth: 0.5,
+            margin: 5,
+            marginBottom: 10,
+            padding: 10,
+            paddingTop: 15,
+            paddingBottom: 5,
+            borderWidth: 0.7,
             borderColor: colors.BORDER,
-            margin: 0
+            borderRadius: 10,
+            marginRight: 10,
+            justifyContent: 'space-evenly',
+            minWidth: dimensions.fullWidth * 0.4,
+            maxWidth: dimensions.fullWidth * 0.6,
+            minHeight: dimensions.fullHeight * 0.25,
+            maxHeight: dimensions.fullHeight * 0.3
         }
 
     })

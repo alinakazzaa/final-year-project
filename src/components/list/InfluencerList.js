@@ -1,13 +1,13 @@
 import React from 'react'
-import { Avatar, Icon } from 'react-native-elements'
+import { Avatar, Image } from 'react-native-elements'
 import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import { IconButton } from '../buttons/IconButton'
 import PropTypes from 'prop-types'
 import { formatNumber } from '../../actions/base'
 import { influencer_style } from '../../screens/Influencer/styles/influencer.styles'
-import { colors, base } from '../../styles/base'
+import { colors, base, dimensions } from '../../styles/base'
 
-export const InfluencerList = ({ influencers, goToInfluencer, createCollab, removeInfluencer, saveInfluencer }) => {
+export const InfluencerList = ({ influencers, goToInfluencer, createCollab, removeInfluencer, saveInfluencer, goToProfile }) => {
 
     const influList = (influ, index) => {
         if (influ !== null)
@@ -22,31 +22,34 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                             onPress={() => goToInfluencer(influ)}
                         />
                     </View>
-                    <View style={influencer_style.middle}>
-                        <View style={influencer_style.middleLeft}>
-                            <Avatar
-                                size={160}
+                    <View>
+                        <View style={influencer_style.top}>
+                            <View><Avatar
+                                size={150}
                                 rounded
                                 source={{
                                     uri: influ.profile_pic_url,
                                 }} />
-                            <TouchableOpacity style={influencer_style.linkView} onPress={() => console.log("Go to user profile....")}>
-                                <Text style={influencer_style.linkText}>Instagram</Text>
-                                <IconButton
-                                    name='launch'
-                                    size={22}
-                                    color={colors.TERTIARY}
-                                    type='material-icons'
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={influencer_style.middleRight}>
-                            <View style={influencer_style.info}>
-                                <Text style={base.title}>Followers</Text>
-                                <Text style={base.text}>{formatNumber(influ.followers)}</Text>
-                                <Text style={base.title}>No of media</Text>
-                                <Text style={base.text}>{formatNumber(influ.media_count)}</Text>
+                                <Text style={{ ...base.text, fontSize: 20, padding: 0, margin: 0, paddingTop: 20 }}>{influ.username}</Text>
                             </View>
+                            <View style={influencer_style.infoBox}>
+                                <View style={influencer_style.info}>
+                                    <Text style={{ ...base.text, fontSize: 16, padding: 0, margin: 0 }}>Followers</Text>
+                                    <Text style={{ ...base.title, fontSize: 18, padding: 0, margin: 0 }}>{formatNumber(influ.followers)}</Text>
+                                </View>
+                                <View style={influencer_style.info}>
+                                    <Text style={{ ...base.text, fontSize: 16, padding: 0, margin: 0 }}>Media count</Text>
+                                    <Text style={{ ...base.title, fontSize: 18, padding: 0, margin: 0 }}>{formatNumber(influ.media_count)}</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={influencer_style.middle}>
+                            <View><TouchableOpacity style={{ ...influencer_style.linkView, alignSelf: 'center', alignItems: 'center' }} onPress={() => goToProfile(influ.profile_url)}>
+                                <Image style={{ height: 60, width: 60 }} source={require(
+                                    // @ts-ignore
+                                    '../../assets/resources/images/instagram-logo.png')} />
+                                <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>Instagram</Text>
+                            </TouchableOpacity></View>
                         </View>
                     </View>
                     <View style={influencer_style.footer}>
@@ -61,11 +64,13 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                         <TouchableOpacity style={influencer_style.createCollab}>
                             <IconButton
                                 name='account-multiple-plus-outline'
-                                size={60}
+                                size={35}
                                 color={colors.TERTIARY}
                                 type='material-community'
                                 onPress={() => createCollab(influ)}
-                            /></TouchableOpacity>
+                            />
+                            <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>New collab</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={influencer_style.voteOption}>
                             <IconButton
                                 name='close'
@@ -75,20 +80,22 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                                 onPress={() => removeInfluencer(influ.id)}
                             /></TouchableOpacity>
                     </View>
-                </View>
+                </View >
             )
     }
 
     return (
 
-        <View style={{ marginBottom: 300 }}>
+        <View>
             <ScrollView keyboardDismissMode='on-drag'
                 contentContainerStyle={base.scrollContainer}>
-                {influencers.map((i, index) => {
-                    return influList(i, index)
-                })}
-            </ScrollView>
-        </View>
+                <View style={{ marginBottom: dimensions.fullHeight * 0.4 }}>
+                    {influencers.map((i, index) => {
+                        return influList(i, index)
+                    })}
+                </View>
+            </ScrollView >
+        </View >
     )
 
 }

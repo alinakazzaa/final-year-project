@@ -1,14 +1,15 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
 import FetchJobForm from '../../components/forms/FetchJobForm'
 import { AppHeader } from '../../layouts/Header'
 import { connect } from 'react-redux'
-import { addFetchJob, setCurrentFetchJob } from '../../actions/fetchJob'
+import { addFetchJob } from '../../actions/fetchJob'
 import { BackButton } from '../../components/buttons/BackButton'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { DATE_TODAY } from '../../constants/TodayDate'
-import { base } from '../../styles/base'
-import { followerRanges } from '../../constants/criteria'
+import { base, colors } from '../../styles/base'
+import { followerRanges, numberOfProfiles } from '../../constants/Criteria'
+import { PENDING } from '../../constants'
 
 class AddFetchJob extends React.Component {
 
@@ -17,8 +18,9 @@ class AddFetchJob extends React.Component {
             id: '',
             title: '',
             hashtag: '',
+            no_profiles: numberOfProfiles[10],
             criteria: { followerMin: followerRanges.micro.min, followerMax: followerRanges.micro.max },
-            status: ''
+            status: PENDING
         },
     }
 
@@ -47,11 +49,16 @@ class AddFetchJob extends React.Component {
 
     handleSubmit = () => {
         const { fetchJob } = this.state
-        const { user, project, addFetchJob, setCurrentFetchJob, navigation } = this.props
+        const { user, project, addFetchJob, navigation, fetch_job } = this.props
         fetchJob.title = 'Hashtag search: ' + fetchJob.hashtag
-        addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
-        setCurrentFetchJob({ details: fetchJob })
-        this.props.navigation.goBack()
+
+        if (fetch_job.all_fetch_jobs.find(job => job.details.hashtag == fetchJob.hashtag)) {
+            Alert.alert("Search with hashtag already exists.\n\nTry something different.")
+        } else {
+            Alert.alert("Search added")
+            addFetchJob(user.current_user.id, project.current_project.id, fetchJob)
+            navigation.navigate("AllFetchJobs")
+        }
     }
 
     componentWillUnmount() {
@@ -59,18 +66,19 @@ class AddFetchJob extends React.Component {
     }
 
     render() {
+        const { project } = this.props
         const { fetchJob } = this.state
 
         return (
             <View>
                 <AppHeader
                     left={<BackButton onPress={() => this.props.navigation.goBack()} />}
+                    center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 15 }}>{`${project.current_project.title} # search`}</Text>}
                     right={<SaveButton onPress={this.handleSubmit} />}
                     gradient={true}
                 />
                 <View style={base.container}>
                     <FetchJobForm fetchJob={fetchJob} handleChange={this.handleChange} />
-                    <View><Text style={base.text}>To consider: the more influencers you fetch, the longer it will take</Text></View>
                 </View>
             </View>
         )
@@ -79,12 +87,12 @@ class AddFetchJob extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.user,
-    project: state.project
+    project: state.project,
+    fetch_job: state.fetch_job
 })
 
 const mapDispatchToProps = {
-    addFetchJob,
-    setCurrentFetchJob
+    addFetchJob
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFetchJob)

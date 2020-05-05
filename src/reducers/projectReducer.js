@@ -1,4 +1,4 @@
-import { SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, REMOVE_PROJECT, UPDATE_PROJECT } from '../constants'
+import { SET_CURRENT_PROJECT, CLEAR_CURRENT_PROJECT, ADD_PROJECT, REMOVE_PROJECT, UPDATE_PROJECT, CLEAR_PROJECT_STATE } from '../constants'
 import { SET_PROJECTS_PENDING, SET_PROJECTS_SUCCESS, SET_PROJECTS_ERROR } from '../constants/response/types'
 
 const initialState = {
@@ -53,8 +53,13 @@ const projectReducer = (state = initialState, action) => {
                 current_project: {}
             }
 
+        case CLEAR_PROJECT_STATE:
+            return {
+                ...initialState
+            }
+
         case ADD_PROJECT:
-            all_projects.splice(all_projects.length, 1, action.project)
+            all_projects.splice(all_projects.length, 0, action.project)
 
             return {
                 ...state,
@@ -72,7 +77,7 @@ const projectReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_projects: [...state.all_projects.filter(project => project.id !== action.project.id)]
+                all_projects: [...state.all_projects.filter(project => project.id != action.project.id)]
             }
 
         default:

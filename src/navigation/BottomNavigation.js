@@ -8,74 +8,45 @@ import { ProjectStack } from './ProjectStack';
 import { colors } from '../styles/base';
 import { nav } from '../styles/navigation'
 
-let home = false
-let proj = true
-let collab = false
-let settings = false
-
-export const changeActive = tab_name => {
-    if (tab_name == 'home') {
-        home = true
-        proj = false
-        collab = false
-        settings = false
-    } else if (tab_name == 'proj') {
-        proj = true
-        home = false
-        collab = false
-        settings = false
-    } else if (tab_name == 'collab') {
-        collab = true
-        home = false
-        proj = false
-        settings = false
-    } else if (tab_name == 'settings') {
-        settings = true
-        home = false
-        proj = false
-        collab = false
-    }
-}
-
 export const BottomNavigator = createBottomTabNavigator(
     {
         // @ts-ignore
         Home: {
             screen: HomeScreen,
             navigationOptions: {
-                tabBarIcon: () => (
-                    <Icon name={home ? 'home' : 'home-outline'} type='material-community' size={32} color={colors.TERTIARY} onPress={() => changeActive('home')} />
-                )
+                tabBarIcon: item => {
+                    return <Icon name={item.focused ? 'home' : 'home-outline'} type='material-community' size={32} color={colors.TERTIARY} />
+                }
             },
 
         },
         Projects: {
             screen: ProjectStack,
             navigationOptions: {
-                tabBarIcon: () => (
-                    <Icon name={proj ? 'folder' : 'folder-outline'} type='material-community' size={32} color={colors.TERTIARY} onPress={() => changeActive('proj')} />
-                )
+                tabBarIcon: item => {
+                    return <Icon name={item.focused ? 'folder' : 'folder-outline'} type='material-community' size={32} color={colors.TERTIARY} />
+                }
             }
         },
         Collabs: {
             screen: CollabStack,
             navigationOptions: {
-                tabBarIcon: () => (
-                    <Icon name={collab ? 'people' : 'people-outline'} type='material' size={34} color={colors.TERTIARY} onPress={() => changeActive('collab')} />
-                )
+                tabBarIcon: item => {
+                    return <Icon name={item.focused ? 'people' : 'people-outline'} type='material' size={34} color={colors.TERTIARY} />
+                }
             },
         },
         Settings: {
             screen: SettingsScreen,
             navigationOptions: {
-                tabBarIcon: () => (
-                    <Icon name={settings ? 'account' : 'account-outline'} type='material-community' size={30} color={colors.TERTIARY} onPress={() => changeActive('settings')} />
-                )
+                tabBarIcon: item => {
+                    return <Icon name={item.focused ? 'account' : 'account-outline'} type='material-community' size={30} color={colors.TERTIARY} />
+                }
             }
         },
     },
     {
-        initialRouteName: 'Projects',
+        initialRouteName: 'Home',
         tabBarOptions: {
             showLabel: false,
             style: { ...nav.tabBar }

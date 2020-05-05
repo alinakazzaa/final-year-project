@@ -10,6 +10,9 @@ import { project_style } from './styles/project.styles'
 import { colors, base, dimensions } from '../../styles/base'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { TabView } from '../../components/tabview/TabView'
+import { Gradient } from '../../styles/Gradient'
+import { AppLogo } from '../../components/logo/AppLogo'
+import { IconButton } from '../../components/buttons/IconButton'
 
 class AllProjects extends React.Component {
 
@@ -57,42 +60,46 @@ class AllProjects extends React.Component {
 
         return (
             <View>
-                <AppHeader
-                    gradient={true}
-                    left={<View style={base.searchTxt}><Text style={base.title}>Search</Text></View>}
-                    center={<View style={base.searchView}>
-                        <Input
-                            onChangeText={text => this.searchProject(text)}
-                            inputStyle={base.inputStyle}
-                            inputContainerStyle={base.searchInput} />
-                    </View>} />
-                <View style={base.container}>
-                    <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size={dimensions.fullWidth * .4} index={index} />
-                    {project.pending && <LoadingScreen size='large' />}
-                    {!project.pending && !project.error &&
-                        index == 0 ?
-                        <View>
-                            <ProjectList
-                                goToProject={this.goToProject}
-                                deleteProject={this.deleteProject}
-                                projects={isSearch ? [...searched.filter(proj => proj.active == true)] :
-                                    activeProjects(project)} />
-                        </View> :
-                        <View>
-                            <ProjectList
-                                goToProject={this.goToProject}
-                                deleteProject={this.deleteProject}
-                                projects={isSearch ? [...searched.filter(proj => proj.active == false)] :
-                                    archivedProjects(project)} />
-                        </View>}
+                <Gradient style={base.container}>
+                    <AppHeader
+                        left={<AppLogo small={true} />}
+                        center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 20 }}>Your Campaigns</Text>}
+                    />
+                    <View style={{ marginBottom: dimensions.fullHeight * 0.2 }}>
+                        <View style={base.searchView}>
+                            <Text style={base.title}>Search</Text>
+                            <Input
+                                onChangeText={text => this.searchProject(text)}
+                                inputStyle={base.inputStyle}
+                                inputContainerStyle={base.searchInput} />
+                        </View>
+                        <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size={dimensions.fullWidth * .4} index={index} />
+                        {project.pending && <LoadingScreen size='large' />}
+                        <IconButton name='plus' type='material-community' size={50} color={colors.WHITE}
+                            onPress={() => this.props.navigation.navigate('AddProject')} />
+                        {!project.pending && !project.error &&
+                            index == 0 ?
+                            <View>
+                                <ProjectList
+                                    goToProject={this.goToProject}
+                                    deleteProject={this.deleteProject}
+                                    projects={isSearch ? [...searched.filter(proj => proj.active == true)] :
+                                        activeProjects(project)} />
+                            </View> :
+                            <View>
+                                <ProjectList
+                                    goToProject={this.goToProject}
+                                    deleteProject={this.deleteProject}
+                                    projects={isSearch ? [...searched.filter(proj => proj.active == false)] :
+                                        archivedProjects(project)} />
+                            </View>}
 
-                    {project.error &&
-                        <View style={base.centerItems}>
-                            <Text style={base.noneMessage}>Start your first campaign</Text>
-                        </View>}
-                    <Icon name='plus' type='material-community' size={50} color={colors.TERTIARY}
-                        onPress={() => this.props.navigation.navigate('AddProject')} />
-                </View>
+                        {project.error &&
+                            <View style={base.centerItems}>
+                                <Text style={base.noneMessage}>Start your first campaign</Text>
+                            </View>}
+                    </View>
+                </Gradient>
             </View>
         )
     }

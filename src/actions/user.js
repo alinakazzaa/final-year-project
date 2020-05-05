@@ -1,9 +1,13 @@
-import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR } from '../constants'
+import { CLEAR_CURRENT_USER, SET_CURRENT_USER_SUCCESS, SET_CURRENT_USER_ERROR, UPDATE_USER } from '../constants'
 import { db } from '../database/config/db'
 import { DATE_TODAY } from '../constants/TodayDate'
 import { SET_USERS_PENDING, SET_USERS_SUCCESS, SET_USERS_ERROR } from '../constants/response/types'
 import { DB_USER_REF } from '../constants/database'
 import { MSG_NO_USERS } from '../constants/response/messages'
+import { clearCollabState } from './collab'
+import { clearProjectState } from './project'
+import { clearInfluencerState } from './influencer'
+import { clearFetchJobState } from './fetchJob'
 
 
 export const getAllUsers = () => {
@@ -62,35 +66,37 @@ export const setCurrentUserError = message => {
 }
 
 export const logOutUser = () => {
-    return {
-        type: CLEAR_CURRENT_USER
+    return dispatch => {
+        dispatch({
+            type: CLEAR_CURRENT_USER
+        })
+        dispatch(clearCollabState())
+        dispatch(clearProjectState())
+        dispatch(clearInfluencerState())
+        dispatch(clearFetchJobState())
     }
+
 }
 
 export const registerUser = userVal => {
-    let user = {
-        username: userVal.username,
-        password: userVal.password,
-        email: userVal.email,
-        id: '',
-        date_created: DATE_TODAY
-
-    }
 
     return dispatch => {
 
         DB_USER_REF.push({
             details: {
-                ...user
+                ...userVal,
+                id: ''
             }
 
         }).then(data => {
-            user.id = data.key
+
             db.ref(`/Users/${data.key}/details`).update({
                 id: data.key
             })
-
-            dispatch(setCurrentUserSuccess(user))
+            dispatch(setCurrentUserSuccess({
+                ...userVal,
+                id: data.key
+            }))
         })
     }
 }
@@ -101,22 +107,14 @@ export const updateUser = (user, user_id) => {
             ...user
         }
     })
+
+    return {
+        type: UPDATE_USER,
+        user
+    }
 }
 
 export const removeUser = user => {
     db.ref(`/Users`).child(user.id).remove()
 }
-
-// export const getUserByUsername = username => {
-//     let user_obj = {}
-//     DB_USER_REF.on('value', user_snapshot => {
-//         user_snapshot.forEach(user => {
-//             if (user.val().details.username == username) {
-//                 user_obj = { ...user.val().details }
-//             }
-//         })
-//     })
-
-//     return user_obj
-// }
 

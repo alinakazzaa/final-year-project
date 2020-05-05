@@ -19,14 +19,13 @@ const fetchJobReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_fetch_jobs: fetch_jobs
+                all_fetch_jobs: [...fetch_jobs]
             }
-
 
         case REMOVE_FETCH_JOB:
             return {
                 ...state,
-                all_fetch_jobs: [...fetch_jobs.filter(fj => fj.details.id !== action.fetch_job.details.id)]
+                all_fetch_jobs: [...fetch_jobs.filter(fj => fj.details.id != action.fetch_job.details.id)]
             }
 
         case SET_FETCH_JOBS_PENDING:
@@ -43,7 +42,8 @@ const fetchJobReducer = (state = initialState, action) => {
             return {
                 ...state,
                 all_fetch_jobs: [...action.fetch_jobs],
-                pending: false
+                pending: false,
+                error: null
             }
 
         case SET_FETCH_JOBS_ERROR:
@@ -57,7 +57,7 @@ const fetchJobReducer = (state = initialState, action) => {
         case SET_CURRENT_FETCH_JOB:
             return {
                 ...state,
-                current_fetch_job: { ...action.fetch_job }
+                current_fetch_job: action.fetch_job
             }
 
         case UPDATE_FETCH_JOB:
@@ -66,14 +66,14 @@ const fetchJobReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_fetch_jobs: fetch_jobs
+                all_fetch_jobs: [...fetch_jobs]
             }
 
         case CLEAR_CURRENT_FETCH_JOB:
 
             return {
                 ...state,
-                current_fetch_job: {}
+                current_fetch_job: state.initialState.current_fetch_job
             }
         case CLEAR_FETCH_JOB_STATE:
 
@@ -86,6 +86,6 @@ const fetchJobReducer = (state = initialState, action) => {
     }
 }
 
-export const getIndex = (fetchJobs, job) => fetchJobs.map(j => { return j }).indexOf(job.details.id)
+export const getIndex = (fetchJobs, job) => fetchJobs.map(j => { return j.details.id }).indexOf(job.details.id)
 
 export default fetchJobReducer

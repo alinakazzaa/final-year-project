@@ -1,4 +1,4 @@
-import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB } from '../constants'
+import { SET_CURRENT_COLLAB, CLEAR_CURRENT_COLLAB, ADD_COLLAB, REMOVE_COLLAB, UPDATE_COLLAB, CLEAR_COLLAB_STATE } from '../constants'
 import { GET_USER_MEDIA_PENDING, GET_USER_MEDIA_SUCCESS, GET_USER_MEDIA_ERROR, SET_COLLABS_PENDING, SET_COLLABS_SUCCESS, SET_COLLABS_ERROR, GET_COLLAB_INFLUENCER_SUCCESS } from '../constants/response/types'
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
 }
 
 const collabReducer = (state = initialState, action) => {
-    let collabs = [...state.all_collabs]
+    const collabs = [...state.all_collabs]
 
     switch (action.type) {
 
@@ -45,7 +45,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                current_collab: { ...action.collab },
+                current_collab: action.collab,
                 pending: false
             }
 
@@ -59,7 +59,7 @@ const collabReducer = (state = initialState, action) => {
 
         case ADD_COLLAB:
 
-            collabs.splice(collabs.length, 1, action.collab)
+            collabs.splice(collabs.length, 0, action.collab)
 
             return {
                 ...state,
@@ -72,7 +72,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_collabs: collabs
+                all_collabs: [...collabs]
 
             }
 
@@ -80,7 +80,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                all_collabs: [...collabs.filter(c => c.details.id !== action.collab.details.id)]
+                all_collabs: [...state.all_collabs.filter(c => c.details.id != action.collabId)]
             }
 
 
@@ -117,12 +117,20 @@ const collabReducer = (state = initialState, action) => {
                 error: true
             }
 
+        case CLEAR_COLLAB_STATE:
+            return {
+                ...initialState
+            }
+
         default:
             return state
     }
 }
 
-export const getIndex = (collabs, collab) => collabs.map(c => { return c }).indexOf(collab)
-export const searchedCollabs = (state, text) => [...state.all_collabs.filter(collab => collab.details.title.toLowerCase().includes(text.toLowerCase()))]
+export const getIndex = (collabs, collab) => collabs.map(c => { return c.details.id }).indexOf(collab.details.id)
+export const searchedCollabs = (state, text) => [...state.all_collabs.filter(collab => {
+    collab.details.title.toLowerCase().includes(text.toLowerCase()) ||
+        collab.details.influencer.username.toLowerCase().includes(text.toLowerCase())
+})]
 
 export default collabReducer

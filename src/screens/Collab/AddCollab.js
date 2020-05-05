@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View } from 'react-native'
+import { View, Alert } from 'react-native'
 import { AppHeader } from '../../layouts/Header'
 import { CollabForm } from '../../components/forms/CollabForm'
 import { connect } from 'react-redux'
@@ -17,17 +17,16 @@ class AddCollab extends React.Component {
     }
 
     state = {
-        collab: { active: false, tags: [{ name: '+', editable: false }] }
+        collabValue: { active: false, tags: [{ name: '+', editable: false }] }
     }
 
     componentDidMount() {
         const { project } = this.props
         const { influencer } = this.props.navigation.state.params
         this.setState({
-            collab: {
-                ...this.state.collab,
+            collabValue: {
+                ...this.state.collabValue,
                 campaign: project.current_project.title,
-                active: false,
                 date_start: DATE_TODAY,
                 influencer: influencer.username
             }
@@ -35,39 +34,49 @@ class AddCollab extends React.Component {
     }
 
     handleSubmit = () => {
-        const { collab } = this.state
-        const { project, addCollab } = this.props
-        const { influencer } = this.props.navigation.state.params
+        const { collabValue } = this.state
+        const { collab, project, addCollab, navigation } = this.props
+        const { influencer } = navigation.state.params
+
         const newCollab = {
-            ...collab,
-            influencer:
-                { id: influencer.id, username: influencer.username },
-            tags: [...collab.tags.filter(tag => tag.name !== '+')]
+            details: {
+                ...collabValue, influencer: {
+                    id: influencer.id,
+                    username: influencer.username, profile_pic_url: influencer.profile_pic_url
+                }
+            }
         }
 
-        // no same influencer & campaign
-        // if(collab.all_collabs.find(c => c.influencer.id == influencer.id))
+        if (collabValue.tags)
+            newCollab.details.tags = [...collabValue.tags.filter(tag => tag.name !== '+')]
 
-        addCollab(project.current_project.user_id, project.current_project.id, newCollab)
+        // no same influencer & campaign
+        if (!collab.all_collabs.find(c => c.details.influencer.id == influencer.id)) {
+            addCollab(project.current_project.user_id, project.current_project.id, newCollab)
+            Alert.alert("Collaboration added")
+            navigation.navigate("AllCollabs")
+        } else {
+            Alert.alert("Collaboration already exists.\n\nTry a different influencer.")
+        }
     }
 
-    handleChange = collab => {
-        this.setState({ collab })
+    handleChange = collabValue => {
+        this.setState({ collabValue })
     }
 
     onTagTextChange = (text, index) => {
-        const { collab } = this.state
-        const updatedTags = [...this.state.collab.tags]
+        const { collabValue } = this.state
+        const updatedTags = [...this.state.collabValue.tags]
         updatedTags[index] = { ...updatedTags[index], name: text }
-        this.setState({ collab: { ...collab, tags: updatedTags } })
+        this.setState({ collabValue: { ...collabValue, tags: updatedTags } })
     }
 
     toggleSwitch = value => {
-        this.setState({ collab: { ...this.state.collab, active: value } })
+        this.setState({ collabValue: { ...this.state.collabValue, active: value } })
     }
 
     editTag = (tag, index) => {
-        let updatedTags = [...this.state.collab.tags]
+        let updatedTags = [...this.state.collabValue.tags]
         let editTag = { name: tag, index, editable: true }
 
         if (editTag.name == '+') {
@@ -75,21 +84,33 @@ class AddCollab extends React.Component {
         }
 
         updatedTags.splice(index, 1, editTag)
-        this.setState({ collab: { ...this.state.collab, tags: updatedTags } })
+        this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
     }
 
-    onEndTagEdit = (index, isNew) => {
-        const updatedTags = [...this.state.collab.tags]
+    onEndTagEdit = index => {
+        const updatedTags = [...this.state.collabValue.tags]
         const editTag = { ...updatedTags[index], editable: false }
 
         updatedTags.splice(index, 1, editTag)
-        updatedTags.push({ name: '+', editable: false })
 
-        this.setState({ collab: { ...this.state.collab, tags: updatedTags } })
+        if (!updatedTags.find(tag => tag.name == '+'))
+            updatedTags.push({ name: '+', editable: false })
+
+
+        this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
+    }
+
+    removeTag = name => {
+        let updatedTags = [...this.state.collabValue.tags.filter(t => t.name !== name)]
+        this.setState({ collabValue: { ...this.state.collabValue, tags: updatedTags } })
+    }
+
+    componentWillUnmount() {
+        this.setState({})
     }
 
     render() {
-        const { collab } = this.state
+        const { collabValue } = this.state
 
         return (
             <View>
@@ -101,9 +122,10 @@ class AddCollab extends React.Component {
                 <View style={base.container}>
                     <CollabForm
                         editTag={this.editTag}
-                        tags={collab.tags} collab={collab} onChange={this.handleChange}
+                        collab={collabValue} onChange={this.handleChange}
                         toggleSwitch={this.toggleSwitch} onTagTextChange={this.onTagTextChange}
-                        onEndTagEdit={this.onEndTagEdit} />
+                        onEndTagEdit={this.onEndTagEdit}
+                        removeTag={this.removeTag} />
                 </View>
             </View>
         )
@@ -111,7 +133,8 @@ class AddCollab extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    project: state.project
+    project: state.project,
+    collab: state.collab
 })
 
 const mapDispatchToProps = {

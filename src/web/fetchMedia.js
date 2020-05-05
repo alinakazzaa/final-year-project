@@ -1,7 +1,7 @@
 import { INSTAGRAM_GET_MEDIA_BY_HASHTAG } from "../constants/insta_endpoints"
-import { fetchInfluencer } from "./fetchInfluencer"
 import { GET_MEDIA_PENDING, GET_MEDIA_ERROR, GET_MEDIA_SUCCESS, COMPLETED_FETCH, COMPLETED_GET_USERS } from "../constants/response/types"
 import { MSG_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
+import { connect } from "react-redux"
 
 export const fetchMedia = (fetch_job, pending, fetchResponse) => {
     let response
@@ -10,23 +10,17 @@ export const fetchMedia = (fetch_job, pending, fetchResponse) => {
 
     fetch(INSTAGRAM_GET_MEDIA_BY_HASHTAG(fetch_job.details.hashtag))
         .then(result => {
-
             if (!result.ok || result.ok == null) {
                 response = {
                     type: GET_MEDIA_ERROR,
                     message: 'error: no hashtag media'
                 }
-            }
-            else {
+                fetchResponse(response)
+            } else {
                 result.json().then(res => {
-                    const edge_hashtag_to_media = { ...res.graphql.hashtag.edge_hashtag_to_media }
+                    if (res.graphql.hashtag.edge_hashtag_to_media.count > 0) {
+                        const edge_hashtag_to_media = { ...res.graphql.hashtag.edge_hashtag_to_media }
 
-                    if (edge_hashtag_to_media.count == 0) {
-                        response = {
-                            type: GET_MEDIA_ERROR,
-                            message: MSG_HASHTAG_MEDIA_ERROR
-                        }
-                    } else {
                         const related_tags = { ...res.graphql.hashtag.edge_hashtag_to_related_tags }
                         const ids = [...extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria)]
 
@@ -45,12 +39,25 @@ export const fetchMedia = (fetch_job, pending, fetchResponse) => {
                         if (!response.has_next_page) {
                             response = { ...response, type: COMPLETED_FETCH }
                         }
+
+
+                        fetchResponse(response)
+                    } else {
+                        response = {
+                            type: GET_MEDIA_ERROR,
+                            message: 'error: no hashtag media'
+                        }
+                        fetchResponse(response)
                     }
 
+                }).catch(error => {
+                    response = {
+                        type: GET_MEDIA_ERROR,
+                        message: String(error)
+                    }
                     fetchResponse(response)
                 })
             }
-
         }).catch(error => {
             response = {
                 type: GET_MEDIA_ERROR,

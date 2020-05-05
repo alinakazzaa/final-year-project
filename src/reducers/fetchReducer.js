@@ -1,5 +1,6 @@
 import { GET_MEDIA_PENDING, GET_MEDIA_SUCCESS, GET_MEDIA_ERROR, GET_USER_PENDING, GET_USER_SUCCESS, GET_USER_ERROR, COMPLETED_FETCH, COMPLETED_GET_USERS } from '../constants/response/types'
 import { IN_PROGRESS, MEDIA_FETCH, COMPLETED, USER_FETCH, CLEAR_RUNNING_FETCH } from '../constants'
+import { DATE_TODAY } from '../constants/TodayDate'
 
 const initialState = {
     pending: null,
@@ -59,7 +60,7 @@ const fetchReducer = (state = initialState, action) => {
         case GET_MEDIA_ERROR:
             running = {
                 ...state,
-                response: { type: action.type, message: action.message },
+                response: { type: COMPLETED_FETCH, message: action.message },
                 pending: false,
                 details: { ...state.details, status: COMPLETED }
             }
@@ -70,15 +71,11 @@ const fetchReducer = (state = initialState, action) => {
 
         case COMPLETED_FETCH:
 
-            running = {
-                ...state,
-                response: { type: action.type },
-                details: { ...state.details, status: COMPLETED },
-                pending: false
-            }
-
             return {
-                ...running
+                ...state,
+                pending: false,
+                response: { type: action.type },
+                details: { ...state.details, status: COMPLETED, date_fetch_run: DATE_TODAY }
             }
 
         case GET_USER_PENDING:
@@ -113,8 +110,6 @@ const fetchReducer = (state = initialState, action) => {
             if (running.progress.total == running.progress.done) {
                 running = {
                     ...running,
-                    details: { ...state.details },
-                    pending: false,
                     response: {
                         type: COMPLETED_GET_USERS
                     }
@@ -139,14 +134,13 @@ const fetchReducer = (state = initialState, action) => {
                 influencers: {
                     ...state.influencers,
                     pending: [...state.influencers.pending.filter(id => id !== action.id)],
-                    fail
+                    fail: [...fail]
                 }
             }
 
             if (running.progress.total == running.progress.done) {
                 running = {
                     ...running,
-                    pending: false,
                     response: {
                         type: COMPLETED_GET_USERS
                     }
@@ -179,5 +173,6 @@ const fetchReducer = (state = initialState, action) => {
 }
 
 export const getIndex = (list, id) => list.map(item => { return item }).indexOf(id)
+export const initial = () => { return { ...initialState } }
 
 export default fetchReducer

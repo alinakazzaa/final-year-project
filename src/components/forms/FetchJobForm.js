@@ -8,7 +8,7 @@ import { formatNumber } from '../../actions/base'
 import { TabView } from '../tabview/TabView'
 import { colors, base, dimensions } from '../../styles/base'
 import Slider from '../slider/Slider'
-import { followerRanges, numberOfProfiles } from '../../constants/criteria'
+import { followerRanges, numberOfProfiles } from '../../constants/Criteria'
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
 import { formStyle, form } from '../../styles/form'
 
@@ -101,9 +101,10 @@ export default class FetchJobForm extends React.Component {
                             onChange={(value) => handleChange(value)}
                             onBlur={Keyboard.dismiss}
                         />
+                        {fetchJob.status == PENDING && <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>To consider: the more influencers you fetch, the longer it will take</Text>}
                     </View>
                 </View>
-                {fetchJob.status !== COMPLETED && fetchJob.status !== IN_PROGRESS && <View style={fetchJobStyle.middle}>
+                {fetchJob.status != COMPLETED && fetchJob.status != IN_PROGRESS && <View style={fetchJobStyle.middle}>
                     <Text style={base.title}>Follower range</Text>
                     <View style={fetchJobStyle.itemRowRange}>
                         <TabView index={index} color={colors.SECONDARY} size={dimensions.fullWidth * .25}
@@ -134,6 +135,7 @@ export default class FetchJobForm extends React.Component {
                                 initialMax={followerRanges.macro.max}
                                 step={10000}
                                 onChange={this.onChangeSlider} />}
+                            <Text style={{ ...base.text, fontSize: 14, marginTop: 10 }}>Remember: Higher follower count means longer search</Text>
                         </View>
                     </View>
                 </View>}

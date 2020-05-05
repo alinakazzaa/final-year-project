@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, fonts, spacing } from './base';
+import { colors, fonts, spacing } from '../../../styles/base';
 
 export const logo = StyleSheet.create(
     {
@@ -14,12 +14,8 @@ export const logo = StyleSheet.create(
             fontWeight: fonts.WEIGHT_LEIGHT,
         },
         small: {
-            width: 35,
-            height: 35,
-        },
-        medium: {
             width: 50,
-            height: 50,
+            height: 50
         },
         large: {
             width: 100,

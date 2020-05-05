@@ -10,8 +10,8 @@ export const boolSelect = {
 export const inputView = {
     color: colors.TERTIARY,
     fontWeight: fonts.WEIGHT_LEIGHT,
-    width: dimensions.fullWidth * .57,
-    minHeight: height.MEDIUM * 0.7,
+    width: dimensions.fullWidth * 0.5,
+    minHeight: height.MEDIUM * 0.6,
     borderColor: colors.BORDER,
     borderBottomWidth: 0.7,
     fontSize: fonts.MEDIUM,
@@ -23,7 +23,7 @@ export const formStyle = {
     textbox: {
         normal: {
             ...inputView,
-            paddingBottom: 5
+            padding: 5
         },
         error: {
 
@@ -49,7 +49,6 @@ export const formStyle = {
 export const form = StyleSheet.create(
     {
         header: {
-            marginTop: spacing.MEDIUM,
             paddingTop: spacing.LARGE,
             paddingBottom: spacing.MEDIUM,
             paddingLeft: 0,
@@ -58,26 +57,23 @@ export const form = StyleSheet.create(
         },
         detailsBox: {
             flexDirection: 'row',
-            // padding: spacing.LARGE,
-            // paddingTop: spacing.SMALL,
-            margin: 0,
             paddingBottom: spacing.MEDIUM,
-            borderTopWidth: 0.7,
+            borderTopWidth: 0.5,
             borderColor: colors.BORDER,
+            borderBottomWidth: 0,
             paddingLeft: 0,
-            justifyContent: 'space-between'
         },
         labelsCol: {
-            marginTop: spacing.LARGE,
-            paddingTop: spacing.SMALL
+            marginTop: spacing.MEDIUM
         },
         inputBox: {
-            marginTop: spacing.LARGE,
-            paddingTop: spacing.SMALL,
-            borderWidth: 0
+            borderWidth: 0,
+            padding: 0,
+            margin: 0,
+            maxWidth: dimensions.fullWidth * 0.6
         },
         inputViewLabel: {
-            minHeight: height.MEDIUM * 1.3,
+            minHeight: height.MEDIUM * 1.2,
             textTransform: 'uppercase',
             paddingTop: spacing.SMALL,
             color: colors.TERTIARY,

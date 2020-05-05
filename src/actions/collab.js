@@ -1,5 +1,5 @@
 import { db } from '../database/config/db';
-import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, GET_INFLUENCER_BY_USERNAME_ERROR, GET_INFLUENCER_BY_USERNAME_SUCCESS, CLEAR_COLLAB_STATE } from '../constants';
+import { CLEAR_CURRENT_COLLAB, SET_CURRENT_COLLAB, ADD_COLLAB, UPDATE_COLLAB, REMOVE_COLLAB, CLEAR_COLLAB_STATE } from '../constants';
 import { DATE_TODAY } from '../constants/TodayDate'
 import { DB_USER_COLLABS_REF } from '../constants/database';
 import { SET_COLLABS_ERROR, SET_COLLABS_SUCCESS, SET_COLLABS_PENDING, GET_COLLAB_INFLUENCER_SUCCESS, GET_COLLAB_INFLUENCER_ERROR } from '../constants/response/types';
@@ -68,20 +68,25 @@ export const clearCollabState = () => {
     }
 }
 
-export const addCollab = (user_id, project_id, collab_val) => {
+export const addCollab = (user_id, project_id, collabValue) => {
+
     let collab = {
-        ...collab_val,
-        description: collab_val.description || '',
-        date_created: DATE_TODAY,
-        id: '',
-        influencer: collab_val.influencer,
-        user_id: user_id,
-        project_id: project_id
+        details: {
+            ...collabValue.details,
+            compensation: collabValue.details.compensation || '',
+            date_created: DATE_TODAY,
+            user_id: user_id,
+            project_id: project_id,
+            id: '',
+            tags: collabValue.details.tags || []
+        }
     }
+
     db.ref(`/Users/${user_id}/Collabs/`).push({
-        details: { ...collab }
+        ...collab,
+
     }).then(data => {
-        collab.id = data.key
+        collab.details.id = data.key
 
         db.ref(`/Users/${user_id}/Collabs/${data.key}/details`).update({
             id: data.key
@@ -95,22 +100,31 @@ export const addCollab = (user_id, project_id, collab_val) => {
 }
 
 export const updateCollab = collab => {
-    console.log(collab)
-    db.ref(`/Users/${collab.details.user_id}/Collabs/${collab.details.id}`).update({
-        ...collab
-    })
-
-    return {
-        type: UPDATE_COLLAB,
-        collab
+    return dispatch => {
+        db.ref(`/Users/${collab.details.user_id}/Collabs/${collab.details.id}`).update({
+            ...collab
+        }).then(() => {
+            dispatch({
+                type: UPDATE_COLLAB,
+                collab
+            })
+        })
     }
+
+
+
 }
 
 export const removeCollab = collab => {
-    db.ref(`/Users/${collab.details.user_id}/Collabs`).child(collab.details.id).remove()
-    return {
-        type: REMOVE_COLLAB,
-        collab
+    console.log(collab)
+    return dispatch => {
+        db.ref(`/Users/${collab.details.user_id}/Collabs/${collab.details.id}`).remove().then(() => {
+
+            dispatch({
+                type: REMOVE_COLLAB,
+                collabId: collab.details.id
+            })
+        })
     }
 }
 

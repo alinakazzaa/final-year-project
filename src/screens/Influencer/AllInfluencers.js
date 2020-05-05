@@ -1,17 +1,16 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import { InfluencerList } from '../../components/list/InfluencerList'
 import { getAllInfluencers, setCurrentInfluencer, filterInfluencers, updateInfluencer, removeInfluencer } from '../../actions/influencer'
 import { connect } from 'react-redux'
 import { AppHeader } from '../../layouts/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 import { Gradient } from '../../styles/Gradient'
-import { colors, base, dimensions } from '../../styles/base'
+import { colors, base } from '../../styles/base'
 import { Input } from 'react-native-elements'
-import { influencer_style } from './styles/influencer.styles'
 import { TabView } from '../../components/tabview/TabView'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
-import { updateFetchJob, updateStateFetchJob } from '../../actions/fetchJob'
+import { updateFetchJob } from '../../actions/fetchJob'
 
 class AllInfluencers extends React.Component {
 
@@ -43,7 +42,8 @@ class AllInfluencers extends React.Component {
 
     searchInfluencer = text => {
         const { influencer } = this.props
-        let filtered_influencers = [...influencer.all_influencers.filter(influ => influ.username.toLowerCase().includes(text.toLowerCase()))]
+        influencer.all_influencers.filter(influ => console.log(influ.username))
+        const filtered_influencers = [...influencer.all_influencers.filter(influ => influ.username.toLowerCase().includes(text.toLowerCase()))]
         this.setState({ searched: filtered_influencers, isSearch: true })
     }
 
@@ -53,31 +53,42 @@ class AllInfluencers extends React.Component {
     }
 
     deleteInflu = id => {
-        const { fetch_job, removeInfluencer, updateStateFetchJob } = this.props
+        const { fetch_job, removeInfluencer, updateFetchJob } = this.props
         const current = { ...fetch_job.current_fetch_job }
         current.influencers.success = [...current.influencers.success.filter(influ_id => influ_id !== id)]
-        updateStateFetchJob(current)
         updateFetchJob(current)
         removeInfluencer(id)
     }
 
+    goToProfile = url => {
+        Linking.canOpenURL(url).then(supported => {
+            if (supported) {
+                Linking.openURL(url)
+            } else {
+                console.log("Don't know how to open URI: " + url)
+            }
+        })
+    }
+
     render() {
-        const { influencer, project } = this.props
-        let { index } = this.state
+        const { influencer, project, fetch_job } = this.props
+        let { index, isSearch, searched } = this.state
 
         return (
             <View>
                 <Gradient style={base.container}>
                     <AppHeader
                         left={<BackButton onPress={() => this.props.navigation.goBack()} />}
-                        center={<View style={base.searchView}>
-                            <Text style={base.title}>Search</Text>
-                            <Input
-                                onChangeText={text => this.searchInfluencer(text)}
-                                inputStyle={base.inputStyle}
-                                inputContainerStyle={base.searchInput} />
-                        </View>}
+                        center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 14 }}>
+                            {`Influencers # ${fetch_job.current_fetch_job.details.hashtag}`}</Text>}
                     />
+                    <View style={base.searchView}>
+                        <Text style={base.title}>Search</Text>
+                        <Input
+                            onChangeText={text => this.searchInfluencer(text)}
+                            inputStyle={base.inputStyle}
+                            inputContainerStyle={base.searchInput} />
+                    </View>
                     {influencer.pending && <LoadingScreen />}
                     {!influencer.pending && !influencer.error &&
                         <View>
@@ -92,8 +103,9 @@ class AllInfluencers extends React.Component {
                             {influencer.all_influencers.length > 0 && index == 0 ?
                                 <View>
                                     <InfluencerList
+                                        goToProfile={this.goToProfile}
                                         saveInfluencer={this.saveInfluencer}
-                                        influencers={filterInfluencers(influencer.all_influencers, true)}
+                                        influencers={isSearch ? filterInfluencers(searched, true) : filterInfluencers(influencer.all_influencers, true)}
                                         current_project={project.current_project}
                                         goToInfluencer={this.goToInfluencer}
                                         createCollab={this.createCollab}
@@ -101,7 +113,8 @@ class AllInfluencers extends React.Component {
                                 </View> :
                                 <View>
                                     <InfluencerList
-                                        influencers={filterInfluencers(influencer.all_influencers, false)}
+                                        goToProfile={this.goToProfile}
+                                        influencers={isSearch ? filterInfluencers(searched, false) : filterInfluencers(influencer.all_influencers, false)}
                                         current_project={project.current_project}
                                         goToInfluencer={this.goToInfluencer}
                                         createCollab={this.createCollab}
@@ -125,7 +138,7 @@ const mapDispatchToProps = {
     getAllInfluencers,
     updateInfluencer,
     removeInfluencer,
-    updateStateFetchJob
+    updateFetchJob
 }
 
 

@@ -6,37 +6,43 @@ export const project_style = StyleSheet.create(
     {
         itemScroll: {
             padding: spacing.SMALL,
-            paddingLeft: 0
+            paddingLeft: 0,
+
         },
         listItem: {
             display: 'flex',
-            flexDirection: 'row',
-            borderBottomWidth: 1,
-            borderRightWidth: 1,
-            borderRadius: 5,
+            borderWidth: 0.7,
+            borderRadius: 10,
             borderColor: colors.BORDER,
-            padding: spacing.LARGE,
+            padding: spacing.MEDIUM,
+            paddingRight: spacing.LARGE,
+            paddingLeft: spacing.LARGE,
             fontFamily: fonts.PRIMARY,
-            justifyContent: 'space-between',
-            marginBottom: spacing.MEDIUM
+            marginBottom: 30,
+            backgroundColor: colors.SCREEN
         },
         fetchJob: {
             display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: spacing.SMALL,
-            borderBottomWidth: 0.5,
-            borderColor: colors.BORDER
+            padding: spacing.MEDIUM,
+            margin: 5,
+            marginBottom: 10,
+            borderWidth: 0.5,
+            borderRadius: 10,
+            borderColor: colors.BORDER,
+            paddingBottom: 5
         },
-        left: {
+        top: {
             display: 'flex',
-            width: '50%'
+            justifyContent: 'space-evenly',
+            minHeight: dimensions.fullHeight * 0.2
         },
         middle: {
             display: 'flex',
+            flexDirection: 'row',
+            paddingTop: 10
         },
-        right: {
+        bottom: {
             display: 'flex',
-            width: '10%'
+            paddingTop: 10
         }
     })

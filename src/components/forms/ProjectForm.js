@@ -37,7 +37,7 @@ export const ProjectForm = ({ project_value, handleChange, toggleSwitch }) => {
                 <Text style={base.title}>Details</Text>
             </View>
             <View style={form.detailsBox}>
-                <View style={base.labelsCol}>
+                <View style={form.labelsCol}>
                     <Text style={form.inputViewLabel}>Title</Text>
                     <Text style={form.inputViewLabel}>Date created</Text>
                     <Text style={form.inputViewLabel}>Description</Text>

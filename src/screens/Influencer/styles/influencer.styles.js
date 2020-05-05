@@ -5,85 +5,83 @@ export const influencer_style = StyleSheet.create(
     {
         influList: {
             flexDirection: 'row',
-            height: dimensions.fullHeight * .2,
-            alignItems: 'center'
+            maxHeight: dimensions.fullHeight * .2,
+            paddingTop: spacing.MEDIUM
         },
-        top: {
+        topView: {
             display: 'flex',
             alignItems: 'center'
         },
-        middle: {
-            borderBottomWidth: 0.5,
+        middleView: {
+            borderBottomWidth: 0.7,
             borderColor: colors.TERTIARY
         },
+        top: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+            paddingTop: 20
+        },
+        middle: {
+            borderBottomWidth: 0.5,
+            borderColor: colors.BORDER,
+            marginBottom: 10,
+            paddingBottom: 30
+        },
+        infoBox: {
+            alignSelf: 'flex-start',
+            justifyContent: 'space-evenly',
+            minHeight: 150
+        },
+        info: {
+            alignItems: 'center'
+        },
         fjListItem: {
-            paddingRight: spacing.LARGE,
-            paddingLeft: spacing.LARGE,
-            borderRightWidth: 0.7,
-            borderColor: colors.BORDER
+            display: 'flex',
+            marginRight: spacing.LARGE
         },
         influUsername: {
             fontSize: fonts.SMALL,
             color: colors.TERTIARY,
             fontFamily: fonts.PRIMARY,
             textTransform: 'uppercase',
-            marginTop: spacing.MEDIUM
+            marginTop: spacing.MEDIUM,
+            alignSelf: 'center'
         },
         listItem: {
             display: 'flex',
             backgroundColor: colors.SCREEN,
             borderRadius: 15,
             flexDirection: 'column',
-            marginBottom: 30
+            marginBottom: 30,
+            padding: 20
         },
         header: {
             borderBottomWidth: 0.5,
             borderColor: colors.BORDER,
-            padding: spacing.MEDIUM,
             flexDirection: 'row',
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
+            padding: 0,
+            margin: 0
         },
-        middleRight: {
-        },
-        middleLeft: {
-            justifyContent: 'space-between',
-            marginTop: spacing.MEDIUM
+        linkViewInflu: {
+            display: 'flex',
+            flexDirection: 'row'
         },
         linkView: {
             display: 'flex',
-            marginTop: spacing.LARGE,
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            alignItems: 'center'
+            marginTop: spacing.LARGE
         },
         footer: {
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            borderTopWidth: 0.4,
-            padding: spacing.MEDIUM,
-            borderTopColor: colors.BORDER
-        },
-        linkText: {
-            fontSize: fonts.LARGE,
-            paddingTop: spacing.SMALL
-        },
-        info: {
             justifyContent: 'space-between',
-            padding: spacing.LARGE
-        },
-        infoText: {
-            fontWeight: fonts.WEIGHT_LIGHT,
-            fontSize: fonts.LARGE
+            alignItems: 'center'
         },
         voteOption: {
-            borderRightWidth: 0.4,
-            borderColor: colors.BORDER,
-            width: '30%'
+            minWidth: '30%'
         },
         createCollab: {
-            width: '40%',
-            paddingTop: '2%',
-            borderRightWidth: 0.4,
-            borderRightColor: colors.BORDER
+            alignSelf: 'center'
         }
     });

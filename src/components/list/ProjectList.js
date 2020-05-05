@@ -2,22 +2,44 @@ import React from 'react'
 import { TouchableOpacity, Text, View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
 import { project_style } from '../../screens/Project/styles/project.styles'
-import { Icon } from 'react-native-elements'
-import { colors, base } from '../../styles/base'
+import { Icon, Divider } from 'react-native-elements'
+import { colors, base, dimensions } from '../../styles/base'
+import { IconButton } from '../buttons/IconButton'
 
 export const ProjectList = ({ projects, deleteProject, goToProject }) => {
     const projList = (proj, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => goToProject(proj)}>
                 <View style={project_style.listItem}>
-                    <View style={project_style.left}>
-                        <Text style={base.title}>{proj.title}</Text>
+                    <View><IconButton
+                        name='chevron-right'
+                        size={50}
+                        color={colors.TERTIARY}
+                        type='material-icons'
+                        style={{ display: 'flex', alignSelf: 'flex-end' }}
+                        onPress={() => goToProject(proj)}
+                    /></View>
+                    <Divider />
+                    <View style={project_style.top}>
+                        <View>
+                            <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Title</Text>
+                            <Text style={{ ...base.title, fontSize: 16 }}>{proj.title}</Text>
+                        </View>
+                        <View>
+                            <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Date added</Text>
+                            <Text style={{ ...base.title, fontSize: 16 }}>{proj.date_created}</Text>
+                        </View>
                     </View>
-                    <View style={project_style.middle}>
-                        <Text style={base.title}>{proj.date_created}</Text>
-                    </View>
-                    <View style={project_style.right}>
-                        <Icon name='delete-outline' type="material-community" size={25} color={colors.TERTIARY} onPress={() => deleteProject(proj)} />
+                    <Divider />
+                    <View style={project_style.bottom}>
+                        <IconButton
+                            name='delete-outline'
+                            size={35}
+                            color={colors.TERTIARY}
+                            type='material-community'
+                            style={{ display: 'flex', alignSelf: 'flex-end' }}
+                            onPress={() => deleteProject(proj)}
+                        />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -28,7 +50,7 @@ export const ProjectList = ({ projects, deleteProject, goToProject }) => {
         <ScrollView keyboardDismissMode='on-drag'
             contentContainerStyle={base.scrollContainer}
         >
-            <View>
+            <View style={{ paddingBottom: dimensions.fullHeight * .38 }}>
                 {
                     projects.length > 0 && projects.map((proj, index) => {
                         return (
