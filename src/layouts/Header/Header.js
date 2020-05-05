@@ -2,8 +2,8 @@ import React from 'react';
 import { Header } from 'react-native-elements';
 import { View } from 'react-native';
 import PropTypes from 'prop-types'
-import { Gradient } from '../styles/Gradient.js'
-import { header } from '../styles/header'
+import { Gradient } from '../Gradient/Gradient'
+import { header } from './styles/header.styles'
 
 
 export const AppHeader = ({ left, center, right, transparent, gradient }) => {
