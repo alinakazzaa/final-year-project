@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text, ScrollView, Alert } from 'react-native'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { IconButton } from '../../components/buttons/IconButton'
 import { connect } from 'react-redux'
 import { getUserProjects, clearProjectState, setCurrentProject } from '../../actions/project'
-import { getProjectFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
+import { getProjectFetchJobs } from '../../actions/fetchJob'
 import { COMPLETED } from '../../constants'
 import { logOutUser } from '../../actions/user'
 import { colors, base, dimensions } from '../../styles/base'
@@ -15,7 +15,7 @@ import { getUserCollabs, setCurrentCollab, clearCollabState } from '../../action
 import { form } from '../../styles/form'
 import { CollabListProjectView } from '../../components/list/CollabListProjectView'
 import { InfluencerListFjView } from '../../components/list/InfluencerListFjView'
-import { Icon, Input } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
 import { AppLogo } from '../../components/logo/AppLogo'
 import { Dialog } from 'react-native-simple-dialogs'
 import SelectInput from 'react-native-select-input-ios'
@@ -32,25 +32,42 @@ class HomeScreen extends React.Component {
         recent_tags: [],
         recent_job: '',
         confirmProject: false,
-        selectedProject: 'test'
+        selectedProject: 'test',
+        recent_collabs: [],
+        toDoInfluencers: [],
+        campaigns: []
     }
 
     componentDidMount() {
-        const { user, project, getUserProjects, getUserCollabs, clearFetchJobState, clearCollabState, clearProjectState } = this.props
-        // clearFetchJobState()
-        // clearProjectState()
-        // clearCollabState()
+        const { user, getUserProjects, getUserCollabs } = this.props
         getUserProjects(user.current_user.id)
         getUserCollabs(user.current_user.id)
         this.setState({ selected: 0 })
     }
 
     componentDidUpdate(prev) {
-        const { user, project, fetch_job, getProjectFetchJobs, collab, getAllInfluencers } = this.props
+        const { user, project, fetch_job, getProjectFetchJobs, collab, getAllInfluencers, influencer } = this.props
 
         if (prev.project != project && project.all_projects.length > 0) {
             const activeProjects = project.all_projects.filter(proj => proj.active)
-            getProjectFetchJobs(user.current_user.id, activeProjects[activeProjects.length - 2].id)
+
+            if (activeProjects.length > 0) {
+                getProjectFetchJobs(user.current_user.id, activeProjects[activeProjects.length - 1].id)
+            }
+
+            const campaigns = [...project.all_projects.map((p, index) => { return { value: index, label: p.title } })]
+            this.setState({ campaigns })
+        }
+
+        if (prev.collab.all_collabs != collab.all_collabs && collab.all_collabs.length > 0) {
+            const recentCollabs = collab.all_collabs.length > 0 && [...collab.all_collabs.sort((a, b) => {
+                if (a.details.date_start > b.details.date_start) {
+                    return -1
+                } else {
+                    return 1
+                }
+            })] || []
+            this.setState({ recent_collabs: [...recentCollabs] })
         }
 
         if (prev.fetch_job != fetch_job && fetch_job.all_fetch_jobs.length > 0) {
@@ -65,6 +82,11 @@ class HomeScreen extends React.Component {
                     getAllInfluencers(latestJob)
                 }
             }
+        }
+
+        if (prev.influencer.all_influencers !== influencer.all_influencers && influencer.all_influencers.length > 0) {
+            const toDoInfluencers = [...influencer.all_influencers.filter(influ => influ.to_do)]
+            this.setState({ toDoInfluencers })
         }
     }
 
@@ -104,16 +126,7 @@ class HomeScreen extends React.Component {
 
     render() {
         const { user, logOutUser, fetch_job, project, collab, influencer, setCurrentProject } = this.props
-        const { recent_tags, recent_job, selectedProject } = this.state
-        const recentCollabs = [...collab.all_collabs.sort((a, b) => {
-            if (a.details.date_start > b.details.date_start) {
-                return -1
-            } else {
-                return 1
-            }
-        })]
-        const campaigns = [...project.all_projects.map((c, index) => { return { value: index, label: c.title } })]
-        const toDoInfluencers = [...influencer.all_influencers.filter(influ => influ.to_do)]
+        const { recent_tags, recent_job, selectedProject, recent_collabs, campaigns, toDoInfluencers } = this.state
 
         return (
             <View>
@@ -168,9 +181,9 @@ class HomeScreen extends React.Component {
                                 flexDirection: 'column',
                                 paddingTop: 20
                             }}>
-                                {project.error !== null &&
-                                    <View><Text style={{ ...base.text, fontSize: 14 }}>Create campaigns and find influencers to match your marketing needs!</Text></View>}
-                                {fetch_job.error !== null && <View><Text style={base.noneMessage}>Run a search and find the right influencers!</Text></View>}
+                                {project.error !== null && <View>
+                                    <Text style={{ ...base.text, fontSize: 14, textAlign: 'center' }}>Create campaigns and find influencers to match your marketing needs!</Text></View>}
+                                {fetch_job.error !== null && <View><Text style={{ ...base.text, fontSize: 14, textAlign: 'center' }}>Run a search and find the right influencers!</Text></View>}
                                 {recent_tags.length > 0 &&
                                     <View>
                                         <Text style={{ ...base.text, fontSize: 13, padding: 0 }}>
@@ -191,7 +204,7 @@ class HomeScreen extends React.Component {
                                             }}>Click tag to add new search</Text>
                                         </View>
                                     </View>}
-                                {recentCollabs.length > 0 && <View style={base.centerItems}>
+                                {recent_collabs.length > 0 && <View style={base.centerItems}>
                                     <Text style={base.noneMessage}>Get in touch with recent influencers</Text>
                                     <Icon name='arrow-downward' type="material" size={40} color={colors.TERTIARY} />
                                 </View>}
@@ -204,12 +217,12 @@ class HomeScreen extends React.Component {
                                     fontSize: 13
                                 }}>Your recent collaborations</Text></View>
                             <View style={{
-                                ...form.detailsBox, flexDirection: 'row', paddingTop: 10
+                                ...form.detailsBox, flexDirection: 'row', paddingTop: 10, justifyContent: 'center'
                             }}>
                                 {collab.pending && <LoadingScreen />}
-                                {collab.pending == false && recentCollabs.length > 0 && <CollabListProjectView isHome={true} collabs={recentCollabs} goToCollab={this.goToCollab} />}
-                                {collab.error !== null && <View style={{ marginTop: 20, ...base.centerItems }}>
-                                    <Text style={base.noneMessage}>You haven't collaborated with any influencers yet.</Text>
+                                {collab.pending == false && recent_collabs.length > 0 && <CollabListProjectView isHome={true} collabs={recent_collabs} goToCollab={this.goToCollab} />}
+                                {collab.error !== null && <View>
+                                    <Text style={{ ...base.text, fontSize: 14, textAlign: 'center' }}>You haven't collaborated with any influencers yet.</Text>
                                     {fetch_job.pending == false && fetch_job.error == null && <Text style={base.noneMessage}>Check out your recent searches to find potential brand ambassadors</Text>}
                                 </View>}
                             </View>
@@ -223,7 +236,7 @@ class HomeScreen extends React.Component {
                             <View style={{ ...form.detailsBox, flexDirection: 'column' }}>
                                 {influencer.pending && <LoadingScreen />}
                                 {influencer.error || influencer.all_influencers.length == 0 && <View style={{ marginTop: 20, ...base.centerItems }}>
-                                    <Text style={base.noneMessage}>Start a search to find the perfect brand ambassador</Text>
+                                    <Text style={{ ...base.text, fontSize: 14, textAlign: 'center' }}>Start a search to find the perfect brand ambassador</Text>
                                     <IconButton
                                         name='account-search-outline'
                                         size={45}
@@ -232,7 +245,7 @@ class HomeScreen extends React.Component {
                                         type='material-community'
                                         onPress={() => this.startNewSearch()} />
                                 </View>}
-                                {influencer.pending == false && !influencer.error &&
+                                {influencer.pending == false && influencer.error == null &&
                                     <InfluencerListFjView goToInfluencer={this.goToInfluencer} isHome={true}
                                         influencers={toDoInfluencers} />}
                             </View>
@@ -261,7 +274,6 @@ const mapDispatchToProps = {
     getAllInfluencers,
     setCurrentCollab,
     setCurrentInfluencer,
-    clearFetchJobState,
     clearCollabState,
     clearProjectState,
     setCurrentProject
