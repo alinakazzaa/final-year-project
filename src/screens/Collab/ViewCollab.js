@@ -156,7 +156,7 @@ class ViewCollab extends React.Component {
                                     {collab.current_collab.publications && collab.current_collab.publications.length > 0 ?
                                         <PublicationList publications={collab.current_collab.publications}
                                             onPress={this.onThumbnailPress} /> :
-                                        <View style={base.centered}><Text style={base.noneMessage}>No publications yet</Text></View>}
+                                        <View style={base.centered}><Text style={{ ...base.text, fontSize: 14, padding: 0, marginTop: 20, alignSelf: 'center', textAlign: 'center' }}>No publications yet</Text></View>}
                                 </View>}
                             </View>
                         </ScrollView>
