@@ -50,7 +50,9 @@ export default class FetchJobForm extends React.Component {
 
     componentDidMount() {
         const { fetchJob } = this.props
-        this.setState({ min: fetchJob.criteria.followerMin, max: fetchJob.criteria.followerMax })
+        this.setState({
+            min: fetchJob.criteria.followerMin, max: fetchJob.criteria.followerMax
+        })
     }
     onChangeSlider = (min, max) => {
         const { handleChange, fetchJob } = this.props
@@ -82,6 +84,9 @@ export default class FetchJobForm extends React.Component {
     render() {
         const { fetchJob, handleChange } = this.props
         const { index, min, max } = this.state
+        const renderIndex = fetchJob.criteria.followerMin == followerRanges.micro.min && 0 ||
+            fetchJob.criteria.followerMin == followerRanges.midi.min && 1 ||
+            fetchJob.criteria.followerMin == followerRanges.macro.min && 2
 
         return (
             <View style={base.formContainer}>
@@ -108,7 +113,7 @@ export default class FetchJobForm extends React.Component {
                 {fetchJob.status != COMPLETED && fetchJob.status != IN_PROGRESS && <View style={fetchJobStyle.middle}>
                     <Text style={base.title}>Follower range</Text>
                     <View style={fetchJobStyle.itemRowRange}>
-                        <TabView index={index} color={colors.SECONDARY} size={dimensions.fullWidth * .25}
+                        <TabView index={renderIndex} color={colors.SECONDARY} size={dimensions.fullWidth * .25}
                             titles={['Micro', 'Midi', 'Maxi']} onPress={this.changeTab} three={true} />
                         <View style={fetchJobStyle.rangeSlider}>
                             <View style={fetchJobStyle.rangeBox}>
