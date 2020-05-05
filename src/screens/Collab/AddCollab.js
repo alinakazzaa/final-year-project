@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Alert } from 'react-native'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { CollabForm } from '../../components/forms/CollabForm'
 import { connect } from 'react-redux'
 import { addCollab } from '../../actions/collab'
@@ -17,7 +17,7 @@ class AddCollab extends React.Component {
     }
 
     state = {
-        collabValue: { active: false, tags: [{ name: '+', editable: false }] }
+        collabValue: { active: true, tags: [{ name: '+', editable: false }] }
     }
 
     componentDidMount() {
@@ -40,17 +40,20 @@ class AddCollab extends React.Component {
 
         const newCollab = {
             details: {
-                ...collabValue, influencer: {
+                ...collabValue,
+                influencer: {
                     id: influencer.id,
                     username: influencer.username, profile_pic_url: influencer.profile_pic_url
-                }
+                },
+                tags: []
             }
         }
 
         if (collabValue.tags)
-            newCollab.details.tags = [...collabValue.tags.filter(tag => tag.name !== '+')]
+            newCollab.details.tags = [...collabValue.tags.filter(tag => tag.name != '+')]
 
-        // no same influencer & campaign
+
+        //no same influencer & campaign
         if (!collab.all_collabs.find(c => c.details.influencer.id == influencer.id)) {
             addCollab(project.current_project.user_id, project.current_project.id, newCollab)
             Alert.alert("Collaboration added")
