@@ -10,17 +10,21 @@ export const getAllInfluencers = fetch_job => {
         const influencers = []
         dispatch(setInfluencersPending())
 
-        fetch_job.influencers.success.forEach(id => {
-            db.ref(`Influencers/${id}`).once('value', snapshot => {
-                if (snapshot !== null)
-                    influencers.push(snapshot.val())
-            }).then(() => {
-                if (influencers.length > 0) {
-                    dispatch(setInfluencersSuccess(influencers))
-                } else {
-                    dispatch(setInfluencersError())
-                }
-            })
+        db.ref(`Influencers/`).once('value', snapshot => {
+            let influencer
+            if (snapshot !== null)
+                fetch_job.influencers.success.forEach(id => {
+                    influencer = snapshot.child(id).val()
+                    if (influencer !== null)
+                        influencers.push(influencer)
+                })
+
+        }).then(() => {
+            if (influencers.length > 0) {
+                dispatch(setInfluencersSuccess(influencers))
+            } else {
+                dispatch(setInfluencersError())
+            }
         })
     }
 }
