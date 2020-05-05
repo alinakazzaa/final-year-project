@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { colors } from '../../styles/base'
 import RangeSlider from 'rn-range-slider'
-import { View } from 'native-base'
 import { sliderStyle } from './styles/slider.styles'
 import { followerRanges } from '../../constants/Criteria'
 
@@ -38,7 +37,7 @@ Slider.propTypes = {
     initialMax: PropTypes.number,
     initialMin: PropTypes.number,
     step: PropTypes.number,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func
 }
 
 Slider.defaultProps = {
@@ -47,5 +46,5 @@ Slider.defaultProps = {
     initialMax: followerRanges.micro.min,
     initialMin: followerRanges.micro.max,
     step: 1000,
-    onChange: null,
+    onChange: null
 }
