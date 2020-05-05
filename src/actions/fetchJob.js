@@ -103,12 +103,16 @@ export const addFetchJob = (user_id, project_id, fetchJobVal) => {
 export const updateFetchJob = fetch_job => {
     return dispatch => {
 
+
         fetch_job.related_tags && fetch_job.related_tags.forEach((tag, index) => {
-            tag = { name: tag, editable: false, index }
+            if (!tag.name) {
+                tag = { name: tag, editable: false, index }
+            }
             fetch_job.related_tags.splice(index, 1, tag)
         })
 
         if (fetch_job.details.status != IN_PROGRESS) {
+
             db.ref(`/Users/${fetch_job.details.user_id}/Projects/${fetch_job.details.project_id}/FetchJobs/${fetch_job.details.id}`).update({
                 ...fetch_job,
                 progress: null,
@@ -117,15 +121,12 @@ export const updateFetchJob = fetch_job => {
                 has_next_page: null,
                 influencers: { ...fetch_job.influencers, fail: null, pending: null }
             })
-
         }
 
         dispatch({
             type: UPDATE_FETCH_JOB,
             fetch_job
         })
-        // dispatch(clearRunningFetchJob())
-
     }
 }
 
@@ -144,8 +145,6 @@ export const removeFetchJob = fetch_job => {
                 dispatch(removeInfluencer(id))
             })
         }
-
-
     }
 }
 
