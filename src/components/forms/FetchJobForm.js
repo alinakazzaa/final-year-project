@@ -29,7 +29,8 @@ const options = {
     auto: 'none',
     fields: {
         hashtag: {
-            autoCapitalize: 'none'
+            autoCapitalize: 'none',
+            autoCorrect: false
         },
         date_created: {
             editable: false
