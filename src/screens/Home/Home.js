@@ -71,16 +71,13 @@ class HomeScreen extends React.Component {
         }
 
         if (prev.fetch_job != fetch_job && fetch_job.all_fetch_jobs.length > 0) {
-            const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED && fj.related_tags)]
+            const completed_fetch_jobs = [...fetch_job.all_fetch_jobs.filter(fj => fj.details.status == COMPLETED)]
 
             if (completed_fetch_jobs.length > 0) {
                 const latestJob = { ...completed_fetch_jobs[completed_fetch_jobs.length - 1] }
                 const tags = latestJob.related_tags ? latestJob.related_tags : []
                 this.setState({ recent_tags: tags, recent_job: completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag })
-
-                if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0) {
-                    getAllInfluencers(latestJob)
-                }
+                getAllInfluencers(latestJob)
             }
         }
 
