@@ -87,6 +87,6 @@ const projectReducer = (state = initialState, action) => {
 
 export const activeProjects = state => [...state.all_projects.filter(proj => proj.active == true)]
 export const archivedProjects = state => [...state.all_projects.filter(proj => proj.active == false)]
-export const getIndex = (projects, project) => projects.map(p => { return p }).indexOf(project.id)
+export const getIndex = (projects, project) => projects.map(p => { return p.id }).indexOf(project.id)
 
 export default projectReducer
