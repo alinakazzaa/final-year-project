@@ -1,7 +1,7 @@
 export const followerRanges = {
     micro: { min: 5000, max: 50000 },
     midi: { min: 50000, max: 100000 },
-    macro: { min: 100000, max: 10000000000000000000 }
+    macro: { min: 100000, max: 1000000 }
 }
 
 export const numberOfProfiles = {
