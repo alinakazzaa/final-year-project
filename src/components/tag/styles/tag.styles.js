@@ -14,9 +14,8 @@ export const tagStyles = StyleSheet.create(
             alignItems: 'center',
             paddingRight: 7,
             paddingLeft: 7,
-            marginBottom: 5,
+            margin: 5,
             flexDirection: 'row',
-            alignSelf: 'flex-start',
         },
         editContainer: {
             display: 'flex',
@@ -41,7 +40,7 @@ export const tagStyles = StyleSheet.create(
         },
         list: {
             flexDirection: 'row',
-            marginTop: spacing.MEDIUM,
-            justifyContent: 'space-evenly'
+            flexWrap: 'wrap',
+            alignItems: 'flex-start'
         }
     });
