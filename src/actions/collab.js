@@ -5,20 +5,25 @@ import { DB_USER_COLLABS_REF } from '../constants/database';
 import { SET_COLLABS_ERROR, SET_COLLABS_SUCCESS, SET_COLLABS_PENDING, GET_COLLAB_INFLUENCER_SUCCESS, GET_COLLAB_INFLUENCER_ERROR } from '../constants/response/types';
 import { MSG_NO_COLLABS } from '../constants/response/messages';
 
-export const getUserCollabs = user_id => {
-    const collabs = []
 
+export const getUserCollabs = user_id => {
     return dispatch => {
 
         dispatch(setCollabsPending())
 
-        DB_USER_COLLABS_REF(user_id).on('value', collab_snapshot => {
-            collab_snapshot.forEach(collab => {
-                collabs.push(collab.val())
+        const collabs = []
+
+        DB_USER_COLLABS_REF(user_id).once('value', collabSnapshot => {
+            collabSnapshot.forEach(collab => {
+                const collabItem = {
+                    ...collab.val()
+                }
+                collabs.push(collabItem)
             })
 
             if (collabs.length == 0) {
                 dispatch(setCollabsError())
+
             } else {
                 dispatch(setCollabsSuccess(collabs))
             }
@@ -34,7 +39,6 @@ export const setCollabsPending = () => {
 }
 
 export const setCollabsSuccess = collabs => {
-
     return {
         type: SET_COLLABS_SUCCESS,
         collabs
@@ -69,62 +73,57 @@ export const clearCollabState = () => {
 }
 
 export const addCollab = (user_id, project_id, collabValue) => {
-
-    let collab = {
-        details: {
-            ...collabValue.details,
-            compensation: collabValue.details.compensation || '',
-            date_created: DATE_TODAY,
-            user_id: user_id,
-            project_id: project_id,
-            id: '',
-            tags: collabValue.details.tags || []
+    return dispatch => {
+        let collab = {
+            details: {
+                ...collabValue.details,
+                compensation: collabValue.details.compensation || '',
+                date_created: DATE_TODAY,
+                user_id: user_id,
+                project_id: project_id,
+                id: '',
+                tags: collabValue.details.tags || []
+            }
         }
-    }
 
-    db.ref(`/Users/${user_id}/Collabs/`).push({
-        ...collab,
+        db.ref(`/Users/${user_id}/Collabs/`).push({
+            ...collab,
+        }).then(data => {
+            collab.details.id = data.key
 
-    }).then(data => {
-        collab.details.id = data.key
+            db.ref(`/Users/${user_id}/Collabs/${data.key}/details`).update({
+                id: data.key
+            })
 
-        db.ref(`/Users/${user_id}/Collabs/${data.key}/details`).update({
-            id: data.key
+            dispatch({
+                type: ADD_COLLAB,
+                collab
+            })
         })
-    })
-
-    return {
-        type: ADD_COLLAB,
-        collab
     }
+
 }
 
 export const updateCollab = collab => {
     return dispatch => {
         db.ref(`/Users/${collab.details.user_id}/Collabs/${collab.details.id}`).update({
             ...collab
-        }).then(() => {
-            dispatch({
-                type: UPDATE_COLLAB,
-                collab
-            })
+        })
+
+        dispatch({
+            type: UPDATE_COLLAB,
+            collab
         })
     }
-
-
 
 }
 
 export const removeCollab = collab => {
-    console.log(collab)
-    return dispatch => {
-        db.ref(`/Users/${collab.details.user_id}/Collabs/${collab.details.id}`).remove().then(() => {
+    db.ref(`/Users/${collab.details.user_id}/Collabs/${collab.details.id}`).remove()
 
-            dispatch({
-                type: REMOVE_COLLAB,
-                collabId: collab.details.id
-            })
-        })
+    return {
+        type: REMOVE_COLLAB,
+        collabId: collab.details.id
     }
 }
 
@@ -144,7 +143,6 @@ export const fetchCollabInfluencer = (collab, pending) => {
                 } else {
                     dispatch({ type: GET_COLLAB_INFLUENCER_ERROR })
                 }
-
             })
     }
 }
