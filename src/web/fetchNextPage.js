@@ -6,7 +6,7 @@ import { MSG_HASHTAG_MEDIA_ERROR } from "../constants/response/messages"
 export const fetchNextPage = (fetch_job, pending, fetchResponse) => {
 
     pending(GET_MEDIA_PENDING, fetch_job)
-    let parsed_end_cursor = fetch_job.end_cursor.replace('==', '%3D%3D')
+    const parsed_end_cursor = fetch_job.end_cursor.replace('==', '%3D%3D')
     let response
     fetch(INSTAGRAM_GET_NEXT_PAGE_MEDIA(fetch_job.details.hashtag, parsed_end_cursor))
         .then(result => {
@@ -27,14 +27,13 @@ export const fetchNextPage = (fetch_job, pending, fetchResponse) => {
                                 message: MSG_HASHTAG_MEDIA_ERROR
                             }
                         } else {
-
                             const ids = [...extractIds(edge_hashtag_to_media.edges, fetch_job.details.criteria)]
 
                             response = {
                                 has_next_page: edge_hashtag_to_media.page_info.has_next_page,
                                 end_cursor: edge_hashtag_to_media.page_info.end_cursor,
                                 type: GET_MEDIA_SUCCESS,
-                                media_ids: ids
+                                media_ids: [...ids]
                             }
 
                             if (ids.length == 0) {
