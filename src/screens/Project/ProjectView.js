@@ -29,9 +29,13 @@ class ProjectView extends React.Component {
     }
 
     componentDidMount() {
-        const { user, project, getProjectFetchJobs, getUserCollabs } = this.props
+        const { user, project, getProjectFetchJobs, getUserCollabs, running_fetch } = this.props
         if (project.current_project.title) {
-            getProjectFetchJobs(user.current_user.id, project.current_project.id)
+
+            if (running_fetch.pending == false) {
+                getProjectFetchJobs(user.current_user.id, project.current_project.id)
+            }
+
             getUserCollabs(user.current_user.id)
             this.setState({ projectValue: { ...project.current_project } })
         }
