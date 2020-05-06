@@ -4,12 +4,12 @@ import { collabStyle } from '../../screens/Collab/styles/collab.styles'
 import { base, colors, fonts } from '../../styles/base'
 import { Avatar, Divider } from 'react-native-elements'
 import { PulseIndicator } from 'react-native-indicators'
-import { Gradient } from '../../styles/Gradient'
+import { Gradient } from '../../layouts/Gradient/Gradient'
 
-export const CollabListProjectView = ({ collabs, goToCollab, isHome }) => {
+export const CollabListProjectView = ({ collabs, goToCollab }) => {
     const collabList = (collab, index) => {
 
-        return <Gradient style={collabStyle.collabView}><TouchableOpacity key={index} onPress={() => goToCollab(collab)}>
+        return <Gradient key={index} style={collabStyle.collabView}><TouchableOpacity key={index} onPress={() => goToCollab(collab)}>
             <View><Avatar
                 size={90}
                 rounded

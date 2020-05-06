@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { connect } from 'react-redux'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { colors, base } from '../../styles/base'
@@ -8,7 +8,7 @@ import { TabView } from '../../components/tabview/TabView'
 import { Input } from 'react-native-elements'
 import { getUserCollabs, setCurrentCollab, removeCollab, filterCollabs } from '../../actions/collab'
 import { CollabList } from '../../components/list/CollabList'
-import { Gradient } from '../../styles/Gradient'
+import { Gradient } from '../../layouts/Gradient/Gradient'
 import { AppLogo } from '../../components/logo/AppLogo'
 
 class AllCollabs extends React.Component {
@@ -41,7 +41,7 @@ class AllCollabs extends React.Component {
 
     searchCollab = text => {
         const { collab } = this.props
-        let filtered_collabs = [...collab.all_collabs.filter(c => c.details.title.toLowerCase().includes(text.toLowerCase()) ||
+        const filtered_collabs = [...collab.all_collabs.filter(c => c.details.title.toLowerCase().includes(text.toLowerCase()) ||
             c.details.influencer.username.toLowerCase().includes(text.toLowerCase()))]
         this.setState({ searched: filtered_collabs, isSearch: true })
     }
@@ -71,6 +71,11 @@ class AllCollabs extends React.Component {
                         </View>
                         <TabView titles={['Active', 'Archived']} onPress={this.setTab}
                             color={colors.TERTIARY} size='46%' index={index} />
+                        {collab.error &&
+                            <View style={base.centerItems}>
+                                <Text style={{ ...base.text, color: colors.WHITE, fontSize: 20, padding: 0, margin: 0, alignSelf: 'center', textAlign: 'center' }}>No collaborations</Text>
+                                <Text style={{ ...base.text, color: colors.WHITE, fontSize: 14, padding: 0, margin: 0, alignSelf: 'center', textAlign: 'center' }}>Hint: create collaboration with influencers from your search</Text>
+                            </View>}
                         {collab.all_collabs.length > 0 &&
                             index == 0 ?
                             <View>
@@ -82,11 +87,6 @@ class AllCollabs extends React.Component {
                                 <CollabList goToCollab={this.goToCollab} deleteCollab={this.deleteCollab}
                                     collabs={isSearch ? filterCollabs(searched, false) :
                                         filterCollabs(collab.all_collabs, false)} />
-                            </View>}
-                        {collab.all_collabs.length == 0 &&
-                            <View style={base.centerItems}>
-                                <Text style={base.noneMessage}>No collaborations yet</Text>
-                                <Text style={base.noneMessage}>Run searches and find influencers to collaborate with</Text>
                             </View>}
                     </View>
                 </Gradient>

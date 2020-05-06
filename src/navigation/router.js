@@ -12,14 +12,14 @@ import { fetchPending, fetchResponse } from '../actions/fetch'
 import { setCurrentFetchJob, updateFetchJob } from '../actions/fetchJob'
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader'])
-
+console.disableYellowBox = true;
 const LogIn = createAppContainer(ApplicationStack)
 const MainApp = createAppContainer(BottomNavigator)
 
 class Router extends Component {
 
     componentDidUpdate(prev) {
-        const { fetch_job, running_fetch, fetchPending, fetchResponse, setCurrentFetchJob, updateFetchJob } = this.props
+        const { running_fetch, fetchPending, fetchResponse, setCurrentFetchJob, updateFetchJob } = this.props
 
         if (prev.running_fetch.details.status != running_fetch.details.status) {
             setCurrentFetchJob(running_fetch)
@@ -40,7 +40,7 @@ class Router extends Component {
                         let ref = setInterval(() => {
                             fetchNextPage(running_fetch, fetchPending, fetchResponse)
                             clearInterval(ref)
-                        }, 5000)
+                        }, 10000)
 
                     } else if (running_fetch.response.type == GET_MEDIA_SUCCESS ||
                         running_fetch.response.type == GET_USER_ERROR ||

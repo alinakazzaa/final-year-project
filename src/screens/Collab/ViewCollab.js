@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Text, Linking, Alert } from 'react-native'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { BackButton } from '../../components/buttons/BackButton'
 import { connect } from 'react-redux'
 import { collabStyle } from './styles/collab.styles'
@@ -28,7 +28,7 @@ class ViewCollab extends React.Component {
     componentDidMount() {
         const { collab, fetchUserMedia } = this.props
 
-        if (collab.pending === false) {
+        if (collab.pending == false) {
             let collabValue = {
                 ...this.state.collabValue,
                 ...collab.current_collab.details,
@@ -65,12 +65,12 @@ class ViewCollab extends React.Component {
 
         const updatedCollab = {
             details: {
-                ...collab.current_collab.details,
-                ...collabValue, influencer: { ...collab.current_collab.details.influencer },
+                ...collabValue,
+                influencer: { ...collab.current_collab.details.influencer },
                 tags: [...collabValue.tags.filter(tag => tag.name !== '+')] || []
             }
         }
-        setCurrentCollab(updatedCollab)
+
         updateCollab(updatedCollab)
         Alert.alert("Collaboration updated")
     }
@@ -148,14 +148,14 @@ class ViewCollab extends React.Component {
                                         collab={collabValue}
                                         removeTag={this.removeTag} />
                                 }
-                                {collabValue.active && <View>
+                                {collab.current_collab.details.active && <View>
                                     <View style={{ marginTop: 20 }}>
                                         <Text style={base.title}>Publications</Text>
                                     </View>
                                     {collab.current_collab.publications && collab.current_collab.publications.length > 0 ?
                                         <PublicationList publications={collab.current_collab.publications}
                                             onPress={this.onThumbnailPress} /> :
-                                        <View style={base.centered}><Text style={base.noneMessage}>No publications yet</Text></View>}
+                                        <View style={base.centered}><Text style={{ ...base.text, fontSize: 14, padding: 0, marginTop: 20, alignSelf: 'center', textAlign: 'center' }}>No publications yet</Text></View>}
                                 </View>}
                             </View>
                         </ScrollView>

@@ -56,7 +56,8 @@ export const extractMedia = (edges, hashtags) => {
                         shortcode: edge.node.shortcode,
                         comment: edge.node.edge_media_to_caption.edges[0].node.text
                     }
-                    media.push(media_item)
+                    if (!media.find(item => item.shortcode == media_item.shortcode))
+                        media.push(media_item)
                 }
             })
         })

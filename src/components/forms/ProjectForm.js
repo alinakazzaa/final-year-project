@@ -60,7 +60,7 @@ export const ProjectForm = ({ project_value, handleChange, toggleSwitch }) => {
     )
 }
 
-ProjectForm.PropTypes = {
+ProjectForm.propTypes = {
     project: PropTypes.object
 }
 

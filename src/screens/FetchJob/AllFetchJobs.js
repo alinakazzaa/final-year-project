@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
 import { FetchJobList } from '../../components/list/FetchJobList'
-import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs, filterFetchJobs, clearFetchJobState } from '../../actions/fetchJob'
+import { setCurrentFetchJob, removeFetchJob, getProjectFetchJobs, filterFetchJobs } from '../../actions/fetchJob'
 import { connect } from 'react-redux'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { COMPLETED, PENDING, IN_PROGRESS } from '../../constants'
 import { BackButton } from '../../components/buttons/BackButton'
 import { TabView } from '../../components/tabview/TabView'
 import { colors, base } from '../../styles/base'
-import { Input, Icon } from 'react-native-elements'
+import { Input } from 'react-native-elements'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
-import { Gradient } from '../../styles/Gradient'
+import { Gradient } from '../../layouts/Gradient/Gradient'
 import { fetchMedia } from '../../web/fetchMedia'
 import { fetchPending, fetchResponse, clearRunningFetchJob } from '../../actions/fetch'
 import { IconButton } from '../../components/buttons/IconButton'
@@ -67,16 +67,22 @@ class AllFetchJobs extends React.Component {
         this.setState({ index })
     }
 
+    getProgressPercent = () => {
+        const { running_fetch } = this.props
+        return (running_fetch.influencers.success.length /
+            Number(running_fetch.details.no_profiles) * 100).toFixed() || 0
+    }
+
     render() {
         const { index, isSearch, searched } = this.state
-        const { fetch_job, navigation, project } = this.props
+        const { fetch_job, navigation, project, running_fetch } = this.props
 
         return (
             <View>
                 <Gradient style={base.container}>
                     <AppHeader
                         left={<BackButton onPress={() => navigation.goBack()} />}
-                        center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 15 }}>{`${project.current_project.title} searches`}</Text>}
+                        center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 17 }}>{`${project.current_project.title} searches`}</Text>}
                     />
                     <View>
                         <View style={base.searchView}>
@@ -93,7 +99,7 @@ class AllFetchJobs extends React.Component {
                         {fetch_job.pending && <LoadingScreen />}
                         {fetch_job.error &&
                             <View style={base.centerItems}>
-                                <Text style={base.noneMessage}>Create your first influencer search</Text>
+                                <Text style={{ ...base.text, color: colors.WHITE, fontSize: 20, padding: 0, margin: 0, alignSelf: 'center', textAlign: 'center' }}>Click + to create your first influencer search</Text>
                             </View>}
                         <IconButton name='plus' type='material-community' size={50} color={colors.TERTIARY} onPress={() => navigation.navigate('AddFetchJob')} />
                         {!fetch_job.error && !fetch_job.pending &&
@@ -101,6 +107,7 @@ class AllFetchJobs extends React.Component {
                                 {index == 0 &&
                                     <View>
                                         <FetchJobList
+                                            hasRunningFetch={running_fetch.pending}
                                             startFetchJob={this.startFetchJob}
                                             fetch_jobs={isSearch ? filterFetchJobs(searched, PENDING) : filterFetchJobs(fetch_job.all_fetch_jobs, PENDING)}
                                             goToFetchJob={this.goToFetchJob}
@@ -109,13 +116,16 @@ class AllFetchJobs extends React.Component {
                                 {index == 1 &&
                                     <View>
                                         <FetchJobList
+                                            hasRunningFetch={null}
                                             startFetchJob={null}
                                             fetch_jobs={isSearch ? filterFetchJobs(searched, IN_PROGRESS) : filterFetchJobs(fetch_job.all_fetch_jobs, IN_PROGRESS)}
                                             goToFetchJob={this.goToFetchJob}
-                                            deleteFetchJob={this.deleteFetchJob} />
+                                            deleteFetchJob={this.deleteFetchJob}
+                                            progress={this.getProgressPercent()} />
                                     </View>}
                                 {index == 2 && <View>
                                     <FetchJobList
+                                        hasRunningFetch={null}
                                         startFetchJob={null}
                                         fetch_jobs={isSearch ? filterFetchJobs(searched, COMPLETED) : filterFetchJobs(fetch_job.all_fetch_jobs, COMPLETED)}
                                         goToFetchJob={this.goToFetchJob}
@@ -140,7 +150,6 @@ const mapDispatchToProps = {
     setCurrentFetchJob,
     removeFetchJob,
     getProjectFetchJobs,
-    clearFetchJobState,
     fetchPending,
     fetchResponse,
     clearRunningFetchJob

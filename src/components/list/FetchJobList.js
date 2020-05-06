@@ -8,7 +8,7 @@ import { colors, base, dimensions } from '../../styles/base'
 import { fetchJobStyle } from '../../screens/FetchJob/styles/fetchJob.styles'
 import { IconButton } from '../buttons/IconButton'
 
-export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFetchJob }) => {
+export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFetchJob, hasRunningFetch, progress }) => {
     const FJList = (fj, index) => {
         const success = fj.influencers ? fj.influencers.success.length : 0
         return (
@@ -41,6 +41,10 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
                                 <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Date added</Text>
                                 <Text style={{ ...base.title, fontSize: 16 }}>{fj.details.date_created}</Text>
                             </View>
+                            {fj.details.status == IN_PROGRESS && <View>
+                                <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Progress</Text>
+                                <Text style={{ ...base.title, fontSize: 16 }}>{progress}</Text>
+                            </View>}
                             {fj.details.status == COMPLETED &&
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={{ ...base.title, color: colors.SECONDARY, fontSize: 25, alignSelf: 'center', marginRight: 10 }}>{success}</Text>
@@ -58,7 +62,7 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
                     {fj.details.status != IN_PROGRESS && <View style={fetchJobStyle.bottom}>
                         <View />
 
-                        {fj.details.status == PENDING && <View><IconButton
+                        {fj.details.status == PENDING && !hasRunningFetch && <View><IconButton
                             name='account-search-outline'
                             size={45}
                             color={colors.SECONDARY}
@@ -97,8 +101,10 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
 FetchJobList.propTypes = {
     fetch_jobs: PropTypes.array.isRequired,
     goToFetchJob: PropTypes.func,
+    progress: PropTypes.number,
 }
 
 FetchJobList.defaultProps = {
     goToFetchJob: null,
+    progress: 0
 }

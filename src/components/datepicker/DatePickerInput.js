@@ -2,13 +2,13 @@ import React from 'react'
 import DatePicker from 'react-native-datepicker'
 import { DATE_TODAY } from '../../constants/TodayDate'
 import { inputView } from '../../styles/form'
-import { fonts, colors, dimensions } from '../../styles/base'
+import { colors, fonts, dimensions } from '../../styles/base'
 
 export const DatePickerInput = ({ date, handleChange }) => {
 
     return (
         <DatePicker
-            style={{ ...inputView, borderBottomWidth: 0 }}
+            style={{ ...inputView, borderBottomWidth: 0, margin: 0 }}
             date={date}
             mode="date"
             placeholder="select date"
@@ -18,6 +18,7 @@ export const DatePickerInput = ({ date, handleChange }) => {
             confirmBtnText="Save"
             cancelBtnText="Cancel"
             showIcon={false}
+            onDateChange={date => handleChange(date)}
             customStyles={{
                 placeholderText: {
                     color: colors.TERTIARY,
@@ -33,14 +34,13 @@ export const DatePickerInput = ({ date, handleChange }) => {
                 },
                 dateInput: {
                     ...inputView,
-                    borderRadius: 4,
+                    borderRadius: 5,
                     width: dimensions.fullWidth * 0.4,
                     borderColor: colors.BORDER,
-                    borderWidth: 0.7
+                    borderBottomWidth: 0.7,
+                    margin: 0
                 }
-                // ... You can check the source to find the other keys.
             }}
-            onDateChange={date => handleChange(date)}
         />
     )
 }

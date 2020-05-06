@@ -70,28 +70,29 @@ export const setCurrentProject = project => {
 }
 
 export const addProject = (user_id, project_val) => {
+    return dispatch => {
+        const project = {
+            ...project_val,
+            user_id,
+            description: project_val.description || '',
+            active: project_val.active || false,
+            id: ''
+        }
 
-    let project = {
-        ...project_val,
-        user_id,
-        description: project_val.description || '',
-        active: project_val.active || false,
-        id: ''
-    }
+        db.ref(`/Users/${user_id}/Projects/`).push({
+            details: { ...project }
+        }).then(data => {
+            project.id = data.key
 
-    db.ref(`/Users/${user_id}/Projects/`).push({
-        details: { ...project }
-    }).then(data => {
-        project.id = data.key
+            db.ref(`/Users/${user_id}/Projects/${data.key}/details`).update({
+                id: data.key
+            })
 
-        db.ref(`/Users/${user_id}/Projects/${data.key}/details`).update({
-            id: data.key
+            dispatch({
+                type: ADD_PROJECT,
+                project
+            })
         })
-    })
-
-    return {
-        type: ADD_PROJECT,
-        project
     }
 }
 
@@ -106,7 +107,6 @@ export const updateProject = project => {
         type: UPDATE_PROJECT,
         project
     }
-
 }
 
 export const removeProject = project => {

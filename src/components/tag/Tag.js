@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { tagStyles } from './styles/tag.styles'
-import { Gradient } from '../../styles/Gradient'
 import { Input } from 'react-native-elements'
-import { colors, fonts, base, spacing } from '../../styles/base'
+import { colors, fonts, base } from '../../styles/base'
 import { IconButton } from '../buttons/IconButton'
 
 
@@ -21,6 +20,7 @@ export const Tag = ({ title, onPress, editable, index, onChangeText, onSubmit, r
             onChangeText={text => onChangeText(text, index)}
             onEndEditing={() => onSubmit(index)}
             inputContainerStyle={tagStyles.editContainer}
+            autoCorrect={false}
         />
         : <View style={tagStyles.container}><TouchableOpacity
             activeOpacity={0.8}
@@ -36,26 +36,23 @@ export const Tag = ({ title, onPress, editable, index, onChangeText, onSubmit, r
                 style={{ marginLeft: 2 }}
             />}
         </View>
-
-    // <Gradient horizontal={true} style={tag.container}>
-    //    </Gradient>
 }
 
 Tag.propTypes = {
     title: PropTypes.string,
     onPress: PropTypes.func.isRequired,
-    onChangeTag: PropTypes.func,
-    removeTag: PropTypes.func,
-    onSubmit: PropTypes.func,
     editable: PropTypes.bool,
-    index: PropTypes.number
+    index: PropTypes.number,
+    onChangeText: PropTypes.func,
+    onSubmit: PropTypes.func,
+    removeTag: PropTypes.func
 }
 
 Tag.defaultProps = {
     title: '',
     editable: false,
     index: null,
-    onChangeTag: null,
+    onChangeText: null,
     onSubmit: null,
     removeTag: null
 }

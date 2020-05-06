@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { View, TouchableOpacity, Text, ScrollView, Animated } from 'react-native'
+import { View, TouchableOpacity, Text, ScrollView } from 'react-native'
 import { clearCurrentProject, setCurrentProject, updateProject } from '../../actions/project'
 import { getUserCollabs, setCollabsPending, fetchCollabInfluencer, clearCollabState, setCurrentCollab } from '../../actions/collab'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { ProjectForm } from '../../components/forms/ProjectForm'
 import { connect } from 'react-redux'
 import { project_style } from './styles/project.styles'
@@ -14,8 +14,6 @@ import { SaveButton } from '../../components/buttons/SaveButton'
 import { base, colors, dimensions } from '../../styles/base'
 import { Icon } from 'react-native-elements'
 import { CollabListProjectView } from '../../components/list/CollabListProjectView'
-
-const AnimatedIcon = Animated.createAnimatedComponent(Icon)
 
 class ProjectView extends React.Component {
 
@@ -31,11 +29,13 @@ class ProjectView extends React.Component {
     }
 
     componentDidMount() {
-        const { user, project, getProjectFetchJobs, getUserCollabs, clearCollabState, clearFetchJobState } = this.props
-        clearCollabState()
-        clearFetchJobState()
+        const { user, project, getProjectFetchJobs, getUserCollabs, running_fetch } = this.props
         if (project.current_project.title) {
-            getProjectFetchJobs(user.current_user.id, project.current_project.id)
+
+            if (running_fetch.pending == false) {
+                getProjectFetchJobs(user.current_user.id, project.current_project.id)
+            }
+
             getUserCollabs(user.current_user.id)
             this.setState({ projectValue: { ...project.current_project } })
         }
@@ -43,7 +43,7 @@ class ProjectView extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { user, project, fetch_job, collab, getUserCollabs, getProjectFetchJobs } = this.props
+        const { project, collab } = this.props
         let projectCollabs
 
         if (prev.collab.all_collabs !== collab.all_collabs && collab.all_collabs.length > 0) {
@@ -88,7 +88,7 @@ class ProjectView extends React.Component {
                 <AppHeader
                     gradient={true}
                     left={<BackButton onPress={() => navigation.goBack()} />}
-                    center={<Text style={{ ...base.title, color: colors.WHITE, ontSize: 20 }}>{projectValue.title}</Text>}
+                    center={<Text style={{ ...base.title, color: colors.WHITE, fontSize: 20 }}>{projectValue.title}</Text>}
                     right={<SaveButton onPress={this.handleSubmit} />}
                 />
                 <ScrollView contentContainerStyle={base.scrollContainer}>
@@ -115,14 +115,14 @@ class ProjectView extends React.Component {
                         </View>
                         <View style={base.itemViewListContainer}>
                             <View style={base.itemViewListNav}>
-                                <Text style={base.title}>{`Collaborations (${projectCollabs.length})`}</Text>
+                                <Text style={base.title}>{`Project Collaborations (${projectCollabs.length})`}</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate('AllCollabs')}>
                                     <Text style={base.title}>View All</Text>
                                 </TouchableOpacity>
                             </View>
                             {collab.pending && <LoadingScreen />}
                             {projectCollabs.length == 0 && <View style={base.centerItems}><Icon name='arrow-upward' type="material" size={40} color={colors.TERTIARY} onPress={() => navigation.navigate("AddFetchJob")} />
-                                <Text style={base.noneMessage}>Run a search and find the right influencers!</Text>
+                                <Text style={{ ...base.text, fontSize: 14, padding: 0, margin: 0 }}>Run a search and find the right influencers!</Text>
                             </View>}
                             {!collab.error && !collab.pending && collab.all_collabs.length > 0 &&
                                 <CollabListProjectView isHome={false} collabs={projectCollabs} goToCollab={this.goToCollab} />}

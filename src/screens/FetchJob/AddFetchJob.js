@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text, Alert } from 'react-native'
 import FetchJobForm from '../../components/forms/FetchJobForm'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { connect } from 'react-redux'
 import { addFetchJob } from '../../actions/fetchJob'
 import { BackButton } from '../../components/buttons/BackButton'

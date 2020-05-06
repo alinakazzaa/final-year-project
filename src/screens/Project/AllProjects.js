@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Text } from 'react-native'
-import { AppHeader } from '../../layouts/Header'
+import { AppHeader } from '../../layouts/Header/Header'
 import { ProjectList } from '../../components/list/ProjectList'
 import { Input, Icon } from 'react-native-elements'
 import { removeProject, setCurrentProject, getUserProjects } from '../../actions/project'
@@ -10,7 +10,7 @@ import { project_style } from './styles/project.styles'
 import { colors, base, dimensions } from '../../styles/base'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { TabView } from '../../components/tabview/TabView'
-import { Gradient } from '../../styles/Gradient'
+import { Gradient } from '../../layouts/Gradient/Gradient'
 import { AppLogo } from '../../components/logo/AppLogo'
 import { IconButton } from '../../components/buttons/IconButton'
 
@@ -75,7 +75,11 @@ class AllProjects extends React.Component {
                         </View>
                         <TabView titles={['Active', 'Archived']} onPress={this.setTab} color={colors.TERTIARY} size={dimensions.fullWidth * .4} index={index} />
                         {project.pending && <LoadingScreen size='large' />}
-                        <IconButton name='plus' type='material-community' size={50} color={colors.WHITE}
+                        {project.error &&
+                            <View style={base.centerItems}>
+                                <Text style={{ ...base.text, color: colors.WHITE, fontSize: 20, padding: 0, margin: 0, alignSelf: 'center', textAlign: 'center' }}>Click + to start new marketing campaign</Text>
+                            </View>}
+                        <IconButton name='plus' type='material-community' size={55} color={colors.TERTIARY}
                             onPress={() => this.props.navigation.navigate('AddProject')} />
                         {!project.pending && !project.error &&
                             index == 0 ?
@@ -92,11 +96,6 @@ class AllProjects extends React.Component {
                                     deleteProject={this.deleteProject}
                                     projects={isSearch ? [...searched.filter(proj => proj.active == false)] :
                                         archivedProjects(project)} />
-                            </View>}
-
-                        {project.error &&
-                            <View style={base.centerItems}>
-                                <Text style={base.noneMessage}>Start your first campaign</Text>
                             </View>}
                     </View>
                 </Gradient>

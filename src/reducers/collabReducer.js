@@ -12,7 +12,7 @@ const initialState = {
 }
 
 const collabReducer = (state = initialState, action) => {
-    const collabs = [...state.all_collabs]
+    let all_collabs = [...state.all_collabs]
 
     switch (action.type) {
 
@@ -26,7 +26,6 @@ const collabReducer = (state = initialState, action) => {
             }
 
         case SET_COLLABS_SUCCESS:
-
             return {
                 ...state,
                 pending: false,
@@ -45,8 +44,7 @@ const collabReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                current_collab: action.collab,
-                pending: false
+                current_collab: action.collab
             }
 
         case CLEAR_CURRENT_COLLAB:
@@ -59,28 +57,29 @@ const collabReducer = (state = initialState, action) => {
 
         case ADD_COLLAB:
 
-            collabs.splice(collabs.length, 0, action.collab)
+            all_collabs.splice(all_collabs.length, 0, action.collab)
 
             return {
                 ...state,
-                all_collabs: [...collabs]
+                all_collabs: [...all_collabs]
             }
 
         case UPDATE_COLLAB:
 
-            collabs.splice(getIndex(collabs, action.collab), 1, action.collab)
+            all_collabs.splice(getIndex(all_collabs, action.collab), 1, action.collab)
 
             return {
                 ...state,
-                all_collabs: [...collabs]
+                all_collabs: [...all_collabs]
 
             }
 
         case REMOVE_COLLAB:
 
             return {
+
                 ...state,
-                all_collabs: [...state.all_collabs.filter(c => c.details.id != action.collabId)]
+                all_collabs: [...all_collabs.filter(c => c.details.id != action.collabId)]
             }
 
 
@@ -128,9 +127,5 @@ const collabReducer = (state = initialState, action) => {
 }
 
 export const getIndex = (collabs, collab) => collabs.map(c => { return c.details.id }).indexOf(collab.details.id)
-export const searchedCollabs = (state, text) => [...state.all_collabs.filter(collab => {
-    collab.details.title.toLowerCase().includes(text.toLowerCase()) ||
-        collab.details.influencer.username.toLowerCase().includes(text.toLowerCase())
-})]
 
 export default collabReducer
