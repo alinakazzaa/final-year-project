@@ -4,7 +4,7 @@ import { AppHeader } from '../../layouts/Header/Header'
 import { IconButton } from '../../components/buttons/IconButton'
 import { connect } from 'react-redux'
 import { getUserProjects, clearProjectState, setCurrentProject } from '../../actions/project'
-import { getProjectFetchJobs } from '../../actions/fetchJob'
+import { getProjectFetchJobs, setCurrentFetchJob } from '../../actions/fetchJob'
 import { COMPLETED } from '../../constants'
 import { logOutUser } from '../../actions/user'
 import { colors, base, dimensions } from '../../styles/base'
@@ -46,12 +46,16 @@ class HomeScreen extends React.Component {
     }
 
     componentDidUpdate(prev) {
-        const { user, project, fetch_job, getProjectFetchJobs, collab, getAllInfluencers, influencer } = this.props
+        const { user, project, fetch_job, getProjectFetchJobs, setCurrentProject, setCurrentFetchJob, collab, getAllInfluencers, influencer } = this.props
 
         if (prev.project != project && project.all_projects.length > 0) {
             const activeProjects = project.all_projects.filter(proj => proj.active)
 
             if (activeProjects.length > 0) {
+                if (project.current_project.id == null) {
+                    setCurrentProject(activeProjects[activeProjects.length - 1])
+                }
+
                 getProjectFetchJobs(user.current_user.id, activeProjects[activeProjects.length - 1].id)
             }
 
@@ -75,6 +79,11 @@ class HomeScreen extends React.Component {
 
             if (completed_fetch_jobs.length > 0) {
                 const latestJob = { ...completed_fetch_jobs[completed_fetch_jobs.length - 1] }
+
+                if (fetch_job.current_fetch_job.details == null) {
+                    setCurrentFetchJob(latestJob)
+                }
+
                 const tags = latestJob.related_tags ? latestJob.related_tags : []
                 this.setState({ recent_tags: tags, recent_job: completed_fetch_jobs[completed_fetch_jobs.length - 1].details.hashtag })
                 getAllInfluencers(latestJob)
@@ -107,7 +116,6 @@ class HomeScreen extends React.Component {
     goToInfluencer = influ => {
         const { navigation, setCurrentInfluencer } = this.props
         setCurrentInfluencer(influ)
-        navigation.goBack()
         navigation.navigate('ViewInfluencer')
     }
 
@@ -273,7 +281,8 @@ const mapDispatchToProps = {
     setCurrentInfluencer,
     clearCollabState,
     clearProjectState,
-    setCurrentProject
+    setCurrentProject,
+    setCurrentFetchJob
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
