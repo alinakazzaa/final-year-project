@@ -81,7 +81,7 @@ class AllProjects extends React.Component {
                             </View>}
                         <IconButton name='plus' type='material-community' size={55} color={colors.TERTIARY}
                             onPress={() => this.props.navigation.navigate('AddProject')} />
-                        {!project.pending && !project.error &&
+                        {!project.pending && project.all_projects.length > 0 &&
                             index == 0 ?
                             <View>
                                 <ProjectList
