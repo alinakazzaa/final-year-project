@@ -43,7 +43,7 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
                             </View>
                             {fj.details.status == IN_PROGRESS && <View>
                                 <Text style={{ ...base.text, fontSize: 14, padding: 0 }}>Progress</Text>
-                                <Text style={{ ...base.title, fontSize: 16 }}>{progress}</Text>
+                                <Text style={{ ...base.title, fontSize: 16 }}>{`${progress}%`}</Text>
                             </View>}
                             {fj.details.status == COMPLETED &&
                                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
