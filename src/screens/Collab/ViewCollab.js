@@ -71,8 +71,7 @@ class ViewCollab extends React.Component {
             }
         }
 
-        // setCurrentCollab(updatedCollab)
-        // updateCollab(updatedCollab)
+        updateCollab(updatedCollab)
         Alert.alert("Collaboration updated")
     }
 
