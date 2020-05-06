@@ -101,7 +101,7 @@ export const FetchJobList = ({ fetch_jobs, goToFetchJob, deleteFetchJob, startFe
 FetchJobList.propTypes = {
     fetch_jobs: PropTypes.array.isRequired,
     goToFetchJob: PropTypes.func,
-    progress: PropTypes.string,
+    progress: PropTypes.number,
 }
 
 FetchJobList.defaultProps = {
