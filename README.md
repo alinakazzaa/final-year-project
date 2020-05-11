@@ -2,7 +2,7 @@
 
 ### This application was completed as a part of my bachelor degree at TU Dublin.
 
-# Project Scope
+## Project Scope
 
 This tool was inspired by GOCOMO and I wanted to create a mobile influencer scouting application as a part of my thesis. 
 This is relatively new on the market, therefore has a lot of potential to become an essential tool for smart and successful marketers.
