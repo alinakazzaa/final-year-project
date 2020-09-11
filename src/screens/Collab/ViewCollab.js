@@ -10,7 +10,7 @@ import { PublicationList } from '../../components/list/PublicationList'
 import { LoadingScreen } from '../../components/loading/LoadingScreen'
 import { SaveButton } from '../../components/buttons/SaveButton'
 import { base } from '../../styles/base'
-import { fetchUserMedia } from '../../web/fetchUserMedia'
+import { fetchUserMedia, extractMedia } from '../../web/fetchUserMedia'
 import { fetchCollabInfluencer, setCollabsPending, updateCollab, clearCurrentCollab, setCurrentCollab } from '../../actions/collab'
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -46,7 +46,7 @@ class ViewCollab extends React.Component {
 
             if (collab.current_collab.details.active && collab.current_collab.details.tags &&
                 collab.current_collab.details.tags.length > 0)
-                fetchUserMedia(collab.current_collab.details.influencer.id, collab.current_collab.details.tags)
+                fetchUserMedia(collab.current_collab.details.influencer.id)
         }
     }
 
@@ -61,7 +61,7 @@ class ViewCollab extends React.Component {
 
     handleSubmit = () => {
         const { collabValue } = this.state
-        const { updateCollab, collab, setCurrentCollab } = this.props
+        const { updateCollab, collab } = this.props
 
         const updatedCollab = {
             details: {
@@ -153,9 +153,9 @@ class ViewCollab extends React.Component {
                                         <Text style={base.title}>Publications</Text>
                                     </View>
                                     {collab.current_collab.publications && collab.current_collab.publications.length > 0 ?
-                                        <PublicationList publications={collab.current_collab.publications}
+                                        <PublicationList publications={[...extractMedia(collab.current_collab.publications, collab.current_collab.details.tags)]}
                                             onPress={this.onThumbnailPress} /> :
-                                        <View style={base.centered}><Text style={{ ...base.text, fontSize: 14, padding: 0, marginTop: 20, alignSelf: 'center', textAlign: 'center' }}>No publications yet</Text></View>}
+                                        <View style={base.centerItems}><Text style={{ ...base.text, fontSize: 14, padding: 0, marginTop: 20, alignSelf: 'center', textAlign: 'center' }}>No publications yet</Text></View>}
                                 </View>}
                             </View>
                         </ScrollView>

@@ -3,7 +3,7 @@ import { GET_USER_MEDIA_ERROR, GET_USER_MEDIA_SUCCESS } from "../constants/respo
 import { setCollabsPending } from "../actions/collab"
 import { fetchResponse } from "../actions/fetch"
 
-export const fetchUserMedia = (user_id, hashtags) => {
+export const fetchUserMedia = user_id => {
     return dispatch => {
         dispatch(setCollabsPending())
 
@@ -17,7 +17,7 @@ export const fetchUserMedia = (user_id, hashtags) => {
 
                         response = {
                             type: GET_USER_MEDIA_SUCCESS,
-                            media: [...extractMedia(edge_owner_to_timeline_media.edges, hashtags)],
+                            media: edge_owner_to_timeline_media.edges,
                             message: 'success: user media',
                         }
 
@@ -41,7 +41,7 @@ export const fetchUserMedia = (user_id, hashtags) => {
 
 
 export const extractMedia = (edges, hashtags) => {
-    let media = []
+    const media = []
     let media_item
 
     if (edges.length > 0) {
