@@ -55,7 +55,8 @@ export const fetchInfluencer = (id, fetch_job, pending, fetchResponse) => {
 
                                                                                                 avgLikes = total / 15
                                                                                                 influ_obj.eng_rate = calculateEngagementRate(avgLikes, influ_obj.followers)
-                                                                                                if (influ_obj.eng_rate >= fetch_job.min_eng_rate) {
+
+                                                                                                if (influ_obj.eng_rate >= Number(fetch_job.details.eng_rate / 100)) {
                                                                                                     addInfluencer(influ_obj)
                                                                                                     fetchResponse(response)
                                                                                                 } else {

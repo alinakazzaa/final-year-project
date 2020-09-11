@@ -20,7 +20,8 @@ class AddFetchJob extends React.Component {
             hashtag: '',
             no_profiles: numberOfProfiles[10],
             criteria: { followerMin: followerRanges.micro.min, followerMax: followerRanges.micro.max },
-            status: PENDING
+            status: PENDING,
+            eng_rate: 0
         },
     }
 
