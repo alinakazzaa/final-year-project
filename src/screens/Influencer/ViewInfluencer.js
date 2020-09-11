@@ -102,11 +102,13 @@ class ViewInfluencer extends React.Component {
                                 <View>
                                     <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.MEDIUM, marginTop: spacing.MEDIUM * 1.2, padding: 0, margin: 0 }}>Followers</Text>
                                     <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.MEDIUM, marginTop: spacing.MEDIUM * 1.2, padding: 0, margin: 0 }}>Media Count</Text>
+                                    <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.MEDIUM, marginTop: spacing.MEDIUM * 1.2, padding: 0, margin: 0 }}>Engagement rate</Text>
                                     <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.MEDIUM, marginTop: spacing.MEDIUM * 1.2, padding: 0, margin: 0 }}>Date added</Text>
                                 </View>
                                 <View>
                                     <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.LARGE, marginTop: spacing.MEDIUM * 1.2, padding: 0, margin: 0 }}>{formatNumber(influencer.current_influencer.followers)}</Text>
                                     <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.LARGE, marginTop: spacing.MEDIUM * 1.2, padding: 0, margin: 0 }}>{formatNumber(influencer.current_influencer.media_count)}</Text>
+                                    <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.LARGE, marginTop: spacing.MEDIUM * 1.2, padding: 0, margin: 0 }}>{formatNumber(influencer.current_influencer.eng_rate)}</Text>
                                     <Text style={{ ...base.text, color: colors.WHITE, fontSize: fonts.LARGE, marginTop: spacing.MEDIUM * 1.2, padding: 0, margin: 0 }}>{influencer.current_influencer.date_added || DATE_TODAY}</Text>
                                 </View>
                             </View>

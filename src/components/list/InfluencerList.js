@@ -40,6 +40,10 @@ export const InfluencerList = ({ influencers, goToInfluencer, createCollab, remo
                                     <Text style={{ ...base.text, fontSize: 16, padding: 0, margin: 0 }}>Media count</Text>
                                     <Text style={{ ...base.title, fontSize: 18, padding: 0, margin: 0 }}>{formatNumber(influ.media_count)}</Text>
                                 </View>
+                                <View style={influencer_style.info}>
+                                    <Text style={{ ...base.text, fontSize: 16, padding: 0, margin: 0 }}>Eng. rate</Text>
+                                    <Text style={{ ...base.title, fontSize: 18, padding: 0, margin: 0 }}>{formatNumber(influ.eng_rate)}</Text>
+                                </View>
                             </View>
                         </View>
                         <Text style={{ ...base.text, fontSize: 20, padding: 0, margin: 0, alignSelf: 'center', paddingTop: 20 }}>{influ.username}</Text>
