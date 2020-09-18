@@ -21,6 +21,7 @@ var no_profiles = t.enums({
 const FetchJob = t.struct({
     hashtag: t.String,
     date_created: t.String,
+    eng_rate: t.Number,
     no_profiles: no_profiles
 })
 
@@ -97,6 +98,7 @@ export default class FetchJobForm extends React.Component {
                     <View style={form.labelsCol}>
                         <Text style={form.inputViewLabel}>Hashtag</Text>
                         <Text style={form.inputViewLabel}>Date created</Text>
+                        <Text style={form.inputViewLabel}>Eng. rate (%)</Text>
                         <Text style={form.inputViewLabel}>No. of Profiles</Text>
                     </View>
                     <View style={form.inputBox}>
